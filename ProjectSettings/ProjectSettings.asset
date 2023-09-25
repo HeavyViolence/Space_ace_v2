@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: Space_ace_v2
+  companyName: Violent village
+  productName: Space ace
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -669,7 +669,7 @@ PlayerSettings:
   cloudProjectId: cff99648-4bae-4397-893e-ef9849520e2a
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Space_ace_v2 (1)
+  projectName: Space ace
   organizationId: heavyviolence
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

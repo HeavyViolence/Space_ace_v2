@@ -6,9 +6,9 @@ namespace SpaceAce.Main
     {
         public float LoadingDelay { get; }
 
-        public MainMenuLoadingStartedEventArgs(float LoadingDelay)
+        public MainMenuLoadingStartedEventArgs(float loadingDelay)
         {
-            this.LoadingDelay = LoadingDelay;
+            LoadingDelay = loadingDelay;
         }
     }
 }

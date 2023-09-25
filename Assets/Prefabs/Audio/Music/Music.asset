@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89440481744f7fe4a9df253babb7ed52, type: 3}
+  m_Name: Music
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 7e75281222decaa4c82e1bd2106ef4c4, type: 3}
+  - {fileID: 8300000, guid: 7169c64fe96271045ab9a1dd05d2fe55, type: 3}
+  - {fileID: 8300000, guid: 08e97bd9188db2e49bab2b31170f944d, type: 3}
+  - {fileID: 8300000, guid: fa8b99cd2aaf02b458b6114e2fdf707e, type: 3}
+  - {fileID: 8300000, guid: f0293df91f1d5f4449fe290f59b22aee, type: 3}
+  - {fileID: 8300000, guid: b0221895c68cd964da7a052e719189f9, type: 3}
+  - {fileID: 8300000, guid: 1ff4fa117cc112244b9ee08ddfed2dce, type: 3}
+  - {fileID: 8300000, guid: c5cba5069c6b5f24aadb51fc54e531e1, type: 3}
+  - {fileID: 8300000, guid: dbd921b7e51df674ab0a1588824717b3, type: 3}
+  - {fileID: 8300000, guid: c402e4a1e694fba48b9b6beff7588cc4, type: 3}
+  _outputAudioGroup: {fileID: 6882789943692672401, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 0
+  _spatialBlend: {x: 0, y: 0}
+  _pitch: {x: 1, y: 1}

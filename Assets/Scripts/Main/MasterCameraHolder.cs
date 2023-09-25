@@ -1,12 +1,11 @@
+using System;
 using UnityEngine;
 
 namespace SpaceAce.Main
 {
-    public sealed class MasterCameraHolder : MonoBehaviour
+    public sealed class MasterCameraHolder
     {
-        [SerializeField] private Camera _masterCamera;
-
-        public Camera MasterCamera => _masterCamera;
+        public Camera MasterCamera { get; private set; } = null;
 
         private float _viewportLeftBound = float.NaN;
         public float ViewportLeftBound
@@ -14,7 +13,7 @@ namespace SpaceAce.Main
             get
             {
                 if (_viewportLeftBound == float.NaN)
-                    _viewportLeftBound = _masterCamera.ViewportToWorldPoint(Vector3.zero).x;
+                    _viewportLeftBound = MasterCamera.ViewportToWorldPoint(Vector3.zero).x;
 
                 return _viewportLeftBound;
             }
@@ -26,7 +25,7 @@ namespace SpaceAce.Main
             get
             {
                 if (_viewportRightBound == float.NaN)
-                    _viewportRightBound = _masterCamera.ViewportToWorldPoint(Vector3.right).x;
+                    _viewportRightBound = MasterCamera.ViewportToWorldPoint(Vector3.right).x;
 
                 return _viewportRightBound;
             }
@@ -38,7 +37,7 @@ namespace SpaceAce.Main
             get
             {
                 if (_viewportUpperBound == float.NaN)
-                    _viewportUpperBound = _masterCamera.ViewportToWorldPoint(Vector3.up).y;
+                    _viewportUpperBound = MasterCamera.ViewportToWorldPoint(Vector3.up).y;
 
                 return _viewportUpperBound;
             }
@@ -50,10 +49,19 @@ namespace SpaceAce.Main
             get
             {
                 if (_viewportLowerBound == float.NaN)
-                    _viewportLowerBound = _masterCamera.ViewportToWorldPoint(Vector3.zero).y;
+                    _viewportLowerBound = MasterCamera.ViewportToWorldPoint(Vector3.zero).y;
 
                 return _viewportLowerBound;
             }
+        }
+
+        public MasterCameraHolder(GameObject masterCameraObject)
+        {
+            if (masterCameraObject == null) throw new ArgumentNullException("Attempted to pass an empty camera object!");
+
+            MasterCamera = masterCameraObject.GetComponentInChildren<Camera>();
+
+            if (MasterCamera == null) throw new MissingComponentException($"Passed camera object is missing {typeof(Camera)}!");
         }
 
         public float GetShiftedViewportLeftBound(float offsetFactor) => ViewportLeftBound * offsetFactor;

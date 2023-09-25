@@ -1,11 +1,12 @@
+using SpaceAce.Architecture;
 using SpaceAce.Auxiliary;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace SpaceAce.Main
 {
-    public sealed class SpaceBackground : MonoBehaviour
+    public sealed class SpaceBackground : IInitializable, IDisposable, IUpdatable
     {
         public const float MinScrollSpeed = 0.001f;
         public const float MaxScrollSpeed = 0.01f;
@@ -13,54 +14,47 @@ namespace SpaceAce.Main
         public const float MainMenuScrollSpeed = 0.003f;
         public const float LevelScrollSpeed = 0.002f;
 
-        [SerializeField] private Material _mainMenuSpaceBackground;
-        [SerializeField] private List<Material> _spaceBackgrounds;
-        [SerializeField] private ParticleSystem _dustfield;
-        [SerializeField] private MeshRenderer _renderer;
+        private readonly Material _mainMenuSpaceBackground = null;
+        private readonly List<Material> _levelsSpaceBackgrounds = null;
+        private readonly ParticleSystem _dustfield = null;
+        private readonly MeshRenderer _renderer = null;
 
-        private GamePauser _gamePauser = null;
-        private LevelLoader _levelLoader = null;
+        private readonly GamePauser _gamePauser = null;
+        private readonly LevelLoader _levelLoader = null;
+        private readonly MainMenuLoader _mainMenuLoader = null;
+
+        private bool _paused = false;
 
         private float _scrollSpeed = MinScrollSpeed;
         public float ScrollSpeed { get => _scrollSpeed; set => _scrollSpeed = Mathf.Clamp(value, MinScrollSpeed, MaxScrollSpeed); }
 
-        public bool ScrollingEnabled { get; private set; } = true;
-
-        [Inject]
-        private void Construct(GamePauser gamePauser, LevelLoader levelLoader)
+        public SpaceBackground(GameObject spaceBackground,
+                               Material mainMenuSpaceBackground,
+                               IEnumerable<Material> levelsSpaceBackgrounds,
+                               GamePauser gamePauser,
+                               LevelLoader levelLoader,
+                               MainMenuLoader mainMenuLoader)
         {
+            if (spaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty space background object!");
+            if (mainMenuSpaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty main menu space background!");
+            if (levelsSpaceBackgrounds is null) throw new ArgumentNullException("Attempted to pass an empty levels space backgrounds!");
+            if (gamePauser is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(GamePauser)}!");
+            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(LevelLoader)}!");
+            if (mainMenuLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(MainMenuLoader)}!");
+
+            _mainMenuSpaceBackground = mainMenuSpaceBackground;
+            _levelsSpaceBackgrounds = new List<Material>(levelsSpaceBackgrounds);
             _gamePauser = gamePauser;
             _levelLoader = levelLoader;
-        }
+            _mainMenuLoader = mainMenuLoader;
 
-        private void OnEnable()
-        {
-            _gamePauser.GamePaused += GamePausedEventHandler;
-            _gamePauser.GameResumed += GameResumedEventHandler;
+            _renderer = spaceBackground.GetComponentInChildren<MeshRenderer>();
+            if (_renderer == null) throw new MissingComponentException($"Space background object is missing {nameof(MeshRenderer)}!");
 
-            _levelLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
-            _levelLoader.LevelLoaded += LevelLoadedEventHandler;
-        }
+            _dustfield = spaceBackground.GetComponentInChildren<ParticleSystem>();
+            if (_dustfield == null) throw new MissingComponentException($"Space background object is missing {nameof(ParticleSystem)}!");
 
-        private void OnDisable()
-        {
-            _gamePauser.GamePaused -= GamePausedEventHandler;
-            _gamePauser.GameResumed -= GameResumedEventHandler;
-
-            _levelLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
-            _levelLoader.LevelLoaded -= LevelLoadedEventHandler;
-        }
-
-        private void Start ()
-        {
             SetMainMenuState();
-        }
-
-        private void Update()
-        {
-            if (ScrollingEnabled == false) return;
-
-            _renderer.sharedMaterial.mainTextureOffset += new Vector2(0f, ScrollSpeed * Time.deltaTime);
         }
 
         private void SetMainMenuState()
@@ -77,25 +71,56 @@ namespace SpaceAce.Main
         {
             ScrollSpeed = LevelScrollSpeed;
 
-            int backgroundIndex = AuxMath.GetRandom(0, _spaceBackgrounds.Count);
+            int backgroundIndex = AuxMath.GetRandom(0, _levelsSpaceBackgrounds.Count);
 
-            _renderer.sharedMaterial = _spaceBackgrounds[backgroundIndex];
+            _renderer.sharedMaterial = _levelsSpaceBackgrounds[backgroundIndex];
             _renderer.sharedMaterial.mainTextureOffset = new Vector2(0f, AuxMath.RandomNormal);
 
             _dustfield.Play(true);
         }
 
+        #region interfaces
+
+        public void Initialize()
+        {
+            _gamePauser.GamePaused += GamePausedEventHandler;
+            _gamePauser.GameResumed += GameResumedEventHandler;
+
+            _mainMenuLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
+
+            _levelLoader.LevelLoaded += LevelLoadedEventHandler;
+        }
+
+        public void Dispose()
+        {
+            _gamePauser.GamePaused -= GamePausedEventHandler;
+            _gamePauser.GameResumed -= GameResumedEventHandler;
+
+            _mainMenuLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
+
+            _levelLoader.LevelLoaded -= LevelLoadedEventHandler;
+        }
+
+        void IUpdatable.Update()
+        {
+            if (_paused == true) return;
+
+            _renderer.sharedMaterial.mainTextureOffset += new Vector2(0f, ScrollSpeed * Time.deltaTime);
+        }
+
+        #endregion
+
         #region event handlers
 
         private void GamePausedEventHandler(object sender, System.EventArgs e)
         {
-            ScrollingEnabled = false;
+            _paused = true;
             _dustfield.Pause(true);
         }
 
         private void GameResumedEventHandler(object sender, System.EventArgs e)
         {
-            ScrollingEnabled = true;
+            _paused = false;
             _dustfield.Play(true);
         }
 

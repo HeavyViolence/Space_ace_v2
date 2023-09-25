@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1025952180311764278}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66,7 +66,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0
   far clip plane: 1000
   field of view: 34
   orthographic: 1
@@ -174,9 +174,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2306833380235299878}
-  - component: {fileID: 1070439055650185618}
-  - component: {fileID: 7899781577180858771}
-  - component: {fileID: 5468068541701383861}
   m_Layer: 0
   m_Name: Master camera holder
   m_TagString: Untagged
@@ -200,42 +197,3 @@ Transform:
   - {fileID: 6957944922859904345}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1070439055650185618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753528834700607575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d93c93c253461564ebe7218c74739fe0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _masterCamera: {fileID: 885264677415479210}
---- !u!114 &7899781577180858771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753528834700607575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2be9b7681765eec4eb3fd65d7f9e97e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _masterListener: {fileID: 4120524105764896382}
---- !u!114 &5468068541701383861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753528834700607575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10b878fd27a5eac489c17463fdff10a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cameraRigidbody: {fileID: 1254762240429524531}
