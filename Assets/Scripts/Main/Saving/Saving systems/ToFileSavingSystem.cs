@@ -14,19 +14,19 @@ namespace SpaceAce.Main.Saving
         private readonly IKeyGenerator _keyGenerator = null;
         private readonly KeyStrength _keyStrength = KeyStrength.Default;
         private readonly IEncryptor _encryptor = null;
-        private readonly string _directory = string.Empty;
+        private readonly string _savesDirectory = string.Empty;
 
-        public ToFileSavingSystem(IKeyGenerator keyGenerator, KeyStrength strength, IEncryptor encryptor, string directory)
+        public ToFileSavingSystem(IKeyGenerator keyGenerator, KeyStrength strength, IEncryptor encryptor, string savesDirectory)
         {
             if (keyGenerator is null) throw new ArgumentNullException(nameof(keyGenerator), $"Attempted to pass an empty {typeof(IKeyGenerator)}!");
             if (encryptor is null) throw new ArgumentNullException(nameof(encryptor), $"Attempted to pass an empty {typeof(IEncryptor)}!");
-            if (string.IsNullOrEmpty(directory) || string.IsNullOrWhiteSpace(directory))
-                throw new ArgumentNullException(nameof(directory), "Attempted to pass an empty directory path!");
+            if (string.IsNullOrEmpty(savesDirectory) || string.IsNullOrWhiteSpace(savesDirectory))
+                throw new ArgumentNullException(nameof(savesDirectory), "Attempted to pass an empty saves directory path!");
 
             _keyGenerator = keyGenerator;
             _keyStrength = strength;
             _encryptor = encryptor;
-            _directory = directory;
+            _savesDirectory = savesDirectory;
         }
 
         public void Register(ISavable entity)
@@ -80,8 +80,6 @@ namespace SpaceAce.Main.Saving
 
                 if (File.Exists(saveFilePath) == true) File.Delete(saveFilePath);
             }
-
-            _savableEntities.Clear();
         }
 
         private void SetState(ISavable entity, string saveFilePath)
@@ -115,6 +113,6 @@ namespace SpaceAce.Main.Saving
             File.WriteAllBytes(saveFilePath, encryptedData);
         }
 
-        private string GetSaveFilePath(ISavable entity) => Path.Combine(_directory, entity.ID + SavesExtension);
+        private string GetSaveFilePath(ISavable entity) => Path.Combine(_savesDirectory, entity.ID + SavesExtension);
     }
 }

@@ -5,7 +5,7 @@ namespace SpaceAce.Main
 {
     public sealed class LevelLoader
     {
-        private const float LevelLoadingDelay = 2f;
+        private const float LevelLoadingDelay = 1f;
 
         public event EventHandler<LevelLoadingStartedEventArgs> LevelLoadingStarted;
         public event EventHandler<LevelLoadedEventArgs> LevelLoaded;
@@ -16,6 +16,8 @@ namespace SpaceAce.Main
 
         public async UniTaskVoid LoadLevel(int levelIndex)
         {
+            if (levelIndex <= 0) throw new ArgumentOutOfRangeException(nameof(levelIndex));
+
             LevelLoadingStarted?.Invoke(this, new(levelIndex, LevelLoadingDelay));
 
             await UniTask.Delay(TimeSpan.FromSeconds(LevelLoadingDelay));

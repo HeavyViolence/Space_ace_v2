@@ -6,7 +6,7 @@ namespace SpaceAce.Main
 {
     public sealed class MainMenuLoader : IInitializable, IDisposable
     {
-        private const float MainMenuLoadingDelay = 2f;
+        private const float MainMenuLoadingDelay = 1f;
 
         public event EventHandler<MainMenuLoadingStartedEventArgs> MainMenuLoadingStarted;
         public event EventHandler MainMenuLoaded;
@@ -17,7 +17,7 @@ namespace SpaceAce.Main
 
         public MainMenuLoader(LevelLoader levelLoader)
         {
-            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(levelLoader)}!");
+            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {typeof(LevelLoader)}!");
             _levelLoader = levelLoader;
         }
 

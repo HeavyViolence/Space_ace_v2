@@ -65,11 +65,7 @@ namespace SpaceAce.Main.Saving
             }
         }
 
-        public void DeleteAllSaves()
-        {
-            PlayerPrefs.DeleteAll();
-            _savableEntities.Clear();
-        }
+        public void DeleteAllSaves() => PlayerPrefs.DeleteAll();
 
         private void SetState(ISavable entity)
         {

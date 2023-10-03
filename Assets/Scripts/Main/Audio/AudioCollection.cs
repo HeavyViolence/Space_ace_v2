@@ -77,18 +77,18 @@ namespace SpaceAce.Main.Audio
             if (_audioClips is not null) _nonRepeatingAudioClipsIndices = new(_audioClips.Count);
         }
 
-        public AudioAccess PlayRandomAudioClip(Vector2 position) => PlayAudioClip(RandomAudioClip, position);
+        public AudioAccess PlayRandomAudioClip(Vector3 position) => PlayAudioClip(RandomAudioClip, position);
         public AudioAccess PlayRandomAudioClipOnLoop(Transform parent) => PlayAudioClipOnLoop(RandomAudioClip, parent);
 
-        public AudioAccess Play(Vector2 position) => PlayAudioClip(NonRepeatingRandomAudioClip, position);
+        public AudioAccess Play(Vector3 position) => PlayAudioClip(NonRepeatingRandomAudioClip, position);
         public AudioAccess PlayNonRepeatingAudioClipOnLoop(Transform parent) => PlayAudioClipOnLoop(NonRepeatingRandomAudioClip, parent);
 
-        public AudioAccess PlayNextAudioClip(Vector2 position) => PlayAudioClip(NextAudioClip, position);
+        public AudioAccess PlayNextAudioClip(Vector3 position) => PlayAudioClip(NextAudioClip, position);
         public AudioAccess PlayNextAudioClipOnLoop(Transform parent) => PlayAudioClipOnLoop(NextAudioClip, parent);
 
-        public AudioAccess Play() => PlayAudioClip(NonRepeatingRandomAudioClip, Vector2.zero);
+        public AudioAccess Play() => PlayAudioClip(NonRepeatingRandomAudioClip, Vector3.zero);
 
-        private AudioAccess PlayAudioClip(AudioClip clip, Vector2 position)
+        private AudioAccess PlayAudioClip(AudioClip clip, Vector3 position)
         {
             AudioProperties properties = new(clip, OutputAudioGroup, RandomVolume, Priority, RandomSpatialBlend, RandomPitch, false, null, position);
 

@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
+using SpaceAce.Main.ObjectPooling;
 using SpaceAce.Main.Saving;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace SpaceAce.Architecture
         private const string SavingSystemFoldoutName = "Saving system";
         private const string AudioFoldoutName = "Audio";
 
-        #region Dependency injection parameters
+        #region DI
 
         [SerializeField, Foldout(SpaceBackgroundFoldoutName)]
         private GameObject _spaceBackgroundPrefab;
@@ -107,6 +108,9 @@ namespace SpaceAce.Architecture
 
             MusicPlayer musicPlayer = new(_music, savingSystem);
             Services.Register(musicPlayer);
+
+            MultiobjectPool multiobjectPool = new(gamePauser);
+            Services.Register(multiobjectPool);
         }
 
         private ISavingSystem InstantiateSavingSystem()
@@ -179,6 +183,8 @@ namespace SpaceAce.Architecture
             if (Services.TryGet(out IEnumerable<IDisposable> services) == true)
                 foreach (var service in services)
                     service.Dispose();
+
+            Services.Clear();
         }
     }
 }

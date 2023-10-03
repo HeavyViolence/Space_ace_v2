@@ -32,11 +32,11 @@ namespace SpaceAce.Main.Saving
         public byte[] Decrypt(byte[] data, byte[] key)
         {
             if (data is null || data.Length == 0) throw new ArgumentNullException(nameof(data), "Attempted to pass an empty data to decrypt!");
-            if (key is null) throw new ArgumentNullException(nameof(key), "Attempted to pass an empty encryption key!");
+            if (key is null) throw new ArgumentNullException(nameof(key), "Attempted to pass an empty decryption key!");
 
             foreach (var validLength in Enum.GetValues(typeof(KeyStrength)))
                 if (key.Length % (int)validLength != 0)
-                    throw new ArgumentException("Attempted to pass encryption key of invalid length!", nameof(key));
+                    throw new ArgumentException("Attempted to pass decryption key of invalid length!", nameof(key));
 
             using Aes algorithm = Aes.Create();
 

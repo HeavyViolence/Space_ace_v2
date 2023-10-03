@@ -13,14 +13,12 @@ namespace SpaceAce.Auxiliary
         public static float GetRandom(float min, float max)
         {
             if (min > max) throw new ArgumentOutOfRangeException($"{nameof(min)}, {nameof(max)}");
-
             return UnityEngine.Random.Range(min, max);
         }
 
         public static int GetRandom(int minInclusive, int maxExclusive)
         {
             if (minInclusive > maxExclusive) throw new ArgumentOutOfRangeException($"{nameof(minInclusive)}, {nameof(maxExclusive)}");
-
             return UnityEngine.Random.Range(minInclusive, maxExclusive);
         }
 
