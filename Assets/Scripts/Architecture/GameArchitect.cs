@@ -1,13 +1,20 @@
 using NaughtyAttributes;
+
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
+using SpaceAce.Main.Localization;
 using SpaceAce.Main.ObjectPooling;
 using SpaceAce.Main.Saving;
+using SpaceAce.UI;
+
 using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Localization;
+using UnityEngine.UIElements;
 
 namespace SpaceAce.Architecture
 {
@@ -17,6 +24,8 @@ namespace SpaceAce.Architecture
         private const string CameraFoldoutName = "Camera";
         private const string SavingSystemFoldoutName = "Saving system";
         private const string AudioFoldoutName = "Audio";
+        private const string UIFoldoutName = "UI";
+        private const string LocalizationFoldoutName = "Localization";
 
         #region DI
 
@@ -50,6 +59,18 @@ namespace SpaceAce.Architecture
         [SerializeField, Foldout(AudioFoldoutName)]
         private AudioCollection _music;
 
+        [SerializeField, Foldout(UIFoldoutName), Label("UI audio")]
+        private UIAudio _uiAudio;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private VisualTreeAsset _mainMenuAsset;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private PanelSettings _mainMenuSettings;
+
+        [SerializeField, Foldout(LocalizationFoldoutName)]
+        private LocalizedFont _localizedFont;
+
         #endregion
 
         private IEnumerable<IUpdatable> _updatableServices = null;
@@ -61,9 +82,14 @@ namespace SpaceAce.Architecture
             CacheUpdatableServices();
             CacheFixedUpdatableServices();
             InitializeServices();
+            RunServices();
         }
 
-        private void OnDestroy() => DisposeServices();
+        private void OnDestroy()
+        {
+            StopServices();
+            DisposeServices();
+        }
 
         private void InstantiateServices()
         {
@@ -72,17 +98,17 @@ namespace SpaceAce.Architecture
             GamePauser gamePauser = new();
             Services.Register(gamePauser);
 
-            LevelLoader levelLoader = new();
-            Services.Register(levelLoader);
+            LevelsLoader levelsLoader = new();
+            Services.Register(levelsLoader);
 
-            MainMenuLoader mainMenuLoader = new(levelLoader);
+            MainMenuLoader mainMenuLoader = new(levelsLoader);
             Services.Register(mainMenuLoader);
 
             SpaceBackground spaceBackground = new(spaceBackgroundObject,
                                                   _mainMenuSpaceBackground,
                                                   _levelsSpaceBackgrounds,
                                                   gamePauser,
-                                                  levelLoader,
+                                                  levelsLoader,
                                                   mainMenuLoader);
             Services.Register(spaceBackground);
 
@@ -111,6 +137,15 @@ namespace SpaceAce.Architecture
 
             MultiobjectPool multiobjectPool = new(gamePauser);
             Services.Register(multiobjectPool);
+
+            LanguageToCodeConverter languageToCodeConverter = new();
+            Services.Register(languageToCodeConverter);
+
+            Localizer localizer = new(_localizedFont, languageToCodeConverter, savingSystem);
+            Services.Register(localizer);
+
+            MainMenuDisplay mainMenuDisplay = new(_mainMenuAsset, _mainMenuSettings, _uiAudio, localizer);
+            Services.Register(mainMenuDisplay);
         }
 
         private ISavingSystem InstantiateSavingSystem()
@@ -146,6 +181,20 @@ namespace SpaceAce.Architecture
             if (Services.TryGet(out IEnumerable<IInitializable> services) == true)
                 foreach (var service in services)
                     service.Initialize();
+        }
+
+        private void RunServices()
+        {
+            if (Services.TryGet(out IEnumerable<IRunnable> runnbaleServices) == true)
+                foreach(var service in runnbaleServices)
+                    service.Run();
+        }
+
+        private void StopServices()
+        {
+            if (Services.TryGet(out IEnumerable<IStoppable> stoppableServices) == true)
+                foreach (var service in stoppableServices)
+                    service.Stop();
         }
 
         private void CacheUpdatableServices()

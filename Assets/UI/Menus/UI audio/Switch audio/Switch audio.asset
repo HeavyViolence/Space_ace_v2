@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89440481744f7fe4a9df253babb7ed52, type: 3}
+  m_Name: Switch audio
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: cef70e3fb6272784a95e8cfb8464ebdc, type: 3}
+  - {fileID: 8300000, guid: 9d825046ac87e8748967fd6b9ff47e94, type: 3}
+  - {fileID: 8300000, guid: 61d31f11a0234354ca6a6668457b9891, type: 3}
+  - {fileID: 8300000, guid: a1c006ca7ed2c7143be94adf7b4bb197, type: 3}
+  - {fileID: 8300000, guid: 30aea0962dc9c094dac11bc353edbd74, type: 3}
+  - {fileID: 8300000, guid: 37a8a55d5aba142438c26c287c144541, type: 3}
+  - {fileID: 8300000, guid: fe4fe0ffbad030d4bb645880c6d922e2, type: 3}
+  - {fileID: 8300000, guid: 34fbeae6540c9074199736c5c7fc79ea, type: 3}
+  - {fileID: 8300000, guid: d68136c0b5fab194bb0d4405f7c9b9b8, type: 3}
+  - {fileID: 8300000, guid: 8a2403e2686fa5241b2e7900f3fe84e0, type: 3}
+  - {fileID: 8300000, guid: 216f84b11362efe42851022f31eaa531, type: 3}
+  - {fileID: 8300000, guid: c1b6beab19530d6439fd4fb46a9ae923, type: 3}
+  - {fileID: 8300000, guid: 694c390c88b6a9244b1c4ec175b8c516, type: 3}
+  - {fileID: 8300000, guid: 42e877b97297de440895c254156b695b, type: 3}
+  - {fileID: 8300000, guid: 5af958f6600b1ce4694afcb6c3c1e656, type: 3}
+  - {fileID: 8300000, guid: bfadce6655671864094f61ea92026046, type: 3}
+  - {fileID: 8300000, guid: 1a4fec880c536a048a25bd3920527b87, type: 3}
+  - {fileID: 8300000, guid: 601f92039e1876843bdafca830a56dcc, type: 3}
+  - {fileID: 8300000, guid: ac42ef028cfae384ebf83b3d9d9759c3, type: 3}
+  - {fileID: 8300000, guid: e2541debd8dad174ab407d7c22003aa3, type: 3}
+  - {fileID: 8300000, guid: a9d5af64f33e4bc49b28860f517a43e3, type: 3}
+  _outputAudioGroup: {fileID: 3503019161036907601, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 0
+  _spatialBlend: {x: 0, y: 0}
+  _pitch: {x: 0.9, y: 1.1}

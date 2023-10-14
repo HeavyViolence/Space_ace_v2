@@ -20,7 +20,7 @@ namespace SpaceAce.Main
         private readonly MeshRenderer _renderer = null;
 
         private readonly GamePauser _gamePauser = null;
-        private readonly LevelLoader _levelLoader = null;
+        private readonly LevelsLoader _levelLoader = null;
         private readonly MainMenuLoader _mainMenuLoader = null;
 
         private bool _paused = false;
@@ -32,14 +32,14 @@ namespace SpaceAce.Main
                                Material mainMenuSpaceBackground,
                                IEnumerable<Material> levelsSpaceBackgrounds,
                                GamePauser gamePauser,
-                               LevelLoader levelLoader,
+                               LevelsLoader levelLoader,
                                MainMenuLoader mainMenuLoader)
         {
             if (spaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty space background object!");
             if (mainMenuSpaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty main menu space background!");
             if (levelsSpaceBackgrounds is null) throw new ArgumentNullException("Attempted to pass an empty levels space backgrounds!");
             if (gamePauser is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(GamePauser)}!");
-            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(LevelLoader)}!");
+            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(LevelsLoader)}!");
             if (mainMenuLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(MainMenuLoader)}!");
 
             _mainMenuSpaceBackground = mainMenuSpaceBackground;

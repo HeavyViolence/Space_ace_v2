@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Space%20ace%20styles.uss?fileID=7433441132597879392&amp;guid=56b0534148b4a4b4490177607d346f08&amp;type=3#Space ace styles" />
+    <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Level-button" class="level-button" />
+</ui:UXML>

@@ -11,13 +11,13 @@ namespace SpaceAce.Main
         public event EventHandler<MainMenuLoadingStartedEventArgs> MainMenuLoadingStarted;
         public event EventHandler MainMenuLoaded;
 
-        private readonly LevelLoader _levelLoader = null;
+        private readonly LevelsLoader _levelLoader = null;
 
         public bool IsMainMenuLoaded { get; private set; } = true;
 
-        public MainMenuLoader(LevelLoader levelLoader)
+        public MainMenuLoader(LevelsLoader levelLoader)
         {
-            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {typeof(LevelLoader)}!");
+            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {typeof(LevelsLoader)}!");
             _levelLoader = levelLoader;
         }
 

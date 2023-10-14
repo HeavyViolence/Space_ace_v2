@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace SpaceAce.Main.Audio
 {
-    public sealed class MusicPlayer : IInitializable, IDisposable, ISavable
+    public sealed class MusicPlayer : IInitializable, IDisposable, IRunnable, IStoppable, ISavable
     {
         public event EventHandler SavingRequested;
 
@@ -93,13 +93,16 @@ namespace SpaceAce.Main.Audio
         public void Initialize()
         {
             _savingSystem.Register(this);
-            Play();
         }
 
         public void Dispose()
         {
             _savingSystem.Deregister(this);
-            Stop();
+        }
+
+        public void Run()
+        {
+            Play();
         }
 
         public string GetState() => JsonConvert.SerializeObject(Settings);

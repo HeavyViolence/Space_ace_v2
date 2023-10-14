@@ -170,6 +170,17 @@ MonoBehaviour:
   _keyStrength: 16
   _audioMixer: {fileID: 24100000, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
   _music: {fileID: 11400000, guid: 3bf6b2c51fe351749bcf7583e917f91b, type: 2}
+  _uiAudio: {fileID: 11400000, guid: e8091a309e24cf14a9db7c09ebdf21cd, type: 2}
+  _mainMenuAsset: {fileID: 9197481963319205126, guid: d30e22cbc981ba24cb3be8eee401b153, type: 3}
+  _mainMenuSettings: {fileID: 11400000, guid: b1e05e79c3e64d243b7223cc29fb7889, type: 2}
+  _localizedFont:
+    m_TableReference:
+      m_TableCollectionName: GUID:1b7b9159f3bab754f9b4578de5e1763d
+    m_TableEntryReference:
+      m_KeyId: 6609555456
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
 --- !u!4 &81637542
 Transform:
   m_ObjectHideFlags: 0

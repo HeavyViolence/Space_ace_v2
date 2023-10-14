@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Menus/Space%20ace%20styles.uss?fileID=7433441132597879392&amp;guid=56b0534148b4a4b4490177607d346f08&amp;type=3#Space ace styles" />
+    <ui:VisualElement name="Root" style="flex-grow: 1;">
+        <ui:VisualElement name="Game-name-title-anchor" style="flex-grow: 0; height: 40%;">
+            <ui:Label tabindex="-1" text="Space Ace" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Game-name" class="game-title-label" style="flex-shrink: 0; font-size: 256%; height: 100%; flex-grow: 1; width: 100%; -unity-text-outline-color: rgb(156, 156, 255); -unity-text-outline-width: 4px; white-space: normal; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; -unity-font-definition: initial; -unity-font: url(&apos;project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&amp;guid=8fe4459f58a94324aba0872fbd0ffaed&amp;type=3#StardosStencil-Regular&apos;); color: rgba(71, 69, 85, 0.61);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Buttons" style="flex-grow: 1; -unity-text-align: upper-left; justify-content: flex-start; align-items: center; align-self: auto; padding-top: 0;">
+            <ui:Button text="Play" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Play-button" class="menu-button" />
+            <ui:Button text="Inventory" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Inventory-button" class="menu-button" />
+            <ui:Button text="Armory" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Armory-button" class="menu-button" />
+            <ui:Button text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Settings-button" class="menu-button" />
+            <ui:Button text="Statistics" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Statistics-button" class="menu-button" />
+            <ui:Button text="Credits" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Credits-button" class="menu-button" />
+            <ui:Button text="Cheats" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Cheats-button" class="menu-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

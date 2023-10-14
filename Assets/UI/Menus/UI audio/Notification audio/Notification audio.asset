@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89440481744f7fe4a9df253babb7ed52, type: 3}
+  m_Name: Notification audio
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 8bb3e90e0ec3ba944a0a5999088eb640, type: 3}
+  - {fileID: 8300000, guid: b8ee070600f22264aa8a3a8825905e0d, type: 3}
+  - {fileID: 8300000, guid: accc15e2287376e47ab13adb12967f8c, type: 3}
+  - {fileID: 8300000, guid: 1c5a828e29c7d1d4994d00b9dcf3c22c, type: 3}
+  - {fileID: 8300000, guid: cdaa238842e0ffc4c822b73d05b48b78, type: 3}
+  - {fileID: 8300000, guid: 6cb2c1c02f8ddcf4b8355c4c83f4b41b, type: 3}
+  - {fileID: 8300000, guid: 25b1731be97dd5547945672e3e0ad452, type: 3}
+  - {fileID: 8300000, guid: 857e19b72b74c6f4c817aabc2fa4f2d0, type: 3}
+  - {fileID: 8300000, guid: 72ba1cb7ed19e6640a4a414ec296a1c1, type: 3}
+  - {fileID: 8300000, guid: b72bdb65371384047bc4e43253ecb5b5, type: 3}
+  - {fileID: 8300000, guid: bf1eeea8c9fd78f47b20b44810e64da9, type: 3}
+  - {fileID: 8300000, guid: 5a119f6724024bb49971c5ca7bdfc49c, type: 3}
+  - {fileID: 8300000, guid: 1b3dcc48d4467fb43aeec7bebf89219e, type: 3}
+  - {fileID: 8300000, guid: 77d5815f2ce994e41a8dc3cc7ea13fe0, type: 3}
+  - {fileID: 8300000, guid: a1b561f7c68b9984f80e36cceef14e96, type: 3}
+  - {fileID: 8300000, guid: aea35e0cb61e8d44ca7a7584312afd71, type: 3}
+  - {fileID: 8300000, guid: 83d974ff89b22f24d884324218cd8f66, type: 3}
+  - {fileID: 8300000, guid: 92002828a5e483d498b53eea420dccbd, type: 3}
+  - {fileID: 8300000, guid: 4439520e179cc4d4a91b9e419b95692e, type: 3}
+  - {fileID: 8300000, guid: fdb85e4238f1e304c9cf598ae1224726, type: 3}
+  _outputAudioGroup: {fileID: -7227176236470740544, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 0, y: 1}
+  _priority: 0
+  _spatialBlend: {x: 0, y: 0}
+  _pitch: {x: 0.9, y: 1.1}

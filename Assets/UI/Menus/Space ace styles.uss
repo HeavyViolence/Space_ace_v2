@@ -1,0 +1,195 @@
+.menu-button {
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    font-size: 36px;
+    -unity-text-align: middle-center;
+    color: rgb(156, 156, 255);
+    background-color: rgba(71, 69, 85, 0.61);
+    border-left-color: rgb(156, 156, 255);
+    border-right-color: rgb(156, 156, 255);
+    border-top-color: rgb(156, 156, 255);
+    border-bottom-color: rgb(156, 156, 255);
+    border-right-width: 6px;
+    border-left-width: 6px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    width: 384px;
+    height: 48px;
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    margin-left: 12px;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    letter-spacing: 0;
+}
+
+.menu-button:hover {
+    transition-duration: 0.2s;
+    border-left-color: rgb(255, 171, 144);
+    border-right-color: rgb(255, 171, 144);
+    border-top-color: rgb(255, 171, 144);
+    border-bottom-color: rgb(255, 171, 144);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-right-width: 8px;
+    border-left-width: 8px;
+    -unity-text-align: middle-center;
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    font-size: 34px;
+    color: rgb(255, 171, 144);
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    margin-left: 12px;
+    width: 384px;
+    height: 48px;
+    background-color: rgba(92, 64, 62, 0.61);
+    rotate: 0;
+    transition-timing-function: ease;
+    letter-spacing: 0;
+}
+
+.menu-button:active {
+    -unity-text-align: middle-center;
+    font-size: 32px;
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    color: rgb(255, 209, 110);
+    border-left-color: rgb(255, 209, 110);
+    border-right-color: rgb(255, 209, 110);
+    border-top-color: rgb(255, 209, 110);
+    border-bottom-color: rgb(255, 209, 110);
+    transition-duration: 0.1s;
+    border-right-width: 10px;
+    border-left-width: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: rgba(78, 70, 55, 0.61);
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    margin-left: 12px;
+    rotate: 0;
+    transition-timing-function: ease;
+    width: 384px;
+    height: 48px;
+    letter-spacing: 0;
+}
+
+.menu-tab-headline-label {
+    font-size: 96px;
+    -unity-text-align: middle-center;
+    color: rgb(156, 156, 255);
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    margin-top: 16px;
+    margin-bottom: 16px;
+    -unity-text-outline-color: rgba(156, 156, 255, 0);
+    -unity-text-outline-width: 0;
+    letter-spacing: 0;
+    background-color: rgba(71, 69, 85, 0.61);
+}
+
+.level-button {
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    font-size: 36px;
+    -unity-text-align: middle-center;
+    -unity-font-style: normal;
+    border-left-color: rgb(156, 156, 255);
+    border-right-color: rgb(156, 156, 255);
+    border-top-color: rgb(156, 156, 255);
+    border-bottom-color: rgb(156, 156, 255);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 6px;
+    border-left-width: 0;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    width: 74px;
+    height: 74px;
+    background-color: rgba(71, 69, 85, 0.61);
+    transition-duration: 0.2s;
+    margin-top: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    color: rgb(156, 156, 255);
+    white-space: nowrap;
+}
+
+.level-button:hover {
+    -unity-text-align: middle-center;
+    font-size: 34px;
+    color: rgb(255, 171, 144);
+    background-color: rgba(92, 64, 62, 0.61);
+    border-left-color: rgb(255, 171, 144);
+    border-right-color: rgb(255, 171, 144);
+    border-top-color: rgb(255, 171, 144);
+    border-bottom-color: rgb(255, 171, 144);
+    border-bottom-width: 6px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    rotate: 0;
+    transition-duration: 0.2s;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    -unity-font-definition: initial;
+}
+
+.level-button:active {
+    font-size: 32px;
+    -unity-text-align: middle-center;
+    background-color: rgba(78, 70, 55, 0.61);
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    -unity-font-definition: initial;
+    color: rgb(255, 209, 110);
+    border-left-color: rgb(255, 209, 110);
+    border-right-color: rgb(255, 209, 110);
+    border-top-color: rgb(255, 209, 110);
+    border-bottom-color: rgb(255, 209, 110);
+    border-bottom-width: 6px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    rotate: 0;
+    transition-duration: 0.1s;
+}
+
+.level-button:focus {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-left-color: rgb(255, 209, 110);
+    border-right-color: rgb(255, 209, 110);
+    border-top-color: rgb(255, 209, 110);
+    border-bottom-color: rgb(255, 209, 110);
+    border-bottom-width: 6px;
+    -unity-text-align: middle-center;
+    font-size: 32px;
+    color: rgb(255, 209, 110);
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/Latin/StardosStencil-Regular.ttf?fileID=12800000&guid=8fe4459f58a94324aba0872fbd0ffaed&type=3#StardosStencil-Regular');
+    -unity-font-definition: initial;
+    transition-duration: 0.2s;
+    rotate: 0;
+    background-color: rgba(78, 70, 55, 0.61);
+}

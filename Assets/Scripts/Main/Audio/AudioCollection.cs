@@ -9,7 +9,8 @@ using UnityEngine.Audio;
 
 namespace SpaceAce.Main.Audio
 {
-    [CreateAssetMenu(fileName = "Audio collection", menuName = "Space ace/Configs/Audio collection")]
+    [CreateAssetMenu(fileName = "Audio collection",
+                     menuName = "Space ace/Configs/Audio/Audio collection")]
     public sealed class AudioCollection : ScriptableObject, IMusic
     {
         public const float MinSpatialBlend = 0f;
@@ -32,16 +33,16 @@ namespace SpaceAce.Main.Audio
         private AudioMixerGroup _outputAudioGroup;
 
         [SerializeField, MinMaxSlider(0f, 1f)]
-        private Vector2 _volume;
+        private Vector2 _volume = new(1f, 1f);
 
         [SerializeField]
         private AudioClipPriority _priority = AudioClipPriority.Lowest;
 
         [SerializeField, MinMaxSlider(MinSpatialBlend, MaxSpatialBlend)]
-        private Vector2 _spatialBlend;
+        private Vector2 _spatialBlend = new(0f, 0f);
 
         [SerializeField, MinMaxSlider(MinPitch, MaxPitch)]
-        private Vector2 _pitch;
+        private Vector2 _pitch = new(MinPitch, MaxPitch);
 
         public AudioMixerGroup OutputAudioGroup => _outputAudioGroup;
 
