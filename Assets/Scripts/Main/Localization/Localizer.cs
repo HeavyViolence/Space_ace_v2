@@ -65,11 +65,11 @@ namespace SpaceAce.Main.Localization
             var operation = LocalizationSettings.InitializationOperation;
             await UniTask.WaitUntil(() => operation.IsDone);
 
-            string activeLocaleCode = _languageToCodeConverter.GetLanguageCode(language);
+            string activeLanguageCode = _languageToCodeConverter.GetLanguageCode(language);
             Locale activeLocale = null;
 
             foreach (var locale in LocalizationSettings.AvailableLocales.Locales)
-                if (locale.Identifier.Code == activeLocaleCode)
+                if (locale.Identifier.Code == activeLanguageCode)
                     activeLocale = locale;
 
             Language previouslySelectedLanguage = ActiveLanguage;

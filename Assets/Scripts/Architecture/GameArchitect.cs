@@ -1,5 +1,5 @@
 using NaughtyAttributes;
-
+using SpaceAce.Gameplay.Levels;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
@@ -45,19 +45,22 @@ namespace SpaceAce.Architecture
         private SavingSystemType _savingSystemType = SavingSystemType.ToFile;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
-        private KeyGeneratorType _keyGeneratorType = KeyGeneratorType.RandomWithSeed;
+        private KeyGeneratorType _keyGeneratorType = KeyGeneratorType.Random;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
         private EncryptionType _encryptionType = EncryptionType.AES;
-
-        [SerializeField, Foldout(SavingSystemFoldoutName)]
-        private KeyStrength _keyStrength = KeyStrength.Default;
 
         [SerializeField, Foldout(AudioFoldoutName)]
         private AudioMixer _audioMixer;
 
         [SerializeField, Foldout(AudioFoldoutName)]
         private AudioCollection _music;
+
+        [SerializeField, Foldout(AudioFoldoutName)]
+        private AudioCollection _levelCompletedAudio;
+
+        [SerializeField, Foldout(AudioFoldoutName)]
+        private AudioCollection _levelFailedAudio;
 
         [SerializeField, Foldout(UIFoldoutName), Label("UI audio")]
         private UIAudio _uiAudio;
@@ -120,7 +123,7 @@ namespace SpaceAce.Architecture
             ISavingSystem savingSystem = InstantiateSavingSystem();
             Services.Register(savingSystem);
 
-            Player player = new(savingSystem);
+            Player player = new(savingSystem, levelsLoader, mainMenuLoader);
             Services.Register(player);
 
             MasterAudioListenerHolder masterAudioListenerHolder = new(masterCameraObject, player, mainMenuLoader);
@@ -138,6 +141,18 @@ namespace SpaceAce.Architecture
             MultiobjectPool multiobjectPool = new(gamePauser);
             Services.Register(multiobjectPool);
 
+            LevelsCompleter levelsCompleter = new(levelsLoader, player, _levelCompletedAudio, _levelFailedAudio);
+            Services.Register(levelsCompleter);
+
+            LevelsUnlocker levelsUnlocker = new(savingSystem, levelsCompleter);
+            Services.Register(levelsUnlocker);
+
+            LevelStopwatch levelStopwatch = new(levelsLoader, levelsCompleter, gamePauser);
+            Services.Register(levelStopwatch);
+
+            BestLevelsRunsStatisticsCollector bestLevelsRunsStatisticsColector = new(savingSystem, levelsCompleter, levelStopwatch, player);
+            Services.Register(bestLevelsRunsStatisticsColector);
+
             LanguageToCodeConverter languageToCodeConverter = new();
             Services.Register(languageToCodeConverter);
 
@@ -153,8 +168,7 @@ namespace SpaceAce.Architecture
             IKeyGenerator keyGenerator = _keyGeneratorType switch
             {
                 KeyGeneratorType.Blank => new BlankKeyGenerator(),
-                KeyGeneratorType.RandomWithSeed => new RandomKeyGenerator(),
-                KeyGeneratorType.RandomCryptosafe => new CryptosafeKeyGenerator(),
+                KeyGeneratorType.Random => new RandomKeyGenerator(),
                 _ => new BlankKeyGenerator(),
             };
 
@@ -168,9 +182,9 @@ namespace SpaceAce.Architecture
 
             ISavingSystem savingSystem = _savingSystemType switch
             {
-                SavingSystemType.ToPlayerPrefs => new ToPlayerPrefsSavingSystem(keyGenerator, _keyStrength, encryptor),
-                SavingSystemType.ToFile => new ToFileSavingSystem(keyGenerator, _keyStrength, encryptor, Application.persistentDataPath),
-                _ => new ToFileSavingSystem(keyGenerator, _keyStrength, encryptor, Application.persistentDataPath),
+                SavingSystemType.ToPlayerPrefs => new ToPlayerPrefsSavingSystem(keyGenerator, encryptor),
+                SavingSystemType.ToFile => new ToFileSavingSystem(keyGenerator, encryptor, Application.persistentDataPath),
+                _ => new ToPlayerPrefsSavingSystem(keyGenerator, encryptor),
             };
 
             return savingSystem;

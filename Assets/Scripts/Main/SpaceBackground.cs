@@ -20,7 +20,7 @@ namespace SpaceAce.Main
         private readonly MeshRenderer _renderer = null;
 
         private readonly GamePauser _gamePauser = null;
-        private readonly LevelsLoader _levelLoader = null;
+        private readonly LevelsLoader _levelsLoader = null;
         private readonly MainMenuLoader _mainMenuLoader = null;
 
         private bool _paused = false;
@@ -32,21 +32,24 @@ namespace SpaceAce.Main
                                Material mainMenuSpaceBackground,
                                IEnumerable<Material> levelsSpaceBackgrounds,
                                GamePauser gamePauser,
-                               LevelsLoader levelLoader,
+                               LevelsLoader levelsLoader,
                                MainMenuLoader mainMenuLoader)
         {
             if (spaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty space background object!");
             if (mainMenuSpaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty main menu space background!");
             if (levelsSpaceBackgrounds is null) throw new ArgumentNullException("Attempted to pass an empty levels space backgrounds!");
-            if (gamePauser is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(GamePauser)}!");
-            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(LevelsLoader)}!");
-            if (mainMenuLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {nameof(MainMenuLoader)}!");
+
+            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
+                $"Attempted to pass an empty {nameof(GamePauser)}!");
+
+            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
+                $"Attempted to pass an empty {nameof(LevelsLoader)}!");
+
+            _mainMenuLoader = mainMenuLoader ?? throw new ArgumentNullException(nameof(mainMenuLoader),
+                $"Attempted to pass an empty {nameof(MainMenuLoader)}!");
 
             _mainMenuSpaceBackground = mainMenuSpaceBackground;
             _levelsSpaceBackgrounds = new List<Material>(levelsSpaceBackgrounds);
-            _gamePauser = gamePauser;
-            _levelLoader = levelLoader;
-            _mainMenuLoader = mainMenuLoader;
 
             _renderer = spaceBackground.GetComponentInChildren<MeshRenderer>();
             if (_renderer == null) throw new MissingComponentException($"Space background object is missing {nameof(MeshRenderer)}!");
@@ -88,7 +91,7 @@ namespace SpaceAce.Main
 
             _mainMenuLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
 
-            _levelLoader.LevelLoaded += LevelLoadedEventHandler;
+            _levelsLoader.LevelLoaded += LevelLoadedEventHandler;
         }
 
         public void Dispose()
@@ -98,7 +101,7 @@ namespace SpaceAce.Main
 
             _mainMenuLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
 
-            _levelLoader.LevelLoaded -= LevelLoadedEventHandler;
+            _levelsLoader.LevelLoaded -= LevelLoadedEventHandler;
         }
 
         void IUpdatable.Update()

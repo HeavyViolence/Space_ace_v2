@@ -7,25 +7,25 @@ namespace SpaceAce.Main.Saving
 {
     public sealed class ToPlayerPrefsSavingSystem : ISavingSystem
     {
-        private readonly HashSet<ISavable> _savableEntities = new();
+        private static readonly UTF8Encoding s_UTF8 = new(true, true);
 
+        private readonly HashSet<ISavable> _savableEntities = new();
         private readonly IKeyGenerator _keyGenerator = null;
-        private readonly KeyStrength _keyStrength = KeyStrength.Default;
         private readonly IEncryptor _encryptor = null;
 
-        public ToPlayerPrefsSavingSystem(IKeyGenerator keyGenerator, KeyStrength strength, IEncryptor encryptor)
+        public ToPlayerPrefsSavingSystem(IKeyGenerator keyGenerator, IEncryptor encryptor)
         {
-            if (keyGenerator is null) throw new ArgumentNullException(nameof(keyGenerator), $"Attempted to pass an empty {typeof(IKeyGenerator)}!");
-            if (encryptor is null) throw new ArgumentNullException(nameof(encryptor), $"Attempted to pass an empty {typeof(IEncryptor)}!");
+            _keyGenerator = keyGenerator ?? throw new ArgumentNullException(nameof(keyGenerator),
+                $"Attempted to pass an empty {typeof(IKeyGenerator)}!");
 
-            _keyGenerator = keyGenerator;
-            _keyStrength = strength;
-            _encryptor = encryptor;
+            _encryptor = encryptor ?? throw new ArgumentNullException(nameof(encryptor),
+                $"Attempted to pass an empty {typeof(IEncryptor)}!");
         }
 
         public void Register(ISavable entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity), $"Attempted to pass an empty {typeof(ISavable)}!");
+            if (entity is null) throw new ArgumentNullException(nameof(entity),
+                $"Attempted to pass an empty {typeof(ISavable)}!");
 
             if (_savableEntities.Add(entity) == true)
             {
@@ -47,7 +47,8 @@ namespace SpaceAce.Main.Saving
 
         public void Deregister(ISavable entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity), $"Attempted to pass an empty {typeof(ISavable)}!");
+            if (entity is null) throw new ArgumentNullException(nameof(entity),
+                $"Attempted to pass an empty {typeof(ISavable)}!");
 
             if (_savableEntities.Contains(entity) == true)
             {
@@ -69,34 +70,27 @@ namespace SpaceAce.Main.Saving
 
         private void SetState(ISavable entity)
         {
-            string stateAsBase64 = PlayerPrefs.GetString(entity.ID, string.Empty);
-            byte[] encryptedData = Convert.FromBase64String(stateAsBase64);
+            string encryptedByteStateAsBase64 = PlayerPrefs.GetString(entity.ID, string.Empty);
+            byte[] encryptedByteState = Convert.FromBase64String(encryptedByteStateAsBase64);
 
-            int keySeed = entity.ID.GetHashCode();
-            byte[] key = _keyGenerator.GenerateKey(_keyStrength, keySeed);
+            byte[] key = _keyGenerator.GenerateKey(entity);
+            byte[] decryptedByteState = _encryptor.Decrypt(encryptedByteState, key);
 
-            byte[] decryptedData = _encryptor.Decrypt(encryptedData, key);
-
-            UTF8Encoding utf8 = new(true, true);
-            string state = utf8.GetString(decryptedData);
-
+            string state = s_UTF8.GetString(decryptedByteState);
             entity.SetState(state);
         }
 
         private void SaveStateToPlayerPrefs(ISavable entity)
         {
             string state = entity.GetState();
+            byte[] byteState = s_UTF8.GetBytes(state);
 
-            UTF8Encoding utf8 = new(true, true);
-            byte[] data = utf8.GetBytes(state);
+            byte[] key = _keyGenerator.GenerateKey(entity);
+            byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
 
-            int keySeed = entity.ID.GetHashCode();
-            byte[] key = _keyGenerator.GenerateKey(_keyStrength, keySeed);
+            string encryptedByteStateAsBase64 = Convert.ToBase64String(encryptedByteState);
 
-            byte[] encryptedData = _encryptor.Encrypt(data, key);
-            string stateAsBase64 = Convert.ToBase64String(encryptedData);
-
-            PlayerPrefs.SetString(entity.ID, stateAsBase64);
+            PlayerPrefs.SetString(entity.ID, encryptedByteStateAsBase64);
             PlayerPrefs.Save();
         }
     }

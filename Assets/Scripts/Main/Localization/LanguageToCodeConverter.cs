@@ -6,14 +6,14 @@ namespace SpaceAce.Main.Localization
 
         public string GetLanguageCode(Language language)
         {
-            string activeLocaleCode = language switch
+            string languageCode = language switch
             {
                 Language.EnglishUnitedStates => "en-US",
                 Language.Russian => "ru-RU",
                 _ => "en-US"
             };
 
-            return activeLocaleCode;
+            return languageCode;
         }
     }
 }

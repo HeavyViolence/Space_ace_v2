@@ -50,10 +50,12 @@ namespace SpaceAce.Main.Audio
 
         public AudioPlayer(ISavingSystem savingSystem, AudioMixer mixer)
         {
-            if (savingSystem is null) throw new ArgumentNullException(nameof(savingSystem), $"Attempted to pass an empty {typeof(ISavingSystem)}!");
-            if (mixer == null) throw new ArgumentNullException(nameof(mixer), $"Attempted to pass an empty {typeof(AudioMixer)}!");
+            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
+                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
 
-            _savingSystem = savingSystem;
+            if (mixer == null) throw new ArgumentNullException(nameof(mixer),
+                $"Attempted to pass an empty {typeof(AudioMixer)}!");
+
             _audioMixer = mixer;
 
             CreateAudioSourcePool();

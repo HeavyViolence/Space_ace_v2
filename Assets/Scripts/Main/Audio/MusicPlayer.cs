@@ -28,7 +28,8 @@ namespace SpaceAce.Main.Audio
 
             set
             {
-                if (value is null) throw new ArgumentNullException(nameof(value), $"Attempted to pass an empty {typeof(MusicPlayerSettings)}!");
+                if (value is null) throw new ArgumentNullException(nameof(value),
+                    $"Attempted to pass an empty {typeof(MusicPlayerSettings)}!");
 
                 _settings = value;
                 SavingRequested?.Invoke(this, EventArgs.Empty);
@@ -39,11 +40,13 @@ namespace SpaceAce.Main.Audio
 
         public MusicPlayer(IMusic music, ISavingSystem savingSystem)
         {
-            if (music is null) throw new ArgumentNullException(nameof(music), $"Attempted to pass an empty {typeof(IMusic)}!");
-            if (savingSystem is null) throw new ArgumentNullException(nameof(savingSystem), $"Attempted to pass an empty {typeof(ISavingSystem)}!");
+            if (music is null) throw new ArgumentNullException(nameof(music),
+                $"Attempted to pass an empty {typeof(IMusic)}!");
 
             _music = music;
-            _savingSystem = savingSystem;
+
+            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
+                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
         }
 
         public void Play()

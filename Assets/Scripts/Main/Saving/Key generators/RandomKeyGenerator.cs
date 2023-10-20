@@ -1,15 +1,17 @@
-using System;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SpaceAce.Main.Saving
 {
     public sealed class RandomKeyGenerator : IKeyGenerator
     {
-        public byte[] GenerateKey(KeyStrength strength, int seed)
-        {
-            Random generator = new(seed);
-            byte[] key = new byte[(int)strength];
+        private static readonly UTF8Encoding s_UTF8 = new(true, true);
+        private static readonly SHA256 s_SHA256 = SHA256.Create();
 
-            generator.NextBytes(key);
+        public byte[] GenerateKey(ISavable entity)
+        {
+            byte[] byteID = s_UTF8.GetBytes(entity.ID);
+            byte[] key = s_SHA256.ComputeHash(byteID);
 
             return key;
         }

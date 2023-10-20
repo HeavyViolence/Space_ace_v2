@@ -2,6 +2,8 @@ namespace SpaceAce.Main.Saving
 {
     public interface IKeyGenerator
     {
-        byte[] GenerateKey(KeyStrength strength, int seed);
+        const int ByteKeyLength = 32;
+
+        byte[] GenerateKey(ISavable entity);
     }
 }

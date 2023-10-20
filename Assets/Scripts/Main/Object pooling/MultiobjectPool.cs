@@ -17,9 +17,9 @@ namespace SpaceAce.Main.ObjectPooling
 
         public MultiobjectPool(GamePauser gamePauser)
         {
-            if (gamePauser is null) throw new ArgumentNullException($"Attempted to pass an empty {typeof(GamePauser)}!");
+            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
 
-            _gamePauser = gamePauser;
             _masterAnchor = new GameObject("Multiobject pool");
         }
 

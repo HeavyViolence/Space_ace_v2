@@ -36,7 +36,8 @@ namespace SpaceAce.Main
 
             set
             {
-                if (value is null) throw new ArgumentNullException(nameof(value), $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
+                if (value is null) throw new ArgumentNullException(nameof(value),
+                    $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
 
                 _settings = value;
                 SavingRequested?.Invoke(this, EventArgs.Empty);
@@ -47,16 +48,19 @@ namespace SpaceAce.Main
 
         public MasterCameraShaker(GameObject masterCameraObject, GamePauser gamePauser, ISavingSystem savingSystem)
         {
-            if (masterCameraObject == null) throw new ArgumentNullException(nameof(masterCameraObject), $"Attempted to pass an empty master camera {typeof(GameObject)}!");
-            if (gamePauser is null) throw new ArgumentNullException(nameof(gamePauser), $"Attempted to pass an empty {typeof(GamePauser)}!");
-            if (savingSystem is null) throw new ArgumentNullException(nameof(savingSystem), $"Attempted dto pass an empty {typeof(ISavingSystem)}!");
+            if (masterCameraObject == null) throw new ArgumentNullException(nameof(masterCameraObject),
+                $"Attempted to pass an empty master camera {typeof(GameObject)}!");
 
             Rigidbody2D body = masterCameraObject.GetComponentInChildren<Rigidbody2D>();
             if (body == null) throw new MissingComponentException($"Passed master camera object is missing {typeof(Rigidbody2D)}!");
 
             _masterCameraRigidbody2D = body;
-            _gamePauser = gamePauser;
-            _savingSystem = savingSystem;
+
+            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
+
+            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
+                $"Attempted dto pass an empty {typeof(ISavingSystem)}!");
         }
 
         public void ShakeOnShotFired()

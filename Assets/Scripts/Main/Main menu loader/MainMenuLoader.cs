@@ -11,17 +11,17 @@ namespace SpaceAce.Main
         public event EventHandler<MainMenuLoadingStartedEventArgs> MainMenuLoadingStarted;
         public event EventHandler MainMenuLoaded;
 
-        private readonly LevelsLoader _levelLoader = null;
+        private readonly LevelsLoader _levelsLoader = null;
 
         public bool IsMainMenuLoaded { get; private set; } = true;
 
-        public MainMenuLoader(LevelsLoader levelLoader)
+        public MainMenuLoader(LevelsLoader levelsLoader)
         {
-            if (levelLoader is null) throw new ArgumentNullException($"Attempted to pass an empty {typeof(LevelsLoader)}!");
-            _levelLoader = levelLoader;
+            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
+                $"Attempted to pass an empty {typeof(LevelsLoader)}!");
         }
 
-        public async UniTaskVoid LoadMainMenu()
+        public async UniTaskVoid LoadMainMenuAsync()
         {
             if (IsMainMenuLoaded) return;
 
@@ -35,12 +35,12 @@ namespace SpaceAce.Main
 
         public void Initialize()
         {
-            _levelLoader.LevelLoaded += (sender, args) => IsMainMenuLoaded = false;
+            _levelsLoader.LevelLoaded += (sender, args) => IsMainMenuLoaded = false;
         }
 
         public void Dispose()
         {
-            _levelLoader.LevelLoaded -= (sender, args) => IsMainMenuLoaded = false;
+            _levelsLoader.LevelLoaded -= (sender, args) => IsMainMenuLoaded = false;
         }
     }
 }

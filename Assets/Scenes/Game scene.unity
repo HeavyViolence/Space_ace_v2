@@ -164,12 +164,13 @@ MonoBehaviour:
   - {fileID: 2100000, guid: eb8fc92c89d442443b648f4196587490, type: 2}
   - {fileID: 2100000, guid: 3dc2c46e34dd937478ca4fe24b4e8548, type: 2}
   _cameraPrefab: {fileID: 1753528834700607575, guid: ae35b244b9f8e51478ba75fad5cf6cd2, type: 3}
-  _savingSystemType: 1
+  _savingSystemType: 0
   _keyGeneratorType: 1
   _encryptionType: 2
-  _keyStrength: 16
   _audioMixer: {fileID: 24100000, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
   _music: {fileID: 11400000, guid: 3bf6b2c51fe351749bcf7583e917f91b, type: 2}
+  _levelCompletedAudio: {fileID: 11400000, guid: 8abd89b7beb2d524b9655c83881c44f4, type: 2}
+  _levelFailedAudio: {fileID: 11400000, guid: de9e9e71816b8244891671678525d376, type: 2}
   _uiAudio: {fileID: 11400000, guid: e8091a309e24cf14a9db7c09ebdf21cd, type: 2}
   _mainMenuAsset: {fileID: 9197481963319205126, guid: d30e22cbc981ba24cb3be8eee401b153, type: 3}
   _mainMenuSettings: {fileID: 11400000, guid: b1e05e79c3e64d243b7223cc29fb7889, type: 2}

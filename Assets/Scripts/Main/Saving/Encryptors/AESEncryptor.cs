@@ -8,12 +8,11 @@ namespace SpaceAce.Main.Saving
     {
         public byte[] Encrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0) throw new ArgumentNullException(nameof(data), "Attempted to pass an empty data to encrypt!");
-            if (key is null || key.Length == 0) throw new ArgumentNullException(nameof(key), "Attempted to pass an empty encryption key!");
+            if (data is null || data.Length == 0) throw new ArgumentNullException(nameof(data),
+                "Attempted to pass an empty data to encrypt!");
 
-            foreach (var validLength in Enum.GetValues(typeof(KeyStrength)))
-                if (key.Length % (int)validLength != 0)
-                    throw new ArgumentException("Attempted to pass encryption key of invalid length!", nameof(key));
+            if (key is null || key.Length != IKeyGenerator.ByteKeyLength) throw new ArgumentNullException(nameof(key),
+                "Encryption key is empty or has an invalid length!");
 
             using Aes algorithm = Aes.Create();
             using ICryptoTransform encryptor = algorithm.CreateEncryptor(key, algorithm.IV);
@@ -31,12 +30,11 @@ namespace SpaceAce.Main.Saving
 
         public byte[] Decrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0) throw new ArgumentNullException(nameof(data), "Attempted to pass an empty data to decrypt!");
-            if (key is null) throw new ArgumentNullException(nameof(key), "Attempted to pass an empty decryption key!");
+            if (data is null || data.Length == 0) throw new ArgumentNullException(nameof(data),
+                "Attempted to pass an empty data to decrypt!");
 
-            foreach (var validLength in Enum.GetValues(typeof(KeyStrength)))
-                if (key.Length % (int)validLength != 0)
-                    throw new ArgumentException("Attempted to pass decryption key of invalid length!", nameof(key));
+            if (key is null || key.Length != IKeyGenerator.ByteKeyLength) throw new ArgumentNullException(nameof(key),
+                "Decryption key is empty or has an invalid length!");
 
             using Aes algorithm = Aes.Create();
 

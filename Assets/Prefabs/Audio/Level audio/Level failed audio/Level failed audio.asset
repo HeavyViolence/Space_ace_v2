@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89440481744f7fe4a9df253babb7ed52, type: 3}
+  m_Name: Level failed audio
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 82ed4f0f9e8859546a3c28503cda0c9f, type: 3}
+  - {fileID: 8300000, guid: 4530a3936335c604f80129dcbf2f65ec, type: 3}
+  - {fileID: 8300000, guid: c6e10601db83fe1448e2d9e05886c7c9, type: 3}
+  - {fileID: 8300000, guid: 83da737df1f569d48895fa8e0c98c9e3, type: 3}
+  - {fileID: 8300000, guid: 1b13aee7b0755274e853ecdece7338f1, type: 3}
+  - {fileID: 8300000, guid: fb82383fa5570504dae498b9bedf7119, type: 3}
+  - {fileID: 8300000, guid: 04202d3d5b37ec146bb5e73c0de5ed5b, type: 3}
+  - {fileID: 8300000, guid: 6c21cc17e7113db4b8898864129bea28, type: 3}
+  - {fileID: 8300000, guid: aaf3f02bb7362694c94c0b3ac0e550ff, type: 3}
+  - {fileID: 8300000, guid: 84bce0a9b832eaa49aac1f4f2b415d17, type: 3}
+  - {fileID: 8300000, guid: 0a3c1e79c67f91c45a5c557c92b7e4e6, type: 3}
+  - {fileID: 8300000, guid: 246ff91137bdcb2429ac4526f7498b36, type: 3}
+  - {fileID: 8300000, guid: 5872585630e31b347a90c6ce0251e31e, type: 3}
+  - {fileID: 8300000, guid: 2253006733078ff48a0a491f471e10e1, type: 3}
+  - {fileID: 8300000, guid: 10e81c79de196f54baf9f8d9f8e924c5, type: 3}
+  - {fileID: 8300000, guid: 2df468405cafb9e4ba98a98271ac1211, type: 3}
+  - {fileID: 8300000, guid: cf1dee0448b26a84582c489700088fb1, type: 3}
+  - {fileID: 8300000, guid: 2aca2fb4b532f0d4f9fbf041e3f8ce87, type: 3}
+  - {fileID: 8300000, guid: e0fc1cbe4329d7d489e732c1eda82858, type: 3}
+  - {fileID: 8300000, guid: bfa026a3b8fb0ef42bc1f1b0d47ef981, type: 3}
+  - {fileID: 8300000, guid: b36da62e8004abe459df751cbbfc3f0d, type: 3}
+  - {fileID: 8300000, guid: 8aa5d98442148e94fa67dd00f90a7939, type: 3}
+  - {fileID: 8300000, guid: 72425109efc5c154fbac48ec72c6f6f2, type: 3}
+  - {fileID: 8300000, guid: 3a89008cbd1ab1c4a87009747c541ecc, type: 3}
+  - {fileID: 8300000, guid: f324121b0f463954cb54e6403b3605b9, type: 3}
+  _outputAudioGroup: {fileID: -7227176236470740544, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 0
+  _spatialBlend: {x: 0, y: 0}
+  _pitch: {x: 0.9, y: 1.1}

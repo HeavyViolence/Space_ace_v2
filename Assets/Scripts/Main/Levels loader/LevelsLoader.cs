@@ -14,7 +14,7 @@ namespace SpaceAce.Main
 
         public LevelsLoader() { }
 
-        public async UniTaskVoid LoadLevel(int levelIndex)
+        public async UniTaskVoid LoadLevelAsync(int levelIndex)
         {
             if (levelIndex <= 0) throw new ArgumentOutOfRangeException(nameof(levelIndex));
 
