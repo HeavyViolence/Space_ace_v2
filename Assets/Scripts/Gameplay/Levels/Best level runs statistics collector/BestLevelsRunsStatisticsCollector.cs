@@ -37,16 +37,11 @@ namespace SpaceAce.Gameplay.Levels
                 $"Attempted to pass an empty {typeof(Player)}!");
         }
 
-        public bool TryGetStatistics(int levelIndex, out BestLevelRunStatistics statistics)
+        public BestLevelRunStatistics GetStatistics(int levelIndex)
         {
-            if (_statistics.TryGetValue(levelIndex, out BestLevelRunStatistics value))
-            {
-                statistics = value;
-                return true;
-            }
+            if (_statistics.TryGetValue(levelIndex, out var value) == true) return value;
 
-            statistics = null;
-            return false;
+            return BestLevelRunStatistics.Default;
         }
 
         #region interfaces
@@ -76,7 +71,9 @@ namespace SpaceAce.Gameplay.Levels
             try
             {
                 var data = JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<int, BestLevelRunStatistics>>>(state);
-                foreach (var element in data) _statistics.TryAdd(element.Key, element.Value);
+
+                foreach (var element in data)
+                    _statistics.TryAdd(element.Key, element.Value);
             }
             catch (Exception) { }
         }

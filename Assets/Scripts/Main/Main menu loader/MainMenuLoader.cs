@@ -21,9 +21,9 @@ namespace SpaceAce.Main
                 $"Attempted to pass an empty {typeof(LevelsLoader)}!");
         }
 
-        public async UniTaskVoid LoadMainMenuAsync()
+        public async UniTask LoadMainMenuAsync()
         {
-            if (IsMainMenuLoaded) return;
+            if (IsMainMenuLoaded == true) return;
 
             MainMenuLoadingStarted?.Invoke(this, new(MainMenuLoadingDelay));
 

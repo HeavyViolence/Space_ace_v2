@@ -14,9 +14,13 @@ namespace SpaceAce.Main
 
         public LevelsLoader() { }
 
-        public async UniTaskVoid LoadLevelAsync(int levelIndex)
+        public async UniTask LoadLevelAsync(int levelIndex)
         {
-            if (levelIndex <= 0) throw new ArgumentOutOfRangeException(nameof(levelIndex));
+            if (levelIndex <= 0)
+                throw new ArgumentOutOfRangeException(nameof(levelIndex),
+                    $"Level index must be greater than 0!");
+
+            if (LoadedLevel == levelIndex) return;
 
             LevelLoadingStarted?.Invoke(this, new(levelIndex, LevelLoadingDelay));
 

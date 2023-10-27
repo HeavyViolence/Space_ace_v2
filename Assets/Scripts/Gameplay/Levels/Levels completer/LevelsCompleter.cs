@@ -31,11 +31,13 @@ namespace SpaceAce.Gameplay.Levels
             _player = player ?? throw new ArgumentNullException(nameof(player),
                 $"Attempted to pass an empty {typeof(Player)}!");
 
-            if (levelCompletedAudio == null) throw new ArgumentNullException(nameof(levelCompletedAudio),
-                $"Attempted to pass an empty level completion audio: {typeof(AudioCollection)}!");
+            if (levelCompletedAudio == null)
+                throw new ArgumentNullException(nameof(levelCompletedAudio),
+                    $"Attempted to pass an empty level completion audio: {typeof(AudioCollection)}!");
 
-            if (levelFailedAudio == null) throw new ArgumentNullException(nameof(levelFailedAudio),
-                $"Attempted to pass an empty level failed audio: {typeof(AudioCollection)}!");
+            if (levelFailedAudio == null)
+                throw new ArgumentNullException(nameof(levelFailedAudio),
+                    $"Attempted to pass an empty level failed audio: {typeof(AudioCollection)}!");
 
             _levelCompletedAudio = levelCompletedAudio;
             _levelFailedAudio = levelFailedAudio;

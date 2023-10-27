@@ -1,8 +1,8 @@
 namespace SpaceAce.Main.Saving
 {
-    public enum KeyGeneratorType
+    public enum KeyGenerationType
     {
         Blank,
-        Random,
+        Hash,
     }
 }

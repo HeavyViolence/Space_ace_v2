@@ -57,11 +57,13 @@ namespace SpaceAce.Main
 
         public MasterCameraHolder(GameObject masterCameraObject)
         {
-            if (masterCameraObject == null) throw new ArgumentNullException("Attempted to pass an empty camera object!");
+            if (masterCameraObject == null)
+                throw new ArgumentNullException("Attempted to pass an empty camera object!");
 
             MasterCamera = masterCameraObject.GetComponentInChildren<Camera>();
 
-            if (MasterCamera == null) throw new MissingComponentException($"Passed camera object is missing {typeof(Camera)}!");
+            if (MasterCamera == null)
+                throw new MissingComponentException($"Passed camera object is missing {typeof(Camera)}!");
         }
 
         public float GetShiftedViewportLeftBound(float offsetFactor) => ViewportLeftBound * offsetFactor;

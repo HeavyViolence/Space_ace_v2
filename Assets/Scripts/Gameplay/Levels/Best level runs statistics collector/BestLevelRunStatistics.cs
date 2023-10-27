@@ -12,7 +12,10 @@ namespace SpaceAce.Gameplay.Levels
         public float DamageTaken { get; }
 
         [JsonIgnore]
-        public float DamageAvertedMastery => DamageTaken == 0f ? 1f : DamageAverted / DamageTaken;
+        public float DamageAvertedMastery => DamageTaken == 0f ? 0f : DamageAverted / DamageTaken;
+
+        [JsonIgnore]
+        public float DamageAvertedPercentage => DamageAvertedMastery * 100f;
 
         public float DamageSent { get; }
         public float DamageDelivered { get; }
@@ -20,37 +23,55 @@ namespace SpaceAce.Gameplay.Levels
         [JsonIgnore]
         public float DamageDealtMastery => DamageSent == 0f ? 0f : DamageDelivered / DamageSent;
 
+        [JsonIgnore]
+        public float DamageDealtPercentage => DamageDealtMastery * 100f;
+
         public int ShotsFired { get; }
         public int Hits { get; }
 
         [JsonIgnore]
         public float Accuracy => ShotsFired == 0 ? 0f : (float)Hits / ShotsFired;
 
+        [JsonIgnore]
+        public float AccuracyPercentage => Accuracy * 100f;
+
         public int MeteorsEncountered { get; }
         public int MeteorsDestroyed { get; }
 
         [JsonIgnore]
-        public float MeteorsMastery => MeteorsEncountered == 0 ? 0f : (float)MeteorsDestroyed / MeteorsEncountered;
-
-        public int SpaceDebrisEncountered { get; }
-        public int SpaceDebrisDestroyed { get; }
+        public float MeteorsDestroyedMastery => MeteorsEncountered == 0 ? 0f : (float)MeteorsDestroyed / MeteorsEncountered;
 
         [JsonIgnore]
-        public float SpaceDebrisMastery => SpaceDebrisEncountered == 0 ? 0f : (float)SpaceDebrisDestroyed / SpaceDebrisEncountered;
+        public float MeteorsDestroyedPercentage => MeteorsDestroyedMastery * 100f;
+
+        public int WrecksEncountered { get; }
+        public int WrecksDestroyed { get; }
+
+        [JsonIgnore]
+        public float WrecksDestroyedMastery => WrecksEncountered == 0 ? 0f : (float)WrecksDestroyed / WrecksEncountered;
+
+        [JsonIgnore]
+        public float WrecksDestroyedPercentage => WrecksDestroyedMastery * 100f;
 
         public float ExperienceEarned { get; }
         public float ExperienceLost { get; }
 
         [JsonIgnore]
-        public float ExperienceMatery => ExperienceEarned + ExperienceLost == 0f ? 0f : ExperienceEarned / (ExperienceEarned + ExperienceLost);
+        public float ExperienceMastery => ExperienceEarned + ExperienceLost == 0f ? 0f : ExperienceEarned / (ExperienceEarned + ExperienceLost);
+
+        [JsonIgnore]
+        public float ExperiencePercentage => ExperienceMastery * 100f;
 
         [JsonIgnore]
         public float LevelMastery => DamageAvertedMastery *
                                      DamageDealtMastery *
                                      Accuracy *
-                                     MeteorsMastery *
-                                     SpaceDebrisMastery *
-                                     ExperienceMatery;
+                                     MeteorsDestroyedMastery *
+                                     WrecksDestroyedMastery *
+                                     ExperienceMastery;
+
+        [JsonIgnore]
+        public float LevelMasteryPercentage => LevelMastery * 100f;
 
         public int EnemiesDefeated { get; }
         public float CreditsEarned { get; }
@@ -80,8 +101,8 @@ namespace SpaceAce.Gameplay.Levels
             Hits = Mathf.Clamp(hits, 0, int.MaxValue);
             MeteorsEncountered = Mathf.Clamp(meteorsEncountered, 0, int.MaxValue);
             MeteorsDestroyed = Mathf.Clamp(meteorsDestroyed, 0, int.MaxValue);
-            SpaceDebrisEncountered = Mathf.Clamp(spaceDebrisEncountered, 0, int.MaxValue);
-            SpaceDebrisDestroyed = Mathf.Clamp(spaceDebrisDestroyed, 0, int.MaxValue);
+            WrecksEncountered = Mathf.Clamp(spaceDebrisEncountered, 0, int.MaxValue);
+            WrecksDestroyed = Mathf.Clamp(spaceDebrisDestroyed, 0, int.MaxValue);
             ExperienceEarned = Mathf.Clamp(experienceEarned, 0f, float.MaxValue);
             ExperienceLost = Mathf.Clamp(experienceLost, 0f, float.MaxValue);
             EnemiesDefeated = Mathf.Clamp(enemiesDefeated, 0, int.MaxValue);

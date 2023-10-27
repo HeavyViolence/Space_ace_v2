@@ -15,16 +15,18 @@ namespace SpaceAce.Architecture
 
         public void Register(IPausable entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity),
-                $"Attempted to register an empty {typeof(IPausable)}!");
+            if (entity is null)
+                throw new ArgumentNullException(nameof(entity),
+                    $"Attempted to register an empty {typeof(IPausable)}!");
 
             _pausableEntities.Add(entity);
         }
 
         public void Deregister(IPausable entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity),
-                $"Attempted to deregister an empty {typeof(IPausable)}!");
+            if (entity is null)
+                throw new ArgumentNullException(nameof(entity),
+                    $"Attempted to deregister an empty {typeof(IPausable)}!");
 
             _pausableEntities.Remove(entity);
         }

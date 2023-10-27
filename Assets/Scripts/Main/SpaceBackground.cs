@@ -35,9 +35,14 @@ namespace SpaceAce.Main
                                LevelsLoader levelsLoader,
                                MainMenuLoader mainMenuLoader)
         {
-            if (spaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty space background object!");
-            if (mainMenuSpaceBackground == null) throw new ArgumentNullException("Attempted to pass an empty main menu space background!");
-            if (levelsSpaceBackgrounds is null) throw new ArgumentNullException("Attempted to pass an empty levels space backgrounds!");
+            if (spaceBackground == null)
+                throw new ArgumentNullException("Attempted to pass an empty space background object!");
+
+            if (mainMenuSpaceBackground == null)
+                throw new ArgumentNullException("Attempted to pass an empty main menu space background!");
+
+            if (levelsSpaceBackgrounds is null)
+                throw new ArgumentNullException("Attempted to pass an empty levels space backgrounds!");
 
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
                 $"Attempted to pass an empty {nameof(GamePauser)}!");
@@ -52,10 +57,14 @@ namespace SpaceAce.Main
             _levelsSpaceBackgrounds = new List<Material>(levelsSpaceBackgrounds);
 
             _renderer = spaceBackground.GetComponentInChildren<MeshRenderer>();
-            if (_renderer == null) throw new MissingComponentException($"Space background object is missing {nameof(MeshRenderer)}!");
+
+            if (_renderer == null)
+                throw new MissingComponentException($"Space background object is missing {nameof(MeshRenderer)}!");
 
             _dustfield = spaceBackground.GetComponentInChildren<ParticleSystem>();
-            if (_dustfield == null) throw new MissingComponentException($"Space background object is missing {nameof(ParticleSystem)}!");
+
+            if (_dustfield == null)
+                throw new MissingComponentException($"Space background object is missing {nameof(ParticleSystem)}!");
 
             SetMainMenuState();
         }

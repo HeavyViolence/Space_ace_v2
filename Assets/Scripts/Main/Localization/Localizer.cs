@@ -36,11 +36,15 @@ namespace SpaceAce.Main.Localization
 
         public async UniTask<string> GetLocalizedStringAsync(string tableName, string entryName, params object[] arguments)
         {
-            if (string.IsNullOrEmpty(tableName) || string.IsNullOrWhiteSpace(tableName))
-                throw new ArgumentNullException(nameof(tableName), "Attempted to pass an empty table name!");
+            if (string.IsNullOrEmpty(tableName) ||
+                string.IsNullOrWhiteSpace(tableName))
+                throw new ArgumentNullException(nameof(tableName),
+                    "Attempted to pass an empty table name!");
 
-            if (string.IsNullOrEmpty(entryName) || string.IsNullOrWhiteSpace(entryName))
-                throw new ArgumentNullException(nameof(entryName), $"Attempted to pass an empty table entry name!");
+            if (string.IsNullOrEmpty(entryName) ||
+                string.IsNullOrWhiteSpace(entryName))
+                throw new ArgumentNullException(nameof(entryName),
+                    $"Attempted to pass an empty table entry name!");
 
             LocalizedString localizedString = new(tableName, entryName) { Arguments = arguments };
 
@@ -58,7 +62,7 @@ namespace SpaceAce.Main.Localization
             return operation.Result;
         }
 
-        public async UniTaskVoid SetActiveLanguageAsync(Language language)
+        public async UniTask SetActiveLanguageAsync(Language language)
         {
             if (_initialized == true && language == ActiveLanguage) return;
 

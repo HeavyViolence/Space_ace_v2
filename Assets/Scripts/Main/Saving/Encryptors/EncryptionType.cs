@@ -4,6 +4,7 @@ namespace SpaceAce.Main.Saving
     {
         None,
         XOR,
+        RandomXOR,
         AES
     }
 }

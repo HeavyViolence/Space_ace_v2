@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEngine;
 
 namespace SpaceAce.Main.Saving
 {
@@ -9,70 +10,45 @@ namespace SpaceAce.Main.Saving
     {
         private const string SavesExtension = ".save";
 
-        private static readonly UTF8Encoding s_UTF8 = new(true, true);
-
+        private readonly UTF8Encoding _UTF8 = new(true, true);
         private readonly HashSet<ISavable> _savableEntities = new();
         private readonly IKeyGenerator _keyGenerator = null;
         private readonly IEncryptor _encryptor = null;
-        private readonly string _savesDirectory = string.Empty;
 
-        public ToFileSavingSystem(IKeyGenerator keyGenerator, IEncryptor encryptor, string savesDirectory)
+        public ToFileSavingSystem(IKeyGenerator keyGenerator, IEncryptor encryptor)
         {
             _keyGenerator = keyGenerator ?? throw new ArgumentNullException(nameof(keyGenerator),
                 $"Attempted to pass an empty {typeof(IKeyGenerator)}!");
 
             _encryptor = encryptor ?? throw new ArgumentNullException(nameof(encryptor),
                 $"Attempted to pass an empty {typeof(IEncryptor)}!");
-
-            if (string.IsNullOrEmpty(savesDirectory) || string.IsNullOrWhiteSpace(savesDirectory))
-                throw new ArgumentNullException(nameof(savesDirectory),
-                    "Attempted to pass an empty saves directory path!");
-
-            _savesDirectory = savesDirectory;
         }
 
         public void Register(ISavable entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity),
-                $"Attempted to pass an empty {typeof(ISavable)}!");
+            if (entity is null)
+                throw new ArgumentNullException(nameof(entity),
+                    $"Attempted to pass an empty {typeof(ISavable)}!");
 
             if (_savableEntities.Add(entity) == true)
             {
                 entity.SavingRequested += (sender, args) => SaveStateToFile(entity);
-                string saveFilePath = GetSaveFilePath(entity);
-
-                if (File.Exists(saveFilePath) == true)
-                {
-                    try
-                    {
-                        SetState(entity, saveFilePath);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
+                SetState(entity);
             }
         }
 
         public void Deregister(ISavable entity)
         {
-            if (entity is null) throw new ArgumentNullException(nameof(entity),
-                $"Attempted to pass an empty {typeof(ISavable)}!");
+            if (entity is null)
+                throw new ArgumentNullException(nameof(entity),
+                    $"Attempted to pass an empty {typeof(ISavable)}!");
 
             if (_savableEntities.Contains(entity) == true)
             {
                 entity.SavingRequested -= (sender, args) => SaveStateToFile(entity);
                 _savableEntities.Remove(entity);
 
-                try
-                {
-                    SaveStateToFile(entity);
-                }
-                catch (Exception)
-                {
-
-                }
+                SaveStateToFile(entity);
             }
         }
 
@@ -80,34 +56,47 @@ namespace SpaceAce.Main.Saving
         {
             foreach (var entity in _savableEntities)
             {
-                string saveFilePath = GetSaveFilePath(entity);
+                string saveFilePath = GetSaveFilePath(entity.ID);
                 if (File.Exists(saveFilePath) == true) File.Delete(saveFilePath);
             }
         }
 
-        private void SetState(ISavable entity, string saveFilePath)
+        private void SetState(ISavable entity)
         {
-            byte[] encryptedByteState = File.ReadAllBytes(saveFilePath);
+            string saveFilePath = GetSaveFilePath(entity.ID);
 
-            byte[] key = _keyGenerator.GenerateKey(entity);
-            byte[] decryptedByteState = _encryptor.Decrypt(encryptedByteState, key);
+            if (File.Exists(saveFilePath) == true)
+            {
+                try
+                {
+                    byte[] encryptedByteState = File.ReadAllBytes(saveFilePath);
 
-            string state = s_UTF8.GetString(decryptedByteState);
-            entity.SetState(state);
+                    byte[] key = _keyGenerator.GenerateKey(entity.ID);
+                    byte[] decryptedByteState = _encryptor.Decrypt(encryptedByteState, key);
+
+                    string state = _UTF8.GetString(decryptedByteState);
+                    entity.SetState(state);
+                }
+                catch (Exception) { }
+            }
         }
 
         private void SaveStateToFile(ISavable entity)
         {
-            string state = entity.GetState();
-            byte[] byteState = s_UTF8.GetBytes(state);
+            try
+            {
+                string state = entity.GetState();
+                byte[] byteState = _UTF8.GetBytes(state);
 
-            byte[] key = _keyGenerator.GenerateKey(entity);
-            byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
+                byte[] key = _keyGenerator.GenerateKey(entity.ID);
+                byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
 
-            string saveFilePath = GetSaveFilePath(entity);
-            File.WriteAllBytes(saveFilePath, encryptedByteState);
+                string saveFilePath = GetSaveFilePath(entity.ID);
+                File.WriteAllBytes(saveFilePath, encryptedByteState);
+            }
+            catch (Exception) { }
         }
 
-        private string GetSaveFilePath(ISavable entity) => Path.Combine(_savesDirectory, entity.ID + SavesExtension);
+        private string GetSaveFilePath(string id) => Path.Combine(Application.persistentDataPath, id + SavesExtension);
     }
 }

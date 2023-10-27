@@ -4,6 +4,6 @@ namespace SpaceAce.Main.Saving
     {
         const int ByteKeyLength = 32;
 
-        byte[] GenerateKey(ISavable entity);
+        byte[] GenerateKey(string id);
     }
 }

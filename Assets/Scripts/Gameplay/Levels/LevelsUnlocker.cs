@@ -12,18 +12,20 @@ namespace SpaceAce.Gameplay.Levels
         private readonly ISavingSystem _savingSystem = null;
         private readonly LevelsCompleter _levelsCompleter = null;
 
-        public int HighestCompletedLevelIndex { get; private set; }
-        public int HighestUnlockedLevelIndex => HighestCompletedLevelIndex + 1;
+        public int LargestCompletedLevelIndex { get; private set; }
+        public int LargestUnlockedLevelIndex => LargestCompletedLevelIndex + 1;
 
         public string ID => "Game progress";
 
         public LevelsUnlocker(ISavingSystem savingSystem , LevelsCompleter levelsCompleter)
         {
-            if (savingSystem is null) throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
+            if (savingSystem is null)
+                throw new ArgumentNullException(nameof(savingSystem),
+                    $"Attempted to pass an empty {typeof(ISavingSystem)}!");
 
-            if (levelsCompleter is null) throw new ArgumentNullException(nameof(levelsCompleter),
-                $"Attempted to pass an empty {typeof(LevelsCompleter)}!");
+            if (levelsCompleter is null)
+                throw new ArgumentNullException(nameof(levelsCompleter),
+                    $"Attempted to pass an empty {typeof(LevelsCompleter)}!");
 
             _savingSystem = savingSystem;
             _levelsCompleter = levelsCompleter;
@@ -43,18 +45,18 @@ namespace SpaceAce.Gameplay.Levels
             _levelsCompleter.LevelCompleted -= LevelCompletedEventHandler;
         }
 
-        public string GetState() => JsonConvert.SerializeObject(HighestCompletedLevelIndex);
+        public string GetState() => JsonConvert.SerializeObject(LargestCompletedLevelIndex);
 
         public void SetState(string state)
         {
             try
             {
                 int index = JsonConvert.DeserializeObject<int>(state);
-                HighestCompletedLevelIndex = index;
+                LargestCompletedLevelIndex = index;
             }
             catch (Exception)
             {
-                HighestCompletedLevelIndex = 0;
+                LargestCompletedLevelIndex = 0;
             }
         }
 
@@ -70,7 +72,7 @@ namespace SpaceAce.Gameplay.Levels
 
         private void LevelCompletedEventHandler(object sender, LevelEndedEventArgs e)
         {
-            HighestCompletedLevelIndex = e.LevelIndex;
+            LargestCompletedLevelIndex = e.LevelIndex;
             SavingRequested?.Invoke(this, EventArgs.Empty);
         }
 

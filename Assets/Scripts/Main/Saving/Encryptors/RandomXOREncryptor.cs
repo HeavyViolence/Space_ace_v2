@@ -1,11 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace SpaceAce.Main.Saving
 {
-    public sealed class AESEncryptor : IEncryptor
+    public sealed class RandomXOREncryptor : IEncryptor
     {
+        private readonly RandomNumberGenerator _RNG = RandomNumberGenerator.Create();
+
         public byte[] Encrypt(byte[] data, byte[] key)
         {
             if (data is null || data.Length == 0)
@@ -16,23 +17,23 @@ namespace SpaceAce.Main.Saving
                 throw new ArgumentNullException(nameof(key),
                     "Encryption key is empty or has an invalid length!");
 
-            using Aes algorithm = Aes.Create();
-            using ICryptoTransform encryptor = algorithm.CreateEncryptor(key, algorithm.IV);
+            byte[] iv = new byte[IKeyGenerator.ByteKeyLength];
+            _RNG.GetNonZeroBytes(iv);
 
-            byte[] encryptedData = encryptor.TransformFinalBlock(data, 0, data.Length);
+            byte[] output = new byte[data.Length + iv.Length];
 
-            List<byte> result = new(data.Length + algorithm.IV.Length);
-            result.AddRange(encryptedData);
-            result.AddRange(algorithm.IV);
+            for (int i = 0; i < data.Length; i++)
+                output[i] = (byte)(data[i] ^ key[i % key.Length] ^ iv[i % iv.Length]);
 
-            algorithm.Clear();
+            for (int i = 0; i < iv.Length; i++)
+                output[output.Length + i] = iv[i];
 
-            return result.ToArray();
+            return output;
         }
 
         public byte[] Decrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0)
+            if (data is null || data.Length <= IKeyGenerator.ByteKeyLength)
                 throw new ArgumentNullException(nameof(data),
                     "Attempted to pass an empty data to decrypt!");
 
@@ -40,18 +41,16 @@ namespace SpaceAce.Main.Saving
                 throw new ArgumentNullException(nameof(key),
                     "Decryption key is empty or has an invalid length!");
 
-            using Aes algorithm = Aes.Create();
+            int firstIVBytePosition = data.Length - IKeyGenerator.ByteKeyLength;
 
-            int firstIVBytePosition = data.Length - algorithm.IV.Length;
-            byte[] encryptedData = data[..firstIVBytePosition];
             byte[] iv = data[firstIVBytePosition..];
+            byte[] encryptedData = data[..firstIVBytePosition];
+            byte[] output = new byte[encryptedData.Length];
 
-            using ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv);
-            byte[] decryptedData = decryptor.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+            for (int i = 0; i < encryptedData.Length; i++)
+                output[i] = (byte)(encryptedData[i] ^ key[i % key.Length] ^ iv[i % iv.Length]);
 
-            algorithm.Clear();
-
-            return decryptedData;
+            return output;
         }
     }
 }

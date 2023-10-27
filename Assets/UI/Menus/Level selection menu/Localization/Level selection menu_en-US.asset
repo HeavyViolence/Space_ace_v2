@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Level selection menu_en-US
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en-US
+  m_SharedData: {fileID: 11400000, guid: 16fec10a3dbc627499121784e480163a, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 2936083555097509891
+  m_TableData:
+  - m_Id: 10627698688
+    m_Localized: Select level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 175635812352
+    m_Localized: Battle!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 533082787840
+    m_Localized: Main menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 673994625024
+    m_Localized: 'Damage averted: {DamageAvertedPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  - m_Id: 1889415843840
+    m_Localized: 'Damage dealt: {DamageDealtPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  - m_Id: 2367847518208
+    m_Localized: 'Accuracy: {AccuracyPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  - m_Id: 2506649620480
+    m_Localized: 'Meteors destroyed: {MeteorsDestroyedPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  - m_Id: 2829967544320
+    m_Localized: 'Wrecks destroyed: {WrecksDestroyedPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  - m_Id: 5853490302976
+    m_Localized: 'Experience earned: {ExperiencePercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  - m_Id: 6225676062720
+    m_Localized: 'Level mastery: {LevelMasteryPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 2936083555097509891
+  references:
+    version: 2
+    RefIds:
+    - rid: 2936083555097509891
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00d035ed9c00000000d0f5e9b701000000d0b54e2702000000d0f59f4702000000d035e79202000000d035df5205000000d03587a9050000

@@ -36,8 +36,9 @@ namespace SpaceAce.Main
 
             set
             {
-                if (value is null) throw new ArgumentNullException(nameof(value),
-                    $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
+                if (value is null)
+                    throw new ArgumentNullException(nameof(value),
+                        $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
 
                 _settings = value;
                 SavingRequested?.Invoke(this, EventArgs.Empty);
@@ -48,11 +49,14 @@ namespace SpaceAce.Main
 
         public MasterCameraShaker(GameObject masterCameraObject, GamePauser gamePauser, ISavingSystem savingSystem)
         {
-            if (masterCameraObject == null) throw new ArgumentNullException(nameof(masterCameraObject),
-                $"Attempted to pass an empty master camera {typeof(GameObject)}!");
+            if (masterCameraObject == null)
+                throw new ArgumentNullException(nameof(masterCameraObject),
+                    $"Attempted to pass an empty master camera {typeof(GameObject)}!");
 
             Rigidbody2D body = masterCameraObject.GetComponentInChildren<Rigidbody2D>();
-            if (body == null) throw new MissingComponentException($"Passed master camera object is missing {typeof(Rigidbody2D)}!");
+
+            if (body == null)
+                throw new MissingComponentException($"Passed master camera object is missing {typeof(Rigidbody2D)}!");
 
             _masterCameraRigidbody2D = body;
 

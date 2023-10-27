@@ -14,11 +14,14 @@ public sealed class MasterAudioListenerHolder : IInitializable, IDisposable
 
     public MasterAudioListenerHolder(GameObject masterCameraObject, Player player, MainMenuLoader mainMenuLoader)
     {
-        if (masterCameraObject == null) throw new ArgumentNullException(nameof(masterCameraObject),
-            $"Attempted to pass an empty audio listener {typeof(GameObject)}!");
+        if (masterCameraObject == null)
+            throw new ArgumentNullException(nameof(masterCameraObject),
+                $"Attempted to pass an empty audio listener {typeof(GameObject)}!");
 
         AudioListener listener = masterCameraObject.GetComponentInChildren<AudioListener>();
-        if (listener == null) throw new MissingComponentException($"Passed master camera object is missing {typeof(AudioListener)}!");
+
+        if (listener == null)
+            throw new MissingComponentException($"Passed master camera object is missing {typeof(AudioListener)}!");
 
         _masterAudioListener = listener;
 

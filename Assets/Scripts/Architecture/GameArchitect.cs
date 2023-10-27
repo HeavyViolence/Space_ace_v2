@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+
 using SpaceAce.Gameplay.Levels;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
@@ -42,13 +43,13 @@ namespace SpaceAce.Architecture
         private GameObject _cameraPrefab;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
-        private SavingSystemType _savingSystemType = SavingSystemType.ToFile;
+        private SavingSystemType _savingSystemtype = SavingSystemType.ToFile;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
-        private KeyGeneratorType _keyGeneratorType = KeyGeneratorType.Random;
+        private KeyGenerationType _keyGeneratorType = KeyGenerationType.Blank;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
-        private EncryptionType _encryptionType = EncryptionType.AES;
+        private EncryptionType _encryptionType = EncryptionType.None;
 
         [SerializeField, Foldout(AudioFoldoutName)]
         private AudioMixer _audioMixer;
@@ -70,6 +71,24 @@ namespace SpaceAce.Architecture
 
         [SerializeField, Foldout(UIFoldoutName)]
         private PanelSettings _mainMenuSettings;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private VisualTreeAsset _levelSelectionMenuAsset;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private VisualTreeAsset _levelButtonAsset;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private PanelSettings _levelSelectionMenuSettings;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private VisualTreeAsset _screenFaderAsset;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private PanelSettings _screenFaderSettings;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private AnimationCurve _fadingCurve;
 
         [SerializeField, Foldout(LocalizationFoldoutName)]
         private LocalizedFont _localizedFont;
@@ -161,14 +180,33 @@ namespace SpaceAce.Architecture
 
             MainMenuDisplay mainMenuDisplay = new(_mainMenuAsset, _mainMenuSettings, _uiAudio, localizer);
             Services.Register(mainMenuDisplay);
+
+            LevelSelectionDisplay levelSelectionDisplay = new(_levelSelectionMenuAsset,
+                                                              _levelButtonAsset,
+                                                              _levelSelectionMenuSettings,
+                                                              _uiAudio,
+                                                              localizer,
+                                                              levelsLoader,
+                                                              levelsUnlocker,
+                                                              bestLevelsRunsStatisticsColector);
+            Services.Register(levelSelectionDisplay);
+
+            ScreenFader screenFader = new(_screenFaderAsset,
+                                          _screenFaderSettings,
+                                          _uiAudio,
+                                          localizer,
+                                          mainMenuLoader,
+                                          levelsLoader,
+                                          _fadingCurve);
+            Services.Register(screenFader);
         }
 
         private ISavingSystem InstantiateSavingSystem()
         {
             IKeyGenerator keyGenerator = _keyGeneratorType switch
             {
-                KeyGeneratorType.Blank => new BlankKeyGenerator(),
-                KeyGeneratorType.Random => new RandomKeyGenerator(),
+                KeyGenerationType.Blank => new BlankKeyGenerator(),
+                KeyGenerationType.Hash => new HashKeyGenerator(),
                 _ => new BlankKeyGenerator(),
             };
 
@@ -176,15 +214,15 @@ namespace SpaceAce.Architecture
             {
                 EncryptionType.None => new BlankEncryptor(),
                 EncryptionType.XOR => new XOREncryptor(),
+                EncryptionType.RandomXOR => new RandomXOREncryptor(),
                 EncryptionType.AES => new AESEncryptor(),
                 _ => new BlankEncryptor(),
             };
 
-            ISavingSystem savingSystem = _savingSystemType switch
+            ISavingSystem savingSystem = _savingSystemtype switch
             {
-                SavingSystemType.ToPlayerPrefs => new ToPlayerPrefsSavingSystem(keyGenerator, encryptor),
-                SavingSystemType.ToFile => new ToFileSavingSystem(keyGenerator, encryptor, Application.persistentDataPath),
-                _ => new ToPlayerPrefsSavingSystem(keyGenerator, encryptor),
+                SavingSystemType.ToFile => new ToFileSavingSystem(keyGenerator, encryptor),
+                _ => new ToFileSavingSystem(keyGenerator, encryptor)
             };
 
             return savingSystem;

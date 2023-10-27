@@ -13,7 +13,9 @@ namespace SpaceAce.Main.Audio
         {
             ID = id;
 
-            if (playbackDuration < 0f) throw new ArgumentOutOfRangeException(nameof(playbackDuration));
+            if (playbackDuration < 0f)
+                throw new ArgumentOutOfRangeException(nameof(playbackDuration));
+
             PlaybackDuration = playbackDuration;
         }
 

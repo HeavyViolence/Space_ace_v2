@@ -18,14 +18,17 @@ namespace SpaceAce.Gameplay.Levels
 
         public LevelStopwatch(LevelsLoader levelsLoader, LevelsCompleter levelsCompleter, GamePauser gamePauser)
         {
-            if (levelsLoader is null) throw new ArgumentNullException(nameof(levelsLoader),
-                $"Attempted to pass an empty {typeof(LevelsLoader)}!");
+            if (levelsLoader is null)
+                throw new ArgumentNullException(nameof(levelsLoader),
+                    $"Attempted to pass an empty {typeof(LevelsLoader)}!");
 
-            if (levelsCompleter is null) throw new ArgumentNullException(nameof(levelsCompleter),
-                $"Attempted to pass an empty {typeof(LevelsCompleter)}!");
+            if (levelsCompleter is null)
+                throw new ArgumentNullException(nameof(levelsCompleter),
+                    $"Attempted to pass an empty {typeof(LevelsCompleter)}!");
 
-            if (gamePauser is null) throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            if (gamePauser is null)
+                throw new ArgumentNullException(nameof(gamePauser),
+                    $"Attempted to pass an empty {typeof(GamePauser)}!");
 
             _levelsLoader = levelsLoader;
             _levelsCompleter = levelsCompleter;

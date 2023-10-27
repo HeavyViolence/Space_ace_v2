@@ -10,13 +10,15 @@ namespace SpaceAce.UI
 {
     public sealed class MainMenuDisplay : UIDisplay, IInitializable
     {
-        private Button _playButton;
-        private Button _inventoryButton;
-        private Button _armoryButton;
-        private Button _settingsButton;
-        private Button _statisticsButton;
-        private Button _creditsButton;
-        private Button _cheatsButton;
+        private readonly CachedService<LevelSelectionDisplay> _levelSelectionDisplay = new();
+
+        private Button _playButton = null;
+        private Button _inventoryButton = null;
+        private Button _armoryButton = null;
+        private Button _settingsButton = null;
+        private Button _statisticsButton = null;
+        private Button _creditsButton = null;
+        private Button _cheatsButton = null;
 
         protected override string DisplayHolderName => "Main menu display";
 
@@ -25,38 +27,39 @@ namespace SpaceAce.UI
                                UIAudio audio,
                                Localizer localizer) : base(displayAsset, settings, audio, localizer) { }
 
-        public override async UniTaskVoid EnableAsync()
+        public override async UniTask EnableAsync()
         {
-            if (Enabled) return;
+            if (Enabled == true) return;
 
             DisplayedDocument.visualTreeAsset = DisplayAsset;
+            DisplayedDocument.rootVisualElement.style.opacity = 0f;
 
             _playButton = DisplayedDocument.rootVisualElement.Q<Button>("Play-button");
-            _playButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _playButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _playButton.clicked += PlayButtonClickedEventHandler;
 
             _inventoryButton = DisplayedDocument.rootVisualElement.Q<Button>("Inventory-button");
-            _inventoryButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _inventoryButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _inventoryButton.clicked += InventoryButtonClickedEventHandler;
 
             _armoryButton = DisplayedDocument.rootVisualElement.Q<Button>("Armory-button");
-            _armoryButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _armoryButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _armoryButton.clicked += ArmoryButtonClickedEventHandler;
 
             _settingsButton = DisplayedDocument.rootVisualElement.Q<Button>("Settings-button");
-            _settingsButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _settingsButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _settingsButton.clicked += SettingsButtonClickedEventHandler;
 
             _statisticsButton = DisplayedDocument.rootVisualElement.Q<Button>("Statistics-button");
-            _statisticsButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _statisticsButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _statisticsButton.clicked += StatisticsButtonClickedEventHandler;
 
             _creditsButton = DisplayedDocument.rootVisualElement.Q<Button>("Credits-button");
-            _creditsButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _creditsButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _creditsButton.clicked += CreditsButtonClickedEventHandler;
 
             _cheatsButton = DisplayedDocument.rootVisualElement.Q<Button>("Cheats-button");
-            _cheatsButton.RegisterCallback<MouseOverEvent>(OnMouseOver);
+            _cheatsButton.RegisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _cheatsButton.clicked += CheatsButtonClickedEventHandler;
 
             var operation = LocalizationSettings.InitializationOperation;
@@ -93,6 +96,7 @@ namespace SpaceAce.UI
             _cheatsButton.text = localizedCheatsButtonText;
             _cheatsButton.style.unityFont = localizedFont;
 
+            DisplayedDocument.rootVisualElement.style.opacity = 1f;
             Enabled = true;
         }
 
@@ -100,24 +104,31 @@ namespace SpaceAce.UI
         {
             if (Enabled == false) return;
 
+            _playButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _playButton.clicked -= PlayButtonClickedEventHandler;
             _playButton = null;
 
+            _inventoryButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _inventoryButton.clicked -= InventoryButtonClickedEventHandler;
             _inventoryButton = null;
 
+            _armoryButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _armoryButton.clicked -= ArmoryButtonClickedEventHandler;
             _armoryButton = null;
 
+            _settingsButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _settingsButton.clicked -= SettingsButtonClickedEventHandler;
             _settingsButton = null;
 
+            _statisticsButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _statisticsButton.clicked -= StatisticsButtonClickedEventHandler;
             _statisticsButton = null;
 
+            _creditsButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _creditsButton.clicked -= CreditsButtonClickedEventHandler;
             _creditsButton = null;
 
+            _cheatsButton.UnregisterCallback<PointerOverEvent>(PointerOverEventHandler);
             _cheatsButton.clicked -= CheatsButtonClickedEventHandler;
             _cheatsButton = null;
 
@@ -136,13 +147,16 @@ namespace SpaceAce.UI
 
         #region event handlers
 
-        private void OnMouseOver(MouseOverEvent e)
+        private void PointerOverEventHandler(PointerOverEvent e)
         {
             UIAudio.HoverOverAudio.PlayRandomAudioClip(Vector3.zero);
         }
 
         private void PlayButtonClickedEventHandler()
         {
+            Disable();
+
+            _levelSelectionDisplay.Access.EnableAsync().Forget();
             UIAudio.ForwardButtonClickAudio.PlayRandomAudioClip(Vector3.zero);
         }
 

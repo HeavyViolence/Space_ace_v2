@@ -20,14 +20,17 @@ namespace SpaceAce.UI
 
         public UIDisplay(VisualTreeAsset displayAsset, PanelSettings settings, UIAudio audio, Localizer localizer)
         {
-            if (displayAsset == null) throw new ArgumentNullException(nameof(displayAsset),
-                $"Attempted to pass an empty {typeof(VisualTreeAsset)} to display!");
+            if (displayAsset == null)
+                throw new ArgumentNullException(nameof(displayAsset),
+                    $"Attempted to pass an empty {typeof(VisualTreeAsset)} to display!");
 
-            if (settings == null) throw new ArgumentNullException(nameof(settings),
-                $"Attempted to pass an empty {typeof(PanelSettings)} for the display!");
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings),
+                    $"Attempted to pass an empty {typeof(PanelSettings)} for the display!");
 
-            if (audio == null) throw new ArgumentNullException(nameof(audio),
-                $"Attempted to pass an empty {typeof(UIAudio)} to play!");
+            if (audio == null)
+                throw new ArgumentNullException(nameof(audio),
+                    $"Attempted to pass an empty {typeof(UIAudio)} to play!");
 
             Localizer = localizer ?? throw new ArgumentNullException(nameof(localizer),
                 $"Attempted to pass an empty {typeof(Localizer)}!");
@@ -41,7 +44,7 @@ namespace SpaceAce.UI
             DisplayedDocument.panelSettings = settings;
         }
 
-        public abstract UniTaskVoid EnableAsync();
+        public abstract UniTask EnableAsync();
 
         public abstract void Disable();
     }
