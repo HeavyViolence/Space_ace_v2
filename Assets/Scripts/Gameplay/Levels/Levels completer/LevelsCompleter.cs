@@ -2,7 +2,9 @@ using SpaceAce.Architecture;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
+
 using System;
+
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Levels
@@ -13,20 +15,18 @@ namespace SpaceAce.Gameplay.Levels
         public event EventHandler<LevelEndedEventArgs> LevelFailed;
         public event EventHandler<LevelEndedEventArgs> LevelConcluded;
 
-        private readonly LevelsLoader _levelsLoader = null;
+        private readonly GameStateLoader _gameStateLoader = null;
         private readonly Player _player = null;
         private readonly AudioCollection _levelCompletedAudio = null;
         private readonly AudioCollection _levelFailedAudio = null;
 
-        private int _loadedLevelIndex = 0;
-
-        public LevelsCompleter(LevelsLoader levelsLoader,
+        public LevelsCompleter(GameStateLoader gameStateLoader,
                                Player player,
                                AudioCollection levelCompletedAudio,
                                AudioCollection levelFailedAudio)
         {
-            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
-                $"Attempted to pass an empty {typeof(LevelsLoader)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             _player = player ?? throw new ArgumentNullException(nameof(player),
                 $"Attempted to pass an empty {typeof(Player)}!");
@@ -47,13 +47,15 @@ namespace SpaceAce.Gameplay.Levels
 
         public void Initialize()
         {
-            _levelsLoader.LevelLoaded += LevelLoadedEventHandler;
+            _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
+
             _player.SpaceshipDefeated += PlayerSpaceshipDefeatedEventHandler;
         }
 
         public void Dispose()
         {
-            _levelsLoader.LevelLoaded -= LevelLoadedEventHandler;
+            _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
+
             _player.SpaceshipDefeated -= PlayerSpaceshipDefeatedEventHandler;
         }
 
@@ -61,15 +63,15 @@ namespace SpaceAce.Gameplay.Levels
 
         #region event handlers
 
-        private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
+        private void MainMenuLoadingStartedEventHandler(object sender, MainMenuLoadingStartedEventArgs e)
         {
-            _loadedLevelIndex = e.LevelIndex;
+            LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
         }
 
         private void PlayerSpaceshipDefeatedEventHandler(object sender, EventArgs e)
         {
-            LevelConcluded?.Invoke(this, new(_loadedLevelIndex));
-            LevelFailed?.Invoke(this, new(_loadedLevelIndex));
+            LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
+            LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
 
             _levelFailedAudio.PlayRandomAudioClip(Vector3.zero);
         }

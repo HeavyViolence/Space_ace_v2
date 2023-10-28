@@ -1,26 +1,33 @@
 using Cysharp.Threading.Tasks;
+
 using SpaceAce.Architecture;
+using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Levels;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 using SpaceAce.Main.Localization;
+
 using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
+using static UnityEngine.InputSystem.InputAction;
+
 namespace SpaceAce.UI
 {
-    public sealed class LevelSelectionDisplay : UIDisplay
+    public sealed class LevelSelectionDisplay : UIDisplay, IInitializable, IDisposable
     {
         private const float BattleButtonLockDelay = 0.1f;
 
         protected override string DisplayHolderName => "Level selection display";
 
         private readonly VisualTreeAsset _levelButtonAsset = null;
-        private readonly LevelsLoader _levelsLoader = null;
+        private readonly GameStateLoader _gameStateLoader = null;
         private readonly LevelsUnlocker _levelsUnlocker = null;
         private readonly BestLevelsRunsStatisticsCollector _bestLevelsRunsStatisticsCollector = null;
+        private readonly GameControlsTransmitter _gameControlsTransmitter = null;
 
         private readonly CachedService<MainMenuDisplay> _mainMenuDisplay = new();
         private readonly List<Button> _levelsButtons = new();
@@ -65,9 +72,10 @@ namespace SpaceAce.UI
                                      PanelSettings settings,
                                      UIAudio audio,
                                      Localizer localizer,
-                                     LevelsLoader levelsLoader,
+                                     GameStateLoader gameStateLoader,
                                      LevelsUnlocker levelsUnlocker,
-                                     BestLevelsRunsStatisticsCollector bestLevelsRunsStatisticsCollector) : base(displayAsset, settings, audio, localizer)
+                                     BestLevelsRunsStatisticsCollector bestLevelsRunsStatisticsCollector,
+                                     GameControlsTransmitter gameControlsTransmitter) : base(displayAsset, settings, audio, localizer)
         {
             if (levelButtonAsset == null)
                 throw new ArgumentNullException(nameof(levelButtonAsset),
@@ -75,14 +83,17 @@ namespace SpaceAce.UI
 
             _levelButtonAsset = levelButtonAsset;
 
-            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
-                $"Attempted to pass an empty {typeof(LevelsLoader)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             _levelsUnlocker = levelsUnlocker ?? throw new ArgumentNullException(nameof(levelsUnlocker),
                 $"Attempted to pass an empty {typeof(LevelsUnlocker)}!");
 
             _bestLevelsRunsStatisticsCollector = bestLevelsRunsStatisticsCollector ?? throw new ArgumentNullException(nameof(bestLevelsRunsStatisticsCollector),
                 $"Attempted to pass an empty {typeof(BestLevelsRunsStatisticsCollector)}!");
+
+            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException(nameof(gameControlsTransmitter),
+                $"Attempted to pass an empty {typeof(GameControlsTransmitter)}!");
         }
 
         public override async UniTask EnableAsync()
@@ -329,6 +340,20 @@ namespace SpaceAce.UI
             _levelRunTimeCounter = null;
         }
 
+        #region interfaces
+
+        public void Initialize()
+        {
+            _gameControlsTransmitter.GoToPreviousMenu += GoToPreviousMenuEventHandler;
+        }
+
+        public void Dispose()
+        {
+            _gameControlsTransmitter.GoToPreviousMenu -= GoToPreviousMenuEventHandler;
+        }
+
+        #endregion
+
         #region event handlers
 
         private void PointerOverEventHandler(PointerOverEvent e)
@@ -348,7 +373,7 @@ namespace SpaceAce.UI
         {
             Disable();
 
-            _levelsLoader.LoadLevelAsync(_selectedLevelIndexToPlay).Forget();
+            _gameStateLoader.LoadLevelAsync(_selectedLevelIndexToPlay).Forget();
             UIAudio.ForwardButtonClickAudio.PlayRandomAudioClip(Vector3.zero);
         }
 
@@ -374,6 +399,17 @@ namespace SpaceAce.UI
             _battleButton?.SetEnabled(false);
             
             await UpdateBestLevelRunStatisticsDisplayAsync(0, font);
+        }
+
+        private void GoToPreviousMenuEventHandler(object sender, CallbackContext e)
+        {
+            if (Enabled == true)
+            {
+                Disable();
+
+                UIAudio.BackwardButtonClickAudio.PlayRandomAudioClip(Vector3.zero);
+                _mainMenuDisplay.Access.EnableAsync().Forget();
+            }
         }
 
         #endregion

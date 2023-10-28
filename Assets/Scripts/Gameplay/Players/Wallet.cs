@@ -1,4 +1,5 @@
 using SpaceAce.Auxiliary;
+
 using System;
 
 namespace SpaceAce.Gameplay.Players

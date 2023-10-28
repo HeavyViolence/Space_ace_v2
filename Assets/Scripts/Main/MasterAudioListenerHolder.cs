@@ -1,18 +1,20 @@
 using SpaceAce.Gameplay.Players;
-using UnityEngine;
-using System;
 using SpaceAce.Main;
 using SpaceAce.Architecture;
+
+using UnityEngine;
+
+using System;
 
 public sealed class MasterAudioListenerHolder : IInitializable, IDisposable
 {
     private readonly AudioListener _masterAudioListener = null;
     private readonly Player _player = null;
-    private readonly MainMenuLoader _mainMenuLoader = null;
+    private readonly GameStateLoader _gameStateLoader = null;
 
     public AudioListener MasterAudioListener => _masterAudioListener;
 
-    public MasterAudioListenerHolder(GameObject masterCameraObject, Player player, MainMenuLoader mainMenuLoader)
+    public MasterAudioListenerHolder(GameObject masterCameraObject, Player player, GameStateLoader gameStateLoader)
     {
         if (masterCameraObject == null)
             throw new ArgumentNullException(nameof(masterCameraObject),
@@ -28,8 +30,8 @@ public sealed class MasterAudioListenerHolder : IInitializable, IDisposable
         _player = player ?? throw new ArgumentNullException(nameof(player),
             $"Attempted to pass an empty {typeof(Player)}!");
 
-        _mainMenuLoader = mainMenuLoader ?? throw new ArgumentNullException(nameof(mainMenuLoader),
-            $"Attempted to pass an empty {typeof(MainMenuLoader)}!");
+        _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+            $"Attempted to pass an empty {typeof(GameStateLoader)}!");
     }
 
     public void Initialize()
@@ -37,7 +39,7 @@ public sealed class MasterAudioListenerHolder : IInitializable, IDisposable
         _player.SpaceshipSpawned += PlayerSpaceshipSpawnedEventHandler;
         _player.SpaceshipDefeated += PlayerSpaceshipDefeatedEventHandler;
 
-        _mainMenuLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
+        _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
     }
 
     public void Dispose()
@@ -45,7 +47,7 @@ public sealed class MasterAudioListenerHolder : IInitializable, IDisposable
         _player.SpaceshipSpawned -= PlayerSpaceshipSpawnedEventHandler;
         _player.SpaceshipDefeated -= PlayerSpaceshipDefeatedEventHandler;
 
-        _mainMenuLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
+        _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
     }
 
     #region event handlers

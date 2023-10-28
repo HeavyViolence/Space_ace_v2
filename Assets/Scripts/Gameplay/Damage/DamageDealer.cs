@@ -1,5 +1,7 @@
 using SpaceAce.Gameplay.Damage;
+
 using System;
+
 using UnityEngine;
 
 public sealed class DamageDealer : MonoBehaviour

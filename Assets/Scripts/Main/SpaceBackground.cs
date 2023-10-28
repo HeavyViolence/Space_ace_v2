@@ -1,7 +1,9 @@
 using SpaceAce.Architecture;
 using SpaceAce.Auxiliary;
+
 using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace SpaceAce.Main
@@ -20,8 +22,7 @@ namespace SpaceAce.Main
         private readonly MeshRenderer _renderer = null;
 
         private readonly GamePauser _gamePauser = null;
-        private readonly LevelsLoader _levelsLoader = null;
-        private readonly MainMenuLoader _mainMenuLoader = null;
+        private readonly GameStateLoader _gameStateLoader = null;
 
         private bool _paused = false;
 
@@ -32,8 +33,7 @@ namespace SpaceAce.Main
                                Material mainMenuSpaceBackground,
                                IEnumerable<Material> levelsSpaceBackgrounds,
                                GamePauser gamePauser,
-                               LevelsLoader levelsLoader,
-                               MainMenuLoader mainMenuLoader)
+                               GameStateLoader gameStateLoader)
         {
             if (spaceBackground == null)
                 throw new ArgumentNullException("Attempted to pass an empty space background object!");
@@ -47,11 +47,8 @@ namespace SpaceAce.Main
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
                 $"Attempted to pass an empty {nameof(GamePauser)}!");
 
-            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
-                $"Attempted to pass an empty {nameof(LevelsLoader)}!");
-
-            _mainMenuLoader = mainMenuLoader ?? throw new ArgumentNullException(nameof(mainMenuLoader),
-                $"Attempted to pass an empty {nameof(MainMenuLoader)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             _mainMenuSpaceBackground = mainMenuSpaceBackground;
             _levelsSpaceBackgrounds = new List<Material>(levelsSpaceBackgrounds);
@@ -98,9 +95,8 @@ namespace SpaceAce.Main
             _gamePauser.GamePaused += GamePausedEventHandler;
             _gamePauser.GameResumed += GameResumedEventHandler;
 
-            _mainMenuLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
-
-            _levelsLoader.LevelLoaded += LevelLoadedEventHandler;
+            _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
+            _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
         }
 
         public void Dispose()
@@ -108,9 +104,8 @@ namespace SpaceAce.Main
             _gamePauser.GamePaused -= GamePausedEventHandler;
             _gamePauser.GameResumed -= GameResumedEventHandler;
 
-            _mainMenuLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
-
-            _levelsLoader.LevelLoaded -= LevelLoadedEventHandler;
+            _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
+            _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
         }
 
         void IUpdatable.Update()

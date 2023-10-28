@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 
+using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Levels;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
@@ -43,7 +44,7 @@ namespace SpaceAce.Architecture
         private GameObject _cameraPrefab;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
-        private SavingSystemType _savingSystemtype = SavingSystemType.ToFile;
+        private SavingSystemType _savingSystemType = SavingSystemType.ToFile;
 
         [SerializeField, Foldout(SavingSystemFoldoutName)]
         private KeyGenerationType _keyGeneratorType = KeyGenerationType.Blank;
@@ -90,6 +91,18 @@ namespace SpaceAce.Architecture
         [SerializeField, Foldout(UIFoldoutName)]
         private AnimationCurve _fadingCurve;
 
+        [SerializeField, Foldout(UIFoldoutName)]
+        private VisualTreeAsset _levelDisplayAsset;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private PanelSettings _levelDisplaySettings;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private VisualTreeAsset _gamePauseMenuAsset;
+
+        [SerializeField, Foldout(UIFoldoutName)]
+        private PanelSettings _gamePauseMenuSettings;
+
         [SerializeField, Foldout(LocalizationFoldoutName)]
         private LocalizedFont _localizedFont;
 
@@ -120,18 +133,14 @@ namespace SpaceAce.Architecture
             GamePauser gamePauser = new();
             Services.Register(gamePauser);
 
-            LevelsLoader levelsLoader = new();
-            Services.Register(levelsLoader);
-
-            MainMenuLoader mainMenuLoader = new(levelsLoader);
-            Services.Register(mainMenuLoader);
+            GameStateLoader gameStateLoader = new();
+            Services.Register(gameStateLoader);
 
             SpaceBackground spaceBackground = new(spaceBackgroundObject,
                                                   _mainMenuSpaceBackground,
                                                   _levelsSpaceBackgrounds,
                                                   gamePauser,
-                                                  levelsLoader,
-                                                  mainMenuLoader);
+                                                  gameStateLoader);
             Services.Register(spaceBackground);
 
             GameObject masterCameraObject = Instantiate(_cameraPrefab);
@@ -142,10 +151,10 @@ namespace SpaceAce.Architecture
             ISavingSystem savingSystem = InstantiateSavingSystem();
             Services.Register(savingSystem);
 
-            Player player = new(savingSystem, levelsLoader, mainMenuLoader);
+            Player player = new(savingSystem, gameStateLoader);
             Services.Register(player);
 
-            MasterAudioListenerHolder masterAudioListenerHolder = new(masterCameraObject, player, mainMenuLoader);
+            MasterAudioListenerHolder masterAudioListenerHolder = new(masterCameraObject, player, gameStateLoader);
             Services.Register(masterAudioListenerHolder);
 
             MasterCameraShaker cameraShaker = new(masterCameraObject, gamePauser, savingSystem);
@@ -160,13 +169,16 @@ namespace SpaceAce.Architecture
             MultiobjectPool multiobjectPool = new(gamePauser);
             Services.Register(multiobjectPool);
 
-            LevelsCompleter levelsCompleter = new(levelsLoader, player, _levelCompletedAudio, _levelFailedAudio);
+            LevelsCompleter levelsCompleter = new(gameStateLoader, player, _levelCompletedAudio, _levelFailedAudio);
             Services.Register(levelsCompleter);
+
+            GameControlsTransmitter gameControlsTransmitter = new(gamePauser, gameStateLoader, levelsCompleter, masterCameraHolder);
+            Services.Register(gameControlsTransmitter);
 
             LevelsUnlocker levelsUnlocker = new(savingSystem, levelsCompleter);
             Services.Register(levelsUnlocker);
 
-            LevelStopwatch levelStopwatch = new(levelsLoader, levelsCompleter, gamePauser);
+            LevelStopwatch levelStopwatch = new(gameStateLoader, levelsCompleter, gamePauser);
             Services.Register(levelStopwatch);
 
             BestLevelsRunsStatisticsCollector bestLevelsRunsStatisticsColector = new(savingSystem, levelsCompleter, levelStopwatch, player);
@@ -178,7 +190,7 @@ namespace SpaceAce.Architecture
             Localizer localizer = new(_localizedFont, languageToCodeConverter, savingSystem);
             Services.Register(localizer);
 
-            MainMenuDisplay mainMenuDisplay = new(_mainMenuAsset, _mainMenuSettings, _uiAudio, localizer);
+            MainMenuDisplay mainMenuDisplay = new(_mainMenuAsset, _mainMenuSettings, _uiAudio, localizer, gameStateLoader);
             Services.Register(mainMenuDisplay);
 
             LevelSelectionDisplay levelSelectionDisplay = new(_levelSelectionMenuAsset,
@@ -186,19 +198,37 @@ namespace SpaceAce.Architecture
                                                               _levelSelectionMenuSettings,
                                                               _uiAudio,
                                                               localizer,
-                                                              levelsLoader,
+                                                              gameStateLoader,
                                                               levelsUnlocker,
-                                                              bestLevelsRunsStatisticsColector);
+                                                              bestLevelsRunsStatisticsColector,
+                                                              gameControlsTransmitter);
             Services.Register(levelSelectionDisplay);
 
             ScreenFader screenFader = new(_screenFaderAsset,
                                           _screenFaderSettings,
                                           _uiAudio,
                                           localizer,
-                                          mainMenuLoader,
-                                          levelsLoader,
+                                          gameStateLoader,
                                           _fadingCurve);
             Services.Register(screenFader);
+
+            LevelDisplay levelDisplay = new(_levelDisplayAsset,
+                                            _levelDisplaySettings,
+                                            _uiAudio,
+                                            localizer,
+                                            gameControlsTransmitter,
+                                            gameStateLoader,
+                                            gamePauser);
+            Services.Register(levelDisplay);
+
+            GamePauseDisplay gamePauseDisplay = new(_gamePauseMenuAsset,
+                                                    _gamePauseMenuSettings,
+                                                    _uiAudio,
+                                                    localizer,
+                                                    gameControlsTransmitter,
+                                                    gameStateLoader,
+                                                    gamePauser);
+            Services.Register(gamePauseDisplay);
         }
 
         private ISavingSystem InstantiateSavingSystem()
@@ -219,7 +249,7 @@ namespace SpaceAce.Architecture
                 _ => new BlankEncryptor(),
             };
 
-            ISavingSystem savingSystem = _savingSystemtype switch
+            ISavingSystem savingSystem = _savingSystemType switch
             {
                 SavingSystemType.ToFile => new ToFileSavingSystem(keyGenerator, encryptor),
                 _ => new ToFileSavingSystem(keyGenerator, encryptor)

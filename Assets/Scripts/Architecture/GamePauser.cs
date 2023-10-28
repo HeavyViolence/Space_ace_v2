@@ -11,8 +11,6 @@ namespace SpaceAce.Architecture
 
         public bool Paused { get; private set; } = false;
 
-        public GamePauser() { }
-
         public void Register(IPausable entity)
         {
             if (entity is null)

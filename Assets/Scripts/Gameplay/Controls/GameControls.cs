@@ -37,7 +37,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Shooting"",
+                    ""name"": ""Fire"",
                     ""type"": ""Button"",
                     ""id"": ""02324914-0e7e-48e7-8d4a-3db35932600a"",
                     ""expectedControlType"": ""Button"",
@@ -181,8 +181,8 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Shooting"",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -192,7 +192,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and mouse"",
                     ""action"": ""NextAmmo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -203,7 +203,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and mouse"",
                     ""action"": ""PreviousAmmo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -222,6 +222,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""582bed29-6338-4bee-a1c7-e0729dd5553b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -231,8 +240,19 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard and mouse"",
                     ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd20a1bd-3654-4cd6-ab46-5ae5b2e00046"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -261,12 +281,13 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_Shooting = m_Player.FindAction("Shooting", throwIfNotFound: true);
+        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_NextAmmo = m_Player.FindAction("NextAmmo", throwIfNotFound: true);
         m_Player_PreviousAmmo = m_Player.FindAction("PreviousAmmo", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
+        m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -329,7 +350,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_Shooting;
+    private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_NextAmmo;
     private readonly InputAction m_Player_PreviousAmmo;
     public struct PlayerActions
@@ -337,7 +358,7 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         private @GameControls m_Wrapper;
         public PlayerActions(@GameControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @Shooting => m_Wrapper.m_Player_Shooting;
+        public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @NextAmmo => m_Wrapper.m_Player_NextAmmo;
         public InputAction @PreviousAmmo => m_Wrapper.m_Player_PreviousAmmo;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -352,9 +373,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @Shooting.started += instance.OnShooting;
-            @Shooting.performed += instance.OnShooting;
-            @Shooting.canceled += instance.OnShooting;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
             @NextAmmo.started += instance.OnNextAmmo;
             @NextAmmo.performed += instance.OnNextAmmo;
             @NextAmmo.canceled += instance.OnNextAmmo;
@@ -368,9 +389,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @Shooting.started -= instance.OnShooting;
-            @Shooting.performed -= instance.OnShooting;
-            @Shooting.canceled -= instance.OnShooting;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
             @NextAmmo.started -= instance.OnNextAmmo;
             @NextAmmo.performed -= instance.OnNextAmmo;
             @NextAmmo.canceled -= instance.OnNextAmmo;
@@ -399,11 +420,13 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Menu;
     private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
     private readonly InputAction m_Menu_Back;
+    private readonly InputAction m_Menu_Inventory;
     public struct MenuActions
     {
         private @GameControls m_Wrapper;
         public MenuActions(@GameControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Back => m_Wrapper.m_Menu_Back;
+        public InputAction @Inventory => m_Wrapper.m_Menu_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -416,6 +439,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Back.started += instance.OnBack;
             @Back.performed += instance.OnBack;
             @Back.canceled += instance.OnBack;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
         }
 
         private void UnregisterCallbacks(IMenuActions instance)
@@ -423,6 +449,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @Back.started -= instance.OnBack;
             @Back.performed -= instance.OnBack;
             @Back.canceled -= instance.OnBack;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
         }
 
         public void RemoveCallbacks(IMenuActions instance)
@@ -452,12 +481,13 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnShooting(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
         void OnNextAmmo(InputAction.CallbackContext context);
         void OnPreviousAmmo(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {
         void OnBack(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

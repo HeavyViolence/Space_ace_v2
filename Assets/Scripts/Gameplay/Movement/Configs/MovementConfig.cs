@@ -1,8 +1,10 @@
 using NaughtyAttributes;
+
 using SpaceAce.Architecture;
 using SpaceAce.Auxiliary;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
+
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement

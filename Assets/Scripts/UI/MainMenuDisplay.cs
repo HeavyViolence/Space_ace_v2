@@ -1,16 +1,23 @@
 using Cysharp.Threading.Tasks;
+
 using SpaceAce.Architecture;
 using SpaceAce.Main.Localization;
 using SpaceAce.Main.Audio;
+using SpaceAce.Main;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Localization.Settings;
 
+using System;
+
 namespace SpaceAce.UI
 {
-    public sealed class MainMenuDisplay : UIDisplay, IInitializable
+    public sealed class MainMenuDisplay : UIDisplay, IInitializable, IDisposable
     {
         private readonly CachedService<LevelSelectionDisplay> _levelSelectionDisplay = new();
+
+        private readonly GameStateLoader _gameStateLoader = null;
 
         private Button _playButton = null;
         private Button _inventoryButton = null;
@@ -25,7 +32,12 @@ namespace SpaceAce.UI
         public MainMenuDisplay(VisualTreeAsset displayAsset,
                                PanelSettings settings,
                                UIAudio audio,
-                               Localizer localizer) : base(displayAsset, settings, audio, localizer) { }
+                               Localizer localizer,
+                               GameStateLoader gameStateLoader) : base(displayAsset, settings, audio, localizer)
+        {
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(GameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
+        }
 
         public override async UniTask EnableAsync()
         {
@@ -141,6 +153,13 @@ namespace SpaceAce.UI
         public void Initialize()
         {
             EnableAsync().Forget();
+
+            _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
+        }
+
+        public void Dispose()
+        {
+            _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
         }
 
         #endregion
@@ -188,6 +207,11 @@ namespace SpaceAce.UI
         private void CheatsButtonClickedEventHandler()
         {
             UIAudio.ForwardButtonClickAudio.PlayRandomAudioClip(Vector3.zero);
+        }
+
+        private void MainMenuLoadedEventHandler(object sender, EventArgs e)
+        {
+            EnableAsync().Forget();
         }
 
         #endregion

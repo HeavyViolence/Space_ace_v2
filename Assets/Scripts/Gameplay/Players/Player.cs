@@ -1,6 +1,8 @@
 using Newtonsoft.Json;
+
 using SpaceAce.Main;
 using SpaceAce.Main.Saving;
+
 using System;
 
 namespace SpaceAce.Gameplay.Players
@@ -14,8 +16,7 @@ namespace SpaceAce.Gameplay.Players
         private static readonly JsonSerializerSettings s_serializationSettings = new() { TypeNameHandling = TypeNameHandling.Auto };
 
         private readonly ISavingSystem _savingSystem = null;
-        private readonly LevelsLoader _levelsLoader = null;
-        private readonly MainMenuLoader _mainMenuLoader = null;
+        private readonly GameStateLoader _gameStateLoader = null;
 
         public Wallet Wallet { get; } = new();
         public Experience Experience { get; } = new();
@@ -23,17 +24,13 @@ namespace SpaceAce.Gameplay.Players
         public string ID => "Player";
 
         public Player(ISavingSystem savingSystem,
-                      LevelsLoader levelsLoader,
-                      MainMenuLoader mainMenuLoader)
+                      GameStateLoader gameStateLoader)
         {
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
 
-            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
-                $"Attempted to pass an empty {typeof(LevelsLoader)}!");
-
-            _mainMenuLoader = mainMenuLoader ?? throw new ArgumentNullException(nameof(mainMenuLoader),
-                $"Attempted to pass an empty {typeof(MainMenuLoader)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
         }
 
         #region interfaces
@@ -45,8 +42,8 @@ namespace SpaceAce.Gameplay.Players
             Wallet.BalanceChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
             Experience.ValueChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
-            _levelsLoader.LevelLoaded += LevelLoadedEventHandler;
-            _mainMenuLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
+            _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
+            _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
         }
 
         public void Dispose()
@@ -56,8 +53,8 @@ namespace SpaceAce.Gameplay.Players
             Wallet.BalanceChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
             Experience.ValueChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
-            _levelsLoader.LevelLoaded -= LevelLoadedEventHandler;
-            _mainMenuLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
+            _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
+            _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
         }
 
         public string GetState()

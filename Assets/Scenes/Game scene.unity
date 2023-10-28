@@ -221,6 +221,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _levelDisplayAsset: {fileID: 9197481963319205126, guid: 462044782a20a214c88878f7c7ac6031, type: 3}
+  _levelDisplaySettings: {fileID: 11400000, guid: 5a12fd6cc38a7484eaa995a83d149dca, type: 2}
+  _gamePauseMenuAsset: {fileID: 9197481963319205126, guid: 2dd6336480cfa5b47a1785bf42089160, type: 3}
+  _gamePauseMenuSettings: {fileID: 11400000, guid: 320c89cd95272aa46b502379113e66ff, type: 2}
   _localizedFont:
     m_TableReference:
       m_TableCollectionName: GUID:1b7b9159f3bab754f9b4578de5e1763d

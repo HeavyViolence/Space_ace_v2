@@ -1,9 +1,12 @@
 using Cysharp.Threading.Tasks;
+
 using SpaceAce.Architecture;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 using SpaceAce.Main.Localization;
+
 using System;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,23 +18,18 @@ namespace SpaceAce.UI
 
         protected override string DisplayHolderName => "Screen fader";
 
-        private readonly MainMenuLoader _mainMenuLoader = null;
-        private readonly LevelsLoader _levelsLoader = null;
+        private readonly GameStateLoader _gameStateLoader = null;
         private readonly AnimationCurve _fadingCurve = null;
 
         public ScreenFader(VisualTreeAsset displayAsset,
                            PanelSettings settings,
                            UIAudio audio,
                            Localizer localizer,
-                           MainMenuLoader mainMenuLoader,
-                           LevelsLoader levelsLoader,
+                           GameStateLoader gameStateLoader,
                            AnimationCurve fadingCurve) : base(displayAsset, settings, audio, localizer)
         {
-            _mainMenuLoader = mainMenuLoader ?? throw new ArgumentNullException(nameof(mainMenuLoader),
-                $"Attempted to pass an empty {typeof(MainMenuLoader)}!");
-
-            _levelsLoader = levelsLoader ?? throw new ArgumentNullException(nameof(levelsLoader),
-                $"Attempted to pass an empty {typeof(LevelsLoader)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             if (fadingCurve == null)
                 throw new ArgumentNullException(nameof(fadingCurve),
@@ -64,14 +62,14 @@ namespace SpaceAce.UI
 
         public void Initialize()
         {
-            _mainMenuLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
-            _levelsLoader.LevelLoadingStarted += LevelLoadingStartedEventHandler;
+            _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
+            _gameStateLoader.LevelLoadingStarted += LevelLoadingStartedEventHandler;
         }
 
         public void Dispose()
         {
-            _mainMenuLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
-            _levelsLoader.LevelLoadingStarted -= LevelLoadingStartedEventHandler;
+            _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
+            _gameStateLoader.LevelLoadingStarted -= LevelLoadingStartedEventHandler;
         }
 
         #endregion

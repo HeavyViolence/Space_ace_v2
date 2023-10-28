@@ -1,5 +1,7 @@
 using NaughtyAttributes;
+
 using SpaceAce.Auxiliary;
+
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement

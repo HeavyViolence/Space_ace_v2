@@ -1,13 +1,15 @@
 using SpaceAce.Architecture;
 using SpaceAce.Main;
+
 using System;
+
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Levels
 {
     public sealed class LevelStopwatch : IInitializable, IDisposable, IPausable, IUpdatable
     {
-        private readonly LevelsLoader _levelsLoader = null;
+        private readonly GameStateLoader _gameStateLoader = null;
         private readonly LevelsCompleter _levelsCompleter = null;
         private readonly GamePauser _gamePauser = null;
 
@@ -16,23 +18,16 @@ namespace SpaceAce.Gameplay.Levels
 
         public TimeSpan Stopwatch { get; private set; }
 
-        public LevelStopwatch(LevelsLoader levelsLoader, LevelsCompleter levelsCompleter, GamePauser gamePauser)
+        public LevelStopwatch(GameStateLoader gameStateLoader, LevelsCompleter levelsCompleter, GamePauser gamePauser)
         {
-            if (levelsLoader is null)
-                throw new ArgumentNullException(nameof(levelsLoader),
-                    $"Attempted to pass an empty {typeof(LevelsLoader)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
-            if (levelsCompleter is null)
-                throw new ArgumentNullException(nameof(levelsCompleter),
+            _levelsCompleter = levelsCompleter ?? throw new ArgumentNullException(nameof(levelsCompleter),
                     $"Attempted to pass an empty {typeof(LevelsCompleter)}!");
 
-            if (gamePauser is null)
-                throw new ArgumentNullException(nameof(gamePauser),
+            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
                     $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _levelsLoader = levelsLoader;
-            _levelsCompleter = levelsCompleter;
-            _gamePauser = gamePauser;
         }
 
         #region interfaces
@@ -40,14 +35,14 @@ namespace SpaceAce.Gameplay.Levels
         public void Initialize()
         {
             _gamePauser.Register(this);
-            _levelsLoader.LevelLoaded += LevelLoadedEventHandler;
+            _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
             _levelsCompleter.LevelConcluded += LevelConcludedEventHandler;
         }
 
         public void Dispose()
         {
             _gamePauser.Deregister(this);
-            _levelsLoader.LevelLoaded -= LevelLoadedEventHandler;
+            _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
             _levelsCompleter.LevelConcluded -= LevelConcludedEventHandler;
         }
 
