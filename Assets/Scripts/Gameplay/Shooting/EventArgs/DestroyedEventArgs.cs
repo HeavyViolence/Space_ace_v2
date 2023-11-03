@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 
-namespace SpaceAce.Gameplay.Damage
+namespace SpaceAce.Gameplay.Shooting
 {
     public sealed class DestroyedEventArgs : EventArgs
     {

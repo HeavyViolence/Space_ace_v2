@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &81637541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,9 +164,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: eb8fc92c89d442443b648f4196587490, type: 2}
   - {fileID: 2100000, guid: 3dc2c46e34dd937478ca4fe24b4e8548, type: 2}
   _cameraPrefab: {fileID: 1753528834700607575, guid: ae35b244b9f8e51478ba75fad5cf6cd2, type: 3}
-  _savingSystemtype: 0
+  _savingSystemType: 0
   _keyGeneratorType: 1
-  _encryptionType: 2
+  _encryptionType: 3
   _audioMixer: {fileID: 24100000, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
   _music: {fileID: 11400000, guid: 3bf6b2c51fe351749bcf7583e917f91b, type: 2}
   _levelCompletedAudio: {fileID: 11400000, guid: 8abd89b7beb2d524b9655c83881c44f4, type: 2}
@@ -233,6 +233,8 @@ MonoBehaviour:
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
+  _defaultPlayerShip: {fileID: 11400000, guid: 2f4f3eb397469df4cbc85b4d06db9a1c, type: 2}
+  _playerShipSpawnPosition: {x: 0, y: -10, z: 0}
 --- !u!4 &81637542
 Transform:
   m_ObjectHideFlags: 0

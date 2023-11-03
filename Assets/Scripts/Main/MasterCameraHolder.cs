@@ -74,5 +74,10 @@ namespace SpaceAce.Main
         public float GetShiftedViewportUpperBound(float offsetFactor) => ViewportUpperBound * offsetFactor;
 
         public float GetShiftedViewportLowerBound(float offsetFactor)  => ViewportLowerBound * offsetFactor;
+
+        public bool InsideViewprot(Vector2 position, float delta = 0f) => position.x + delta < ViewportLeftBound &&
+                                                                          position.x - delta > ViewportRightBound &&
+                                                                          position.y - delta > ViewportUpperBound &&
+                                                                          position.y + delta < ViewportLowerBound;
     }
 }

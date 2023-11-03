@@ -1,7 +1,6 @@
 using NaughtyAttributes;
 
 using SpaceAce.Architecture;
-using SpaceAce.Auxiliary;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 
@@ -63,30 +62,23 @@ namespace SpaceAce.Gameplay.Movement
 
         public float MinHorizontalSpeed => _horizontalSpeed.x;
         public float MaxHorizontalSpeed => _horizontalSpeed.y;
-        public float RandomHorizontalSpeed => AuxMath.GetRandom(_horizontalSpeed.x, _horizontalSpeed.y);
 
         public float MinVerticalSpeed => _verticalSpeed.x;
         public float MaxVerticalSpeed => _verticalSpeed.y;
-        public float RandomVerticalSpeed => AuxMath.GetRandom(_verticalSpeed.x, _verticalSpeed.y);
 
         public float MinSpatialSpeed => _spatialSpeed.x;
         public float MaxSpatialSpeed => _spatialSpeed.y;
-        public float RandomSpatialSpeed => AuxMath.GetRandom(_spatialSpeed.x, _spatialSpeed.y);
 
-        public bool RotationEnabled => _rotationSpeed.x != 0f || _rotationSpeed.y != 0f;
         public float LowestRotationSpeed => _rotationSpeed.x;
         public float HighestRotationSpeed => _rotationSpeed.y;
-        public float RandomrotationSpeed => AuxMath.GetRandom(_rotationSpeed.x, _rotationSpeed.y);
 
         public float UpperBound => s_masterCameraHolder.Access.ViewportUpperBound * _upperBoundDisplacement;
         public float LowerBound => s_masterCameraHolder.Access.ViewportLowerBound * _lowerBoundDisplacement;
         public float LeftBound => s_masterCameraHolder.Access.ViewportLeftBound * _leftBoundDisplacement;
         public float RightBound => s_masterCameraHolder.Access.ViewportRightBound * _rightBoundDisplacement;
 
-        public bool CollisionDamageEnabled => _collisionDamage.x > 0f || _collisionDamage.y > 0f;
         public float LowestCollisionDamage => _collisionDamage.x;
         public float HighestCollisionDamage => _collisionDamage.y;
-        public float RandomCollisiondamage => AuxMath.GetRandom(_collisionDamage.x, _collisionDamage.y);
 
         public AudioCollection CollisionAudio => _collisionAudio;
 

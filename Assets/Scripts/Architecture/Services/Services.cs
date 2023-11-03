@@ -9,7 +9,9 @@ namespace SpaceAce.Architecture
 
         public static void Register(object service)
         {
-            if (service is null) throw new ArgumentNullException(nameof(service), "Attempted to register an empty game service!");
+            if (service is null)
+                throw new ArgumentNullException(nameof(service),
+                    "Attempted to register an empty service!");
 
             Type serviceType = service.GetType();
 
@@ -21,7 +23,7 @@ namespace SpaceAce.Architecture
 
         public static bool TryGet<T>(out T service)
         {
-            if (s_registeredServices.TryGetValue(typeof(T), out var value))
+            if (s_registeredServices.TryGetValue(typeof(T), out var value) == true)
             {
                 service = (T)value;
                 return true;

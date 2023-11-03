@@ -28,6 +28,7 @@ namespace SpaceAce.Architecture
         private const string AudioFoldoutName = "Audio";
         private const string UIFoldoutName = "UI";
         private const string LocalizationFoldoutName = "Localization";
+        private const string PlayerFoldoutName = "Player";
 
         #region DI
 
@@ -106,6 +107,12 @@ namespace SpaceAce.Architecture
         [SerializeField, Foldout(LocalizationFoldoutName)]
         private LocalizedFont _localizedFont;
 
+        [SerializeField, Foldout(PlayerFoldoutName)]
+        private ObjectPoolEntry _defaultPlayerShip;
+
+        [SerializeField, Foldout(PlayerFoldoutName)]
+        private Vector3 _playerShipSpawnPosition;
+
         #endregion
 
         private IEnumerable<IUpdatable> _updatableServices = null;
@@ -151,7 +158,15 @@ namespace SpaceAce.Architecture
             ISavingSystem savingSystem = InstantiateSavingSystem();
             Services.Register(savingSystem);
 
-            Player player = new(savingSystem, gameStateLoader);
+            MultiobjectPool multiobjectPool = new(gamePauser);
+            Services.Register(multiobjectPool);
+
+            Player player = new(savingSystem,
+                                gameStateLoader,
+                                multiobjectPool,
+                                null, // replace!
+                                _defaultPlayerShip,
+                                _playerShipSpawnPosition);
             Services.Register(player);
 
             MasterAudioListenerHolder masterAudioListenerHolder = new(masterCameraObject, player, gameStateLoader);
@@ -165,9 +180,6 @@ namespace SpaceAce.Architecture
 
             MusicPlayer musicPlayer = new(_music, savingSystem);
             Services.Register(musicPlayer);
-
-            MultiobjectPool multiobjectPool = new(gamePauser);
-            Services.Register(multiobjectPool);
 
             LevelsCompleter levelsCompleter = new(gameStateLoader, player, _levelCompletedAudio, _levelFailedAudio);
             Services.Register(levelsCompleter);

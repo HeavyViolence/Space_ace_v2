@@ -2,7 +2,7 @@ using System;
 
 using UnityEngine;
 
-namespace SpaceAce.Gameplay.Damage
+namespace SpaceAce.Gameplay.Shooting
 {
     public sealed class DamageReceivedEventArgs : EventArgs
     {

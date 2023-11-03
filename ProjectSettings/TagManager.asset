@@ -11,14 +11,14 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Player projectiles
+  - Enemies
+  - Enemy projectiles
+  - Bombs
+  - Meteors
+  - Wrecks
+  - Bosses
   - 
   - 
   - 
@@ -40,4 +40,28 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Meteors
+    uniqueID: 2438869999
+    locked: 0
+  - name: Wrecks
+    uniqueID: 719018425
+    locked: 0
+  - name: Bombs
+    uniqueID: 273740271
+    locked: 0
+  - name: Enemy projectiles
+    uniqueID: 4178602465
+    locked: 0
+  - name: Enemies
+    uniqueID: 2807906119
+    locked: 0
+  - name: Bosses
+    uniqueID: 3851110067
+    locked: 0
+  - name: Player projectiles
+    uniqueID: 51776231
+    locked: 0
+  - name: Player
+    uniqueID: 1671965441
     locked: 0

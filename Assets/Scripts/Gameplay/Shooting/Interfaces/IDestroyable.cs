@@ -1,6 +1,6 @@
 using System;
 
-namespace SpaceAce.Gameplay.Damage
+namespace SpaceAce.Gameplay.Shooting
 {
     public interface IDestroyable
     {

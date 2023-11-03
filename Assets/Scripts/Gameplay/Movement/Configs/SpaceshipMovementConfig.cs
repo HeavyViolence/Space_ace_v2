@@ -1,7 +1,5 @@
 using NaughtyAttributes;
 
-using SpaceAce.Auxiliary;
-
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement
@@ -36,23 +34,17 @@ namespace SpaceAce.Gameplay.Movement
 
         public float MinHorizontalSpeedDuration => _horizontalSpeedDuration.x;
         public float MaxHorizontalSpeedDuration => _horizontalSpeedDuration.y;
-        public float RandomHorizontalSpeedDuration => AuxMath.GetRandom(_horizontalSpeedDuration.x, _horizontalSpeedDuration.y);
 
         public float MinHorizontalSpeedTransitionDuration => _horizontalSpeedTransitionDuration.x;
         public float MaxHorizontalSpeedTransitionDuration => _horizontalSpeedTransitionDuration.y;
-        public float RandomHorizontalSpeedTransitionDuration => AuxMath.GetRandom(_horizontalSpeedTransitionDuration.x, _horizontalSpeedTransitionDuration.y);
 
         public float MinVerticalSpeedDuration => _verticalsSpeedDuration.x;
         public float MaxVerticalSpeedDuration => _verticalsSpeedDuration.y;
-        public float RandomVerticalSpeedDuration => AuxMath.GetRandom(_verticalsSpeedDuration.x, _verticalsSpeedDuration.y);
 
         public float MinVerticalSpeedTransitionDuration => _verticalSpeedTransitionDuration.x;
         public float MaxVerticalSpeedTransitionDuration => _verticalSpeedTransitionDuration.y;
-        public float RandomVerticalSpeedTransitionDuration => AuxMath.GetRandom(_verticalSpeedTransitionDuration.x, _verticalSpeedTransitionDuration.y);
 
-        public bool PlayerAimEnabled => _playerAimSpeed.x > 0f || _playerAimSpeed.y > 0f;
         public float LowestPlayerAimSpeed => _playerAimSpeed.x;
         public float HighestPlayerAimSpeed => _playerAimSpeed.y;
-        public float RandomPlayerAimSpeed => AuxMath.GetRandom(_playerAimSpeed.x, _playerAimSpeed.y);
     }
 }
