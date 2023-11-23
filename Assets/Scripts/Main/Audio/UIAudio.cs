@@ -27,14 +27,14 @@ namespace SpaceAce.Main.Audio
         [SerializeField]
         private AudioCollection _errorAudio;
 
-        public AudioCollection ForwardButtonClickAudio => _forwardButtonClickAudio;
-        public AudioCollection BackwardButtonClickAudio => _backwardButtonClickAudio;
-        public AudioCollection HoverOverAudio => _hoverOverAudio;
-        public AudioCollection SwitchAudio => _switchAudio;
+        public AudioCollection ForwardClick => _forwardButtonClickAudio;
+        public AudioCollection BackwardClick => _backwardButtonClickAudio;
+        public AudioCollection HoverOver => _hoverOverAudio;
+        public AudioCollection Switch => _switchAudio;
 
-        public AudioCollection CreditsOperationAudio => _creditsOperationAudio;
+        public AudioCollection CreditsOperation => _creditsOperationAudio;
 
-        public AudioCollection NotificationAudio => _notificationAudio;
-        public AudioCollection ErrorAudio => _errorAudio;
+        public AudioCollection Notification => _notificationAudio;
+        public AudioCollection Error => _errorAudio;
     }
 }

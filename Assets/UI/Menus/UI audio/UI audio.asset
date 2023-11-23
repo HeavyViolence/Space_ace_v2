@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e72b85b174e286d4ea13610e216e4898, type: 3}
+  m_Script: {fileID: 11500000, guid: 2935834b7b19f9649a17c67baadb804d, type: 3}
   m_Name: UI audio
   m_EditorClassIdentifier: 
   _forwardButtonClickAudio: {fileID: 11400000, guid: 7d3457e10312dbb4f9b4910823519eb8, type: 2}
-  _backwardButtonClickAudio: {fileID: 11400000, guid: 32e97bde7cc1fd245b8d7ce3d6345a23, type: 2}
+  _backwardButtonClickAudio: {fileID: 11400000, guid: c4377d9bb7ad98841bc68bcf8571ebf5, type: 2}
   _hoverOverAudio: {fileID: 11400000, guid: ee35fa49512c217458acaed42099503f, type: 2}
   _switchAudio: {fileID: 11400000, guid: 17330f70c962d364694a517282f353c6, type: 2}
   _creditsOperationAudio: {fileID: 11400000, guid: 0a5e6a432df20c34aadef18e0c353dd6, type: 2}

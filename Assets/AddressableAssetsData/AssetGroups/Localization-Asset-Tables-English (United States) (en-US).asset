@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 1158ff15a2af883419339723de3a57f3
   m_SerializeEntries:
   - m_GUID: 6c0f97a95cc2b5149a847cd3fd146d86
-    m_Address: Localized font_en-US
+    m_Address: Localized fonts_en-US
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en-US

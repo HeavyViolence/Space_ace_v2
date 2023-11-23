@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89440481744f7fe4a9df253babb7ed52, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
   m_Name: Collision audio
   m_EditorClassIdentifier: 
   _audioClips:
@@ -27,6 +27,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2e1e0b72ab7ff8942becb59d5a5c56f0, type: 3}
   _outputAudioGroup: {fileID: 5500035958517537877, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
   _volume: {x: 1, y: 1}
-  _priority: 0
+  _priority: 1
   _spatialBlend: {x: 0.5, y: 0.5}
   _pitch: {x: 0.75, y: 1.25}

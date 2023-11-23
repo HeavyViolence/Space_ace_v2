@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc592018124a90947bcf6736b02a84d6, type: 3}
+  m_Name: Level selection display assets
+  m_EditorClassIdentifier: 
+  _display: {fileID: 9197481963319205126, guid: e89f4792c44f4244ab2e27d8f900546c, type: 3}
+  _levelButton: {fileID: 9197481963319205126, guid: dee66983e085af846937bbae174d900e, type: 3}
+  _settings: {fileID: 11400000, guid: d87848623502c434da0ad4f063949e9f, type: 2}
+  _uiAudio: {fileID: 11400000, guid: e8091a309e24cf14a9db7c09ebdf21cd, type: 2}

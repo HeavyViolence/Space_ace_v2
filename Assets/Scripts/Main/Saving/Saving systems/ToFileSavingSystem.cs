@@ -13,8 +13,8 @@ namespace SpaceAce.Main.Saving
 
         private readonly UTF8Encoding _UTF8 = new(true, true);
         private readonly HashSet<ISavable> _savableEntities = new();
-        private readonly IKeyGenerator _keyGenerator = null;
-        private readonly IEncryptor _encryptor = null;
+        private readonly IKeyGenerator _keyGenerator;
+        private readonly IEncryptor _encryptor;
 
         public ToFileSavingSystem(IKeyGenerator keyGenerator, IEncryptor encryptor)
         {
@@ -34,7 +34,7 @@ namespace SpaceAce.Main.Saving
             if (_savableEntities.Add(entity) == true)
             {
                 entity.SavingRequested += (sender, args) => SaveStateToFile(entity);
-                SetState(entity);
+                LoadStateFromFile(entity);
             }
         }
 
@@ -62,7 +62,23 @@ namespace SpaceAce.Main.Saving
             }
         }
 
-        private void SetState(ISavable entity)
+        private void SaveStateToFile(ISavable entity)
+        {
+            try
+            {
+                string state = entity.GetState();
+                byte[] byteState = _UTF8.GetBytes(state);
+
+                byte[] key = _keyGenerator.GenerateKey(entity.ID);
+                byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
+
+                string saveFilePath = GetSaveFilePath(entity.ID);
+                File.WriteAllBytes(saveFilePath, encryptedByteState);
+            }
+            catch (Exception) { }
+        }
+
+        private void LoadStateFromFile(ISavable entity)
         {
             string saveFilePath = GetSaveFilePath(entity.ID);
 
@@ -80,22 +96,6 @@ namespace SpaceAce.Main.Saving
                 }
                 catch (Exception) { }
             }
-        }
-
-        private void SaveStateToFile(ISavable entity)
-        {
-            try
-            {
-                string state = entity.GetState();
-                byte[] byteState = _UTF8.GetBytes(state);
-
-                byte[] key = _keyGenerator.GenerateKey(entity.ID);
-                byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
-
-                string saveFilePath = GetSaveFilePath(entity.ID);
-                File.WriteAllBytes(saveFilePath, encryptedByteState);
-            }
-            catch (Exception) { }
         }
 
         private string GetSaveFilePath(string id) => Path.Combine(Application.persistentDataPath, id + SavesExtension);

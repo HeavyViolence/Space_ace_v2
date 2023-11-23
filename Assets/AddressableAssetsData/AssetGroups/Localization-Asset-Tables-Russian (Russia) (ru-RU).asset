@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 9b361a125578fa34dae1a3a6f9cdd9e2
   m_SerializeEntries:
   - m_GUID: 5584cc5b46aaabe49a35409e222861b0
-    m_Address: Localized font_ru-RU
+    m_Address: Localized fonts_ru-RU
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-ru-RU

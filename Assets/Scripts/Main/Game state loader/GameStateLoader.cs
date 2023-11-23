@@ -2,37 +2,39 @@ using Cysharp.Threading.Tasks;
 
 using System;
 
+using UnityEngine;
+
 namespace SpaceAce.Main
 {
-    public sealed class GameStateLoader
+    public sealed class GameStateLoader : IGameStateLoader
     {
-        private const float LoadingDelay = 1f;
-
         public event EventHandler<MainMenuLoadingStartedEventArgs> MainMenuLoadingStarted;
         public event EventHandler MainMenuLoaded;
 
         public event EventHandler<LevelLoadingStartedEventArgs> LevelLoadingStarted;
         public event EventHandler<LevelLoadedEventArgs> LevelLoaded;
 
-        public GameState GameState { get; private set; } = GameState.MainMenu;
+        public GameState CurrentState { get; private set; } = GameState.MainMenu;
         public int LoadedLevelIndex { get; private set; } = 0;
 
-        public async UniTask LoadMainMenuAsync()
+        public async UniTask LoadMainMenuAsync(float delay)
         {
-            if (GameState == GameState.MainMenu ||
-                GameState == GameState.MainMenuLoading) return;
+            if (CurrentState == GameState.MainMenu ||
+                CurrentState == GameState.MainMenuLoading) return;
 
-            MainMenuLoadingStarted?.Invoke(this, new(LoadingDelay));
-            GameState = GameState.MainMenuLoading;
+            float clampedDelay = Mathf.Clamp(delay, IGameStateLoader.MinLoadingDelay, IGameStateLoader.MaxLoadingDelay);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(LoadingDelay));
+            MainMenuLoadingStarted?.Invoke(this, new(clampedDelay));
+            CurrentState = GameState.MainMenuLoading;
+
+            await UniTask.Delay(TimeSpan.FromSeconds(clampedDelay));
 
             MainMenuLoaded?.Invoke(this, EventArgs.Empty);
-            GameState = GameState.MainMenu;
+            CurrentState = GameState.MainMenu;
             LoadedLevelIndex = 0;
         }
 
-        public async UniTask LoadLevelAsync(int levelIndex)
+        public async UniTask LoadLevelAsync(int levelIndex, float delay)
         {
             if (levelIndex <= 0)
                 throw new ArgumentOutOfRangeException(nameof(levelIndex),
@@ -40,13 +42,15 @@ namespace SpaceAce.Main
 
             if (LoadedLevelIndex == levelIndex) return;
 
-            LevelLoadingStarted?.Invoke(this, new(levelIndex, LoadingDelay));
-            GameState = GameState.LevelLoading;
+            float clampedDelay = Mathf.Clamp(delay, IGameStateLoader.MinLoadingDelay, IGameStateLoader.MaxLoadingDelay);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(LoadingDelay));
+            LevelLoadingStarted?.Invoke(this, new(levelIndex, clampedDelay));
+            CurrentState = GameState.LevelLoading;
+
+            await UniTask.Delay(TimeSpan.FromSeconds(clampedDelay));
 
             LevelLoaded?.Invoke(this, new(levelIndex));
-            GameState = GameState.Level;
+            CurrentState = GameState.Level;
             LoadedLevelIndex = levelIndex;
         }
     }

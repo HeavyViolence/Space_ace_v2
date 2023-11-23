@@ -1,5 +1,3 @@
-using SpaceAce.Architecture;
-using SpaceAce.Gameplay.Levels;
 using SpaceAce.Main;
 
 using System;
@@ -7,11 +5,13 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using Zenject;
+
 using static UnityEngine.InputSystem.InputAction;
 
 namespace SpaceAce.Gameplay.Controls
 {
-    public sealed class GameControlsTransmitter : IInitializable, IDisposable
+    public sealed class GameControlsTransmitter : IGameControlsTransmitter, IInitializable, IDisposable
     {
         public event EventHandler<CallbackContext> GoToPreviousMenu;
         public event EventHandler<CallbackContext> OpenInventory;
@@ -23,11 +23,9 @@ namespace SpaceAce.Gameplay.Controls
         public event EventHandler<CallbackContext> Ceasefire;
 
         private readonly GameControls _gameControls = new();
-
-        private readonly GamePauser _gamePauser = null;
-        private readonly GameStateLoader _gameStateLoader = null;
-        private readonly LevelsCompleter _levelsCompleter = null;
-        private readonly MasterCameraHolder _masterCameraHolder = null;
+        private readonly IGamePauser _gamePauser;
+        private readonly IGameStateLoader _gameStateLoader;
+        private readonly IMasterCameraHolder _masterCameraHolder;
 
         public Vector2 MovementDirection => _gameControls.Player.Movement.ReadValue<Vector2>();
 
@@ -47,23 +45,21 @@ namespace SpaceAce.Gameplay.Controls
             }
         }
 
-        public GameControlsTransmitter(GamePauser gamePauser,
-                                       GameStateLoader gameStateLoader,
-                                       LevelsCompleter levelsCompleter,
-                                       MasterCameraHolder masterCameraHolder)
+        public GameControlsTransmitter(IGamePauser gamePauser,
+                                       IGameStateLoader gameStateLoader,
+                                       IMasterCameraHolder masterCameraHolder)
         {
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+                $"Attempted to pass an empty {typeof(IGamePauser)}!");
 
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an mepty {typeof(GameStateLoader)}!");
-
-            _levelsCompleter = levelsCompleter ?? throw new ArgumentNullException(nameof(levelsCompleter),
-                $"Attempted to pass an empty {typeof(LevelsCompleter)}!");
+                $"Attempted to pass an mepty {typeof(IGameStateLoader)}!");
 
             _masterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException(nameof(masterCameraHolder),
-                $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
+                $"Attempted to pass an empty {typeof(IMasterCameraHolder)}!");
         }
+
+
 
         #region interfaces
 
@@ -74,8 +70,6 @@ namespace SpaceAce.Gameplay.Controls
 
             _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
             _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
-
-            _levelsCompleter.LevelConcluded += LevelConcludedEventHandler;
 
             _gameControls.Menu.Back.performed += (ctx) => GoToPreviousMenu?.Invoke(this, ctx);
             _gameControls.Menu.Inventory.performed += (ctx) => OpenInventory?.Invoke(this, ctx);
@@ -97,8 +91,6 @@ namespace SpaceAce.Gameplay.Controls
 
             _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
             _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
-
-            _levelsCompleter.LevelConcluded -= LevelConcludedEventHandler;
 
             _gameControls.Menu.Back.performed -= (ctx) => GoToPreviousMenu?.Invoke(this, ctx);
             _gameControls.Menu.Inventory.performed -= (ctx) => OpenInventory?.Invoke(this, ctx);
@@ -135,11 +127,6 @@ namespace SpaceAce.Gameplay.Controls
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
             _gameControls.Player.Enable();
-        }
-
-        private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
-        {
-            _gameControls.Player.Disable();
         }
 
         #endregion

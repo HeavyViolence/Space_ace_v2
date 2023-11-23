@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89440481744f7fe4a9df253babb7ed52, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
   m_Name: Notification audio
   m_EditorClassIdentifier: 
   _audioClips:
@@ -34,7 +34,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4439520e179cc4d4a91b9e419b95692e, type: 3}
   - {fileID: 8300000, guid: fdb85e4238f1e304c9cf598ae1224726, type: 3}
   _outputAudioGroup: {fileID: -7227176236470740544, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
-  _volume: {x: 0, y: 1}
+  _volume: {x: 1, y: 1}
   _priority: 0
   _spatialBlend: {x: 0, y: 0}
   _pitch: {x: 0.9, y: 1.1}

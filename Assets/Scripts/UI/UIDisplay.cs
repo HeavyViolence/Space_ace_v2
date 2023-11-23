@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 
 using SpaceAce.Main.Localization;
-using SpaceAce.Main.Audio;
 
 using System;
 
@@ -14,14 +13,15 @@ namespace SpaceAce.UI
     {
         protected readonly VisualTreeAsset DisplayAsset;
         protected readonly UIDocument DisplayedDocument;
-        protected readonly UIAudio UIAudio;
-        protected readonly Localizer Localizer;
+        protected readonly ILocalizer Localizer;
 
         protected abstract string DisplayHolderName { get; }
 
         public bool Enabled { get; protected set; } = false;
 
-        public UIDisplay(VisualTreeAsset displayAsset, PanelSettings settings, UIAudio audio, Localizer localizer)
+        public UIDisplay(VisualTreeAsset displayAsset,
+                         PanelSettings settings,
+                         ILocalizer localizer)
         {
             if (displayAsset == null)
                 throw new ArgumentNullException(nameof(displayAsset),
@@ -31,20 +31,15 @@ namespace SpaceAce.UI
                 throw new ArgumentNullException(nameof(settings),
                     $"Attempted to pass an empty {typeof(PanelSettings)} for the display!");
 
-            if (audio == null)
-                throw new ArgumentNullException(nameof(audio),
-                    $"Attempted to pass an empty {typeof(UIAudio)} to play!");
-
-            Localizer = localizer ?? throw new ArgumentNullException(nameof(localizer),
-                $"Attempted to pass an empty {typeof(Localizer)}!");
-
             DisplayAsset = displayAsset;
-            UIAudio = audio;
 
             GameObject uiDisplay = new(DisplayHolderName);
 
             DisplayedDocument = uiDisplay.AddComponent<UIDocument>();
             DisplayedDocument.panelSettings = settings;
+
+            Localizer = localizer ?? throw new ArgumentNullException(nameof(localizer),
+                $"Attempted to pass an empty {typeof(ILocalizer)}!");
         }
 
         public abstract UniTask EnableAsync();
