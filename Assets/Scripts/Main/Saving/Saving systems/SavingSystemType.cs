@@ -2,6 +2,7 @@ namespace SpaceAce.Main.Saving
 {
     public enum SavingSystemType
     {
-        ToFile
+        ToFile,
+        ToPlayerPrefs
     }
 }

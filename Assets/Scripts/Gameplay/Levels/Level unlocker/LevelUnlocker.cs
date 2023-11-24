@@ -8,25 +8,25 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Levels
 {
-    public sealed class LevelUnlocker : ILevelUnlocker, IInitializable, IDisposable, ISavable
+    public sealed class LevelUnlocker : IInitializable, IDisposable, ISavable
     {
         public event EventHandler SavingRequested;
 
         private readonly ISavingSystem _savingSystem;
-        private readonly ILevelCompleter _levelCompleter;
+        private readonly LevelCompleter _levelCompleter;
 
         public int LargestCompletedLevelIndex { get; private set; }
         public int LargestUnlockedLevelIndex => LargestCompletedLevelIndex + 1;
 
         public string ID => "Game progress";
 
-        public LevelUnlocker(ISavingSystem savingSystem, ILevelCompleter levelCompleter)
+        public LevelUnlocker(ISavingSystem savingSystem, LevelCompleter levelCompleter)
         {
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
 
             _levelCompleter = levelCompleter ?? throw new ArgumentNullException(nameof(levelCompleter),
-                $"Attempted to pass an empty {typeof(ILevelCompleter)}!");
+                $"Attempted to pass an empty {typeof(LevelCompleter)}!");
         }
 
         #region interfaces

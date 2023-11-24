@@ -1,6 +1,6 @@
 namespace SpaceAce.Main.Localization
 {
-    public sealed class LanguageToCodeConverter : ILanguageToCodeConverter
+    public sealed class LanguageToCodeConverter
     {
         public string GetLanguageCode(Language language)
         {

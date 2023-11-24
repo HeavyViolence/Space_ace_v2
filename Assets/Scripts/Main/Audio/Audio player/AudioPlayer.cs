@@ -15,7 +15,7 @@ using Zenject;
 
 namespace SpaceAce.Main.Audio
 {
-    public sealed class AudioPlayer : IAudioPlayer, IInitializable, IDisposable, ISavable
+    public sealed class AudioPlayer : IInitializable, IDisposable, ISavable
     {
         private const int MaxAudioSources = 32;
 

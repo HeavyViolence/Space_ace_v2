@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SpaceAce.Main
 {
-    public sealed class MasterCameraHolder : IMasterCameraHolder
+    public sealed class MasterCameraHolder
     {
         public Camera MasterCamera { get; private set; }
         public GameObject MasterCameraObject { get; private set; }

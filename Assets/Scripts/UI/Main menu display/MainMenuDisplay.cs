@@ -10,7 +10,7 @@ using System;
 
 namespace SpaceAce.UI
 {
-    public sealed class MainMenuDisplay : UIDisplay, IMainMenuDisplay
+    public sealed class MainMenuDisplay : UIDisplay
     {
         public event EventHandler PlayButtonClicked;
         public event EventHandler InventoryButtonClicked;
@@ -33,9 +33,9 @@ namespace SpaceAce.UI
 
         public MainMenuDisplay(VisualTreeAsset displayAsset,
                                PanelSettings settings,
-                               ILocalizer localizer) : base(displayAsset,
-                                                            settings,
-                                                            localizer) { }
+                               Localizer localizer) : base(displayAsset,
+                                                           settings,
+                                                           localizer) { }
 
         public override async UniTask EnableAsync()
         {

@@ -9,7 +9,7 @@ using Zenject;
 
 namespace SpaceAce.Main
 {
-    public sealed class SpaceBackground : ISpaceBackground, IInitializable, IDisposable, ITickable
+    public sealed class SpaceBackground : IInitializable, IDisposable, ITickable
     {
         public const float MinScrollSpeed = 0.001f;
         public const float MaxScrollSpeed = 0.01f;
@@ -21,8 +21,8 @@ namespace SpaceAce.Main
         private readonly List<Material> _levelSpaceBackgrounds;
         private readonly ParticleSystem _dustfield;
         private readonly MeshRenderer _renderer;
-        private readonly IGamePauser _gamePauser;
-        private readonly IGameStateLoader _gameStateLoader;
+        private readonly GamePauser _gamePauser;
+        private readonly GameStateLoader _gameStateLoader;
 
         private bool _paused = false;
 
@@ -32,8 +32,8 @@ namespace SpaceAce.Main
         public SpaceBackground(GameObject spaceBackgroundPrefab,
                                Material mainMenuSpaceBackground,
                                IEnumerable<Material> levelSpaceBackgrounds,
-                               IGamePauser gamePauser,
-                               IGameStateLoader gameStateLoader)
+                               GamePauser gamePauser,
+                               GameStateLoader gameStateLoader)
         {
             if (spaceBackgroundPrefab == null)
                 throw new ArgumentNullException("Attempted to pass an empty space background prefab!");
@@ -60,10 +60,10 @@ namespace SpaceAce.Main
                 throw new MissingComponentException($"Space background object is missing {nameof(ParticleSystem)}!");
 
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(IGamePauser)}!");
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
 
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(IGameStateLoader)}!");
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             SetMainMenuState();
         }

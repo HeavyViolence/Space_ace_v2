@@ -6,8 +6,11 @@ using UnityEngine;
 
 namespace SpaceAce.Main
 {
-    public sealed class GameStateLoader : IGameStateLoader
+    public sealed class GameStateLoader
     {
+        public const float MinLoadingDelay = 0.5f;
+        public const float MaxLoadingDelay = 2f;
+
         public event EventHandler<MainMenuLoadingStartedEventArgs> MainMenuLoadingStarted;
         public event EventHandler MainMenuLoaded;
 
@@ -22,7 +25,7 @@ namespace SpaceAce.Main
             if (CurrentState == GameState.MainMenu ||
                 CurrentState == GameState.MainMenuLoading) return;
 
-            float clampedDelay = Mathf.Clamp(delay, IGameStateLoader.MinLoadingDelay, IGameStateLoader.MaxLoadingDelay);
+            float clampedDelay = Mathf.Clamp(delay, MinLoadingDelay, MaxLoadingDelay);
 
             MainMenuLoadingStarted?.Invoke(this, new(clampedDelay));
             CurrentState = GameState.MainMenuLoading;
@@ -42,7 +45,7 @@ namespace SpaceAce.Main
 
             if (LoadedLevelIndex == levelIndex) return;
 
-            float clampedDelay = Mathf.Clamp(delay, IGameStateLoader.MinLoadingDelay, IGameStateLoader.MaxLoadingDelay);
+            float clampedDelay = Mathf.Clamp(delay, MinLoadingDelay, MaxLoadingDelay);
 
             LevelLoadingStarted?.Invoke(this, new(levelIndex, clampedDelay));
             CurrentState = GameState.LevelLoading;

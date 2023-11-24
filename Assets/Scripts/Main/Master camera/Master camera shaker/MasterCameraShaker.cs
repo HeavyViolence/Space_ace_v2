@@ -13,13 +13,13 @@ using Zenject;
 
 namespace SpaceAce.Main
 {
-    public sealed class MasterCameraShaker : IMasterCameraShaker, IInitializable, IDisposable, ISavable
+    public sealed class MasterCameraShaker : IInitializable, IDisposable, ISavable
     {
         public event EventHandler SavingRequested;
 
         private readonly Rigidbody2D _masterCameraBody;
 
-        private readonly IGamePauser _gamePauser;
+        private readonly GamePauser _gamePauser;
         private readonly ISavingSystem _savingSystem;
 
         private int _activeShakers = 0;
@@ -53,13 +53,13 @@ namespace SpaceAce.Main
 
         public string ID => "Camera shaking";
 
-        public MasterCameraShaker(IMasterCameraHolder masterCameraHolder,
-                                  IGamePauser gamePauser,
+        public MasterCameraShaker(MasterCameraHolder masterCameraHolder,
+                                  GamePauser gamePauser,
                                   ISavingSystem savingSystem)
         {
             if (masterCameraHolder is null)
                 throw new ArgumentNullException(nameof(masterCameraHolder),
-                    $"Attempted to pass an empty {typeof(IMasterCameraHolder)}!");
+                    $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
 
             Rigidbody2D body = masterCameraHolder.MasterCameraObject.GetComponentInChildren<Rigidbody2D>();
 
@@ -69,7 +69,7 @@ namespace SpaceAce.Main
             _masterCameraBody = body;
 
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(IGamePauser)}!");
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
 
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");

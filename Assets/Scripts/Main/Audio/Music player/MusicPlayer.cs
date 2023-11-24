@@ -13,14 +13,14 @@ using Zenject;
 
 namespace SpaceAce.Main.Audio
 {
-    public sealed class MusicPlayer : IMusicPlayer, IInitializable, IDisposable, ISavable
+    public sealed class MusicPlayer : IInitializable, IDisposable, ISavable
     {
         public event EventHandler SavingRequested;
 
         private CancellationTokenSource _musicCanceller;
 
-        private readonly IAudioCollection _music;
-        private readonly IAudioPlayer _audioPlayer;
+        private readonly AudioCollection _music;
+        private readonly AudioPlayer _audioPlayer;
         private readonly ISavingSystem _savingSystem;
 
         public bool IsPlaying { get; private set; } = false;
@@ -42,15 +42,15 @@ namespace SpaceAce.Main.Audio
         public string ID => "Music settings";
 
 
-        public MusicPlayer(IAudioCollection music,
-                           IAudioPlayer audioPlayer,
+        public MusicPlayer(AudioCollection music,
+                           AudioPlayer audioPlayer,
                            ISavingSystem savingSystem)
         {
             _music = music ?? throw new ArgumentNullException(nameof(music),
-                    $"Attempted to pass an empty {typeof(IAudioCollection)}!");
+                    $"Attempted to pass an empty {typeof(AudioCollection)}!");
 
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(IAudioPlayer)}!");
+                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
 
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");

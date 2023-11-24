@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace SpaceAce.UI
 {
-    public sealed class ScreenFader : UIDisplay, IScreenFader
+    public sealed class ScreenFader : UIDisplay
     {
         protected override string DisplayHolderName => "Screen fader";
 
@@ -17,16 +17,16 @@ namespace SpaceAce.UI
 
         public ScreenFader(VisualTreeAsset displayAsset,
                            PanelSettings settings,
-                           AnimationCurve fadingCurve,
-                           ILocalizer localizer) : base(displayAsset,
-                                                        settings,
-                                                        localizer)
+                           UISettings uiSettings,
+                           Localizer localizer) : base(displayAsset,
+                                                       settings,
+                                                       localizer)
         {
-            if (fadingCurve == null)
-                throw new ArgumentNullException(nameof(fadingCurve),
+            if (uiSettings == null)
+                throw new ArgumentNullException(nameof(uiSettings),
                     $"Attempted to pass an empty fading curve: {typeof(AnimationCurve)}!");
 
-            _fadingCurve = fadingCurve;
+            _fadingCurve = uiSettings.FadingCurve;
         }
 
         public override async UniTask EnableAsync()

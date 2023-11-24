@@ -1,3 +1,5 @@
+using SpaceAce.Main.Audio;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,11 +15,22 @@ namespace SpaceAce.UI
         [SerializeField]
         private PanelSettings _settings;
 
+        [SerializeField]
+        private UISettings _uiSettings;
+
+        [SerializeField]
+        private UIAudio _uiAudio;
+
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<GamePauseDisplay>()
                      .AsSingle()
                      .WithArguments(_display, _settings)
+                     .NonLazy();
+
+            Container.BindInterfacesAndSelfTo<GamePauseDisplayMediator>()
+                     .AsSingle()
+                     .WithArguments(_uiSettings, _uiAudio)
                      .NonLazy();
         }
     }

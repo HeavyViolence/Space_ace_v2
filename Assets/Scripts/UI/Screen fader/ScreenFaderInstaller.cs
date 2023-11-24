@@ -14,13 +14,13 @@ namespace SpaceAce.UI
         private PanelSettings _settings;
 
         [SerializeField]
-        private AnimationCurve _fadingCurve;
+        private UISettings _uiSettings;
 
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<ScreenFader>()
                      .AsSingle()
-                     .WithArguments(_dispaly, _settings, _fadingCurve)
+                     .WithArguments(_dispaly, _settings, _uiSettings)
                      .NonLazy();
         }
     }

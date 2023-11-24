@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace SpaceAce.UI
 {
-    public sealed class GamePauseDisplay : UIDisplay, IGamePauseDisplay
+    public sealed class GamePauseDisplay : UIDisplay
     {
         public event EventHandler ResumeButtonClicked;
         public event EventHandler InventoryButtonClicked;
@@ -26,9 +26,9 @@ namespace SpaceAce.UI
 
         public GamePauseDisplay(VisualTreeAsset displayAsset,
                                 PanelSettings settings,
-                                ILocalizer localizer) : base(displayAsset,
-                                                             settings,
-                                                             localizer) { }
+                                Localizer localizer) : base(displayAsset,
+                                                            settings,
+                                                            localizer) { }
 
         public override async UniTask EnableAsync()
         {

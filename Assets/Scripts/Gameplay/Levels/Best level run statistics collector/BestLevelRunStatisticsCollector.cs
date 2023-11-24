@@ -10,35 +10,35 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Levels
 {
-    public sealed class BestLevelRunStatisticsCollector : IBestLevelRunStatisticsCollector, IInitializable, IDisposable, ISavable
+    public sealed class BestLevelRunStatisticsCollector : IInitializable, IDisposable, ISavable
     {
         public event EventHandler SavingRequested;
 
         private readonly Dictionary<int, BestLevelRunStatistics> _statistics = new();
 
         private readonly ISavingSystem _savingSystem;
-        private readonly ILevelCompleter _levelCompleter;
-        private readonly ILevelStopwatch _levelStopwatch;
-        private readonly IPlayer _player;
+        private readonly LevelCompleter _levelCompleter;
+        private readonly LevelStopwatch _levelStopwatch;
+        private readonly Player _player;
 
         public string ID => "Best levels runs statistics";
 
         public BestLevelRunStatisticsCollector(ISavingSystem savingSystem,
-                                               ILevelCompleter levelCompleter,
-                                               ILevelStopwatch levelStopwatch,
-                                               IPlayer player)
+                                               LevelCompleter levelCompleter,
+                                               LevelStopwatch levelStopwatch,
+                                               Player player)
         {
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
 
             _levelCompleter = levelCompleter ?? throw new ArgumentNullException(nameof(levelCompleter),
-                $"Attempted to pass an empty {typeof(ILevelCompleter)}!");
+                $"Attempted to pass an empty {typeof(LevelCompleter)}!");
 
             _levelStopwatch = levelStopwatch ?? throw new ArgumentNullException(nameof(levelStopwatch),
-                $"Attempted to pass an empty {typeof(ILevelStopwatch)}!");
+                $"Attempted to pass an empty {typeof(LevelStopwatch)}!");
 
             _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an mepty {typeof(IPlayer)}!");
+                $"Attempted to pass an mepty {typeof(Player)}!");
         }
 
         public BestLevelRunStatistics GetStatistics(int levelIndex)

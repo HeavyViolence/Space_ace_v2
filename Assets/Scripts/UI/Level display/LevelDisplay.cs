@@ -6,15 +6,15 @@ using UnityEngine.UIElements;
 
 namespace SpaceAce.UI
 {
-    public sealed class LevelDisplay : UIDisplay, ILevelDisplay
+    public sealed class LevelDisplay : UIDisplay
     {
         protected override string DisplayHolderName => "Level display";
 
         public LevelDisplay(VisualTreeAsset displayAsset,
                             PanelSettings settings,
-                            ILocalizer localizer) : base(displayAsset,
-                                                         settings,
-                                                         localizer) { }
+                            Localizer localizer) : base(displayAsset,
+                                                        settings,
+                                                        localizer) { }
 
         public override async UniTask EnableAsync()
         {

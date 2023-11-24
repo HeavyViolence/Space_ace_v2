@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace SpaceAce.UI
 {
-    public sealed class LevelSelectionDisplay : UIDisplay, ILevelSelectionDisplay
+    public sealed class LevelSelectionDisplay : UIDisplay
     {
         private const float BattleButtonLockDelay = 0.1f;
 
@@ -24,8 +24,8 @@ namespace SpaceAce.UI
         protected override string DisplayHolderName => "Level selection display";
 
         private readonly VisualTreeAsset _levelButtonAsset;
-        private readonly ILevelUnlocker _levelUnlocker;
-        private readonly IBestLevelRunStatisticsCollector _bestLevelsRunStatisticsCollector;
+        private readonly LevelUnlocker _levelUnlocker;
+        private readonly BestLevelRunStatisticsCollector _bestLevelsRunStatisticsCollector;
 
         private readonly List<Button> _levelsButtons = new();
 
@@ -65,9 +65,9 @@ namespace SpaceAce.UI
         private int _selectedLevelIndexToPlay = 0;
 
         public LevelSelectionDisplay(LevelSelectionDisplayAssets assets,
-                                     ILocalizer localizer,
-                                     ILevelUnlocker levelUnlocker,
-                                     IBestLevelRunStatisticsCollector bestLevelRunStatisticsCollector) : base(assets.Display,
+                                     Localizer localizer,
+                                     LevelUnlocker levelUnlocker,
+                                     BestLevelRunStatisticsCollector bestLevelRunStatisticsCollector) : base(assets.Display,
                                                                                                               assets.Settings,
                                                                                                               localizer)
         {
@@ -78,10 +78,10 @@ namespace SpaceAce.UI
             _levelButtonAsset = assets.LevelButton;
 
             _levelUnlocker = levelUnlocker ?? throw new ArgumentNullException(nameof(levelUnlocker),
-                $"Attempted to pass an empty {typeof(ILevelUnlocker)}!");
+                $"Attempted to pass an empty {typeof(LevelUnlocker)}!");
 
             _bestLevelsRunStatisticsCollector = bestLevelRunStatisticsCollector ?? throw new ArgumentNullException(nameof(bestLevelRunStatisticsCollector),
-                $"Attempted to pass an empty {typeof(IBestLevelRunStatisticsCollector)}!");
+                $"Attempted to pass an empty {typeof(BestLevelRunStatisticsCollector)}!");
         }
 
         public override async UniTask EnableAsync()

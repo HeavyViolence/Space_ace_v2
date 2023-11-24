@@ -11,7 +11,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace SpaceAce.Gameplay.Controls
 {
-    public sealed class GameControlsTransmitter : IGameControlsTransmitter, IInitializable, IDisposable
+    public sealed class GameControlsTransmitter : IInitializable, IDisposable
     {
         public event EventHandler<CallbackContext> GoToPreviousMenu;
         public event EventHandler<CallbackContext> OpenInventory;
@@ -23,9 +23,9 @@ namespace SpaceAce.Gameplay.Controls
         public event EventHandler<CallbackContext> Ceasefire;
 
         private readonly GameControls _gameControls = new();
-        private readonly IGamePauser _gamePauser;
-        private readonly IGameStateLoader _gameStateLoader;
-        private readonly IMasterCameraHolder _masterCameraHolder;
+        private readonly GamePauser _gamePauser;
+        private readonly GameStateLoader _gameStateLoader;
+        private readonly MasterCameraHolder _masterCameraHolder;
 
         public Vector2 MovementDirection => _gameControls.Player.Movement.ReadValue<Vector2>();
 
@@ -45,18 +45,18 @@ namespace SpaceAce.Gameplay.Controls
             }
         }
 
-        public GameControlsTransmitter(IGamePauser gamePauser,
-                                       IGameStateLoader gameStateLoader,
-                                       IMasterCameraHolder masterCameraHolder)
+        public GameControlsTransmitter(GamePauser gamePauser,
+                                       GameStateLoader gameStateLoader,
+                                       MasterCameraHolder masterCameraHolder)
         {
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(IGamePauser)}!");
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
 
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an mepty {typeof(IGameStateLoader)}!");
+                $"Attempted to pass an mepty {typeof(GameStateLoader)}!");
 
             _masterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException(nameof(masterCameraHolder),
-                $"Attempted to pass an empty {typeof(IMasterCameraHolder)}!");
+                $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
         }
 
 

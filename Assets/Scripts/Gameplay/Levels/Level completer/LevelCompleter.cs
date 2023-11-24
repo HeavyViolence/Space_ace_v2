@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
@@ -11,38 +13,38 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Levels
 {
-    public sealed class LevelCompleter : ILevelCompleter, IInitializable, IDisposable
+    public sealed class LevelCompleter : IInitializable, IDisposable
     {
         public event EventHandler<LevelEndedEventArgs> LevelCompleted;
         public event EventHandler<LevelEndedEventArgs> LevelFailed;
         public event EventHandler<LevelEndedEventArgs> LevelConcluded;
 
-        private readonly IAudioCollection _levelCompletedAudio;
-        private readonly IAudioCollection _levelFailedAudio;
-        private readonly IGameStateLoader _gameStateLoader;
-        private readonly IPlayer _player;
-        private readonly IAudioPlayer _audioPlayer;
+        private readonly AudioCollection _levelCompletedAudio;
+        private readonly AudioCollection _levelFailedAudio;
+        private readonly GameStateLoader _gameStateLoader;
+        private readonly Player _player;
+        private readonly AudioPlayer _audioPlayer;
 
-        public LevelCompleter(IAudioCollection levelCompletedAudio,
-                              IAudioCollection levelFailedAudio,
-                              IGameStateLoader gameStateLoader,
-                              IPlayer player,
-                              IAudioPlayer audioPlayer)
+        public LevelCompleter(AudioCollection levelCompletedAudio,
+                              AudioCollection levelFailedAudio,
+                              GameStateLoader gameStateLoader,
+                              Player player,
+                              AudioPlayer audioPlayer)
         {
             _levelCompletedAudio = levelCompletedAudio ?? throw new ArgumentNullException(nameof(levelCompletedAudio),
-                    $"Attempted to pass an empty {typeof(IAudioCollection)}!");
+                    $"Attempted to pass an empty {typeof(AudioCollection)}!");
 
             _levelFailedAudio = levelFailedAudio ?? throw new ArgumentNullException(nameof(levelFailedAudio),
-                    $"Attempted to pass an empty {typeof(IAudioCollection)}!");
+                    $"Attempted to pass an empty {typeof(AudioCollection)}!");
 
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(IGameStateLoader)}!");
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an empty {typeof(IPlayer)}!");
+                $"Attempted to pass an empty {typeof(Player)}!");
 
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(IAudioPlayer)}!");
+                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
         }
 
         #region interfaces
@@ -50,14 +52,12 @@ namespace SpaceAce.Gameplay.Levels
         public void Initialize()
         {
             _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
-
             _player.SpaceshipDefeated += PlayerSpaceshipDefeatedEventHandler;
         }
 
         public void Dispose()
         {
             _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
-
             _player.SpaceshipDefeated -= PlayerSpaceshipDefeatedEventHandler;
         }
 
@@ -74,9 +74,7 @@ namespace SpaceAce.Gameplay.Levels
         {
             LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
             LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
-
-            CancellationTokenSource cts = new();
-            _audioPlayer.PlayOnceAsync(_levelFailedAudio.Random, Vector3.zero, null, cts.Token);
+            _audioPlayer.PlayOnceAsync(_levelFailedAudio.Random, Vector3.zero, null, CancellationToken.None).Forget();
         }
 
         #endregion

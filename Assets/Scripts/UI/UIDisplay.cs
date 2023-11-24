@@ -13,7 +13,7 @@ namespace SpaceAce.UI
     {
         protected readonly VisualTreeAsset DisplayAsset;
         protected readonly UIDocument DisplayedDocument;
-        protected readonly ILocalizer Localizer;
+        protected readonly Localizer Localizer;
 
         protected abstract string DisplayHolderName { get; }
 
@@ -21,7 +21,7 @@ namespace SpaceAce.UI
 
         public UIDisplay(VisualTreeAsset displayAsset,
                          PanelSettings settings,
-                         ILocalizer localizer)
+                         Localizer localizer)
         {
             if (displayAsset == null)
                 throw new ArgumentNullException(nameof(displayAsset),
@@ -39,7 +39,7 @@ namespace SpaceAce.UI
             DisplayedDocument.panelSettings = settings;
 
             Localizer = localizer ?? throw new ArgumentNullException(nameof(localizer),
-                $"Attempted to pass an empty {typeof(ILocalizer)}!");
+                $"Attempted to pass an empty {typeof(Localizer)}!");
         }
 
         public abstract UniTask EnableAsync();

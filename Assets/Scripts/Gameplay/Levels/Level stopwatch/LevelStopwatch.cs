@@ -8,29 +8,29 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Levels
 {
-    public sealed class LevelStopwatch : ILevelStopwatch, IInitializable, IDisposable, IPausable, ITickable
+    public sealed class LevelStopwatch : IInitializable, IDisposable, IPausable, ITickable
     {
-        private readonly IGameStateLoader _gameStateLoader;
-        private readonly ILevelCompleter _levelCompleter;
-        private readonly IGamePauser _gamePauser;
+        private readonly GameStateLoader _gameStateLoader;
+        private readonly LevelCompleter _levelCompleter;
+        private readonly GamePauser _gamePauser;
 
         private float _timer = 0f;
         private bool _paused = true;
 
         public TimeSpan Stopwatch { get; private set; }
 
-        public LevelStopwatch(IGameStateLoader gameStateLoader,
-                              ILevelCompleter levelCompleter,
-                              IGamePauser gamePauser)
+        public LevelStopwatch(GameStateLoader gameStateLoader,
+                              LevelCompleter levelCompleter,
+                              GamePauser gamePauser)
         {
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(IGameStateLoader)}!");
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
 
             _levelCompleter = levelCompleter ?? throw new ArgumentNullException(nameof(levelCompleter),
-                $"Attempted to pass an empty {typeof(ILevelCompleter)}!");
+                $"Attempted to pass an empty {typeof(LevelCompleter)}!");
 
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass n empty {typeof(IGamePauser)}!");
+                $"Attempted to pass n empty {typeof(GamePauser)}!");
         }
 
         #region interfaces

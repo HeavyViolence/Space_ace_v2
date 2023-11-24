@@ -8,20 +8,20 @@ using Zenject;
 
 namespace SpaceAce.Main
 {
-    public sealed class MasterAudioListenerHolder : IMasterAudioListenerHolder, IInitializable, IDisposable
+    public sealed class MasterAudioListenerHolder : IInitializable, IDisposable
     {
-        private readonly IPlayer _player;
-        private readonly IGameStateLoader _gameStateLoader;
+        private readonly Player _player;
+        private readonly GameStateLoader _gameStateLoader;
 
         public AudioListener MasterAudioListener { get; private set; }
 
-        public MasterAudioListenerHolder(IMasterCameraHolder masterCameraHolder,
-                                         IPlayer player,
-                                         IGameStateLoader gameStateLoader)
+        public MasterAudioListenerHolder(MasterCameraHolder masterCameraHolder,
+                                         Player player,
+                                         GameStateLoader gameStateLoader)
         {
             if (masterCameraHolder is null)
                 throw new ArgumentNullException(nameof(masterCameraHolder),
-                    $"Attempted to pass an empty {typeof(IMasterCameraHolder)}!");
+                    $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
 
             AudioListener listener = masterCameraHolder.MasterCameraObject.GetComponentInChildren<AudioListener>();
 
@@ -31,10 +31,10 @@ namespace SpaceAce.Main
             MasterAudioListener = listener;
 
             _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an empty {typeof(IPlayer)}!");
+                $"Attempted to pass an empty {typeof(Player)}!");
 
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(IGameStateLoader)}!");
+                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
         }
 
         #region interfaces

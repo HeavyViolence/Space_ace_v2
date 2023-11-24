@@ -14,12 +14,12 @@ using Zenject;
 
 namespace SpaceAce.Main.Localization
 {
-    public sealed class Localizer : ILocalizer, IInitializable, IDisposable, ISavable
+    public sealed class Localizer : IInitializable, IDisposable, ISavable
     {
         public event EventHandler SavingRequested;
 
         private readonly LocalizedFont _localizedFont;
-        private readonly ILanguageToCodeConverter _languageToCodeConverter;
+        private readonly LanguageToCodeConverter _languageToCodeConverter;
         private readonly ISavingSystem _savingSystem;
 
         private bool _initialized = false;
@@ -28,14 +28,14 @@ namespace SpaceAce.Main.Localization
         public string ID => "Localization";
 
         public Localizer(LocalizedFont localizedFont,
-                         ILanguageToCodeConverter languageToCodeConverter,
+                         LanguageToCodeConverter languageToCodeConverter,
                          ISavingSystem savingSystem)
         {
             _localizedFont = localizedFont ?? throw new ArgumentNullException(nameof(localizedFont),
                 $"Attempted to pass an empty {typeof(LocalizedFont)}!");
 
             _languageToCodeConverter = languageToCodeConverter ?? throw new ArgumentNullException(nameof(languageToCodeConverter),
-                $"Attempted to pass an empty {typeof(ILanguageToCodeConverter)}!");
+                $"Attempted to pass an empty {typeof(LanguageToCodeConverter)}!");
 
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
