@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using SpaceAce.Main.Audio;
 
 using System;
-using System.Threading;
 
 using UnityEngine;
 
@@ -50,12 +49,12 @@ namespace SpaceAce.UI
         {
             _mainMenuDisplay.Disable();
             _levelSelectionDisplay.EnableAsync().Forget();
-            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
         }
 
         private void PointerOverEventHandler(object sender, UnityEngine.UIElements.PointerOverEvent e)
         {
-            AudioPlayer.PlayOnceAsync(UIAudio.HoverOver.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.HoverOver.Random, Vector3.zero).Forget();
         }
 
         #endregion

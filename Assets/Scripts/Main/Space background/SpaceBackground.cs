@@ -68,28 +68,6 @@ namespace SpaceAce.Main
             SetMainMenuState();
         }
 
-        private void SetMainMenuState()
-        {
-            ScrollSpeed = MainMenuScrollSpeed;
-
-            _renderer.sharedMaterial = _mainMenuSpaceBackground;
-            _renderer.sharedMaterial.mainTextureOffset = new Vector2(0f, AuxMath.RandomNormal);
-
-            _dustfield.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        }
-
-        private void SetLevelState()
-        {
-            ScrollSpeed = LevelScrollSpeed;
-
-            int backgroundIndex = AuxMath.GetRandom(0, _levelSpaceBackgrounds.Count);
-
-            _renderer.sharedMaterial = _levelSpaceBackgrounds[backgroundIndex];
-            _renderer.sharedMaterial.mainTextureOffset = new Vector2(0f, AuxMath.RandomNormal);
-
-            _dustfield.Play(true);
-        }
-
         #region interfaces
 
         public void Initialize()
@@ -144,5 +122,27 @@ namespace SpaceAce.Main
         }
 
         #endregion
+
+        private void SetMainMenuState()
+        {
+            ScrollSpeed = MainMenuScrollSpeed;
+
+            _renderer.sharedMaterial = _mainMenuSpaceBackground;
+            _renderer.sharedMaterial.mainTextureOffset = new Vector2(0f, AuxMath.RandomNormal);
+
+            _dustfield.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
+        private void SetLevelState()
+        {
+            ScrollSpeed = LevelScrollSpeed;
+
+            int backgroundIndex = AuxMath.GetRandom(0, _levelSpaceBackgrounds.Count);
+
+            _renderer.sharedMaterial = _levelSpaceBackgrounds[backgroundIndex];
+            _renderer.sharedMaterial.mainTextureOffset = new Vector2(0f, AuxMath.RandomNormal);
+
+            _dustfield.Play(true);
+        }
     }
 }

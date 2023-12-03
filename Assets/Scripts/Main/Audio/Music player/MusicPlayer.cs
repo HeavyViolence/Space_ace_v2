@@ -46,8 +46,11 @@ namespace SpaceAce.Main.Audio
                            AudioPlayer audioPlayer,
                            ISavingSystem savingSystem)
         {
-            _music = music ?? throw new ArgumentNullException(nameof(music),
+            if (music == null)
+                throw new ArgumentNullException(nameof(music),
                     $"Attempted to pass an empty {typeof(AudioCollection)}!");
+
+            _music = music;
 
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
                 $"Attempted to pass an empty {typeof(AudioPlayer)}!");
@@ -63,7 +66,7 @@ namespace SpaceAce.Main.Audio
             IsPlaying = true;
 
             _musicCanceller = new();
-            PlayMusicForever(_musicCanceller.Token).Forget();
+            PlayMusicForeverAsync(_musicCanceller.Token).Forget();
         }
 
         public void Stop()
@@ -76,7 +79,7 @@ namespace SpaceAce.Main.Audio
             _musicCanceller.Dispose();
         }
 
-        private async UniTaskVoid PlayMusicForever(CancellationToken token)
+        private async UniTaskVoid PlayMusicForeverAsync(CancellationToken token)
         {
             await UniTask.WaitForSeconds(Settings.PlaybackStartDelay, true, PlayerLoopTiming.Update, token);
 
@@ -85,7 +88,13 @@ namespace SpaceAce.Main.Audio
                 await _audioPlayer.PlayOnceAsync(_music.NonRepeatingRandom, Vector3.zero, null, token);
                 await UniTask.WaitForSeconds(Settings.PlaybackDelay, true, PlayerLoopTiming.Update, token);
 
-                if (token.IsCancellationRequested == true) return;
+                if (token.IsCancellationRequested == true)
+                {
+                    IsPlaying = false;
+                    _musicCanceller.Dispose();
+
+                    return;
+                }
             }
         }
 
@@ -94,7 +103,7 @@ namespace SpaceAce.Main.Audio
         public void Initialize()
         {
             _savingSystem.Register(this);
-            Play();
+            if (Settings.Autoplay == true) Play();
         }
 
         public void Dispose()

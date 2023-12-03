@@ -75,7 +75,7 @@ namespace SpaceAce.Main.Audio
 
         private float RandomPitch => AuxMath.GetRandom(_pitch.x, _pitch.y);
 
-        private AudioClip RandomAudioClip => _audioClips[UnityEngine.Random.Range(0, _audioClips.Count)];
+        private AudioClip RandomAudioClip => _audioClips[AuxMath.GetRandom(0, _audioClips.Count)];
 
         private AudioClip NonRepeatingRandomAudioClip
         {
@@ -99,7 +99,7 @@ namespace SpaceAce.Main.Audio
         }
 
         [Button("Audio preview")]
-        private void AudioPreview()
+        private async UniTaskVoid AudioPreview()
         {
             if (AudioClipsAmount == 0) return;
 
@@ -117,12 +117,8 @@ namespace SpaceAce.Main.Audio
 
             previewSource.Play();
 
-            ClearAudioPreviewObjectAsync(previewObject, randomClip.length * pitch).Forget();
-        }
+            await UniTask.WaitForSeconds(randomClip.length * pitch);
 
-        private async UniTaskVoid ClearAudioPreviewObjectAsync(GameObject previewObject, float delay)
-        {
-            await UniTask.WaitForSeconds(delay);
             DestroyImmediate(previewObject);
         }
     }

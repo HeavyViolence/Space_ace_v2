@@ -17,7 +17,7 @@ namespace SpaceAce.Main.Saving
             byte[] output = new byte[data.Length];
 
             for (int i  = 0; i < data.Length; i++)
-                output[i] = (byte)(data[i] ^ key[i]);
+                output[i] = (byte)(data[i] ^ key[i % key.Length]);
 
             return output;
         }
@@ -35,7 +35,7 @@ namespace SpaceAce.Main.Saving
             byte[] output = new byte[data.Length];
 
             for (int i = 0; i < data.Length; i++)
-                output[i] = (byte)(data[i] ^ key[i]);
+                output[i] = (byte)(data[i] ^ key[i % key.Length]);
 
             return output;
         }

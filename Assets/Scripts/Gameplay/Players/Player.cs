@@ -27,13 +27,14 @@ namespace SpaceAce.Gameplay.Players
         private readonly ISavingSystem _savingSystem;
         private readonly GameStateLoader _gameStateLoader;
         private readonly GameControlsTransmitter _gameControlsTransmitter;
+        private readonly GamePauser _gamePauser;
 
         private GameObject _activeShip;
         private IMovementController _playerShipMovementController;
 
         public Wallet Wallet { get; private set; }
         public Experience Experience { get; private set; }
-        public PlayerShipType SelectedShipType { get; set; } = PlayerShipType.Ship1Mk1;
+        public PlayerShipType SelectedShipType { get; set; }
 
         public string ID => "Player";
 
@@ -42,7 +43,8 @@ namespace SpaceAce.Gameplay.Players
                       float initialWalletBalance,
                       ISavingSystem savingSystem,
                       GameStateLoader gameStateLoader,
-                      GameControlsTransmitter gameControlsTransmitter)
+                      GameControlsTransmitter gameControlsTransmitter,
+                      GamePauser gamePauser)
         {
             _playerShipFactory = factory ?? throw new ArgumentNullException(nameof(factory),
                 $"Attempted to pass an empty {typeof(PlayerShipFactory)}!");
@@ -60,6 +62,9 @@ namespace SpaceAce.Gameplay.Players
 
             Wallet = new Wallet(initialWalletBalance);
             Experience = new Experience();
+
+            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
         }
 
         #region interfaces
@@ -115,7 +120,11 @@ namespace SpaceAce.Gameplay.Players
 
         public void FixedTick()
         {
+            if (_gameStateLoader.CurrentState != GameState.Level ||
+                _gamePauser.Paused == true) return;
 
+            _playerShipMovementController.Move(_gameControlsTransmitter.MovementDirection);
+            _playerShipMovementController.Rotate(_gameControlsTransmitter.MouseWorldPosition);
         }
 
         #endregion
@@ -124,12 +133,12 @@ namespace SpaceAce.Gameplay.Players
 
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
-            //SpawnPlayerShip();
+            SpawnPlayerShip();
         }
 
         private void MainMenuLoadedEventHandler(object sender, EventArgs e)
         {
-            //ReleasePlayerShip();
+            ReleasePlayerShip();
         }
 
         private void SpawnPlayerShip()
@@ -142,10 +151,10 @@ namespace SpaceAce.Gameplay.Players
             else
                 throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IMovementController)}!");
 
-            if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
+            /*if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
                 destroyable.Destroyed += PlayerShipDefeatedEventHandler;
             else
-                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");
+                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");*/
 
             SpaceshipSpawned?.Invoke(this, EventArgs.Empty);
         }
@@ -154,10 +163,10 @@ namespace SpaceAce.Gameplay.Players
         {
             if (_activeShip == null) return;
 
-            if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
+            /*if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
                 destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
             else
-                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");
+                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");*/
 
             _playerShipFactory.ReleasePlayerShip(_activeShip, SelectedShipType);
             _activeShip = null;

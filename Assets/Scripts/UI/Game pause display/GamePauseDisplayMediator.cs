@@ -5,7 +5,6 @@ using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 
 using System;
-using System.Threading;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -96,7 +95,7 @@ namespace SpaceAce.UI
         {
             _gamePauseDisplay.Disable();
             _screenFader.FadeInAndOutAsync(_settings.FadingDuration).Forget();
-            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
 
             await _gameStateLoader.LoadMainMenuAsync(_settings.LoadingDelay);
 
@@ -109,12 +108,12 @@ namespace SpaceAce.UI
             _gamePauseDisplay.Disable();
             _levelDisplay.EnableAsync().Forget();
             _gamePauser.Resume();
-            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
         }
 
         private void PointerOverEventHandler(object sender, PointerOverEvent e)
         {
-            AudioPlayer.PlayOnceAsync(UIAudio.HoverOver.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.HoverOver.Random, Vector3.zero).Forget();
         }
 
         private void GoToPreviousMenuEventHandler(object sender, CallbackContext e)
@@ -124,7 +123,7 @@ namespace SpaceAce.UI
             _gamePauseDisplay.Disable();
             _levelDisplay.EnableAsync().Forget();
             _gamePauser.Resume();
-            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();
         }
 
         #endregion

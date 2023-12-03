@@ -23,6 +23,7 @@ namespace SpaceAce.Main.Audio
 
         private readonly AudioMixer _audioMixer;
         private readonly ISavingSystem _savingSystem;
+        private readonly GamePauser _gamePauser;
 
         private GameObject _audioSourcesAnchor;
         private readonly Dictionary<Guid, AudioSource> _activeAudioSources = new(MaxAudioSources);
@@ -54,7 +55,9 @@ namespace SpaceAce.Main.Audio
             }
         }
 
-        public AudioPlayer(AudioMixer mixer, ISavingSystem savingSystem)
+        public AudioPlayer(AudioMixer mixer,
+                           ISavingSystem savingSystem,
+                           GamePauser gamePauser)
         {
             if (mixer == null)
                 throw new ArgumentNullException(nameof(mixer),
@@ -65,18 +68,20 @@ namespace SpaceAce.Main.Audio
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
 
+            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
+                $"Attempted to pass an empty {typeof(GamePauser)}!");
+
             CreateAudioSourcePool();
         }
 
         public async UniTask PlayOnceAsync(AudioProperties properties,
                                            Vector3 position,
-                                           Transform anchor,
-                                           CancellationToken token)
+                                           Transform anchor = null,
+                                           CancellationToken token = default,
+                                           bool obeyGamePause = false)
         {
             AudioSource source = FindAvailableAudioSource();
             AudioAccess access = ConfigureAudioSource(source, properties, position, anchor, false);
-
-            if (access == AudioAccess.None) return;
 
             float timer = 0f;
 
@@ -84,31 +89,63 @@ namespace SpaceAce.Main.Audio
             {
                 timer += Time.deltaTime;
 
-                if (token != CancellationToken.None &&
-                    token.IsCancellationRequested == true)
+                if (token != default &&
+                    token.IsCancellationRequested == true) break;
+
+                if (obeyGamePause == true && _gamePauser.Paused == true)
                 {
-                    DisableActiveAudioSource(access.ID);
-                    return;
+                    source.Pause();
+                    await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                    source.Play();
                 }
 
                 await UniTask.Yield();
             }
+
+            DisableActiveAudioSource(access.ID);
         }
 
-        public async UniTask PlayOnLoopAsync(AudioProperties properties,
+        public async UniTask PlayInLoopAsync(AudioProperties properties,
                                              Vector3 position,
-                                             Transform anchor,
-                                             CancellationToken token)
+                                             Transform anchor = null,
+                                             CancellationToken token = default,
+                                             bool obeyGamePause = false)
         {
             AudioSource source = FindAvailableAudioSource();
             AudioAccess access = ConfigureAudioSource(source, properties, position, anchor, true);
 
-            if (access == AudioAccess.None) return;
+            float timer = 0f;
 
-            if (token == CancellationToken.None)
-                await UniTask.WaitForSeconds(properties.Clip.length);
+            if (token == default)
+            {
+                while (timer < access.PlaybackDuration)
+                {
+                    timer += Time.deltaTime;
+
+                    if (obeyGamePause == true && _gamePauser.Paused == true)
+                    {
+                        source.Pause();
+                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                        source.Play();
+                    }
+
+                    await UniTask.Yield();
+                }
+            }
             else
-                await UniTask.WaitUntil(() => token.IsCancellationRequested == true);
+            {
+                while (token.IsCancellationRequested == false)
+                {
+                    if (obeyGamePause == true && _gamePauser.Paused == true)
+                    {
+                        source.Pause();
+                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                        source.Play();
+                    }
+
+                    await UniTask.Yield();
+                }
+            }
 
             DisableActiveAudioSource(access.ID);
         }
@@ -174,10 +211,12 @@ namespace SpaceAce.Main.Audio
                                                  Transform anchor,
                                                  bool loop)
         {
-            if (source == null || properties is null) return AudioAccess.None;
+            if (properties is null)
+                throw new ArgumentNullException(nameof(properties),
+                    $"Attempted to pass an empty {typeof(AudioProperties)}!");
 
-            var id = Guid.NewGuid();
             AudioAccess access;
+            var id = Guid.NewGuid();
 
             source.clip = properties.Clip;
             source.outputAudioMixerGroup = properties.OutputAudioGroup;

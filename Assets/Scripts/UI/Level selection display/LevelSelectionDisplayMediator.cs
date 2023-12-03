@@ -5,7 +5,6 @@ using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 
 using System;
-using System.Threading;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -101,14 +100,14 @@ namespace SpaceAce.UI
         {
             _levelSelectionDisplay.Disable();
             _mainMenuDisplay.EnableAsync().Forget();
-            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();
         }
 
         private async UniTask BattleButtonClickedEventHandlerAsync(object sender, EventArgs e)
         {
             _levelSelectionDisplay.Disable();
             _screenFader.FadeInAndOutAsync(_settings.FadingDuration).Forget();
-            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
 
             await _gameStateLoader.LoadLevelAsync(_selectedLevelIndex, _settings.LoadingDelay);
 
@@ -118,7 +117,7 @@ namespace SpaceAce.UI
         private void LevelButtonCheckedEventHandler(object sender, LevelButtonCheckedEventArgs e)
         {
             _selectedLevelIndex = e.LevelIndex;
-            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
         }
 
         private void LevelButtonUncheckedEventHandler(object sender, EventArgs e)
@@ -128,7 +127,7 @@ namespace SpaceAce.UI
 
         private void PointerOverEventHandler(object sender, PointerOverEvent e)
         {
-            AudioPlayer.PlayOnceAsync(UIAudio.HoverOver.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.HoverOver.Random, Vector3.zero).Forget();
         }
 
         private void GoToPreviousMenuEventHandler(object sender, CallbackContext e)
@@ -137,7 +136,7 @@ namespace SpaceAce.UI
 
             _levelSelectionDisplay.Disable();
             _mainMenuDisplay.EnableAsync().Forget();
-            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();
         }
 
         #endregion

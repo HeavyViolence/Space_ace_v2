@@ -6,6 +6,7 @@ using SpaceAce.Auxiliary;
 using SpaceAce.Main.Saving;
 
 using System;
+using System.Threading;
 
 using UnityEngine;
 
@@ -22,8 +23,6 @@ namespace SpaceAce.Main
         private readonly GamePauser _gamePauser;
         private readonly ISavingSystem _savingSystem;
 
-        private int _activeShakers = 0;
-
         public const float MinAmplitude = 0.1f;
         public const float MaxAmplitude = 1f;
 
@@ -36,6 +35,7 @@ namespace SpaceAce.Main
         public const float AmplitudeCutoff = 0.01f;
 
         private MasterCameraShakerSettings _settings = MasterCameraShakerSettings.Default;
+
         public MasterCameraShakerSettings Settings
         {
             get => _settings;
@@ -53,10 +53,14 @@ namespace SpaceAce.Main
 
         public string ID => "Camera shaking";
 
-        public MasterCameraShaker(MasterCameraHolder masterCameraHolder,
+        public MasterCameraShaker(MasterCameraShakerSettings settings,
+                                  MasterCameraHolder masterCameraHolder,
                                   GamePauser gamePauser,
                                   ISavingSystem savingSystem)
         {
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings),
+                $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
+
             if (masterCameraHolder is null)
                 throw new ArgumentNullException(nameof(masterCameraHolder),
                     $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
@@ -75,47 +79,45 @@ namespace SpaceAce.Main
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
         }
 
-        public void ShakeOnShotFired()
+        public async UniTask ShakeOnShotFiredAsync(CancellationToken token = default)
         {
-            if (Settings.ShakingOnShotFiredEnabled == false) return;
-
-            Shake(0.05f, 2f, 2f).Forget();
+            await ShakeAsync(Settings.OnShotFired, token);
         }
 
-        public void ShakeOnDefeat()
+        public async UniTask ShakeOnDefeatAsync(CancellationToken token = default)
         {
-            if (Settings.ShakingOnDefeatEnabled == false) return;
-
-            Shake(0.5f, 2f, 1f).Forget();
+            await ShakeAsync(Settings.OnDefeat, token);
         }
 
-        public void ShakeOnCollision()
+        public async UniTask ShakeOnCollisionAsync(CancellationToken token = default)
         {
-            if (Settings.ShakingOnCollisionEnabled == false) return;
-
-            Shake(0.2f, 2f, 2f).Forget();
+            await ShakeAsync(Settings.OnCollision, token);
         }
 
-        public void ShakeOnHit()
+        public async UniTask ShakeOnHitAsync(CancellationToken token = default)
         {
-            if (Settings.ShakingOnHitEnabled == false) return;
-
-            Shake(0.1f, 2f, 2f).Forget();
+            await ShakeAsync(Settings.OnHit, token);
         }
 
-        private async UniTaskVoid Shake(float amplitude, float attenuation, float frequency)
+        private async UniTask ShakeAsync(ShakeSettings settings, CancellationToken token)
         {
-            _activeShakers++;
+            if (settings.Enabled == false) return;
 
-            amplitude = Mathf.Clamp(amplitude, 0f, MaxAmplitude);
-            attenuation = Mathf.Clamp(attenuation, 0f, MaxAttenuation);
-            frequency = Mathf.Clamp(frequency, 0f, MaxFrequency);
+            float amplitude = settings.Amplitude;
+            float attenuation = settings.Attenuation;
+            float frequency = settings.Frequency;
 
             float timer = 0f;
             float duration = -1f * Mathf.Log(AmplitudeCutoff) / attenuation;
 
             while (timer < duration)
             {
+                if (token != default && token.IsCancellationRequested == true)
+                {
+                    _masterCameraBody.MovePosition(Vector2.zero);
+                    return;
+                }
+
                 timer += Time.fixedDeltaTime;
 
                 float delta = amplitude * Mathf.Exp(-1f * attenuation * timer) * Mathf.Sin(2f * Mathf.PI * frequency * timer);
@@ -125,13 +127,12 @@ namespace SpaceAce.Main
 
                 _masterCameraBody.MovePosition(deltaPos);
 
-                while (_gamePauser.Paused) await UniTask.NextFrame();
+                while (_gamePauser.Paused == true) await UniTask.NextFrame();
 
                 await UniTask.WaitForFixedUpdate();
             }
 
-            if (--_activeShakers == 0)
-                _masterCameraBody.MovePosition(Vector2.zero);
+            _masterCameraBody.MovePosition(Vector2.zero);
         }
 
         #region interfaces

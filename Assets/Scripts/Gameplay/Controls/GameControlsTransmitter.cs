@@ -35,13 +35,7 @@ namespace SpaceAce.Gameplay.Controls
             {
                 if (Mouse.current is null) return Vector3.zero;
 
-                Vector2 mouseScreenPosition = Mouse.current.position.value;
-
-                Vector3 mouseScreenPositionWithDepth = new(mouseScreenPosition.x,
-                                                           mouseScreenPosition.y,
-                                                           _masterCameraHolder.MasterCamera.transform.position.z);
-
-                return _masterCameraHolder.MasterCamera.ScreenToWorldPoint(mouseScreenPositionWithDepth);
+                return _masterCameraHolder.MasterCamera.ScreenToWorldPoint(Mouse.current.position.value);
             }
         }
 

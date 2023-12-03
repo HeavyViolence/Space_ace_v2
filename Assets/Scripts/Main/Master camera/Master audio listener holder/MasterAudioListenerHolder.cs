@@ -44,7 +44,7 @@ namespace SpaceAce.Main
             _player.SpaceshipSpawned += PlayerSpaceshipSpawnedEventHandler;
             _player.SpaceshipDefeated += PlayerSpaceshipDefeatedEventHandler;
 
-            _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
+            _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
         }
 
         public void Dispose()
@@ -52,7 +52,7 @@ namespace SpaceAce.Main
             _player.SpaceshipSpawned -= PlayerSpaceshipSpawnedEventHandler;
             _player.SpaceshipDefeated -= PlayerSpaceshipDefeatedEventHandler;
 
-            _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
+            _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
         }
 
         #endregion
@@ -69,7 +69,7 @@ namespace SpaceAce.Main
             MasterAudioListener.enabled = true;
         }
 
-        private void MainMenuLoadingStartedEventHandler(object sender, MainMenuLoadingStartedEventArgs e)
+        private void MainMenuLoadedEventHandler(object sender, EventArgs e)
         {
             MasterAudioListener.enabled = true;
         }

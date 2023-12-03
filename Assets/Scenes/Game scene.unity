@@ -436,6 +436,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32f2b572780f3b4d8d95fb487c182af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _settings:
+    _onShotFired:
+      _enabled: 1
+      _amplitude: {x: 0.045, y: 0.055}
+      _attenuation: {x: 1.5, y: 2.5}
+      _frequency: {x: 1.5, y: 2.5}
+    _onDefeat:
+      _enabled: 1
+      _amplitude: {x: 0.45, y: 0.55}
+      _attenuation: {x: 1.5, y: 2.5}
+      _frequency: {x: 0.5, y: 1.5}
+    _onCollision:
+      _enabled: 1
+      _amplitude: {x: 0.15, y: 0.25}
+      _attenuation: {x: 1.5, y: 2.5}
+      _frequency: {x: 1.5, y: 2.5}
+    _onHit:
+      _enabled: 1
+      _amplitude: {x: 0.05, y: 0.15}
+      _attenuation: {x: 1.5, y: 2.5}
+      _frequency: {x: 1.5, y: 2.5}
 --- !u!4 &491086736
 Transform:
   m_ObjectHideFlags: 0
@@ -1088,7 +1109,7 @@ GameObject:
   - component: {fileID: 1668263260}
   - component: {fileID: 1668263259}
   m_Layer: 0
-  m_Name: Scene installer
+  m_Name: Game scene installer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1117,11 +1138,11 @@ MonoBehaviour:
   - {fileID: 550855448}
   - {fileID: 797462022}
   - {fileID: 491086735}
-  - {fileID: 597690495}
-  - {fileID: 1411607753}
-  - {fileID: 1627518979}
   - {fileID: 1161216379}
   - {fileID: 807972785}
+  - {fileID: 1627518979}
+  - {fileID: 597690495}
+  - {fileID: 1411607753}
   - {fileID: 1984476078}
   - {fileID: 1945165111}
   - {fileID: 1155723067}
