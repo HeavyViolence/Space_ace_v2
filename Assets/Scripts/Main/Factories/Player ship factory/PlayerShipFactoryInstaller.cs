@@ -13,7 +13,7 @@ namespace SpaceAce.Main.Factories
         {
             Container.BindInterfacesAndSelfTo<PlayerShipFactory>()
                      .AsSingle()
-                     .WithArguments(_config.PlayerShips)
+                     .WithArguments(_config.Content)
                      .NonLazy();
         }
     }

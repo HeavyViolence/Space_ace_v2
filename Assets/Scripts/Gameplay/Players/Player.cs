@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 
 using SpaceAce.Gameplay.Controls;
-using SpaceAce.Gameplay.Shooting;
+using SpaceAce.Gameplay.Damage;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories;
 using SpaceAce.Main.Saving;
@@ -143,7 +143,7 @@ namespace SpaceAce.Gameplay.Players
 
         private void SpawnPlayerShip()
         {
-            _activeShip = _playerShipFactory.CreatePlayerShip(SelectedShipType);
+            _activeShip = _playerShipFactory.Create(SelectedShipType);
             _activeShip.transform.SetPositionAndRotation(_shipSpawnPosition, Quaternion.identity);
 
             if (_activeShip.TryGetComponent(out IMovementController controller) == true)
@@ -168,13 +168,13 @@ namespace SpaceAce.Gameplay.Players
             else
                 throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");*/
 
-            _playerShipFactory.ReleasePlayerShip(_activeShip, SelectedShipType);
+            _playerShipFactory.Release(_activeShip, SelectedShipType);
             _activeShip = null;
         }
 
         private void PlayerShipDefeatedEventHandler(object sender, DestroyedEventArgs e)
         {
-            _playerShipFactory.ReleasePlayerShip(_activeShip, SelectedShipType);
+            _playerShipFactory.Release(_activeShip, SelectedShipType);
             SpaceshipDefeated?.Invoke(this, EventArgs.Empty);
 
             _activeShip = null;

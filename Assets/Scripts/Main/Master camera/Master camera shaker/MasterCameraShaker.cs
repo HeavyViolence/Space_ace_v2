@@ -112,11 +112,7 @@ namespace SpaceAce.Main
 
             while (timer < duration)
             {
-                if (token != default && token.IsCancellationRequested == true)
-                {
-                    _masterCameraBody.MovePosition(Vector2.zero);
-                    return;
-                }
+                if (token != default && token.IsCancellationRequested == true) break;
 
                 timer += Time.fixedDeltaTime;
 

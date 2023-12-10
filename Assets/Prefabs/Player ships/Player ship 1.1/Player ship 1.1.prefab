@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 102720568966310649}
   - component: {fileID: 7625245225462541341}
   - component: {fileID: 3214719429403278206}
-  - component: {fileID: 297028235143731142}
   - component: {fileID: 4109602246007189167}
+  - component: {fileID: 8775590829006353744}
+  - component: {fileID: 2402196658495515395}
   - component: {fileID: 394775376711316432}
   m_Layer: 6
   m_Name: Player ship 1.1
@@ -99,18 +100,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -4}
   serializedVersion: 2
   m_Radius: 4
---- !u!114 &297028235143731142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7057199970465144767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90c448b92224b244e8759bae33b9d027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4109602246007189167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +113,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: db8f334ad55fe5f41be955eb810fe657, type: 2}
+--- !u!114 &8775590829006353744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057199970465144767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9452b45567f0456469d8f1dc2edb7633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2402196658495515395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057199970465144767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19677d2cc3d6ba545acc0ac23d10f1de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!81 &394775376711316432
 AudioListener:
   m_ObjectHideFlags: 0

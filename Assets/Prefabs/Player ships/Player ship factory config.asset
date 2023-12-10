@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Player ship factory config
   m_EditorClassIdentifier: 
   _slots:
-  - ShipType: 0
-    Prefab: {fileID: 7057199970465144767, guid: 1a005daf849776f489022ca13d076d91, type: 3}
+  - _shipType: 0
+    _prefab: {fileID: 7057199970465144767, guid: 1a005daf849776f489022ca13d076d91, type: 3}

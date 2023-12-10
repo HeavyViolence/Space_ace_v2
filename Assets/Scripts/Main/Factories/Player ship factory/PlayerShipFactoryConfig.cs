@@ -11,17 +11,6 @@ namespace SpaceAce.Main.Factories
         [SerializeField]
         private List<PlayerShipSlot> _slots;
 
-        public IEnumerable<KeyValuePair<PlayerShipType, GameObject>> PlayerShips
-        {
-            get
-            {
-                Dictionary<PlayerShipType, GameObject> playerShips = new();
-
-                foreach (var slot in _slots)
-                    playerShips.Add(slot.ShipType, slot.Prefab);
-
-                return playerShips;
-            }
-        }
+        public IEnumerable<PlayerShipSlot> Content => _slots;
     }
 }

@@ -7,7 +7,14 @@ namespace SpaceAce.Main.Factories
     [Serializable]
     public sealed class PlayerShipSlot
     {
-        public PlayerShipType ShipType;
-        public GameObject Prefab;
+        [SerializeField]
+        private PlayerShipType _shipType;
+
+        [SerializeField]
+        private GameObject _prefab;
+
+        public PlayerShipType ShipType => _shipType;
+
+        public GameObject Prefab => _prefab;
     }
 }

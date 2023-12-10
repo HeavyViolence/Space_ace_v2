@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Explosions massive
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 745f356df9f73d249877096d7fdc4ff2, type: 3}
+  - {fileID: 8300000, guid: 22261878429892e4486997de1cab4468, type: 3}
+  - {fileID: 8300000, guid: 297fce1095f318846b5de43000745382, type: 3}
+  - {fileID: 8300000, guid: 0112273a55e3e6d4ba043c9da39a6231, type: 3}
+  - {fileID: 8300000, guid: 6ba7b9146d91bf14aa45519581cce2d1, type: 3}
+  - {fileID: 8300000, guid: bd1734ead68548747a1555f3ee048101, type: 3}
+  - {fileID: 8300000, guid: 979272c97cc9a1e499ba857e56649b76, type: 3}
+  - {fileID: 8300000, guid: 07251277b5d244249a8539bac5e1ee47, type: 3}
+  - {fileID: 8300000, guid: b96b91dae8bba404ab07db2a196f9121, type: 3}
+  _outputAudioGroup: {fileID: -1662928088861500674, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 0
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

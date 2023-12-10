@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 
 using SpaceAce.Auxiliary;
-using SpaceAce.Gameplay.Shooting;
+using SpaceAce.Gameplay.Damage;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 
@@ -15,7 +15,6 @@ using Zenject;
 namespace SpaceAce.Gameplay.Movement
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    [RequireComponent(typeof(DamageDealer))]
     public abstract class Movement : MonoBehaviour, IEscapable, IMovementBehaviourSupplier
     {
         public event EventHandler Escaped;
@@ -147,9 +146,7 @@ namespace SpaceAce.Gameplay.Movement
         {
             e.DamageReceiver.ApplyDamage(NextCollisionDamage);
             AudioPlayer.PlayOnceAsync(_config.CollisionAudio.Random, e.HitPosition, null, default, true).Forget();
-
-            if (_config.CameraShakeOnCollisionEnabled == true)
-                MasterCameraShaker.ShakeOnCollisionAsync().Forget();
+            MasterCameraShaker.ShakeOnCollisionAsync().Forget();
         }
 
         #endregion

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa1ae02c8b2bfa44bfb3c17243634b0, type: 3}
+  m_Name: Explosion factory config
+  m_EditorClassIdentifier: 
+  _explosions:
+  - _size: 0
+    _prefab: {fileID: 7637384536743596190, guid: abab2d6d6534efb43ab16eb192c5e405, type: 3}
+    _audio: {fileID: 11400000, guid: 3c7ddb8f2c2b5ef4ca3bb3a409156db5, type: 2}
+  - _size: 1
+    _prefab: {fileID: 2214963566927775019, guid: cf82e9056238a864c952bcb613c2dc3e, type: 3}
+    _audio: {fileID: 11400000, guid: 2bdbbbbd6c261dc45a25d8526da15138, type: 2}
+  - _size: 2
+    _prefab: {fileID: 5608567123395098421, guid: 1c6d220e4da9f784fa01fa2ed49a2db8, type: 3}
+    _audio: {fileID: 11400000, guid: 16586be083f36a149a78c7e24d3280d5, type: 2}
+  - _size: 3
+    _prefab: {fileID: 357360737365508220, guid: d375546a2a6c3c5479a2a4af1eaa1b29, type: 3}
+    _audio: {fileID: 11400000, guid: f680a9d2fbd43f24aae72dcce60ed3ff, type: 2}
