@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 using Newtonsoft.Json;
 
 using SpaceAce.Gameplay.Controls;
@@ -28,6 +30,7 @@ namespace SpaceAce.Gameplay.Players
         private readonly GameStateLoader _gameStateLoader;
         private readonly GameControlsTransmitter _gameControlsTransmitter;
         private readonly GamePauser _gamePauser;
+        private readonly ExplosionFactory _explosionFactory;
 
         private GameObject _activeShip;
         private IMovementController _playerShipMovementController;
@@ -44,7 +47,8 @@ namespace SpaceAce.Gameplay.Players
                       ISavingSystem savingSystem,
                       GameStateLoader gameStateLoader,
                       GameControlsTransmitter gameControlsTransmitter,
-                      GamePauser gamePauser)
+                      GamePauser gamePauser,
+                      ExplosionFactory explosionFactory)
         {
             _playerShipFactory = factory ?? throw new ArgumentNullException(nameof(factory),
                 $"Attempted to pass an empty {typeof(PlayerShipFactory)}!");
@@ -65,6 +69,9 @@ namespace SpaceAce.Gameplay.Players
 
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
                 $"Attempted to pass an empty {typeof(GamePauser)}!");
+
+            _explosionFactory = explosionFactory ?? throw new ArgumentNullException(nameof(explosionFactory),
+                $"Attempted to pass an empty {typeof(ExplosionFactory)}!");
         }
 
         #region interfaces
@@ -178,6 +185,8 @@ namespace SpaceAce.Gameplay.Players
             SpaceshipDefeated?.Invoke(this, EventArgs.Empty);
 
             _activeShip = null;
+
+            _explosionFactory.CreateAsync(ExplosionSize.Massive, e.DeathPosition).Forget();
         }
 
         #endregion

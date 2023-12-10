@@ -19,7 +19,7 @@ namespace SpaceAce.Main.Factories
         private readonly AudioPlayer _audioPlayer;
         private readonly Dictionary<ExplosionSize, GameObject> _explosionPrefabs = new();
         private readonly Dictionary<ExplosionSize, AudioCollection> _explosionAudio = new();
-        private readonly Dictionary<ExplosionSize, Stack<CachedExplosion>> _explosionPool = new();
+        private readonly Dictionary<ExplosionSize, Stack<CachedParticleSystem>> _explosionPool = new();
 
         public ExplosionFactory(DiContainer diContainer,
                                 GamePauser gamePauser,
@@ -47,34 +47,34 @@ namespace SpaceAce.Main.Factories
 
         public async UniTask CreateAsync(ExplosionSize size, Vector3 position, CancellationToken token = default)
         {
-            CachedExplosion explosion = InstantiateExplosion(size, position);
+            CachedParticleSystem explosion = InstantiateExplosion(size, position);
 
             PlayExplosionAudio(size, position, token);
             await AwaitExplosionEffectToPlayAsync(explosion, token);
             ReleaseExplosion(size, explosion);
         }
 
-        private CachedExplosion InstantiateExplosion(ExplosionSize size, Vector3 position)
+        private CachedParticleSystem InstantiateExplosion(ExplosionSize size, Vector3 position)
         {
-            CachedExplosion cache;
+            CachedParticleSystem cache;
 
-            if (_explosionPool.TryGetValue(size, out Stack<CachedExplosion> stack) == true &&
+            if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true &&
                 stack.Count > 0)
             {
                 cache = stack.Pop();
             }
-            else if (_explosionPrefabs.TryGetValue(size, out GameObject value) == true)
+            else if (_explosionPrefabs.TryGetValue(size, out GameObject explosionPrefab) == true)
             {
-                GameObject explosion = _diContainer.InstantiatePrefab(value);
+                GameObject instance = _diContainer.InstantiatePrefab(explosionPrefab);
 
-                if (explosion.TryGetComponent(out ParticleSystemPauser pauser) == true)
-                    cache = new(explosion, pauser);
+                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true)
+                    cache = new(instance, pauser);
                 else throw new MissingComponentException($"Explosion prefab is missing {typeof(ParticleSystemPauser)}!");
             }
             else throw new Exception($"Explosion prefab of a requested size ({size}) doesn't exist!");
 
-            cache.Explosion.SetActive(true);
-            cache.Explosion.transform.position = position;
+            cache.Instance.SetActive(true);
+            cache.Instance.transform.position = position;
 
             return cache;
         }
@@ -86,11 +86,11 @@ namespace SpaceAce.Main.Factories
             else throw new Exception($"Explosion audio of a requested size ({size}) doesn't exist!");
         }
 
-        private async UniTask AwaitExplosionEffectToPlayAsync(CachedExplosion cache, CancellationToken token)
+        private async UniTask AwaitExplosionEffectToPlayAsync(CachedParticleSystem instance, CancellationToken token)
         {
             float timer = 0f;
 
-            while (timer < cache.Pauser.EffectDuration)
+            while (timer < instance.Pauser.EffectDuration)
             {
                 timer += Time.deltaTime;
 
@@ -102,19 +102,19 @@ namespace SpaceAce.Main.Factories
             }
         }
 
-        private void ReleaseExplosion(ExplosionSize size, CachedExplosion cache)
+        private void ReleaseExplosion(ExplosionSize size, CachedParticleSystem instance)
         {
-            cache.Explosion.SetActive(false);
-            cache.Explosion.transform.position = Vector3.zero;
+            instance.Instance.SetActive(false);
+            instance.Instance.transform.position = Vector3.zero;
 
-            if (_explosionPool.TryGetValue(size, out Stack<CachedExplosion> stack) == true)
+            if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true)
             {
-                stack.Push(cache);
+                stack.Push(instance);
             }
             else
             {
-                Stack<CachedExplosion> newStack = new();
-                newStack.Push(cache);
+                Stack<CachedParticleSystem> newStack = new();
+                newStack.Push(instance);
 
                 _explosionPool.Add(size, newStack);
             }

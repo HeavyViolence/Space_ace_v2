@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7345849e833343e4e89f4970a1e41958, type: 3}
+  m_Name: Hit factory config
+  m_EditorClassIdentifier: 
+  _hitEffects:
+  - _strength: 0
+    _hitPrefab: {fileID: 5540708334515442067, guid: 18651da799474ef4e8f6bfb8556695e1, type: 3}
+  - _strength: 1
+    _hitPrefab: {fileID: 8126448095733925265, guid: 59ac407648858374fbdbf5e11716d1a0, type: 3}
+  - _strength: 2
+    _hitPrefab: {fileID: 1070144136910441287, guid: a918baaa4e2d5cf4da17bc5f5ca7674a, type: 3}
+  - _strength: 3
+    _hitPrefab: {fileID: 4237978876874319475, guid: 9e5f17fa786331e4fbdf249385a01541, type: 3}
+  - _strength: 4
+    _hitPrefab: {fileID: 7642998693066192235, guid: ccc7b2b9bc4b2c2408674156ef037299, type: 3}
