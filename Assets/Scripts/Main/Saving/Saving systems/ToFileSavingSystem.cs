@@ -58,7 +58,9 @@ namespace SpaceAce.Main.Saving
             foreach (var entity in _savableEntities)
             {
                 string saveFilePath = GetSaveFilePath(entity.ID);
-                if (File.Exists(saveFilePath) == true) File.Delete(saveFilePath);
+
+                if (File.Exists(saveFilePath) == true)
+                    File.Delete(saveFilePath);
             }
         }
 

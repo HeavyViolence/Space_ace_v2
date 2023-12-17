@@ -17,6 +17,7 @@ namespace SpaceAce.Main.Factories
         private readonly DiContainer _diContainer;
         private readonly GamePauser _gamePauser;
         private readonly AudioPlayer _audioPlayer;
+        private readonly MasterCameraShaker _masterCameraShaker;
         private readonly Dictionary<ExplosionSize, GameObject> _explosionPrefabs = new();
         private readonly Dictionary<ExplosionSize, AudioCollection> _explosionAudio = new();
         private readonly Dictionary<ExplosionSize, Stack<CachedParticleSystem>> _explosionPool = new();
@@ -24,6 +25,7 @@ namespace SpaceAce.Main.Factories
         public ExplosionFactory(DiContainer diContainer,
                                 GamePauser gamePauser,
                                 AudioPlayer audioPlayer,
+                                MasterCameraShaker masterCameraShaker,
                                 IEnumerable<ExplosionSlot> explosions)
         {
             _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer),
@@ -34,6 +36,9 @@ namespace SpaceAce.Main.Factories
 
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
                 $"Attempted to pass an empty {typeof(AudioPlayer)}!");
+
+            _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException(nameof(masterCameraShaker),
+                $"Attempted to pass an empty {typeof(MasterCameraShaker)}!");
 
             if (explosions is null) throw new ArgumentNullException(nameof(explosions),
                 $"Attempted to pass an empty explosions collection!");
@@ -49,7 +54,7 @@ namespace SpaceAce.Main.Factories
         {
             CachedParticleSystem explosion = InstantiateExplosion(size, position);
 
-            PlayExplosionAudio(size, position, token);
+            PlayExplosionEffects(size, position, token);
             await AwaitExplosionEffectToPlayAsync(explosion, token);
             ReleaseExplosion(size, explosion);
         }
@@ -58,8 +63,7 @@ namespace SpaceAce.Main.Factories
         {
             CachedParticleSystem cache;
 
-            if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true &&
-                stack.Count > 0)
+            if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true && stack.Count > 0)
             {
                 cache = stack.Pop();
             }
@@ -67,8 +71,7 @@ namespace SpaceAce.Main.Factories
             {
                 GameObject instance = _diContainer.InstantiatePrefab(explosionPrefab);
 
-                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true)
-                    cache = new(instance, pauser);
+                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true) cache = new(instance, pauser);
                 else throw new MissingComponentException($"Explosion prefab is missing {typeof(ParticleSystemPauser)}!");
             }
             else throw new Exception($"Explosion prefab of a requested size ({size}) doesn't exist!");
@@ -79,11 +82,13 @@ namespace SpaceAce.Main.Factories
             return cache;
         }
 
-        private void PlayExplosionAudio(ExplosionSize size, Vector3 position, CancellationToken token)
+        private void PlayExplosionEffects(ExplosionSize size, Vector3 position, CancellationToken token)
         {
             if (_explosionAudio.TryGetValue(size, out AudioCollection audio) == true)
                 _audioPlayer.PlayOnceAsync(audio.Random, position, null, token, true).Forget();
             else throw new Exception($"Explosion audio of a requested size ({size}) doesn't exist!");
+
+            _masterCameraShaker.ShakeOnDefeatAsync().Forget();
         }
 
         private async UniTask AwaitExplosionEffectToPlayAsync(CachedParticleSystem instance, CancellationToken token)

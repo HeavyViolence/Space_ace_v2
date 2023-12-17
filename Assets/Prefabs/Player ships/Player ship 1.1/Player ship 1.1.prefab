@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 4109602246007189167}
   - component: {fileID: 8775590829006353744}
   - component: {fileID: 2402196658495515395}
+  - component: {fileID: 6540780965829247938}
+  - component: {fileID: 4104192229742060791}
+  - component: {fileID: 8191987481647491410}
   - component: {fileID: 394775376711316432}
   m_Layer: 6
   m_Name: Player ship 1.1
@@ -97,7 +100,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -4}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 4
 --- !u!114 &4109602246007189167
@@ -137,6 +140,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19677d2cc3d6ba545acc0ac23d10f1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6540780965829247938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057199970465144767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29eab9d138a5c7c468a815ffd35076ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: 0b3847b3e628da743ad62c7c6a88e640, type: 2}
+--- !u!114 &4104192229742060791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057199970465144767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fe8bcaffa7d8c54488b7583cbe023d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: b44a7354831759f40aa08baeb54ac514, type: 2}
+--- !u!114 &8191987481647491410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057199970465144767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48eb7017509aa6a49a23884257b4415f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: aba80a829d86d174bab7f5bb91becb24, type: 2}
 --- !u!81 &394775376711316432
 AudioListener:
   m_ObjectHideFlags: 0

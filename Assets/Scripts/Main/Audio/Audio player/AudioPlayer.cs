@@ -95,7 +95,9 @@ namespace SpaceAce.Main.Audio
                 if (obeyGamePause == true && _gamePauser.Paused == true)
                 {
                     source.Pause();
-                    await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+
+                    while (_gamePauser.Paused == true) await UniTask.Yield();
+
                     source.Play();
                 }
 
@@ -125,7 +127,9 @@ namespace SpaceAce.Main.Audio
                     if (obeyGamePause == true && _gamePauser.Paused == true)
                     {
                         source.Pause();
-                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+
+                        while (_gamePauser.Paused == true) await UniTask.Yield();
+
                         source.Play();
                     }
 
@@ -139,7 +143,9 @@ namespace SpaceAce.Main.Audio
                     if (obeyGamePause == true && _gamePauser.Paused == true)
                     {
                         source.Pause();
-                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+
+                        while (_gamePauser.Paused == true) await UniTask.Yield();
+
                         source.Play();
                     }
 

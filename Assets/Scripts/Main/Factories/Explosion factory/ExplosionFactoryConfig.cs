@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SpaceAce.Main.Factories
 {
     [CreateAssetMenu(fileName = "Explosion factory config",
-                 menuName = "Space ace/Configs/Factories/Explosion factory config")]
+                     menuName = "Space ace/Configs/Factories/Explosion factory config")]
     public class ExplosionFactoryConfig : ScriptableObject
     {
         [SerializeField]

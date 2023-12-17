@@ -19,14 +19,14 @@ namespace SpaceAce.Gameplay.Levels
         private readonly ISavingSystem _savingSystem;
         private readonly LevelCompleter _levelCompleter;
         private readonly LevelStopwatch _levelStopwatch;
-        private readonly Player _player;
+        private readonly Players.Player _player;
 
         public string ID => "Best levels runs statistics";
 
         public BestLevelRunStatisticsCollector(ISavingSystem savingSystem,
                                                LevelCompleter levelCompleter,
                                                LevelStopwatch levelStopwatch,
-                                               Player player)
+                                               Players.Player player)
         {
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
@@ -38,7 +38,7 @@ namespace SpaceAce.Gameplay.Levels
                 $"Attempted to pass an empty {typeof(LevelStopwatch)}!");
 
             _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an mepty {typeof(Player)}!");
+                $"Attempted to pass an mepty {typeof(Players.Player)}!");
         }
 
         public BestLevelRunStatistics GetStatistics(int levelIndex)

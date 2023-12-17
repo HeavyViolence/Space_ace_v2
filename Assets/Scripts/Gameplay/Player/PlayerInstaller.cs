@@ -9,7 +9,7 @@ namespace SpaceAce.Gameplay.Players
         [SerializeField]
         private Vector3 _shipSpawnPosition;
 
-        [SerializeField, Range(0f, 10000f)]
+        [SerializeField, Range(0f, 10_000f)]
         private float _initialWalletBalance;
 
         public override void InstallBindings()

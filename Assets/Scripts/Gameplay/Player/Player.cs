@@ -1,14 +1,14 @@
-using Cysharp.Threading.Tasks;
-
 using Newtonsoft.Json;
 
 using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Damage;
+using SpaceAce.Gameplay.Inventories;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories;
 using SpaceAce.Main.Saving;
 
 using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -25,33 +25,37 @@ namespace SpaceAce.Gameplay.Players
         private static readonly JsonSerializerSettings s_serializationSettings = new() { TypeNameHandling = TypeNameHandling.Auto };
 
         private readonly PlayerShipFactory _playerShipFactory;
+        private readonly ItemFactory _itemFactory;
         private readonly Vector3 _shipSpawnPosition = Vector3.zero;
         private readonly ISavingSystem _savingSystem;
         private readonly GameStateLoader _gameStateLoader;
         private readonly GameControlsTransmitter _gameControlsTransmitter;
         private readonly GamePauser _gamePauser;
-        private readonly ExplosionFactory _explosionFactory;
 
         private GameObject _activeShip;
         private IMovementController _playerShipMovementController;
 
-        public Wallet Wallet { get; private set; }
-        public Experience Experience { get; private set; }
+        public Wallet Wallet { get; }
+        public Experience Experience { get; }
+        public Inventory Inventory { get; }
         public PlayerShipType SelectedShipType { get; set; }
 
         public string ID => "Player";
 
         public Player(PlayerShipFactory factory,
+                      ItemFactory itemFactory,
                       Vector3 shipSpawnPosition,
                       float initialWalletBalance,
                       ISavingSystem savingSystem,
                       GameStateLoader gameStateLoader,
                       GameControlsTransmitter gameControlsTransmitter,
-                      GamePauser gamePauser,
-                      ExplosionFactory explosionFactory)
+                      GamePauser gamePauser)
         {
             _playerShipFactory = factory ?? throw new ArgumentNullException(nameof(factory),
                 $"Attempted to pass an empty {typeof(PlayerShipFactory)}!");
+
+            _itemFactory = itemFactory ?? throw new ArgumentNullException(nameof(itemFactory),
+                $"Attempted to pass an empty {typeof(ItemFactory)}!");
 
             _shipSpawnPosition = shipSpawnPosition;
 
@@ -64,14 +68,12 @@ namespace SpaceAce.Gameplay.Players
             _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException(nameof(gameControlsTransmitter),
                 $"Attempted to pass an empty {typeof(GameControlsTransmitter)}!");
 
-            Wallet = new Wallet(initialWalletBalance);
-            Experience = new Experience();
+            Wallet = new(initialWalletBalance);
+            Experience = new();
+            Inventory = new();
 
             _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
                 $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _explosionFactory = explosionFactory ?? throw new ArgumentNullException(nameof(explosionFactory),
-                $"Attempted to pass an empty {typeof(ExplosionFactory)}!");
         }
 
         #region interfaces
@@ -82,6 +84,7 @@ namespace SpaceAce.Gameplay.Players
 
             Wallet.BalanceChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
             Experience.ValueChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Inventory.ContentChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
             _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
@@ -93,6 +96,7 @@ namespace SpaceAce.Gameplay.Players
 
             Wallet.BalanceChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
             Experience.ValueChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Inventory.ContentChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
             _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
@@ -100,7 +104,7 @@ namespace SpaceAce.Gameplay.Players
 
         public string GetState()
         {
-            PlayerState state = new(Wallet.Balance, Experience.Value, SelectedShipType);
+            PlayerState state = new(Wallet.Balance, Experience.Value, SelectedShipType, Inventory.GetContentSnapshot());
             string jsonState = JsonConvert.SerializeObject(state, s_serializationSettings);
 
             return jsonState;
@@ -115,6 +119,9 @@ namespace SpaceAce.Gameplay.Players
                 Wallet.AddCredits(playerState.Credits);
                 Experience.Add(playerState.Experience);
                 SelectedShipType = playerState.SelectedShip;
+
+                IEnumerable<Item> items = _itemFactory.BatchCreate(playerState.InventorySnapshot);
+                Inventory.AddRange(items);
             }
             catch (Exception) { }
         }
@@ -127,8 +134,7 @@ namespace SpaceAce.Gameplay.Players
 
         public void FixedTick()
         {
-            if (_gameStateLoader.CurrentState != GameState.Level ||
-                _gamePauser.Paused == true) return;
+            if (_gameStateLoader.CurrentState != GameState.Level || _gamePauser.Paused == true) return;
 
             _playerShipMovementController.Move(_gameControlsTransmitter.MovementDirection);
             _playerShipMovementController.Rotate(_gameControlsTransmitter.MouseWorldPosition);
@@ -158,10 +164,10 @@ namespace SpaceAce.Gameplay.Players
             else
                 throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IMovementController)}!");
 
-            /*if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
+            if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
                 destroyable.Destroyed += PlayerShipDefeatedEventHandler;
             else
-                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");*/
+                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");
 
             SpaceshipSpawned?.Invoke(this, EventArgs.Empty);
         }
@@ -170,10 +176,10 @@ namespace SpaceAce.Gameplay.Players
         {
             if (_activeShip == null) return;
 
-            /*if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
+            if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
                 destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
             else
-                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");*/
+                throw new MissingComponentException($"Player ship is missing {typeof(IDestroyable)}!");
 
             _playerShipFactory.Release(_activeShip, SelectedShipType);
             _activeShip = null;
@@ -185,8 +191,6 @@ namespace SpaceAce.Gameplay.Players
             SpaceshipDefeated?.Invoke(this, EventArgs.Empty);
 
             _activeShip = null;
-
-            _explosionFactory.CreateAsync(ExplosionSize.Massive, e.DeathPosition).Forget();
         }
 
         #endregion
