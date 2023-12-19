@@ -40,6 +40,9 @@ namespace SpaceAce.Main.Factories
 
         public void Release(GameObject instance, PlayerShipType type)
         {
+            if (instance == null) throw new ArgumentNullException(nameof(instance),
+                $"Attempted to pass an empty {typeof(GameObject)}!");
+
             instance.SetActive(false);
             instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
 

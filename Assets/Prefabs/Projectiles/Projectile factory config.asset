@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a00e3ee5c39bc54d94552eca627d910, type: 3}
+  m_Name: Projectile factory config
+  m_EditorClassIdentifier: 
+  _skins:
+  - _skin: 0
+    _prefab: {fileID: 1572496124263638045, guid: 179b641f37724204dac8e1f238827494, type: 3}
+  - _skin: 1
+    _prefab: {fileID: 8842169965226841571, guid: 12c1ae288e6601243bb6b9e42ead5c30, type: 3}
+  - _skin: 2
+    _prefab: {fileID: 3567454365782727058, guid: ac2202f75a149f54bbe04980f4841e7a, type: 3}
+  - _skin: 3
+    _prefab: {fileID: 7981104116124110957, guid: 630c659f03bb3f7448887c8c46d481e6, type: 3}
+  - _skin: 4
+    _prefab: {fileID: 6017429901236476857, guid: ea766f6b9282f0b4db3a6f7c85df51fd, type: 3}
+  - _skin: 5
+    _prefab: {fileID: 3150522740444364092, guid: 9bf66d16a1eb60749987cff420ee89c4, type: 3}
+  - _skin: 6
+    _prefab: {fileID: 1727354641205278791, guid: f85271b1a67579649b5e9bb7adf7f034, type: 3}
+  - _skin: 7
+    _prefab: {fileID: 5157317533318652164, guid: 7c3758bad2e4cf045b8f9857a6165d38, type: 3}
+  - _skin: 8
+    _prefab: {fileID: 321502585440893902, guid: 023e68f99401f6241bdbc4433c9f6888, type: 3}
+  - _skin: 9
+    _prefab: {fileID: 8503966456865163755, guid: 4b692e6edfb472b4b853ce51a203f518, type: 3}
+  - _skin: 10
+    _prefab: {fileID: 7904691952544837413, guid: 5b47daa0f3b2b0a439008eda37193d92, type: 3}
+  - _skin: 11
+    _prefab: {fileID: 3994269715820132603, guid: b23a84af833b3d946b25e9957cdb8198, type: 3}
+  - _skin: 12
+    _prefab: {fileID: 3462597418696441308, guid: ce7cf8d0ee70f394cbb7136a690635a9, type: 3}
+  - _skin: 13
+    _prefab: {fileID: 7947272341104339937, guid: ad9b93e2adea9084fbb3027a4d1fc4e5, type: 3}
+  - _skin: 14
+    _prefab: {fileID: 6154359927303737994, guid: 29896d1d23786374aa8a5dd05d19e5de, type: 3}
+  - _skin: 15
+    _prefab: {fileID: 4800051051940080158, guid: d09ba7c9184dc904599bf4e7edb53084, type: 3}
+  - _skin: 16
+    _prefab: {fileID: 4171533642903670789, guid: 19455ad0cc6b49243a07976dac7ce673, type: 3}
+  - _skin: 17
+    _prefab: {fileID: 5696661047170794080, guid: 0db1291e95c3e6d4a9f9e7cd44d3e29c, type: 3}
+  _playerProjectilesLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _playerProjectilesSortingLayer: Player projectiles
+  _enemyProjectilesLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  _enemyProjectilesSortingLayer: Enemy projectiles

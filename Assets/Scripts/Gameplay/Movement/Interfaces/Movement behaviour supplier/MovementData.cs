@@ -8,11 +8,11 @@ namespace SpaceAce.Gameplay.Movement
     {
         public float Timer { get; set; }
 
-        public float InitialSpeed { get; private set; }
+        public float InitialSpeed { get; }
         public float CurrentSpeed { get; set; }
-        public float FinalSpeed { get; private set; }
-        public float FinalSpeedGainDuration { get; private set; }
-
+        public float FinalSpeed { get; }
+        public float FinalSpeedGainDuration { get; }
+            
         public Vector3 InitialPosition { get; }
         public Vector3 CurrentPosition { get; set; }
 
@@ -27,8 +27,8 @@ namespace SpaceAce.Gameplay.Movement
 
         public Transform Target { get; set; }
 
-        public float HomingSpeed { get; private set; }
-        public float RevolutionsPerMinute { get; private set; }
+        public float HomingSpeed { get; }
+        public float RevolutionsPerMinute { get; }
 
         public MovementData(float initialSpeed,
                             float finalSpeed,

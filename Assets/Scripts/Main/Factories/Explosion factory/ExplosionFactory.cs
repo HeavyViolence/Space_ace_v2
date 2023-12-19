@@ -56,7 +56,7 @@ namespace SpaceAce.Main.Factories
 
             PlayExplosionEffects(size, position, token);
             await AwaitExplosionEffectToPlayAsync(explosion, token);
-            ReleaseExplosion(size, explosion);
+            Release(explosion, size);
         }
 
         private CachedParticleSystem InstantiateExplosion(ExplosionSize size, Vector3 position)
@@ -107,8 +107,11 @@ namespace SpaceAce.Main.Factories
             }
         }
 
-        private void ReleaseExplosion(ExplosionSize size, CachedParticleSystem instance)
+        private void Release(CachedParticleSystem instance, ExplosionSize size)
         {
+            if (instance is null) throw new ArgumentNullException(nameof(instance),
+                $"Attempted to pass an empty {typeof(CachedParticleSystem)}!");
+
             instance.Instance.SetActive(false);
             instance.Instance.transform.position = Vector3.zero;
 

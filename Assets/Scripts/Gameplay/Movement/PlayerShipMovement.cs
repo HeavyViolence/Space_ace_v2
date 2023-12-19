@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement
 {
-    public sealed class PlayerShipMovement : Movement, IMovementController
+    public sealed class PlayerShipMovement : ControllableMovement, IMovementController
     {
         private Vector2 _speed2D;
         private float _rotationSpeed;

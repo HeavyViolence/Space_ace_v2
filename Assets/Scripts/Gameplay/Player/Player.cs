@@ -34,6 +34,7 @@ namespace SpaceAce.Gameplay.Players
 
         private GameObject _activeShip;
         private IMovementController _playerShipMovementController;
+        private IShootingController _playerSHipShootingController;
 
         public Wallet Wallet { get; }
         public Experience Experience { get; }
@@ -88,6 +89,9 @@ namespace SpaceAce.Gameplay.Players
 
             _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
+
+            _gameControlsTransmitter.Fire += (sender, args) => _playerSHipShootingController.Shoot();
+            _gameControlsTransmitter.Ceasefire += (sender, args) => _playerSHipShootingController.StopShooting();
         }
 
         public void Dispose()
@@ -100,6 +104,9 @@ namespace SpaceAce.Gameplay.Players
 
             _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
+
+            _gameControlsTransmitter.Fire -= (sender, args) => _playerSHipShootingController.Shoot();
+            _gameControlsTransmitter.Ceasefire -= (sender, args) => _playerSHipShootingController.StopShooting();
         }
 
         public string GetState()
@@ -159,15 +166,17 @@ namespace SpaceAce.Gameplay.Players
             _activeShip = _playerShipFactory.Create(SelectedShipType);
             _activeShip.transform.SetPositionAndRotation(_shipSpawnPosition, Quaternion.identity);
 
-            if (_activeShip.TryGetComponent(out IMovementController controller) == true)
-                _playerShipMovementController = controller;
-            else
-                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IMovementController)}!");
+            if (_activeShip.TryGetComponent(out IMovementController movementController) == true)
+                _playerShipMovementController = movementController;
+            else throw new MissingComponentException($"Player ship is missing {typeof(IMovementController)}!");
+
+            if (_activeShip.TryGetComponent(out IShootingController shootingController) == true)
+                _playerSHipShootingController = shootingController;
+            else throw new MissingComponentException($"Player ship is missing {typeof(IShootingController)}!");
 
             if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
                 destroyable.Destroyed += PlayerShipDefeatedEventHandler;
-            else
-                throw new MissingComponentException($"Player ship is missing a mandatory component: {typeof(IDestroyable)}!");
+            else throw new MissingComponentException($"Player ship is missing {typeof(IDestroyable)}!");
 
             SpaceshipSpawned?.Invoke(this, EventArgs.Empty);
         }
@@ -178,11 +187,13 @@ namespace SpaceAce.Gameplay.Players
 
             if (_activeShip.TryGetComponent(out IDestroyable destroyable) == true)
                 destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
-            else
-                throw new MissingComponentException($"Player ship is missing {typeof(IDestroyable)}!");
+            else throw new MissingComponentException($"Player ship is missing {typeof(IDestroyable)}!");
 
             _playerShipFactory.Release(_activeShip, SelectedShipType);
+
             _activeShip = null;
+            _playerShipMovementController = null;
+            _playerSHipShootingController = null;
         }
 
         private void PlayerShipDefeatedEventHandler(object sender, DestroyedEventArgs e)
@@ -191,6 +202,8 @@ namespace SpaceAce.Gameplay.Players
             SpaceshipDefeated?.Invoke(this, EventArgs.Empty);
 
             _activeShip = null;
+            _playerShipMovementController = null;
+            _playerSHipShootingController = null;
         }
 
         #endregion

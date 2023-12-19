@@ -39,31 +39,30 @@ namespace SpaceAce.Main.Factories
         {
             CachedParticleSystem hitEffect = InstantiateHitEffect(strength, position);
             await AwaitHitEffectToPlayAsync(hitEffect, token);
-            ReleaseHitEffect(strength, hitEffect);
+            Release(hitEffect, strength);
         }
 
         private CachedParticleSystem InstantiateHitEffect(HitStrength strength, Vector3 position)
         {
-            CachedParticleSystem hitEffect;
-
             if (_hitPool.TryGetValue(strength, out Stack<CachedParticleSystem> stack) == true && stack.Count > 0)
             {
-                hitEffect = stack.Pop();
+                CachedParticleSystem hitEffect = stack.Pop();
+
+                hitEffect.Instance.SetActive(true);
+                hitEffect.Instance.transform.position = position;
+
+                return hitEffect;
             }
-            else if (_hitPrefabs.TryGetValue(strength, out GameObject hitPrefab) == true)
+            
+            if (_hitPrefabs.TryGetValue(strength, out GameObject hitPrefab) == true)
             {
                 GameObject instance = _diContainer.InstantiatePrefab(hitPrefab);
 
-                if (hitPrefab.TryGetComponent(out ParticleSystemPauser pauser) == true)
-                    hitEffect = new(instance, pauser);
+                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true) return new(instance, pauser);
                 else throw new MissingComponentException($"Hit prefab is missing {typeof(ParticleSystemPauser)}!");
             }
-            else throw new Exception($"Hit effect of a requested strength ({strength}) doesn't exist!");
 
-            hitEffect.Instance.SetActive(true);
-            hitEffect.Instance.transform.position = position;
-
-            return hitEffect;
+            throw new Exception($"Hit effect of a requested strength ({strength}) doesn't exist!");
         }
 
         private async UniTask AwaitHitEffectToPlayAsync(CachedParticleSystem instance, CancellationToken token)
@@ -82,8 +81,11 @@ namespace SpaceAce.Main.Factories
             }
         }
 
-        private void ReleaseHitEffect(HitStrength strength, CachedParticleSystem instance)
+        private void Release(CachedParticleSystem instance, HitStrength strength)
         {
+            if (instance is null) throw new ArgumentNullException(nameof(instance),
+                $"Attempted to pass an empty {typeof(CachedParticleSystem)}!");
+
             instance.Instance.SetActive(false);
             instance.Instance.transform.position = Vector3.zero;
 
