@@ -19,14 +19,14 @@ namespace SpaceAce.Gameplay.Levels
         private readonly ISavingSystem _savingSystem;
         private readonly LevelCompleter _levelCompleter;
         private readonly LevelStopwatch _levelStopwatch;
-        private readonly Players.Player _player;
+        private readonly Player _player;
 
         public string ID => "Best levels runs statistics";
 
         public BestLevelRunStatisticsCollector(ISavingSystem savingSystem,
                                                LevelCompleter levelCompleter,
                                                LevelStopwatch levelStopwatch,
-                                               Players.Player player)
+                                               Player player)
         {
             _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
                 $"Attempted to pass an empty {typeof(ISavingSystem)}!");
@@ -62,7 +62,7 @@ namespace SpaceAce.Gameplay.Levels
             _levelCompleter.LevelCompleted -= LevelCompletedEventHandler;
         }
 
-        public override bool Equals(object obj) => Equals(obj as ISavable);
+        public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
         public bool Equals(ISavable other) => other is not null && ID == other.ID;
 

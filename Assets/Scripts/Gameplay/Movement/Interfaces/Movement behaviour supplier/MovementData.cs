@@ -1,17 +1,17 @@
-using System;
-
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement
 {
     public sealed class MovementData
     {
+        public static MovementData Default => new(0f, 0f, 0f, Vector3.zero, Vector3.zero, Quaternion.identity, null, 0f, 0f);
+
         public float Timer { get; set; }
 
-        public float InitialSpeed { get; }
+        public float InitialSpeed { get; set; }
         public float CurrentSpeed { get; set; }
-        public float FinalSpeed { get; }
-        public float FinalSpeedGainDuration { get; }
+        public float FinalSpeed { get; set; }
+        public float FinalSpeedGainDuration { get; set; }
             
         public Vector3 InitialPosition { get; }
         public Vector3 CurrentPosition { get; set; }
@@ -19,87 +19,47 @@ namespace SpaceAce.Gameplay.Movement
         public Vector3 InitialDirection { get; }
         public Vector3 CurrentDirection { get; set; }
 
-        public Vector3 InitialVelocity => InitialDirection * InitialSpeed;
-        public Vector3 CurrentVelocity => CurrentDirection * CurrentSpeed;
+        public Vector2 InitialVelocity => InitialDirection * InitialSpeed;
+        public Vector2 CurrentVelocity => CurrentDirection * CurrentSpeed;
 
         public Quaternion InitialRotation {  get; }
         public Quaternion CurrentRotation { get; set; }
 
         public Transform Target { get; set; }
 
-        public float HomingSpeed { get; }
-        public float RevolutionsPerMinute { get; }
+        public float HomingSpeed { get; set; }
+        public float RotationsPerMinute { get; set; }
 
         public MovementData(float initialSpeed,
                             float finalSpeed,
                             float finalSpeedGainDuration,
                             Vector3 initialPosition,
+                            Vector3 initialDirection,
                             Quaternion initialRotation,
                             Transform target,
                             float homingSpeed,
-                            float revolutionsPerMinute)
+                            float rotationsPerMinute)
         {
             Timer = 0f;
 
-            InitialSpeed = Mathf.Abs(initialSpeed);
+            InitialSpeed = Mathf.Clamp(initialSpeed, 0f, float.MaxValue);
             CurrentSpeed = InitialSpeed;
-            FinalSpeed = Mathf.Abs(finalSpeed);
-            FinalSpeedGainDuration = Mathf.Abs(finalSpeedGainDuration);
+            FinalSpeed = Mathf.Clamp(finalSpeed, 0f, float.MaxValue);
+            FinalSpeedGainDuration = Mathf.Clamp(finalSpeedGainDuration, 0f, float.MaxValue);
 
             InitialPosition = initialPosition;
             CurrentPosition = initialPosition;
 
+            InitialDirection = initialDirection;
+            CurrentDirection = initialDirection;
+
             InitialRotation = initialRotation;
-            CurrentRotation = InitialRotation;
+            CurrentRotation = initialRotation;
 
             Target = target;
-            HomingSpeed = Mathf.Abs(homingSpeed);
+            HomingSpeed = Mathf.Clamp(homingSpeed, 0f, float.MaxValue);
 
-            RevolutionsPerMinute = revolutionsPerMinute;
-        }
-
-        public static MovementData operator +(MovementData left, MovementData right)
-        {
-            if (left is null)
-                throw new ArgumentNullException(nameof(left),
-                    $"Attempted to pass an empty {typeof(MovementData)}!");
-
-            if (right is null)
-                throw new ArgumentNullException(nameof(right),
-                    $"Attempted to pass an empty {typeof(MovementData)}!");
-
-            MovementData result = new(left.InitialSpeed + right.InitialSpeed,
-                                      left.FinalSpeed + right.FinalSpeed,
-                                      left.FinalSpeedGainDuration + right.FinalSpeedGainDuration,
-                                      Vector3.zero,
-                                      Quaternion.identity,
-                                      null,
-                                      left.HomingSpeed + right.HomingSpeed,
-                                      left.RevolutionsPerMinute + right.RevolutionsPerMinute);
-
-            return result;
-        }
-
-        public static MovementData operator -(MovementData left, MovementData right)
-        {
-            if (left is null)
-                throw new ArgumentNullException(nameof(left),
-                    $"Attempted to pass an empty {typeof(MovementData)}!");
-
-            if (right is null)
-                throw new ArgumentNullException(nameof(right),
-                    $"Attempted to pass an empty {typeof(MovementData)}!");
-
-            MovementData result = new(left.InitialSpeed - right.InitialSpeed,
-                                      left.FinalSpeed - right.FinalSpeed,
-                                      left.FinalSpeedGainDuration - right.FinalSpeedGainDuration,
-                                      Vector3.zero,
-                                      Quaternion.identity,
-                                      null,
-                                      left.HomingSpeed - right.HomingSpeed,
-                                      left.RevolutionsPerMinute - right.RevolutionsPerMinute);
-
-            return result;
+            RotationsPerMinute = Mathf.Clamp(rotationsPerMinute, 0f, float.MaxValue);
         }
     }
 }

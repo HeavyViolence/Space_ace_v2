@@ -1,6 +1,5 @@
 using NaughtyAttributes;
 
-using SpaceAce.Auxiliary;
 using SpaceAce.Main.Factories;
 
 using UnityEngine;
@@ -22,14 +21,14 @@ namespace SpaceAce.Gameplay.Damage
 
         public float MinInitialValue => _durability.x;
         public float MaxInitialValue => _durability.y;
-        public float RandomInitialValue => AuxMath.GetRandom(_durability.x, _durability.y);
+        public float RandomInitialValue => Random.Range(_durability.x, _durability.y);
 
         [SerializeField, MinMaxSlider(MinInitialRegen, MaxInitialRegen)]
         private Vector2 _regen = new(MinInitialRegen, MaxInitialRegen);
 
         public float MinInitialValueRegen => _regen.x;
         public float MaxInitialValueRegen => _regen.y;
-        public float RandomInitialValueRegen => AuxMath.GetRandom(_regen.x, _regen.y);
+        public float RandomInitialValueRegen => Random.Range(_regen.x, _regen.y);
 
         [SerializeField]
         private ExplosionSize _explosionSize = ExplosionSize.Tiny;

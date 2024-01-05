@@ -69,13 +69,13 @@ namespace SpaceAce.Main.Audio
                                                          RandomSpatialBlend,
                                                          RandomPitch);
 
-        private float RandomVolume => AuxMath.GetRandom(_volume.x, _volume.y);
+        private float RandomVolume => UnityEngine.Random.Range(_volume.x, _volume.y);
 
-        private float RandomSpatialBlend => AuxMath.GetRandom(_spatialBlend.x, _spatialBlend.y);
+        private float RandomSpatialBlend => UnityEngine.Random.Range(_spatialBlend.x, _spatialBlend.y);
 
-        private float RandomPitch => AuxMath.GetRandom(_pitch.x, _pitch.y);
+        private float RandomPitch => UnityEngine.Random.Range(_pitch.x, _pitch.y);
 
-        private AudioClip RandomAudioClip => _audioClips[AuxMath.GetRandom(0, _audioClips.Count)];
+        private AudioClip RandomAudioClip => _audioClips[UnityEngine.Random.Range(0, _audioClips.Count)];
 
         private AudioClip NonRepeatingRandomAudioClip
         {

@@ -7,54 +7,66 @@ namespace SpaceAce.Gameplay.Inventories
     {
         public event EventHandler ContentChanged;
 
-        private readonly HashSet<Item> _content = new();
+        private readonly HashSet<ItemStack> _content = new();
 
-        public bool AddItem(Item item)
+        public int ContentCount => _content.Count;
+
+        public void Add(ItemStack stack)
         {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item),
-                    $"Attempted to add an empty {typeof(Item)}!");
+            if (stack is null)
+                throw new ArgumentNullException(nameof(stack),
+                    $"Attempted to add an empty {typeof(ItemStack)}!");
 
-            ContentChanged?.Invoke(this, EventArgs.Empty);
-
-            return _content.Add(item);
-        }
-
-        public void AddRange(IEnumerable<Item> items)
-        {
-            if (items is null)
-                throw new ArgumentNullException(nameof(items),
-                    $"Attempted to pass an empty {typeof(IEnumerable<Item>)}!");
-
-            foreach (Item item in items) _content.Add(item);
-
-            ContentChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        public bool RemoveItem(Item item)
-        {
-            if (item is null)
-                throw new ArgumentNullException(nameof(item),
-                    $"Attempted to remove an empty {typeof(Item)}!");
-
-            return _content.Remove(item);
-        }
-
-        public void Clear() => _content.Clear();
-
-        public IEnumerable<Item> GetContent() => _content;
-
-        public IEnumerable<ItemSnapshot> GetContentSnapshot()
-        {
-            List<ItemSnapshot> snapshots = new(_content.Count);
-
-            foreach (var item in _content)
+            if (_content.TryGetValue(stack, out ItemStack theSameStack) == true)
             {
-                ItemSnapshot snapshot = item.GetSnapshot();
-                snapshots.Add(snapshot);
+                theSameStack.Add(stack.Amount);
+            }
+            else
+            {
+                _content.Add(stack);
+                stack.Depleted += StackDepletedEventHandler;
             }
 
-            return snapshots;
+            ContentChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Add(IEnumerable<ItemStack> stacks)
+        {
+            if (stacks is null)
+                throw new ArgumentNullException(nameof(stacks),
+                    $"Attempted to add an empty {typeof(IEnumerable<ItemStack>)}!");
+
+            foreach (var stack in stacks) Add(stack);
+        }
+
+        public bool Contains(ItemStack stack) => _content.Contains(stack);
+
+        public void Clear()
+        {
+            foreach (var stack in _content)
+                stack.Depleted -= StackDepletedEventHandler;
+
+            _content.Clear();
+        }
+
+        public IEnumerable<ItemStack> GetContent() => _content;
+
+        public IEnumerable<ItemStackSavableState> GetContentSavableState()
+        {
+            List<ItemStackSavableState> states = new(_content.Count);
+
+            foreach (var stack in _content)
+            {
+                ItemStackSavableState state = stack.GetSavableState();
+                states.Add(state);
+            }
+
+            return states;
+        }
+
+        private void StackDepletedEventHandler(object sender, EventArgs e)
+        {
+            _content.Remove(sender as ItemStack);
         }
     }
 }

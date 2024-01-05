@@ -1,7 +1,5 @@
 using NaughtyAttributes;
 
-using SpaceAce.Auxiliary;
-
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Shooting
@@ -24,21 +22,21 @@ namespace SpaceAce.Gameplay.Shooting
 
         public float MinInitialHeatCapacity => _heatCapacity.x;
         public float MaxInitialHeatCapacity => _heatCapacity.y;
-        public float RandomInitialHeatCapacity => AuxMath.GetRandom(_heatCapacity.x, _heatCapacity.y);
+        public float RandomInitialHeatCapacity => Random.Range(_heatCapacity.x, _heatCapacity.y);
 
         [SerializeField, MinMaxSlider(MinBaseHeatLossRate, MaxBaseHeatLossRate)]
         private Vector2 _baseHeatLossRate = new(MinBaseHeatLossRate, MaxBaseHeatLossRate);
 
         public float MinInitialBaseHeatLossRate => _baseHeatLossRate.x;
         public float MaxInitialBaseHeatLossRate => _baseHeatLossRate.y;
-        public float RandomInitialBaseHeatLossRate => AuxMath.GetRandom(_baseHeatLossRate.x, _baseHeatLossRate.y);
+        public float RandomInitialBaseHeatLossRate => Random.Range(_baseHeatLossRate.x, _baseHeatLossRate.y);
 
         [SerializeField, MinMaxSlider(MinOverheatDuration, MaxOverheatDuration)]
         private Vector2 _overheatDuration = new(MinOverheatDuration, MaxOverheatDuration);
 
         public float MinInitialOverheatDuration => _overheatDuration.x;
         public float MaxInitialOverheatDuration => _overheatDuration.y;
-        public float RandomInitialOverheatDuration => AuxMath.GetRandom(_overheatDuration.x, _overheatDuration.y);
+        public float RandomInitialOverheatDuration => Random.Range(_overheatDuration.x, _overheatDuration.y);
 
         [SerializeField]
         private AnimationCurve _heatLossFactorCurve;

@@ -1,7 +1,5 @@
 using NaughtyAttributes;
 
-using SpaceAce.Auxiliary;
-
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Damage
@@ -18,6 +16,6 @@ namespace SpaceAce.Gameplay.Damage
 
         public float MinInitialValue => _armor.x;
         public float MaxInitialValue => _armor.y;
-        public float RandomInitialValue => AuxMath.GetRandom(_armor.x, _armor.y);
+        public float RandomInitialValue => Random.Range(_armor.x, _armor.y);
     }
 }

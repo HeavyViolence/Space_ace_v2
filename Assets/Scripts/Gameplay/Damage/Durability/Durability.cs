@@ -23,9 +23,9 @@ namespace SpaceAce.Gameplay.Damage
         protected virtual float MaxInitialValueRegen => _config.MaxInitialValueRegen;
         protected virtual float RandomInitialValueRegen => _config.RandomInitialValueRegen;
 
-        public float Value { get; private set; }
-        public float MaxValue { get; private set; }
-        public float Regen { get; private set; }
+        public float Value { get; protected set; }
+        public float MaxValue { get; protected set; }
+        public float Regen { get; protected set; }
 
         [Inject]
         private void Construct(GamePauser gamePauser)

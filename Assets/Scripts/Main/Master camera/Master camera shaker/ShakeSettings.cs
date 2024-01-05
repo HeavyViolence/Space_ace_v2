@@ -2,8 +2,6 @@ using NaughtyAttributes;
 
 using Newtonsoft.Json;
 
-using SpaceAce.Auxiliary;
-
 using System;
 
 using UnityEngine;
@@ -42,13 +40,13 @@ namespace SpaceAce.Main
         public bool Enabled => _enabled;
 
         [JsonIgnore]
-        public float Amplitude => AuxMath.GetRandom(_amplitude.x, _amplitude.y);
+        public float Amplitude => UnityEngine.Random.Range(_amplitude.x, _amplitude.y);
 
         [JsonIgnore]
-        public float Attenuation => AuxMath.GetRandom(_attenuation.x, _attenuation.y);
+        public float Attenuation => UnityEngine.Random.Range(_attenuation.x, _attenuation.y);
 
         [JsonIgnore]
-        public float Frequency => AuxMath.GetRandom(_frequency.x, _frequency.y);
+        public float Frequency => UnityEngine.Random.Range(_frequency.x, _frequency.y);
 
         public ShakeSettings(bool enabled,
                              Vector2 amplitudeRange,

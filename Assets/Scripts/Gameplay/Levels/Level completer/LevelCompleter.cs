@@ -22,20 +22,25 @@ namespace SpaceAce.Gameplay.Levels
         private readonly AudioCollection _levelCompletedAudio;
         private readonly AudioCollection _levelFailedAudio;
         private readonly GameStateLoader _gameStateLoader;
-        private readonly Players.Player _player;
+        private readonly Player _player;
         private readonly AudioPlayer _audioPlayer;
 
         public LevelCompleter(AudioCollection levelCompletedAudio,
                               AudioCollection levelFailedAudio,
                               GameStateLoader gameStateLoader,
-                              Players.Player player,
+                              Player player,
                               AudioPlayer audioPlayer)
         {
-            _levelCompletedAudio = levelCompletedAudio ?? throw new ArgumentNullException(nameof(levelCompletedAudio),
+            if (levelCompletedAudio == null)
+                throw new ArgumentNullException(nameof(levelCompletedAudio),
                     $"Attempted to pass an empty {typeof(AudioCollection)}!");
 
-            _levelFailedAudio = levelFailedAudio ?? throw new ArgumentNullException(nameof(levelFailedAudio),
+            _levelCompletedAudio = levelCompletedAudio;
+
+            if (levelFailedAudio == null) throw new ArgumentNullException(nameof(levelFailedAudio),
                     $"Attempted to pass an empty {typeof(AudioCollection)}!");
+
+            _levelFailedAudio = levelFailedAudio;
 
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
                 $"Attempted to pass an empty {typeof(GameStateLoader)}!");

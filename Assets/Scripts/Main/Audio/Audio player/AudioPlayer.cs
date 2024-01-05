@@ -313,7 +313,7 @@ namespace SpaceAce.Main.Audio
             }
         }
 
-        public override bool Equals(object other) => Equals(other as ISavable);
+        public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
         public bool Equals(ISavable other) => other is not null && other.ID == ID;
 

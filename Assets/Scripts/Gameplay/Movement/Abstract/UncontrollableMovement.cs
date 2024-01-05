@@ -20,7 +20,7 @@ namespace SpaceAce.Gameplay.Movement
             _behaviour(Body, ref _data);
         }
 
-        public void SupplyMovementBehaviour(MovementBehaviour behaviour, MovementData data)
+        public void Supply(MovementBehaviour behaviour, MovementData data)
         {
             _behaviour = behaviour ?? throw new ArgumentNullException(nameof(behaviour),
                 $"Attempted to pass an empty {typeof(MovementBehaviour)}!");

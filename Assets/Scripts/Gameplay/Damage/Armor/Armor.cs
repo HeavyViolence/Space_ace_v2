@@ -13,20 +13,29 @@ namespace SpaceAce.Gameplay.Damage
         protected virtual float MaxInitialValue => _config.MaxInitialValue;
         protected virtual float RandomInitialValue => _config.RandomInitialValue;
 
-        public float Value { get; private set; }
+        public float Value { get; protected set; }
 
         protected virtual void OnEnable()
         {
             Value = RandomInitialValue;
         }
 
-        public float GetDamageToBeDealt(float damageReceived)
+        public float GetReducedDamage(float damage)
         {
-            if (damageReceived < 0f)
-                throw new ArgumentOutOfRangeException(nameof(damageReceived),
+            if (damage < 0f)
+                throw new ArgumentOutOfRangeException(nameof(damage),
                     $"Incoming damage must not be negative!");
 
-            return damageReceived * damageReceived / Value;
+            return damage * damage / Value;
+        }
+
+        public void ApplyDamage(float damage)
+        {
+            if (Value <= 0f)
+                throw new ArgumentOutOfRangeException(nameof(damage),
+                    "Damage value must be positive!");
+
+            Value = Mathf.Clamp(Value - damage, 0f, float.MaxValue);
         }
     }
 }

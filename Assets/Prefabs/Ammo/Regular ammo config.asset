@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c68e7d76edebc8949958f7558a995c42, type: 3}
+  m_Name: Regular ammo config
+  m_EditorClassIdentifier: 
+  _shotAudio: {fileID: 11400000, guid: 01b3bbb0640ca144293f351a45cc7b8d, type: 2}
+  _basePrice: 0.05
+  _basePriceFactorPerSize: 1.382
+  _basePriceFactorPerQuality: 1.618
+  _baseHeatGeneration: 15
+  _heatGenerationFactorPerSize: 1.382
+  _heatGenerationFactorPerQuality: 0.87
+  _baseSpeed: 70
+  _speedFactorPerSize: 0.81
+  _speedFactorPerQuality: 1.11
+  _baseDamage: 30
+  _damageFactorPerSize: 1.618
+  _damageFactorPerQuality: 1.618

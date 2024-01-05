@@ -33,8 +33,7 @@ namespace SpaceAce.Gameplay.Damage
         public Guid ID { get; private set; }
 
         [Inject]
-        private void Construct(ExplosionFactory factory,
-                               GamePauser gamePauser)
+        private void Construct(ExplosionFactory factory, GamePauser gamePauser)
         {
             _explosionFactory = factory ?? throw new ArgumentNullException(nameof(factory),
                 $"Attempted to pass an empty {typeof(ExplosionFactory)}!");
@@ -80,7 +79,7 @@ namespace SpaceAce.Gameplay.Damage
                 throw new ArgumentOutOfRangeException(nameof(damage),
                     "Damage value must be positive!");
 
-            float damageToBeDealt = Armor.GetDamageToBeDealt(damage);
+            float damageToBeDealt = Armor.GetReducedDamage(damage);
 
             Durability.ApplyDamage(damageToBeDealt);
             DamageReceived?.Invoke(this, new(damage, damageToBeDealt, transform.position));

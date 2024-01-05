@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 
-using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
 
 using UnityEngine;
@@ -16,19 +15,19 @@ namespace SpaceAce.Gameplay.Movement
 
         protected virtual float MinHorizontalSpeed => _config.MinHorizontalSpeed;
         protected virtual float MaxHorizontalSpeed => _config.MaxHorizontalSpeed;
-        protected virtual float NextHorizontalSpeed => AuxMath.GetRandom(MinHorizontalSpeed, MaxHorizontalSpeed);
+        protected virtual float NextHorizontalSpeed => Random.Range(MinHorizontalSpeed, MaxHorizontalSpeed);
 
         protected virtual float MinVerticalSpeed => _config.MinVerticalSpeed;
         protected virtual float MaxVerticalSpeed => _config.MaxVerticalSpeed;
-        protected virtual float NextVerticalSpeed => AuxMath.GetRandom(MinVerticalSpeed, MaxVerticalSpeed);
+        protected virtual float NextVerticalSpeed => Random.Range(MinVerticalSpeed, MaxVerticalSpeed);
 
         protected virtual float MinSpatialSpeed => _config.MinSpatialSpeed;
         protected virtual float MaxSpatialSpeed => _config.MaxSpatialSpeed;
-        protected virtual float NextSpatialSpeed => AuxMath.GetRandom(MinSpatialSpeed, MaxSpatialSpeed);
+        protected virtual float NextSpatialSpeed => Random.Range(MinSpatialSpeed, MaxSpatialSpeed);
 
         protected virtual float MinRotationSpeed => _config.LowestRotationSpeed;
         protected virtual float MaxRotationSpeed => _config.HighestRotationSpeed;
-        protected virtual float NextRotationSpeed => AuxMath.GetRandom(MinRotationSpeed, MaxRotationSpeed);
+        protected virtual float NextRotationSpeed => Random.Range(MinRotationSpeed, MaxRotationSpeed);
         protected bool RotationEnabled => MinRotationSpeed != 0f || MaxRotationSpeed != 0f;
 
         protected virtual float UpperBound => MasterCameraHolder.GetViewportUpperBoundWithOffset(_config.UpperBoundDisplacement);
@@ -38,7 +37,7 @@ namespace SpaceAce.Gameplay.Movement
 
         protected virtual float MinCollisionDamage => _config.LowestCollisionDamage;
         protected virtual float MaxCollisionDamage => _config.HighestCollisionDamage;
-        protected virtual float NextCollisionDamage => AuxMath.GetRandom(MinCollisionDamage, MaxCollisionDamage);
+        protected virtual float NextCollisionDamage => Random.Range(MinCollisionDamage, MaxCollisionDamage);
         protected bool CollisionDamageEnabled => MaxCollisionDamage > 0f;
 
         protected override void Awake()

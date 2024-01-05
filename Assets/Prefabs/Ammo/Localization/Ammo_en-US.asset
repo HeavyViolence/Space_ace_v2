@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Ammo_en-US
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en-US
+  m_SharedData: {fileID: 11400000, guid: 454c4003c36da6b4dac98f49dd34252d, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 4327559728174727170
+  m_TableData:
+  - m_Id: 10174713856
+    m_Localized: '{Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
+      regular ammo'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 1155453727133696
+    m_Localized: 'Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Type: regular
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Dp'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 1888902377230336
+    m_Localized: '{Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
+      strange ammo'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 1888948699123712
+    m_Localized: 'Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Type: strange
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Dp
+
+      Shooting takes no ammo'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  references:
+    version: 2
+    RefIds:
+    - rid: 4327559728174727170
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00d0755e0200000000d0f508e11a040000d0355bf2b5060000d03524fdb50600

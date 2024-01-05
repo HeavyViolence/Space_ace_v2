@@ -122,7 +122,7 @@ namespace SpaceAce.Main.Localization
             }
         }
 
-        public override bool Equals(object obj) => Equals(obj as ISavable);
+        public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
         public bool Equals(ISavable other) => other is not null && ID == other.ID;
 

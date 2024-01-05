@@ -28,28 +28,28 @@ namespace SpaceAce.Gameplay.Movement
 
         public float MinHorizontalSpeed => _horizontalSpeed.x;
         public float MaxHorizontalSpeed => _horizontalSpeed.y;
-        public float RandomHorizontalSpeed => AuxMath.GetRandom(_horizontalSpeed.x, _horizontalSpeed.y);
+        public float RandomHorizontalSpeed => Random.Range(_horizontalSpeed.x, _horizontalSpeed.y);
 
         [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
         private Vector2 _verticalSpeed = new(MinSpeed, MaxSpeed);
 
         public float MinVerticalSpeed => _verticalSpeed.x;
         public float MaxVerticalSpeed => _verticalSpeed.y;
-        public float RandomVerticalSpeed => AuxMath.GetRandom(_verticalSpeed.x, _verticalSpeed.y);
+        public float RandomVerticalSpeed => Random.Range(_verticalSpeed.x, _verticalSpeed.y);
 
         [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
         private Vector2 _spatialSpeed = new(MinSpeed, MaxSpeed);
 
         public float MinSpatialSpeed => _spatialSpeed.x;
         public float MaxSpatialSpeed => _spatialSpeed.y;
-        public float RandomSpatialSpeed => AuxMath.GetRandom(_spatialSpeed.x, _spatialSpeed.y);
+        public float RandomSpatialSpeed => Random.Range(_spatialSpeed.x, _spatialSpeed.y);
 
         [SerializeField, MinMaxSlider(0f, MaxRotationSpeed)]
         private Vector2 _rotationSpeed = new(0f, MaxRotationSpeed);
 
         public float LowestRotationSpeed => _rotationSpeed.x;
         public float HighestRotationSpeed => _rotationSpeed.y;
-        public float RandomRotationSpeed => AuxMath.RandomSign * AuxMath.GetRandom(_rotationSpeed.x, _rotationSpeed.y);
+        public float RandomRotationSpeed => AuxMath.RandomSign * Random.Range(_rotationSpeed.x, _rotationSpeed.y);
 
         [SerializeField, MinValue(MinBoundDisplacement), MaxValue(MaxBoundDisplacement), HorizontalLine]
         private float _upperBoundDisplacement = DefaultBoundDisplacement;
@@ -73,7 +73,7 @@ namespace SpaceAce.Gameplay.Movement
 
         public float LowestCollisionDamage => _collisionDamage.x;
         public float HighestCollisionDamage => _collisionDamage.y;
-        public float RandomCollisionDamage => AuxMath.GetRandom(_collisionDamage.x, _collisionDamage.y);
+        public float RandomCollisionDamage => Random.Range(_collisionDamage.x, _collisionDamage.y);
 
         [SerializeField]
         private AudioCollection _collisionAudio;

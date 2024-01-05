@@ -137,7 +137,7 @@ namespace SpaceAce.Main
         {
             ScrollSpeed = LevelScrollSpeed;
 
-            int backgroundIndex = AuxMath.GetRandom(0, _levelSpaceBackgrounds.Count);
+            int backgroundIndex = UnityEngine.Random.Range(0, _levelSpaceBackgrounds.Count);
 
             _renderer.sharedMaterial = _levelSpaceBackgrounds[backgroundIndex];
             _renderer.sharedMaterial.mainTextureOffset = new Vector2(0f, AuxMath.RandomNormal);

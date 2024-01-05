@@ -13,7 +13,7 @@ namespace SpaceAce.Main.Factories
         public SpriteRenderer SpriteRenderer { get; }
         public DamageDealer DamageDealer { get; }
         public IEscapable Escapable { get; }
-        public IMovementBehaviourSupplier BehaviourSupplier { get; }
+        public IMovementBehaviourSupplier MovementBehaviourSupplier { get; }
 
         public CachedProjectile(GameObject instance,
                                 SpriteRenderer spriteRenderer,
@@ -39,7 +39,7 @@ namespace SpaceAce.Main.Factories
             Escapable = escapable ?? throw new ArgumentNullException(nameof(damageDealer),
                 $"Attempted to pass an empty {typeof(IEscapable)}!");
 
-            BehaviourSupplier = behaviourSupplier ?? throw new ArgumentNullException(nameof(behaviourSupplier),
+            MovementBehaviourSupplier = behaviourSupplier ?? throw new ArgumentNullException(nameof(behaviourSupplier),
                 $"Attempted to pass an empty {typeof(IMovementBehaviourSupplier)}!");
         }
     }

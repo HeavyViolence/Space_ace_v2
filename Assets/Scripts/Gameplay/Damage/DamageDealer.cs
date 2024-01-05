@@ -16,7 +16,7 @@ namespace SpaceAce.Gameplay.Damage
         private void OnTriggerEnter2D(Collider2D collider)
         {
             if (collider.gameObject.TryGetComponent(out IDamageable damageReceiver) == true)
-                Hit?.Invoke(this, new(transform.position, damageReceiver));
+                Hit?.Invoke(this, new(transform.position, damageReceiver, collider.gameObject));
         }
     }
 }
