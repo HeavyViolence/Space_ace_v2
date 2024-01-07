@@ -4,14 +4,14 @@ using Zenject;
 
 namespace SpaceAce.Main.Factories
 {
-    public sealed class HitFactoryInstaller : MonoInstaller
+    public sealed class ProjectileHitEffectFactoryInstaller : MonoInstaller
     {
         [SerializeField]
-        private HitFactoryConfig _config;
+        private ProjectileHitEffectFactoryConfig _config;
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<HitFactory>()
+            Container.BindInterfacesAndSelfTo<ProjectileHitEffectFactory>()
                      .AsSingle()
                      .WithArguments(_config.HitEffects)
                      .NonLazy();

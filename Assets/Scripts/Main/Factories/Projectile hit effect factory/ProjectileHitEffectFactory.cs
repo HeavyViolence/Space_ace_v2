@@ -10,41 +10,36 @@ using Zenject;
 
 namespace SpaceAce.Main.Factories
 {
-    public sealed class HitFactory
+    public sealed class ProjectileHitEffectFactory
     {
         private readonly DiContainer _diContainer;
         private readonly GamePauser _gamePauser;
-        private readonly Dictionary<HitStrength, GameObject> _hitPrefabs = new();
-        private readonly Dictionary<HitStrength, Stack<CachedParticleSystem>> _hitPool = new();
+        private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectsPrefabs = new();
+        private readonly Dictionary<ProjectileHitEffectSkin, Stack<CachedParticleSystem>> _hitEffectsPool = new();
 
-        public HitFactory(DiContainer diContainer,
-                          GamePauser gamePauser,
-                          IEnumerable<HitSlot> hitEffects)
+        public ProjectileHitEffectFactory(DiContainer diContainer,
+                                          GamePauser gamePauser,
+                                          IEnumerable<ProjectileHitEffectFactoryConfigSlot> hitEffects)
         {
-            _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer),
-                $"Attempted to pass an empty {typeof(DiContainer)}!");
+            _diContainer = diContainer ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
 
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            if (hitEffects is null)
-                throw new ArgumentNullException(nameof(hitEffects),
-                    "Attempted to pass an empty hit effects collection!");
+            if (hitEffects is null) throw new ArgumentNullException();
 
             foreach (var hitEffect in hitEffects)
-                _hitPrefabs.Add(hitEffect.Strength, hitEffect.Prefab);
+                _hitEffectsPrefabs.Add(hitEffect.Skin, hitEffect.Prefab);
         }
 
-        public async UniTask CreateAsync(HitStrength strength, Vector3 position, CancellationToken token = default)
+        public async UniTask CreateAsync(ProjectileHitEffectSkin skin, Vector3 position, CancellationToken token = default)
         {
-            CachedParticleSystem hitEffect = InstantiateHitEffect(strength, position);
+            CachedParticleSystem hitEffect = InstantiateHitEffect(skin, position);
             await AwaitHitEffectToPlayAsync(hitEffect, token);
-            Release(hitEffect, strength);
+            Release(hitEffect, skin);
         }
 
-        private CachedParticleSystem InstantiateHitEffect(HitStrength strength, Vector3 position)
+        private CachedParticleSystem InstantiateHitEffect(ProjectileHitEffectSkin skin, Vector3 position)
         {
-            if (_hitPool.TryGetValue(strength, out Stack<CachedParticleSystem> stack) == true && stack.Count > 0)
+            if (_hitEffectsPool.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true && stack.Count > 0)
             {
                 CachedParticleSystem hitEffect = stack.Pop();
 
@@ -54,7 +49,7 @@ namespace SpaceAce.Main.Factories
                 return hitEffect;
             }
             
-            if (_hitPrefabs.TryGetValue(strength, out GameObject hitPrefab) == true)
+            if (_hitEffectsPrefabs.TryGetValue(skin, out GameObject hitPrefab) == true)
             {
                 GameObject instance = _diContainer.InstantiatePrefab(hitPrefab);
 
@@ -62,7 +57,7 @@ namespace SpaceAce.Main.Factories
                 else throw new MissingComponentException($"Hit prefab is missing {typeof(ParticleSystemPauser)}!");
             }
 
-            throw new Exception($"Hit effect of a requested strength ({strength}) doesn't exist!");
+            throw new Exception($"Hit effect of a requested skin ({skin}) doesn't exist!");
         }
 
         private async UniTask AwaitHitEffectToPlayAsync(CachedParticleSystem instance, CancellationToken token)
@@ -81,7 +76,7 @@ namespace SpaceAce.Main.Factories
             }
         }
 
-        private void Release(CachedParticleSystem instance, HitStrength strength)
+        private void Release(CachedParticleSystem instance, ProjectileHitEffectSkin skin)
         {
             if (instance is null) throw new ArgumentNullException(nameof(instance),
                 $"Attempted to pass an empty {typeof(CachedParticleSystem)}!");
@@ -89,7 +84,7 @@ namespace SpaceAce.Main.Factories
             instance.Instance.SetActive(false);
             instance.Instance.transform.position = Vector3.zero;
 
-            if (_hitPool.TryGetValue(strength, out Stack<CachedParticleSystem> stack) == true)
+            if (_hitEffectsPool.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true)
             {
                 stack.Push(instance);
             }
@@ -98,7 +93,7 @@ namespace SpaceAce.Main.Factories
                 Stack<CachedParticleSystem> newStack = new();
                 newStack.Push(instance);
 
-                _hitPool.Add(strength, newStack);
+                _hitEffectsPool.Add(skin, newStack);
             }
         }
     }

@@ -14,17 +14,9 @@ namespace SpaceAce.Main.Factories
                                   GameStateLoader gameStateLoader,
                                   AmmoFactory ammoFactory)
         {
-            Localizer = localizer ??
-                throw new ArgumentNullException(nameof(localizer),
-                $"Attempted to pass an empty {typeof(Localizer)}!");
-
-            GameStateLoader = gameStateLoader ??
-                throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempetd to pass an empty {typeof(GameStateLoader)}!");
-
-            AmmoFactory = ammoFactory ??
-                throw new ArgumentNullException(nameof(ammoFactory),
-                $"Attempted to pass an empty {typeof(AmmoFactory)}!");
+            Localizer = localizer ?? throw new ArgumentNullException();
+            GameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            AmmoFactory = ammoFactory ?? throw new ArgumentNullException();
         }
     }
 }

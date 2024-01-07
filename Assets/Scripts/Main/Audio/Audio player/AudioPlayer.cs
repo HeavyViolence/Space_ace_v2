@@ -38,7 +38,7 @@ namespace SpaceAce.Main.Audio
 
             set
             {
-                if (value is null) throw new ArgumentNullException(nameof(value), $"Attempted to pass an empty {typeof(AudioPlayerSettings)}!");
+                if (value is null) throw new ArgumentNullException();
 
                 _settings = value;
 
@@ -55,21 +55,14 @@ namespace SpaceAce.Main.Audio
             }
         }
 
-        public AudioPlayer(AudioMixer mixer,
-                           ISavingSystem savingSystem,
-                           GamePauser gamePauser)
+        public AudioPlayer(AudioMixer mixer, ISavingSystem savingSystem, GamePauser gamePauser)
         {
-            if (mixer == null)
-                throw new ArgumentNullException(nameof(mixer),
-                    $"Attempted to pass an empty {typeof(AudioMixer)}!");
+            if (mixer == null) throw new ArgumentNullException();
 
             _audioMixer = mixer;
 
-            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
-
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
 
             CreateAudioSourcePool();
         }

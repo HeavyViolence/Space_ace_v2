@@ -1196,7 +1196,7 @@ GameObject:
   - component: {fileID: 1349285137}
   - component: {fileID: 1349285136}
   m_Layer: 0
-  m_Name: Hit factory
+  m_Name: Projectile hit effect factory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cad49d7b0d50b04eb4bf951bdbbd2f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _config: {fileID: 11400000, guid: 9e5095a3a3c53da4fa09a64688e53715, type: 2}
+  _config: {fileID: 11400000, guid: 7ea47c4dfba15614e8d7f602765f6e95, type: 2}
 --- !u!4 &1349285137
 Transform:
   m_ObjectHideFlags: 0

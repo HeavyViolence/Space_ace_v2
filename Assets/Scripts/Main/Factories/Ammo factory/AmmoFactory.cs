@@ -1,5 +1,6 @@
 using SpaceAce.Gameplay.Inventories;
 using SpaceAce.Gameplay.Shooting.Ammo;
+using SpaceAce.Main.Audio;
 using SpaceAce.Main.Localization;
 
 using System;
@@ -12,16 +13,22 @@ namespace SpaceAce.Main.Factories
         private readonly AmmoServices _ammoServices;
 
         public AmmoFactory(ProjectileFactory projectileFactory,
+                           ProjectileHitEffectFactory projectileHitEffectFactory,
                            GameStateLoader gameStateLoader,
                            Localizer localizer,
                            MasterCameraHolder masterCameraHolder,
+                           MasterCameraShaker masterCameraShaker,
+                           AudioPlayer audioPlayer,
                            GamePauser gamePauser,
                            AmmoConfigs ammoConfigs)
         {
             _ammoServices = new(gameStateLoader,
                                 localizer,
                                 masterCameraHolder,
+                                masterCameraShaker,
+                                audioPlayer,
                                 projectileFactory,
+                                projectileHitEffectFactory,
                                 gamePauser);
 
             if (ammoConfigs == null) throw new ArgumentNullException();
@@ -29,9 +36,14 @@ namespace SpaceAce.Main.Factories
         }
 
         public AmmoStack Create(AmmoFactoryRequest request) =>
-            Create(request.Type, request.Size, request.Quality, request.Skin, request.Amount);
+            Create(request.Type, request.Size, request.Quality, request.ProjectileSkin, request.HitEffectSkin, request.Amount);
 
-        public AmmoStack Create(AmmoType type, ItemSize size, ItemQuality quality, ProjectileSkin skin, int amount)
+        public AmmoStack Create(AmmoType type,
+                                ItemSize size,
+                                ItemQuality quality,
+                                ProjectileSkin projectileSKin,
+                                ProjectileHitEffectSkin hitEffectSkin,
+                                int amount)
         {
             Ammo ammo;
 
@@ -40,21 +52,21 @@ namespace SpaceAce.Main.Factories
                 case AmmoType.Regular:
                     {
                         var config = _ammoConfigs.RegularAmmoConfig;
-                        ammo = new RegularAmmo(_ammoServices, size, quality, skin, config);
+                        ammo = new RegularAmmo(_ammoServices, size, quality, projectileSKin, hitEffectSkin, config);
 
                         break;
                     }
                 case AmmoType.Strange:
                     {
                         var config = _ammoConfigs.StrangeAmmoConfig;
-                        ammo = new StrangeAmmo(_ammoServices, size, quality, skin, config);
+                        ammo = new StrangeAmmo(_ammoServices, size, quality, projectileSKin, hitEffectSkin, config);
 
                         break;
                     }
                 default:
                     {
                         var config = _ammoConfigs.RegularAmmoConfig;
-                        ammo = new RegularAmmo(_ammoServices, size, quality, skin, config);
+                        ammo = new RegularAmmo(_ammoServices, size, quality, projectileSKin, hitEffectSkin, config);
 
                         break;
                     }

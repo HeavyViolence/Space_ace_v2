@@ -24,7 +24,10 @@ namespace SpaceAce.Gameplay.Players
         private ItemSize _size = ItemSize.Medium;
 
         [SerializeField]
-        private ProjectileSkin _skin = ProjectileSkin.Red;
+        private ProjectileSkin _projectileSkin = ProjectileSkin.Red;
+
+        [SerializeField]
+        private ProjectileHitEffectSkin _hitEffectSkin = ProjectileHitEffectSkin.Red;
 
         [SerializeField]
         private ItemQuality _quality = ItemQuality.Common;
@@ -32,6 +35,6 @@ namespace SpaceAce.Gameplay.Players
         [SerializeField, Range(MinAmount, MaxAmount)]
         private int _amount = MinAmount;
 
-        public AmmoFactoryRequest Request => new(_type, _size, _quality, _skin, _amount);
+        public AmmoFactoryRequest Request => new(_type, _size, _quality, _projectileSkin, _hitEffectSkin, _amount);
     }
 }

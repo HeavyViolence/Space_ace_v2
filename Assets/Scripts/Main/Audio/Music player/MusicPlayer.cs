@@ -32,9 +32,7 @@ namespace SpaceAce.Main.Audio
 
             set
             {
-                _settings = value ?? throw new ArgumentNullException(nameof(value),
-                        $"Attempted to pass an empty {typeof(MusicPlayerSettings)}!");
-
+                _settings = value ?? throw new ArgumentNullException();
                 SavingRequested?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -42,21 +40,14 @@ namespace SpaceAce.Main.Audio
         public string ID => "Music settings";
 
 
-        public MusicPlayer(AudioCollection music,
-                           AudioPlayer audioPlayer,
-                           ISavingSystem savingSystem)
+        public MusicPlayer(AudioCollection music, AudioPlayer audioPlayer, ISavingSystem savingSystem)
         {
-            if (music == null)
-                throw new ArgumentNullException(nameof(music),
-                    $"Attempted to pass an empty {typeof(AudioCollection)}!");
+            if (music == null) throw new ArgumentNullException();
 
             _music = music;
 
-            _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
-
-            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
+            _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
         }
 
         public void Play()
@@ -85,7 +76,7 @@ namespace SpaceAce.Main.Audio
 
             while (true)
             {
-                await _audioPlayer.PlayOnceAsync(_music.NonRepeatingRandom, Vector3.zero, null, token);
+                await _audioPlayer.PlayOnceAsync(_music.NonRepeatingRandom, Vector3.zero, null, token, true);
                 await UniTask.WaitForSeconds(Settings.PlaybackDelay, true, PlayerLoopTiming.Update, token);
 
                 if (token.IsCancellationRequested == true)

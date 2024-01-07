@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4773084102856628948
+--- !u!1001 &404614140712146285
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -11,18 +11,10 @@ PrefabInstance:
     - target: {fileID: 491406847490980965, guid: a918baaa4e2d5cf4da17bc5f5ca7674a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 48d1f8ecc3e89614d95ea99ff2fec673, type: 2}
+      objectReference: {fileID: 2100000, guid: fb4104cc726711c49a437d9ee6986413, type: 2}
     - target: {fileID: 1070144136910441287, guid: a918baaa4e2d5cf4da17bc5f5ca7674a, type: 3}
       propertyPath: m_Name
-      value: Hit very weak
-      objectReference: {fileID: 0}
-    - target: {fileID: 3892837239443476204, guid: a918baaa4e2d5cf4da17bc5f5ca7674a, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3892837239443476204, guid: a918baaa4e2d5cf4da17bc5f5ca7674a, type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 3
+      value: Hit green Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5276759225870925015, guid: a918baaa4e2d5cf4da17bc5f5ca7674a, type: 3}
       propertyPath: m_LocalPosition.x

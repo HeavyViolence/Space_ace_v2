@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 491406847490980965}
   - component: {fileID: 2302216008123525119}
   m_Layer: 0
-  m_Name: Hit default
+  m_Name: Hit red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4845,7 +4845,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fd16c0b9a6fd08b4e8e8a05140b13364, type: 2}
+  - {fileID: 2100000, guid: 48d1f8ecc3e89614d95ea99ff2fec673, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

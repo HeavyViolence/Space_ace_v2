@@ -1,4 +1,7 @@
+using Cysharp.Threading.Tasks;
+
 using System;
+using System.Threading;
 
 using UnityEngine;
 
@@ -8,8 +11,20 @@ namespace SpaceAce.Gameplay.Inventories
     {
         public event EventHandler AmountChanged, Depleted;
 
-        public IItem Item { get; }
+        protected readonly IItem Item;
+
         public int Amount { get; private set; }
+
+        public ItemSize ItemSize => Item.Size;
+        public ItemQuality ItemQuality => Item.Quality;
+
+        public float ItemPrice => Item.Price;
+
+        public bool ItemTradable => Item.Tradable;
+        public bool ItemUsable => Item.Usable;
+
+        public async UniTask<string> GetItemNameAsync() => await Item.GetNameAsync();
+        public async UniTask<string> GetItemDescriptionAsync() => await Item.GetDescriptionAsync();
 
         public ItemStack(IItem item, int amount)
         {
@@ -51,27 +66,22 @@ namespace SpaceAce.Gameplay.Inventories
                 throw new ArgumentOutOfRangeException(nameof(amount),
                     "Amount must be positive!");
 
-            if (Item.Tradable == true)
+            if (ItemTradable == true)
             {
                 int amountToSell = Mathf.Clamp(amount, 0, Amount);
                 Remove(amountToSell);
 
-                sellPrice = amountToSell * Item.Price;
+                sellPrice = amountToSell * ItemPrice;
                 return true;
             }
 
-            sellPrice = float.NaN;
+            sellPrice = 0f;
             return false;
         }
 
-        public bool Use()
+        public async UniTask<bool> UseAsync(CancellationToken token = default, params object[] args)
         {
-            if (Item.Usable == true && Amount > 0 && Item.Use() == true)
-            {
-                Remove(1);
-                return true;
-            }
-
+            if (Amount > 0) return await Item.UseAsync(this, token, args);
             return false;
         }
 

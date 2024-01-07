@@ -19,6 +19,9 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         public const float MaxDispersion = 10f;
 
         [SerializeField]
+        private bool _shakeOnShotFired = false;
+
+        [SerializeField]
         private ItemSize _ammoSize;
 
         [SerializeField]
@@ -32,6 +35,8 @@ namespace SpaceAce.Gameplay.Shooting.Guns
 
         [SerializeField, Range(MinDispersion, MaxDispersion)]
         private float _dispersion = MinDispersion;
+
+        public bool ShakeOnShotFired => _shakeOnShotFired;
 
         public ItemSize AmmoSize => _ammoSize;
 

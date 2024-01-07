@@ -13,6 +13,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
 
         public ItemSize AmmoSize => _config.AmmoSize;
         public ProjectileRequestor ProjectileRequestor => _config.ProjectileRequestor;
+        public bool ShakeOnShotFired => _config.ShakeOnShotFired;
         public bool IsRightHanded => transform.localPosition.x > 0f;
         public float SignedConvergenceAngle => IsRightHanded ? -1f * _config.ConvergenceAngle : _config.ConvergenceAngle;
 
