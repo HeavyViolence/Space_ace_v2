@@ -31,27 +31,18 @@ namespace SpaceAce.Main.Localization
                          LanguageToCodeConverter languageToCodeConverter,
                          ISavingSystem savingSystem)
         {
-            _localizedFont = localizedFont ?? throw new ArgumentNullException(nameof(localizedFont),
-                $"Attempted to pass an empty {typeof(LocalizedFont)}!");
-
-            _languageToCodeConverter = languageToCodeConverter ?? throw new ArgumentNullException(nameof(languageToCodeConverter),
-                $"Attempted to pass an empty {typeof(LanguageToCodeConverter)}!");
-
-            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
+            _localizedFont = localizedFont ?? throw new ArgumentNullException();
+            _languageToCodeConverter = languageToCodeConverter ?? throw new ArgumentNullException();
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
         }
 
         public async UniTask<string> GetLocalizedStringAsync(string tableName, string entryName, params object[] arguments)
         {
-            if (string.IsNullOrEmpty(tableName) ||
-                string.IsNullOrWhiteSpace(tableName))
-                throw new ArgumentNullException(nameof(tableName),
-                    "Attempted to pass an empty table name!");
+            if (string.IsNullOrEmpty(tableName) || string.IsNullOrWhiteSpace(tableName))
+                throw new ArgumentNullException();
 
-            if (string.IsNullOrEmpty(entryName) ||
-                string.IsNullOrWhiteSpace(entryName))
-                throw new ArgumentNullException(nameof(entryName),
-                    $"Attempted to pass an empty table entry name!");
+            if (string.IsNullOrEmpty(entryName) || string.IsNullOrWhiteSpace(entryName))
+                throw new ArgumentNullException();
 
             LocalizedString localizedString = new(tableName, entryName) { Arguments = arguments };
 

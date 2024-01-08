@@ -44,18 +44,16 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public Ammo(AmmoServices services,
                     ItemSize size,
                     ItemQuality quality,
-                    ProjectileSkin projectileSkin,
-                    ProjectileHitEffectSkin hitEffectSkin,
                     AmmoConfig config)
         {
+            if (config == null) throw new ArgumentNullException();
+
             Services = services;
 
             Size = size;
             Quality = quality;
-            ProjectileSkin = projectileSkin;
-            HitEffectSkin = hitEffectSkin;
-
-            if (config == null) throw new ArgumentNullException();
+            ProjectileSkin = config.ProjectileSkin;
+            HitEffectSkin = config.HitEffectSkin;
 
             Price = config.GetPrice(size, quality);
             HeatGeneration = config.GetHeatGeneration(size, quality);

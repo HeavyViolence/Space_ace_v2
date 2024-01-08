@@ -42,9 +42,7 @@ namespace SpaceAce.Main
 
             set
             {
-                if (value is null)
-                    throw new ArgumentNullException(nameof(value),
-                        $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
+                if (value is null) throw new ArgumentNullException();
 
                 _settings = value;
                 SavingRequested?.Invoke(this, EventArgs.Empty);
@@ -58,12 +56,9 @@ namespace SpaceAce.Main
                                   GamePauser gamePauser,
                                   ISavingSystem savingSystem)
         {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings),
-                $"Attempted to pass an empty {typeof(MasterCameraShakerSettings)}!");
+            _settings = settings ?? throw new ArgumentNullException();
 
-            if (masterCameraHolder is null)
-                throw new ArgumentNullException(nameof(masterCameraHolder),
-                    $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
+            if (masterCameraHolder is null) throw new ArgumentNullException();
 
             Rigidbody2D body = masterCameraHolder.MasterCameraObject.GetComponentInChildren<Rigidbody2D>();
 
@@ -72,11 +67,8 @@ namespace SpaceAce.Main
 
             _masterCameraBody = body;
 
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
         }
 
         public async UniTask ShakeOnShotFiredAsync(CancellationToken token = default)

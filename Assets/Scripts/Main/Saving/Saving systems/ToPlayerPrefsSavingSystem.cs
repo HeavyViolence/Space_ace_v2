@@ -15,18 +15,13 @@ namespace SpaceAce.Main.Saving
 
         public ToPlayerPrefsSavingSystem(IKeyGenerator keyGenerator, IEncryptor encryptor)
         {
-            _keyGenerator = keyGenerator ?? throw new ArgumentNullException(nameof(keyGenerator),
-                $"Attempted to pass an empty {typeof(IKeyGenerator)}!");
-
-            _encryptor = encryptor ?? throw new ArgumentNullException(nameof(encryptor),
-                $"Attempted to pass an empty {typeof(IEncryptor)}!");
+            _keyGenerator = keyGenerator ?? throw new ArgumentNullException();
+            _encryptor = encryptor ?? throw new ArgumentNullException();
         }
 
         public void Register(ISavable entity)
         {
-            if (entity is null)
-                throw new ArgumentNullException(nameof(entity),
-                    $"Attempted to pass an empty {typeof(ISavable)}!");
+            if (entity is null) throw new ArgumentNullException();
 
             if (_savableEntities.Add(entity) == true)
             {
@@ -37,9 +32,7 @@ namespace SpaceAce.Main.Saving
 
         public void Deregister(ISavable entity)
         {
-            if (entity is null)
-                throw new ArgumentNullException(nameof(entity),
-                    $"Attempted to pass an empty {typeof(ISavable)}!");
+            if (entity is null) throw new ArgumentNullException();
 
             if (_savableEntities.Contains(entity) == true)
             {

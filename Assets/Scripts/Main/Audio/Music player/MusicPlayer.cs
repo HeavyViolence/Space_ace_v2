@@ -43,7 +43,6 @@ namespace SpaceAce.Main.Audio
         public MusicPlayer(AudioCollection music, AudioPlayer audioPlayer, ISavingSystem savingSystem)
         {
             if (music == null) throw new ArgumentNullException();
-
             _music = music;
 
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException();

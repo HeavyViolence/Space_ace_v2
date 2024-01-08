@@ -23,14 +23,9 @@ namespace SpaceAce.Gameplay.Levels
                               LevelCompleter levelCompleter,
                               GamePauser gamePauser)
         {
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
-
-            _levelCompleter = levelCompleter ?? throw new ArgumentNullException(nameof(levelCompleter),
-                $"Attempted to pass an empty {typeof(LevelCompleter)}!");
-
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass n empty {typeof(GamePauser)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            _levelCompleter = levelCompleter ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
         }
 
         #region interfaces

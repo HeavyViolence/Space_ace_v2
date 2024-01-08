@@ -37,29 +37,15 @@ namespace SpaceAce.UI
                                              GameStateLoader gameStateLoader,
                                              GameControlsTransmitter gameControlsTransmitter) : base(audioPlayer, uiAudio)
         {
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings),
-                    $"Attempted to pass an empty {typeof(UISettings)}!");
-
+            if (settings == null) throw new ArgumentNullException();
             _settings = settings;
 
-            _levelSelectionDisplay = levelSelectionDisplay ?? throw new ArgumentNullException(nameof(levelSelectionDisplay),
-                $"Attempted to pass an empty {typeof(LevelSelectionDisplay)}!");
-
-            _mainMenuDisplay = mainMenuDisplay ?? throw new ArgumentNullException(nameof(mainMenuDisplay),
-                $"Attempted to pass an empty {typeof(MainMenuDisplay)}!");
-
-            _levelDisplay = levelDisplay ?? throw new ArgumentNullException(nameof(levelDisplay),
-                $"Attempted to pass an empty {typeof(LevelDisplay)}!");
-
-            _screenFader = screenFader ?? throw new ArgumentNullException(nameof(screenFader),
-                $"Attempted to pass an empty {typeof(ScreenFader)}!");
-
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
-
-            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException(nameof(gameControlsTransmitter),
-                $"Attempted to pass an empty {typeof(GameControlsTransmitter)}!");
+            _levelSelectionDisplay = levelSelectionDisplay ?? throw new ArgumentNullException();
+            _mainMenuDisplay = mainMenuDisplay ?? throw new ArgumentNullException();
+            _levelDisplay = levelDisplay ?? throw new ArgumentNullException();
+            _screenFader = screenFader ?? throw new ArgumentNullException();
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException();
         }
 
         #region interfaces

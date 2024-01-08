@@ -11,9 +11,6 @@ namespace SpaceAce.Gameplay.Players
     [Serializable]
     public sealed class PlayerStartingAmmoConfig
     {
-        public const int MinGrade = 0;
-        public const int MaxGrade = 100;
-
         public const int MinAmount = 1;
         public const int MaxAmount = 1_000;
 
@@ -24,17 +21,11 @@ namespace SpaceAce.Gameplay.Players
         private ItemSize _size = ItemSize.Medium;
 
         [SerializeField]
-        private ProjectileSkin _projectileSkin = ProjectileSkin.Red;
-
-        [SerializeField]
-        private ProjectileHitEffectSkin _hitEffectSkin = ProjectileHitEffectSkin.Red;
-
-        [SerializeField]
         private ItemQuality _quality = ItemQuality.Common;
 
         [SerializeField, Range(MinAmount, MaxAmount)]
         private int _amount = MinAmount;
 
-        public AmmoFactoryRequest Request => new(_type, _size, _quality, _projectileSkin, _hitEffectSkin, _amount);
+        public AmmoFactoryRequest Request => new(_type, _size, _quality, _amount);
     }
 }

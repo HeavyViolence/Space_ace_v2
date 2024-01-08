@@ -8,13 +8,8 @@ namespace SpaceAce.Main.Saving
     {
         public byte[] Encrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0)
-                throw new ArgumentNullException(nameof(data),
-                    "Attempted to pass an empty data to encrypt!");
-
-            if (key is null || key.Length != IKeyGenerator.ByteKeyLength)
-                throw new ArgumentNullException(nameof(key),
-                    "Encryption key is empty or has an invalid length!");
+            if (data is null || data.Length == 0) throw new ArgumentNullException();
+            if (key is null || key.Length != IKeyGenerator.ByteKeyLength) throw new ArgumentNullException();
 
             using Aes algorithm = Aes.Create();
             using ICryptoTransform encryptor = algorithm.CreateEncryptor(key, algorithm.IV);
@@ -32,13 +27,8 @@ namespace SpaceAce.Main.Saving
 
         public byte[] Decrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0)
-                throw new ArgumentNullException(nameof(data),
-                    "Attempted to pass an empty data to decrypt!");
-
-            if (key is null || key.Length != IKeyGenerator.ByteKeyLength)
-                throw new ArgumentNullException(nameof(key),
-                    "Decryption key is empty or has an invalid length!");
+            if (data is null || data.Length == 0) throw new ArgumentNullException();
+            if (key is null || key.Length != IKeyGenerator.ByteKeyLength) throw new ArgumentNullException();
 
             using Aes algorithm = Aes.Create();
 

@@ -31,25 +31,15 @@ namespace SpaceAce.Gameplay.Levels
                               Player player,
                               AudioPlayer audioPlayer)
         {
-            if (levelCompletedAudio == null)
-                throw new ArgumentNullException(nameof(levelCompletedAudio),
-                    $"Attempted to pass an empty {typeof(AudioCollection)}!");
-
+            if (levelCompletedAudio == null) throw new ArgumentNullException();
             _levelCompletedAudio = levelCompletedAudio;
 
-            if (levelFailedAudio == null) throw new ArgumentNullException(nameof(levelFailedAudio),
-                    $"Attempted to pass an empty {typeof(AudioCollection)}!");
-
+            if (levelFailedAudio == null) throw new ArgumentNullException();
             _levelFailedAudio = levelFailedAudio;
 
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
-
-            _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an empty {typeof(Players.Player)}!");
-
-            _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            _player = player ?? throw new ArgumentNullException();
+            _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
         }
 
         #region interfaces

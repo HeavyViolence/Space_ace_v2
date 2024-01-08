@@ -22,10 +22,7 @@ namespace SpaceAce.UI
                                                        settings,
                                                        localizer)
         {
-            if (uiSettings == null)
-                throw new ArgumentNullException(nameof(uiSettings),
-                    $"Attempted to pass an empty fading curve: {typeof(AnimationCurve)}!");
-
+            if (uiSettings == null) throw new ArgumentNullException();
             _fadingCurve = uiSettings.FadingCurve;
         }
 

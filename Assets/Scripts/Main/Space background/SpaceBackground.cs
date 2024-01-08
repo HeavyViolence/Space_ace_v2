@@ -35,14 +35,9 @@ namespace SpaceAce.Main
                                GamePauser gamePauser,
                                GameStateLoader gameStateLoader)
         {
-            if (spaceBackgroundPrefab == null)
-                throw new ArgumentNullException("Attempted to pass an empty space background prefab!");
-
-            if (mainMenuSpaceBackground == null)
-                throw new ArgumentNullException("Attempted to pass an empty main menu space background!");
-
-            if (levelSpaceBackgrounds is null)
-                throw new ArgumentNullException("Attempted to pass an empty levels space backgrounds!");
+            if (spaceBackgroundPrefab == null) throw new ArgumentNullException();
+            if (mainMenuSpaceBackground == null) throw new ArgumentNullException();
+            if (levelSpaceBackgrounds is null) throw new ArgumentNullException();
 
             _mainMenuSpaceBackground = mainMenuSpaceBackground;
             _levelSpaceBackgrounds = new List<Material>(levelSpaceBackgrounds);
@@ -59,11 +54,8 @@ namespace SpaceAce.Main
             if (_dustfield == null)
                 throw new MissingComponentException($"Space background object is missing {nameof(ParticleSystem)}!");
 
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
 
             SetMainMenuState();
         }

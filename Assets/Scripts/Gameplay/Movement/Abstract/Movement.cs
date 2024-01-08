@@ -30,17 +30,10 @@ namespace SpaceAce.Gameplay.Movement
                                MasterCameraHolder masterCameraHolder,
                                MasterCameraShaker masterCameraShaker)
         {
-            GamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            AudioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
-
-            MasterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException(nameof(masterCameraHolder),
-                $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
-
-            MasterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException(nameof(masterCameraShaker),
-                $"Attempted to pass an empty {typeof(MasterCameraShaker)}!");
+            GamePauser = gamePauser ?? throw new ArgumentNullException();
+            AudioPlayer = audioPlayer ?? throw new ArgumentNullException();
+            MasterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException();
+            MasterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
         }
 
         protected virtual void Awake()

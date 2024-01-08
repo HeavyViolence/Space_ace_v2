@@ -71,17 +71,12 @@ namespace SpaceAce.UI
                                                                                                               assets.Settings,
                                                                                                               localizer)
         {
-            if (assets.LevelButton == null)
-                throw new ArgumentNullException(nameof(assets.LevelButton),
-                    $"Attempted to pass an empty level button asset: {typeof(VisualTreeAsset)}!");
+            if (assets.LevelButton == null) throw new ArgumentNullException();
 
             _levelButtonAsset = assets.LevelButton;
 
-            _levelUnlocker = levelUnlocker ?? throw new ArgumentNullException(nameof(levelUnlocker),
-                $"Attempted to pass an empty {typeof(LevelUnlocker)}!");
-
-            _bestLevelsRunStatisticsCollector = bestLevelRunStatisticsCollector ?? throw new ArgumentNullException(nameof(bestLevelRunStatisticsCollector),
-                $"Attempted to pass an empty {typeof(BestLevelRunStatisticsCollector)}!");
+            _levelUnlocker = levelUnlocker ?? throw new ArgumentNullException();
+            _bestLevelsRunStatisticsCollector = bestLevelRunStatisticsCollector ?? throw new ArgumentNullException();
         }
 
         public override async UniTask EnableAsync()

@@ -17,10 +17,7 @@ namespace SpaceAce.Gameplay.Players
 
         public Experience(float value)
         {
-            if (value < 0f)
-                throw new ArgumentOutOfRangeException(nameof(value),
-                    "Attempted to create an experience with a negative value!");
-
+            if (value < 0f) throw new ArgumentOutOfRangeException();
             Value = value;
         }
 
@@ -39,10 +36,7 @@ namespace SpaceAce.Gameplay.Players
 
         public void Add(float amount)
         {
-            if (amount < 0f)
-                throw new ArgumentOutOfRangeException(nameof(amount),
-                    "Attempted to add a negative amount of experience!");
-
+            if (amount < 0f) throw new ArgumentOutOfRangeException();
             if (amount == 0f) return;
 
             float oldValue = Value;

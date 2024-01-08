@@ -5,7 +5,6 @@ using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 
 using System;
-using System.Threading;
 
 using UnityEngine;
 
@@ -22,23 +21,16 @@ namespace SpaceAce.UI
         private readonly GameControlsTransmitter _gameControlsTransmitter;
 
         public LevelDisplayMediator(AudioPlayer audioPlayer,
-                                    UIAudio uIAudio,
+                                    UIAudio uiAudio,
                                     LevelDisplay levelDisplay,
                                     GamePauseDisplay gamePauseDisplay,
                                     GamePauser gamePauser,
-                                    GameControlsTransmitter gameControlsTransmitter) : base(audioPlayer, uIAudio)
+                                    GameControlsTransmitter gameControlsTransmitter) : base(audioPlayer, uiAudio)
         {
-            _levelDisplay = levelDisplay ?? throw new ArgumentNullException(nameof(levelDisplay),
-                $"Attempted to pass an empty {typeof(LevelDisplay)}!");
-
-            _gamePauseDisplay = gamePauseDisplay ?? throw new ArgumentNullException(nameof(GamePauseDisplay),
-                $"Attempted to pass an empty {typeof(GamePauseDisplay)}!");
-
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException(nameof(gameControlsTransmitter),
-                $"Attempted to pass an empty {typeof(GameControlsTransmitter)}!");
+            _levelDisplay = levelDisplay ?? throw new ArgumentNullException();
+            _gamePauseDisplay = gamePauseDisplay ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException();
         }
 
         #region interfaces
@@ -64,7 +56,7 @@ namespace SpaceAce.UI
             _levelDisplay.Disable();
             _gamePauseDisplay.EnableAsync().Forget();
             _gamePauser.Pause();
-            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero, null).Forget();
         }
 
         #endregion

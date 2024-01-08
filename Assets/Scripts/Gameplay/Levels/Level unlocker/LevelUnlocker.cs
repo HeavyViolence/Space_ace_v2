@@ -22,11 +22,8 @@ namespace SpaceAce.Gameplay.Levels
 
         public LevelUnlocker(ISavingSystem savingSystem, LevelCompleter levelCompleter)
         {
-            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
-
-            _levelCompleter = levelCompleter ?? throw new ArgumentNullException(nameof(levelCompleter),
-                $"Attempted to pass an empty {typeof(LevelCompleter)}!");
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
+            _levelCompleter = levelCompleter ?? throw new ArgumentNullException();
         }
 
         #region interfaces

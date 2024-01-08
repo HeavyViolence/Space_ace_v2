@@ -29,22 +29,11 @@ namespace SpaceAce.Gameplay.Players
                                             ISavingSystem savedSystem,
                                             PlayerStartingItemsDispenserConfig config)
         {
-            _player = player ??
-                throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an empty {typeof(Player)}!");
+            _player = player ?? throw new ArgumentNullException();
+            _ammoFactory = ammoFactory ?? throw new ArgumentNullException();
+            _savingSystem = savedSystem ?? throw new ArgumentNullException();
 
-            _ammoFactory = ammoFactory ??
-                throw new ArgumentNullException(nameof(ammoFactory),
-                $"Attempted to pass an empty {typeof(AmmoFactory)}!");
-
-            _savingSystem = savedSystem ??
-                throw new ArgumentNullException(nameof(savedSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
-
-            if (config == null)
-                throw new ArgumentNullException(nameof(config),
-                    $"Attempted to pass an empty {typeof(PlayerStartingItemsDispenserConfig)}!");
-
+            if (config == null) throw new ArgumentNullException();
             _config = config;
         }
 

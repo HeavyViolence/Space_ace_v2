@@ -9,7 +9,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public override ItemStackSavableState GetSavableState()
         {
             var ammo = Item as Ammo;
-            return new AmmoStackSavableState(ammo.Size, ammo.Quality, Amount, ammo.Type, ammo.ProjectileSkin, ammo.HitEffectSkin);
+            return new AmmoStackSavableState(ammo.Type, ammo.Size, ammo.Quality, Amount);
         }
     }
 }

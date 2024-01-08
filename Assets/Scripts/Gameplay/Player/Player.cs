@@ -51,31 +51,13 @@ namespace SpaceAce.Gameplay.Players
                       GameControlsTransmitter gameControlsTransmitter,
                       GamePauser gamePauser)
         {
-            _playerShipFactory = playerShipFactory ??
-                throw new ArgumentNullException(nameof(playerShipFactory),
-                $"Attempted to pass an empty {typeof(PlayerShipFactory)}!");
-
-            _savedItemsFactory = savedItemsFactory ??
-                throw new ArgumentNullException(nameof(savedItemsFactory),
-                $"Attempted to pass an empty {typeof(SavedItemsFactory)}!");
-
+            _playerShipFactory = playerShipFactory ?? throw new ArgumentNullException();
+            _savedItemsFactory = savedItemsFactory ?? throw new ArgumentNullException();
             _shipSpawnPosition = shipSpawnPosition;
-
-            _savingSystem = savingSystem ??
-                throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
-
-            _gameStateLoader = gameStateLoader ??
-                throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
-
-            _gameControlsTransmitter = gameControlsTransmitter ??
-                throw new ArgumentNullException(nameof(gameControlsTransmitter),
-                $"Attempted to pass an empty {typeof(GameControlsTransmitter)}!");
-
-            _gamePauser = gamePauser ??
-                throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
 
             Wallet = new();
             Experience = new();

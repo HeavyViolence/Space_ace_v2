@@ -35,11 +35,8 @@ namespace SpaceAce.Gameplay.Damage
         [Inject]
         private void Construct(ExplosionFactory factory, GamePauser gamePauser)
         {
-            _explosionFactory = factory ?? throw new ArgumentNullException(nameof(factory),
-                $"Attempted to pass an empty {typeof(ExplosionFactory)}!");
-
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            _explosionFactory = factory ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
         }
 
         protected virtual void Awake()
@@ -75,9 +72,7 @@ namespace SpaceAce.Gameplay.Damage
 
         public void ApplyDamage(float damage)
         {
-            if (damage <= 0f)
-                throw new ArgumentOutOfRangeException(nameof(damage),
-                    "Damage value must be positive!");
+            if (damage <= 0f) throw new ArgumentOutOfRangeException();
 
             float damageToBeDealt = Armor.GetReducedDamage(damage);
 

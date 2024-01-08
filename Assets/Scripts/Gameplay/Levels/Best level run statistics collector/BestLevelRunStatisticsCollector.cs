@@ -28,23 +28,15 @@ namespace SpaceAce.Gameplay.Levels
                                                LevelStopwatch levelStopwatch,
                                                Player player)
         {
-            _savingSystem = savingSystem ?? throw new ArgumentNullException(nameof(savingSystem),
-                $"Attempted to pass an empty {typeof(ISavingSystem)}!");
-
-            _levelCompleter = levelCompleter ?? throw new ArgumentNullException(nameof(levelCompleter),
-                $"Attempted to pass an empty {typeof(LevelCompleter)}!");
-
-            _levelStopwatch = levelStopwatch ?? throw new ArgumentNullException(nameof(levelStopwatch),
-                $"Attempted to pass an empty {typeof(LevelStopwatch)}!");
-
-            _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an mepty {typeof(Players.Player)}!");
+            _savingSystem = savingSystem ?? throw new ArgumentNullException();
+            _levelCompleter = levelCompleter ?? throw new ArgumentNullException();
+            _levelStopwatch = levelStopwatch ?? throw new ArgumentNullException();
+            _player = player ?? throw new ArgumentNullException();
         }
 
         public BestLevelRunStatistics GetStatistics(int levelIndex)
         {
             if (_statistics.TryGetValue(levelIndex, out var value) == true) return value;
-
             return BestLevelRunStatistics.Default;
         }
 
@@ -75,9 +67,7 @@ namespace SpaceAce.Gameplay.Levels
             try
             {
                 var data = JsonConvert.DeserializeObject<IEnumerable<KeyValuePair<int, BestLevelRunStatistics>>>(state);
-
-                foreach (var element in data)
-                    _statistics.TryAdd(element.Key, element.Value);
+                foreach (var element in data) _statistics.TryAdd(element.Key, element.Value);
             }
             catch (Exception) { }
         }

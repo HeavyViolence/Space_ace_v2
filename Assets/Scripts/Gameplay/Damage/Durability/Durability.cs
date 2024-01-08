@@ -30,8 +30,7 @@ namespace SpaceAce.Gameplay.Damage
         [Inject]
         private void Construct(GamePauser gamePauser)
         {
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
         }
 
         protected virtual void OnEnable()
@@ -51,10 +50,7 @@ namespace SpaceAce.Gameplay.Damage
 
         public void ApplyDamage(float damage)
         {
-            if (damage <= 0f)
-                throw new ArgumentOutOfRangeException(nameof(damage),
-                    $"Damage value must be positive!");
-
+            if (damage <= 0f) throw new ArgumentOutOfRangeException();
             Value = Mathf.Clamp(Value - damage, 0f, MaxValue);
         }
     }

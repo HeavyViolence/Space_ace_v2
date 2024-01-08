@@ -58,7 +58,6 @@ namespace SpaceAce.Main.Audio
         public AudioPlayer(AudioMixer mixer, ISavingSystem savingSystem, GamePauser gamePauser)
         {
             if (mixer == null) throw new ArgumentNullException();
-
             _audioMixer = mixer;
 
             _savingSystem = savingSystem ?? throw new ArgumentNullException();

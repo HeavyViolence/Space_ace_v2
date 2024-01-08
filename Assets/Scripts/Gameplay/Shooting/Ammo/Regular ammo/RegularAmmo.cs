@@ -95,13 +95,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public RegularAmmo(AmmoServices services,
                            ItemSize size,
                            ItemQuality quality,
-                           ProjectileSkin projectileSkin,
-                           ProjectileHitEffectSkin hitEffectSkin,
                            RegularAmmoConfig config) : base(services,
                                                             size,
                                                             quality,
-                                                            projectileSkin,
-                                                            hitEffectSkin,
                                                             config)
         { }
 

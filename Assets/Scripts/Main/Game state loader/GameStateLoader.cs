@@ -39,10 +39,7 @@ namespace SpaceAce.Main
 
         public async UniTask LoadLevelAsync(int levelIndex, float delay)
         {
-            if (levelIndex <= 0)
-                throw new ArgumentOutOfRangeException(nameof(levelIndex),
-                    $"Level index must be greater than 0!");
-
+            if (levelIndex <= 0) throw new ArgumentOutOfRangeException();
             if (LoadedLevelIndex == levelIndex) return;
 
             float clampedDelay = Mathf.Clamp(delay, MinLoadingDelay, MaxLoadingDelay);

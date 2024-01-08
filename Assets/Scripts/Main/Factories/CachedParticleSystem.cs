@@ -12,16 +12,10 @@ namespace SpaceAce.Main.Factories
         public CachedParticleSystem(GameObject instance,
                                     ParticleSystemPauser pauser)
         {
-            if (instance == null)
-                throw new ArgumentNullException(nameof(instance),
-                    $"Attempted to pass an empty instance of {typeof(GameObject)}!");
-
+            if (instance == null) throw new ArgumentNullException();
             Instance = instance;
 
-            if (pauser == null)
-                throw new ArgumentNullException(nameof(pauser),
-                    $"Attempted to pass an empty {typeof(ParticleSystemPauser)}!");
-
+            if (pauser == null) throw new ArgumentNullException();
             Pauser = pauser;
         }
     }

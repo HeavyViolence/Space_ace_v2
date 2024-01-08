@@ -11,17 +11,12 @@ namespace SpaceAce.UI
         protected readonly AudioPlayer AudioPlayer;
         protected readonly UIAudio UIAudio;
 
-        public UIDisplayMediator(AudioPlayer audioPlayer,
-                                 UIAudio uIAudio)
+        public UIDisplayMediator(AudioPlayer audioPlayer, UIAudio uiAudio)
         {
-            AudioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
+            AudioPlayer = audioPlayer ?? throw new ArgumentNullException();
 
-            if (uIAudio == null)
-                throw new ArgumentNullException(nameof(uIAudio),
-                    $"Attempted to pass an empty {typeof(UIAudio)}!");
-
-            UIAudio = uIAudio;
+            if (uiAudio == null) throw new ArgumentNullException();
+            UIAudio = uiAudio;
         }
 
         public abstract void Initialize();

@@ -34,7 +34,6 @@ namespace SpaceAce.Gameplay.Controls
             get
             {
                 if (Mouse.current is null) return Vector3.zero;
-
                 return _masterCameraHolder.MasterCamera.ScreenToWorldPoint(Mouse.current.position.value);
             }
         }
@@ -43,17 +42,10 @@ namespace SpaceAce.Gameplay.Controls
                                        GameStateLoader gameStateLoader,
                                        MasterCameraHolder masterCameraHolder)
         {
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an mepty {typeof(GameStateLoader)}!");
-
-            _masterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException(nameof(masterCameraHolder),
-                $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            _masterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException();
         }
-
-
 
         #region interfaces
 

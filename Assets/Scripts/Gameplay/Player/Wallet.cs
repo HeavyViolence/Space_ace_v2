@@ -17,10 +17,7 @@ namespace SpaceAce.Gameplay.Players
 
         public Wallet(float balance)
         {
-            if (balance < 0f)
-                throw new ArgumentOutOfRangeException(nameof(balance),
-                    "Atempted to create a wallet with a negative balance!");
-
+            if (balance < 0f) throw new ArgumentOutOfRangeException();
             Balance = balance;
         }
 
@@ -39,10 +36,7 @@ namespace SpaceAce.Gameplay.Players
 
         public void AddCredits(float amount)
         {
-            if (amount < 0f)
-                throw new ArgumentOutOfRangeException(nameof(amount),
-                    "Attempted to add a negative amount of credits!");
-
+            if (amount < 0f) throw new ArgumentOutOfRangeException();
             if (amount == 0f) return;
 
             float oldBalance = Balance;

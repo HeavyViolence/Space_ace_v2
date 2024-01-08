@@ -78,8 +78,7 @@ namespace SpaceAce.Main.Factories
 
         private void Release(CachedParticleSystem instance, ProjectileHitEffectSkin skin)
         {
-            if (instance is null) throw new ArgumentNullException(nameof(instance),
-                $"Attempted to pass an empty {typeof(CachedParticleSystem)}!");
+            if (instance is null) throw new ArgumentNullException();
 
             instance.Instance.SetActive(false);
             instance.Instance.transform.position = Vector3.zero;

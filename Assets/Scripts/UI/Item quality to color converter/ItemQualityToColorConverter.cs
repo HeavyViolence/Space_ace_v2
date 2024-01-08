@@ -12,9 +12,8 @@ namespace SpaceAce.UI
 
         public ItemQualityToColorConverter(ItemQualityToColorConverterConfig config)
         {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config),
-                    $"Attempted to pass an empty {typeof(ItemQualityToColorConverterConfig)}!");
+            if (config == null) throw new ArgumentNullException();
+            _config = config;
         }
 
         public Color32 GetQualityColor(ItemQuality quality) => _config.GetQualityColor(quality);

@@ -19,18 +19,13 @@ namespace SpaceAce.Main.Factories
 
         public ItemStack Recreate(ItemStackSavableState state)
         {
-            if (state is null)
-                throw new ArgumentNullException(nameof(state),
-                    $"Attempted to pass an empty {typeof(ItemStackSavableState)}!");
-
+            if (state is null) throw new ArgumentNullException();
             return state.Recreate(_services);
         }
 
         public IEnumerable<ItemStack> BatchRecreate(IEnumerable<ItemStackSavableState> states)
         {
-            if (states is null)
-                throw new ArgumentNullException(nameof(states),
-                    $"Attempted to pass an empty {typeof(IEnumerable<ItemStackSavableState>)}!");
+            if (states is null) throw new ArgumentNullException();
 
             List<ItemStack> groups = new();
 

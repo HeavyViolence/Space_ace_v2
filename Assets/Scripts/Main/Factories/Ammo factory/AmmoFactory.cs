@@ -36,14 +36,9 @@ namespace SpaceAce.Main.Factories
         }
 
         public AmmoStack Create(AmmoFactoryRequest request) =>
-            Create(request.Type, request.Size, request.Quality, request.ProjectileSkin, request.HitEffectSkin, request.Amount);
+            Create(request.Type, request.Size, request.Quality, request.Amount);
 
-        public AmmoStack Create(AmmoType type,
-                                ItemSize size,
-                                ItemQuality quality,
-                                ProjectileSkin projectileSKin,
-                                ProjectileHitEffectSkin hitEffectSkin,
-                                int amount)
+        public AmmoStack Create(AmmoType type, ItemSize size, ItemQuality quality, int amount)
         {
             Ammo ammo;
 
@@ -52,21 +47,21 @@ namespace SpaceAce.Main.Factories
                 case AmmoType.Regular:
                     {
                         var config = _ammoConfigs.RegularAmmoConfig;
-                        ammo = new RegularAmmo(_ammoServices, size, quality, projectileSKin, hitEffectSkin, config);
+                        ammo = new RegularAmmo(_ammoServices, size, quality, config);
 
                         break;
                     }
                 case AmmoType.Strange:
                     {
                         var config = _ammoConfigs.StrangeAmmoConfig;
-                        ammo = new StrangeAmmo(_ammoServices, size, quality, projectileSKin, hitEffectSkin, config);
+                        ammo = new StrangeAmmo(_ammoServices, size, quality, config);
 
                         break;
                     }
                 default:
                     {
                         var config = _ammoConfigs.RegularAmmoConfig;
-                        ammo = new RegularAmmo(_ammoServices, size, quality, projectileSKin, hitEffectSkin, config);
+                        ammo = new RegularAmmo(_ammoServices, size, quality, config);
 
                         break;
                     }

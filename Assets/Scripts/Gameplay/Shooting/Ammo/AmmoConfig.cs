@@ -1,6 +1,7 @@
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Inventories;
 using SpaceAce.Main.Audio;
+using SpaceAce.Main.Factories;
 
 using UnityEngine;
 
@@ -12,6 +13,16 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         private AudioCollection _shotAudio;
 
         public AudioCollection ShotAudio => _shotAudio;
+
+        [SerializeField]
+        private ProjectileSkin _projectileSkin;
+
+        public ProjectileSkin ProjectileSkin => _projectileSkin;
+
+        [SerializeField]
+        private ProjectileHitEffectSkin _hitEffectSkin;
+
+        public ProjectileHitEffectSkin HitEffectSkin => _hitEffectSkin;
 
         #region price
 

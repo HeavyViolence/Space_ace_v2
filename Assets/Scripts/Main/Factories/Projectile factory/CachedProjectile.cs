@@ -21,26 +21,17 @@ namespace SpaceAce.Main.Factories
                                 IEscapable escapable,
                                 IMovementBehaviourSupplier behaviourSupplier)
         {
-            if (instance == null) throw new ArgumentNullException(nameof(instance),
-                    "Attempted to pass an empty projectile prefab!");
-
+            if (instance == null) throw new ArgumentNullException();
             Instance = instance;
 
-            if (spriteRenderer == null) throw new ArgumentNullException(nameof(spriteRenderer),
-                $"Attempted to pass an empty {typeof(SpriteRenderer)}!");
-
+            if (spriteRenderer == null) throw new ArgumentNullException();
             SpriteRenderer = spriteRenderer;
 
-            if (damageDealer == null) throw new ArgumentNullException(nameof(damageDealer),
-                $"Attempted to pass an empty {typeof(DamageDealer)}!");
-
+            if (damageDealer == null) throw new ArgumentNullException();
             DamageDealer = damageDealer;
 
-            Escapable = escapable ?? throw new ArgumentNullException(nameof(damageDealer),
-                $"Attempted to pass an empty {typeof(IEscapable)}!");
-
-            MovementBehaviourSupplier = behaviourSupplier ?? throw new ArgumentNullException(nameof(behaviourSupplier),
-                $"Attempted to pass an empty {typeof(IMovementBehaviourSupplier)}!");
+            Escapable = escapable ?? throw new ArgumentNullException();
+            MovementBehaviourSupplier = behaviourSupplier ?? throw new ArgumentNullException();
         }
     }
 }

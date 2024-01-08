@@ -28,41 +28,25 @@ namespace SpaceAce.UI
 
         public GamePauseDisplayMediator(UISettings settings,
                                         AudioPlayer audioPlayer,
-                                        UIAudio uIAudio,
+                                        UIAudio uiAudio,
                                         GamePauseDisplay gamePauseDisplay,
                                         LevelDisplay levelDisplay,
                                         MainMenuDisplay mainMenuDisplay,
                                         ScreenFader screenFader,
                                         GamePauser gamePauser,
                                         GameStateLoader gameStateLoader,
-                                        GameControlsTransmitter gameControlsTransmitter) : base(audioPlayer, uIAudio)
+                                        GameControlsTransmitter gameControlsTransmitter) : base(audioPlayer, uiAudio)
         {
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings),
-                    $"Attempted to pass an empty {typeof(UISettings)}!");
-
+            if (settings == null) throw new ArgumentNullException();
             _settings = settings;
 
-            _gamePauseDisplay = gamePauseDisplay ?? throw new ArgumentNullException(nameof(gamePauseDisplay),
-                $"Attempted to pass an empty {typeof(GamePauseDisplay)}!");
-
-            _levelDisplay = levelDisplay ?? throw new ArgumentNullException(nameof(levelDisplay),
-                $"Attempted to pass an empty {typeof(LevelDisplay)}!");
-
-            _mainMenuDisplay = mainMenuDisplay ?? throw new ArgumentNullException(nameof(mainMenuDisplay),
-                $"Attempte dto pass an empty {typeof(MainMenuDisplay)}!");
-
-            _screenFader = screenFader ?? throw new ArgumentNullException(nameof(screenFader),
-                $"Attempted to pass an empty {typeof(ScreenFader)}!");
-
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
-
-            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException(nameof(gameControlsTransmitter),
-                $"Attempted to pass an empty {typeof(GameControlsTransmitter)}!");
+            _gamePauseDisplay = gamePauseDisplay ?? throw new ArgumentNullException();
+            _levelDisplay = levelDisplay ?? throw new ArgumentNullException();
+            _mainMenuDisplay = mainMenuDisplay ?? throw new ArgumentNullException();
+            _screenFader = screenFader ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
+            _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException();
         }
 
         #region interfaces

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Strange ammo config
   m_EditorClassIdentifier: 
   _shotAudio: {fileID: 11400000, guid: 01b3bbb0640ca144293f351a45cc7b8d, type: 2}
+  _projectileSkin: 0
+  _hitEffectSkin: 3
   _basePrice: 50
   _basePriceFactorPerSize: 1.382
   _basePriceFactorPerQuality: 1.618

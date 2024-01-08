@@ -15,8 +15,7 @@ namespace SpaceAce.Main.Factories
 
         public PlayerShipFactory(DiContainer container, IEnumerable<PlayerShipSlot> slots)
         {
-            _diContainer = container ?? throw new ArgumentNullException(nameof(container),
-                $"Attempted to pass an empty DI container!");
+            _diContainer = container ?? throw new ArgumentNullException();
 
             if (slots is not null)
             {
@@ -26,22 +25,24 @@ namespace SpaceAce.Main.Factories
             }
             else
             {
-                throw new ArgumentNullException(nameof(slots),
-                    $"Attempted to pass an empty player ships collection!");
+                throw new ArgumentNullException();
             }
         }
 
         public GameObject Create(PlayerShipType type)
         {
-            if (_objectPool.TryGetValue(type, out var ship) == true) return ship;
+            if (_objectPool.TryGetValue(type, out var ship) == true)
+            {
+                ship.SetActive(true);
+                return ship;
+            }
 
             return _diContainer.InstantiatePrefab(_playerShips[type]);
         }
 
         public void Release(GameObject instance, PlayerShipType type)
         {
-            if (instance == null) throw new ArgumentNullException(nameof(instance),
-                $"Attempted to pass an empty {typeof(GameObject)}!");
+            if (instance == null) throw new ArgumentNullException();
 
             instance.SetActive(false);
             instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);

@@ -19,9 +19,7 @@ namespace SpaceAce.Main
                                          Player player,
                                          GameStateLoader gameStateLoader)
         {
-            if (masterCameraHolder is null)
-                throw new ArgumentNullException(nameof(masterCameraHolder),
-                    $"Attempted to pass an empty {typeof(MasterCameraHolder)}!");
+            if (masterCameraHolder is null) throw new ArgumentNullException();
 
             AudioListener listener = masterCameraHolder.MasterCameraObject.GetComponentInChildren<AudioListener>();
 
@@ -30,11 +28,8 @@ namespace SpaceAce.Main
 
             MasterAudioListener = listener;
 
-            _player = player ?? throw new ArgumentNullException(nameof(player),
-                $"Attempted to pass an empty {typeof(Player)}!");
-
-            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException(nameof(gameStateLoader),
-                $"Attempted to pass an empty {typeof(GameStateLoader)}!");
+            _player = player ?? throw new ArgumentNullException();
+            _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
         }
 
         #region interfaces

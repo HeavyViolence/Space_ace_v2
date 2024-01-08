@@ -28,20 +28,12 @@ namespace SpaceAce.Main.Factories
                                 MasterCameraShaker masterCameraShaker,
                                 IEnumerable<ExplosionSlot> explosions)
         {
-            _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer),
-                $"Attempted to pass an empty {typeof(DiContainer)}!");
+            _diContainer = diContainer ?? throw new ArgumentNullException();
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
+            _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
 
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
-
-            _audioPlayer = audioPlayer ?? throw new ArgumentNullException(nameof(audioPlayer),
-                $"Attempted to pass an empty {typeof(AudioPlayer)}!");
-
-            _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException(nameof(masterCameraShaker),
-                $"Attempted to pass an empty {typeof(MasterCameraShaker)}!");
-
-            if (explosions is null) throw new ArgumentNullException(nameof(explosions),
-                $"Attempted to pass an empty explosions collection!");
+            if (explosions is null) throw new ArgumentNullException();
 
             foreach (var explosion in explosions)
             {
@@ -72,7 +64,7 @@ namespace SpaceAce.Main.Factories
                 GameObject instance = _diContainer.InstantiatePrefab(explosionPrefab);
 
                 if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true) cache = new(instance, pauser);
-                else throw new MissingComponentException($"Explosion prefab is missing {typeof(ParticleSystemPauser)}!");
+                else throw new MissingComponentException();
             }
             else throw new Exception($"Explosion prefab of a requested size ({size}) doesn't exist!");
 
@@ -109,8 +101,7 @@ namespace SpaceAce.Main.Factories
 
         private void Release(CachedParticleSystem instance, ExplosionSize size)
         {
-            if (instance is null) throw new ArgumentNullException(nameof(instance),
-                $"Attempted to pass an empty {typeof(CachedParticleSystem)}!");
+            if (instance is null) throw new ArgumentNullException();
 
             instance.Instance.SetActive(false);
             instance.Instance.transform.position = Vector3.zero;

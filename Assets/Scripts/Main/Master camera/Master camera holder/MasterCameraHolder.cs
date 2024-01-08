@@ -16,8 +16,7 @@ namespace SpaceAce.Main
 
         public MasterCameraHolder(GameObject masterCameraPrefab)
         {
-            if (masterCameraPrefab == null)
-                throw new ArgumentNullException("Attempted to pass an empty master camera prefab!");
+            if (masterCameraPrefab == null) throw new ArgumentNullException();
 
             MasterCameraObject = UnityEngine.Object.Instantiate(masterCameraPrefab, Vector3.back, Quaternion.identity);
             MasterCamera = MasterCameraObject.GetComponentInChildren<Camera>();

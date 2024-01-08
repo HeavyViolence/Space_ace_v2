@@ -13,9 +13,7 @@ namespace SpaceAce.Gameplay.Inventories
 
         public void Add(ItemStack stack)
         {
-            if (stack is null)
-                throw new ArgumentNullException(nameof(stack),
-                    $"Attempted to add an empty {typeof(ItemStack)}!");
+            if (stack is null) throw new ArgumentNullException();
 
             if (_content.TryGetValue(stack, out ItemStack theSameStack) == true)
             {
@@ -32,10 +30,7 @@ namespace SpaceAce.Gameplay.Inventories
 
         public void Add(IEnumerable<ItemStack> stacks)
         {
-            if (stacks is null)
-                throw new ArgumentNullException(nameof(stacks),
-                    $"Attempted to add an empty {typeof(IEnumerable<ItemStack>)}!");
-
+            if (stacks is null) throw new ArgumentNullException();
             foreach (var stack in stacks) Add(stack);
         }
 

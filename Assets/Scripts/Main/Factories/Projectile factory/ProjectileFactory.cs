@@ -25,8 +25,7 @@ namespace SpaceAce.Main.Factories
 
         public ProjectileFactory(ProjectileFactoryConfig config, DiContainer diContainer)
         {
-            if (config == null) throw new ArgumentNullException(nameof(config),
-                $"Attempted to pass an empty {typeof(ProjectileFactoryConfig)}!");
+            if (config == null) throw new ArgumentNullException();
 
             foreach (var slot in config.Slots) _projectilePrefabs.Add(slot.Skin, slot.Prefab);
 
@@ -36,8 +35,7 @@ namespace SpaceAce.Main.Factories
             _playerProjectilesSortingLayer = config.PlayerProjectilesSortingLayer;
             _enemyProjectilesSortingLayer = config.EnemyProjectilesSortingLayer;
 
-            _diContainer = diContainer ?? throw new ArgumentNullException(nameof(diContainer),
-                $"Attempted to pass an empty {typeof(DiContainer)}!");
+            _diContainer = diContainer ?? throw new ArgumentNullException();
         }
 
         public CachedProjectile Create(ProjectileRequestor requestor, ProjectileSkin skin)
@@ -118,8 +116,7 @@ namespace SpaceAce.Main.Factories
 
         public void Release(CachedProjectile projectile, ProjectileSkin skin)
         {
-            if (projectile is null) throw new ArgumentNullException(nameof(projectile),
-                $"Attempted to pass an empty {typeof(CachedProjectile)}!");
+            if (projectile is null) throw new ArgumentNullException();
 
             projectile.Instance.SetActive(false);
             projectile.Instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);

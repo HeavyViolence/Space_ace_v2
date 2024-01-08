@@ -48,8 +48,7 @@ namespace SpaceAce.Gameplay.Shooting
         [Inject]
         private void Construct(GamePauser gamePauser)
         {
-            GamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            GamePauser = gamePauser ?? throw new ArgumentNullException();
         }
 
         protected virtual void OnEnable()

@@ -22,19 +22,13 @@ namespace SpaceAce.Gameplay.Damage
 
         public float GetReducedDamage(float damage)
         {
-            if (damage < 0f)
-                throw new ArgumentOutOfRangeException(nameof(damage),
-                    $"Incoming damage must not be negative!");
-
+            if (damage < 0f) throw new ArgumentOutOfRangeException();
             return damage * damage / Value;
         }
 
         public void ApplyDamage(float damage)
         {
-            if (Value <= 0f)
-                throw new ArgumentOutOfRangeException(nameof(damage),
-                    "Damage value must be positive!");
-
+            if (Value <= 0f) throw new ArgumentOutOfRangeException();
             Value = Mathf.Clamp(Value - damage, 0f, float.MaxValue);
         }
     }

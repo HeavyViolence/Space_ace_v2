@@ -28,21 +28,15 @@ namespace SpaceAce.Gameplay.Inventories
 
         public ItemStack(IItem item, int amount)
         {
-            Item = item ?? throw new ArgumentNullException(nameof(item),
-                $"Attempted to pass an empty {typeof(IItem)}!");
+            Item = item ?? throw new ArgumentNullException();
 
-            if (amount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(amount),
-                    "Amount must be positive!");
-
+            if (amount <= 0) throw new ArgumentOutOfRangeException();
             Amount = amount;
         }
 
         public void Add(int amount)
         {
-            if (amount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(amount),
-                    "Amount must be positive!");
+            if (amount <= 0) throw new ArgumentOutOfRangeException();
 
             Amount += amount;
             AmountChanged?.Invoke(this, EventArgs.Empty);
@@ -50,9 +44,7 @@ namespace SpaceAce.Gameplay.Inventories
 
         public void Remove(int amount)
         {
-            if (amount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(amount),
-                    "Amount must be positive!");
+            if (amount <= 0) throw new ArgumentOutOfRangeException();
 
             Amount = Mathf.Clamp(Amount - amount, 0, int.MaxValue);
             AmountChanged?.Invoke(this, EventArgs.Empty);
@@ -62,9 +54,7 @@ namespace SpaceAce.Gameplay.Inventories
 
         public bool Sell(int amount, out float sellPrice)
         {
-            if (amount <= 0)
-                throw new ArgumentOutOfRangeException(nameof(amount),
-                    "Amount must be positive!");
+            if (amount <= 0) throw new ArgumentOutOfRangeException();
 
             if (ItemTradable == true)
             {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+
 using SpaceAce.Gameplay.Inventories;
 
 using UnityEngine;
@@ -18,8 +19,8 @@ namespace SpaceAce.Auxiliary
 
         public static IEnumerable<int> GetRandomNumbersWithoutRepetition(int min, int max, int amount)
         {
-            if (min >= max) throw new ArgumentOutOfRangeException($"{nameof(min)}, {nameof(max)}");
-            if (amount > max - min) throw new ArgumentOutOfRangeException(nameof(amount));
+            if (min >= max) throw new ArgumentOutOfRangeException();
+            if (amount > max - min) throw new ArgumentOutOfRangeException();
 
             System.Random random = new();
             List<int> availableNumbers = Enumerable.Range(min, max - min).ToList();
@@ -38,7 +39,7 @@ namespace SpaceAce.Auxiliary
 
         public static IEnumerable<int> GetRandomNumbersWithoutRepetition(IEnumerable<int> availableNumbers, int amount)
         {
-            if (availableNumbers.Count() < amount) throw new ArgumentOutOfRangeException(nameof(amount));
+            if (availableNumbers.Count() < amount) throw new ArgumentOutOfRangeException();
 
             System.Random random = new();
             HashSet<int> numbersToUse = new(availableNumbers);

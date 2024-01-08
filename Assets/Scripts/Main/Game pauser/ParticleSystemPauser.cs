@@ -23,8 +23,7 @@ namespace SpaceAce.Main
         [Inject]
         private void Construct(GamePauser gamePauser)
         {
-            _gamePauser = gamePauser ?? throw new ArgumentNullException(nameof(gamePauser),
-                $"Attempted to pass an empty {typeof(GamePauser)}!");
+            _gamePauser = gamePauser ?? throw new ArgumentNullException();
         }
 
         private void Awake()

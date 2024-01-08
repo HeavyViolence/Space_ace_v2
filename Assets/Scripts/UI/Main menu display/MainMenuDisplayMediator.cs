@@ -18,11 +18,8 @@ namespace SpaceAce.UI
                                        MainMenuDisplay mainMenuDisplay,
                                        LevelSelectionDisplay levelSelectionDisplay) : base(audioPlayer, uiAudio)
         {
-            _mainMenuDisplay = mainMenuDisplay ?? throw new ArgumentNullException(nameof(mainMenuDisplay),
-                $"Attempted to pass an empty {typeof(MainMenuDisplay)}!");
-
-            _levelSelectionDisplay = levelSelectionDisplay ?? throw new ArgumentNullException(nameof(levelSelectionDisplay),
-                $"Attempted to pass an empty {typeof(LevelSelectionDisplay)}!");
+            _mainMenuDisplay = mainMenuDisplay ?? throw new ArgumentNullException();
+            _levelSelectionDisplay = levelSelectionDisplay ?? throw new ArgumentNullException();
         }
 
         #region interfaces
