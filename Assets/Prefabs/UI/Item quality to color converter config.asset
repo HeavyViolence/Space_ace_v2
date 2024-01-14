@@ -12,24 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b92125e171362f4ab7e55a0d520050d, type: 3}
   m_Name: Item quality to color converter config
   m_EditorClassIdentifier: 
-  _poorQualityColor:
-    serializedVersion: 2
-    rgba: 1660944383
   _commonQualityColor:
     serializedVersion: 2
-    rgba: 1660903936
+    rgba: 1660944383
   _uncommonQualityColor:
     serializedVersion: 2
-    rgba: 1644232448
+    rgba: 1660944128
   _rareQualityColor:
+    serializedVersion: 2
+    rgba: 1644232448
+  _exceptionalQualityColor:
     serializedVersion: 2
     rgba: 1644232703
   _exoticQualityColor:
     serializedVersion: 2
-    rgba: 1644192511
+    rgba: 1644199935
   _epicQualityColor:
     serializedVersion: 2
     rgba: 1644167423
   _legendaryQualityColor:
     serializedVersion: 2
-    rgba: 1660879006
+    rgba: 1660878975

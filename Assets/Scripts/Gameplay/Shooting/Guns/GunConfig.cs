@@ -1,4 +1,4 @@
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Main.Factories;
 
 using UnityEngine;
@@ -22,7 +22,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         private bool _shakeOnShotFired = false;
 
         [SerializeField]
-        private ItemSize _ammoSize;
+        private Size _ammoSize;
 
         [SerializeField]
         private ProjectileRequestor _projectileRequestor;
@@ -38,7 +38,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
 
         public bool ShakeOnShotFired => _shakeOnShotFired;
 
-        public ItemSize AmmoSize => _ammoSize;
+        public Size AmmoSize => _ammoSize;
 
         public ProjectileRequestor ProjectileRequestor => _projectileRequestor;
 

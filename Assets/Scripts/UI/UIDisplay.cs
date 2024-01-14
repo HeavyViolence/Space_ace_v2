@@ -19,17 +19,12 @@ namespace SpaceAce.UI
 
         public bool Enabled { get; protected set; } = false;
 
-        public UIDisplay(VisualTreeAsset displayAsset,
-                         PanelSettings settings,
-                         Localizer localizer)
+        public UIDisplay(VisualTreeAsset displayAsset, PanelSettings settings, Localizer localizer)
         {
-            if (displayAsset == null)
-                throw new ArgumentNullException(nameof(displayAsset),
-                    $"Attempted to pass an empty {typeof(VisualTreeAsset)} to display!");
+            if (displayAsset == null) throw new ArgumentNullException();
+            if (settings == null) throw new ArgumentNullException();
 
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings),
-                    $"Attempted to pass an empty {typeof(PanelSettings)} for the display!");
+            Localizer = localizer ?? throw new ArgumentNullException();
 
             DisplayAsset = displayAsset;
 
@@ -37,9 +32,6 @@ namespace SpaceAce.UI
 
             DisplayedDocument = uiDisplay.AddComponent<UIDocument>();
             DisplayedDocument.panelSettings = settings;
-
-            Localizer = localizer ?? throw new ArgumentNullException(nameof(localizer),
-                $"Attempted to pass an empty {typeof(Localizer)}!");
         }
 
         public abstract UniTask EnableAsync();

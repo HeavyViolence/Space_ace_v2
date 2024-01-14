@@ -1,4 +1,4 @@
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 
 using UnityEngine;
 
@@ -9,9 +9,6 @@ namespace SpaceAce.UI
     public sealed class ItemQualityToColorConverterConfig : ScriptableObject
     {
         [SerializeField]
-        private Color32 _poorQualityColor;
-
-        [SerializeField]
         private Color32 _commonQualityColor;
 
         [SerializeField]
@@ -19,6 +16,9 @@ namespace SpaceAce.UI
 
         [SerializeField]
         private Color32 _rareQualityColor;
+
+        [SerializeField]
+        private Color32 _exceptionalQualityColor;
 
         [SerializeField]
         private Color32 _exoticQualityColor;
@@ -29,18 +29,18 @@ namespace SpaceAce.UI
         [SerializeField]
         private Color32 _legendaryQualityColor;
 
-        public Color32 GetQualityColor(ItemQuality quality)
+        public Color32 GetQualityColor(Quality quality)
         {
             return quality switch
             {
-                ItemQuality.Poor => _poorQualityColor,
-                ItemQuality.Common => _commonQualityColor,
-                ItemQuality.Uncommon => _uncommonQualityColor,
-                ItemQuality.Rare => _rareQualityColor,
-                ItemQuality.Exotic => _exoticQualityColor,
-                ItemQuality.Epic => _epicQualityColor,
-                ItemQuality.Legendary => _legendaryQualityColor,
-                _ => _poorQualityColor
+                Quality.Common => _commonQualityColor,
+                Quality.Uncommon => _uncommonQualityColor,
+                Quality.Rare => _rareQualityColor,
+                Quality.Exceptional => _exceptionalQualityColor,
+                Quality.Exotic => _exoticQualityColor,
+                Quality.Epic => _epicQualityColor,
+                Quality.Legendary => _legendaryQualityColor,
+                _ => _commonQualityColor
             };
         }
     }

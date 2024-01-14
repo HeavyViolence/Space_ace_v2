@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Damage;
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories;
 using SpaceAce.Main.Saving;
@@ -92,7 +92,7 @@ namespace SpaceAce.Gameplay.Players
 
         public string GetState()
         {
-            PlayerState state = new(Wallet.Balance, Experience.Value, SelectedShipType, Inventory.GetContentSavableState());
+            PlayerState state = new(Wallet.Balance, Experience.Value, SelectedShipType, Inventory.GetItemsSavableState());
             string jsonState = JsonConvert.SerializeObject(state, s_serializationSettings);
 
             return jsonState;
@@ -110,8 +110,8 @@ namespace SpaceAce.Gameplay.Players
 
                 if (playerState.InventoryContent is not null)
                 {
-                    IEnumerable<ItemStack> content = _savedItemsFactory.BatchRecreate(playerState.InventoryContent);
-                    Inventory.Add(content);
+                    IEnumerable<IItem> content = _savedItemsFactory.BatchCreate(playerState.InventoryContent);
+                    Inventory.AddItems(content);
                 }
             }
             catch (Exception) { }

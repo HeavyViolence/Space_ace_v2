@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7534268f100141443984d27d7d67bf51, type: 3}
-  m_Name: Player starting items dispenser config
+  m_Script: {fileID: 11500000, guid: b21652b4d7527464db0db58003fc6bfd, type: 3}
+  m_Name: Ammo set configs
   m_EditorClassIdentifier: 
-  _startingCredits: 100
-  _startingAmmo:
-  - _type: 1
-    _size: 1
-    _quality: 0
-    _amount: 1
+  _regularAmmoConfig: {fileID: 11400000, guid: e7606c428b4296145a854291d6e1f55a, type: 2}
+  _strangeAmmoConfig: {fileID: 11400000, guid: 7f3ea473af761fa4a9af640d3d244f46, type: 2}

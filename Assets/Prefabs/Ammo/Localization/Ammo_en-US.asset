@@ -20,18 +20,13 @@ MonoBehaviour:
     - rid: 4327559728174727170
   m_TableData:
   - m_Id: 10174713856
-    m_Localized: '{Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
-      regular ammo'
+    m_Localized: Regular ammo set
     m_Metadata:
-      m_Items:
-      - rid: 4327559728174727170
+      m_Items: []
   - m_Id: 1155453727133696
     m_Localized: 'Size: {Size:choose(0|1|2):Small|Medium|Large}
 
-      Type: regular
-
-      Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
+      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -41,23 +36,18 @@ MonoBehaviour:
       Speed: {Speed:n}
       m/s
 
-      Damage: {Damage:n} Dp'
+      Damage: {Damage:n} Hp'
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
   - m_Id: 1888902377230336
-    m_Localized: '{Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
-      strange ammo'
+    m_Localized: Strange ammo set
     m_Metadata:
-      m_Items:
-      - rid: 4327559728174727170
+      m_Items: []
   - m_Id: 1888948699123712
     m_Localized: 'Size: {Size:choose(0|1|2):Small|Medium|Large}
 
-      Type: strange
-
-      Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Poor|Common|Uncommon|Rare|Exotic|Epic|Legendary}
+      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -67,9 +57,9 @@ MonoBehaviour:
       Speed: {Speed:n}
       m/s
 
-      Damage: {Damage:n} Dp
+      Damage: {Damage:n} Hp
 
-      Shooting takes no ammo'
+      Ammo loss probability: {AmmoLossProbabilityPercentage:n}%'
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
@@ -79,4 +69,4 @@ MonoBehaviour:
     - rid: 4327559728174727170
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00d0755e0200000000d0f508e11a040000d0355bf2b5060000d03524fdb50600
+        m_Entries: 00d0f508e11a040000d03524fdb50600

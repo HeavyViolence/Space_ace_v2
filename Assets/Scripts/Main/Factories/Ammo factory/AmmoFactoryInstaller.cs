@@ -9,7 +9,7 @@ namespace SpaceAce.Main.Factories
     public sealed class AmmoFactoryInstaller : MonoInstaller
     {
         [SerializeField]
-        private AmmoConfigs _ammoConfigs;
+        private AmmoSetConfigs _ammoConfigs;
 
         public override void InstallBindings()
         {

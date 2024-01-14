@@ -1,5 +1,5 @@
 using SpaceAce.Auxiliary;
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Main.Factories;
 
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         [SerializeField]
         private GunConfig _config;
 
-        public ItemSize AmmoSize => _config.AmmoSize;
+        public Size AmmoSize => _config.AmmoSize;
         public ProjectileRequestor ProjectileRequestor => _config.ProjectileRequestor;
         public bool ShakeOnShotFired => _config.ShakeOnShotFired;
         public bool IsRightHanded => transform.localPosition.x > 0f;

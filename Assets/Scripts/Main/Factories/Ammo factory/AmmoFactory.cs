@@ -1,4 +1,4 @@
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main.Audio;
 using SpaceAce.Main.Localization;
@@ -9,7 +9,7 @@ namespace SpaceAce.Main.Factories
 {
     public sealed class AmmoFactory
     {
-        private readonly AmmoConfigs _ammoConfigs;
+        private readonly AmmoSetConfigs _ammoConfigs;
         private readonly AmmoServices _ammoServices;
 
         public AmmoFactory(ProjectileFactory projectileFactory,
@@ -20,7 +20,8 @@ namespace SpaceAce.Main.Factories
                            MasterCameraShaker masterCameraShaker,
                            AudioPlayer audioPlayer,
                            GamePauser gamePauser,
-                           AmmoConfigs ammoConfigs)
+                           ItemPropertyEvaluator itemPropertyEvaluator,
+                           AmmoSetConfigs ammoConfigs)
         {
             _ammoServices = new(gameStateLoader,
                                 localizer,
@@ -29,46 +30,65 @@ namespace SpaceAce.Main.Factories
                                 audioPlayer,
                                 projectileFactory,
                                 projectileHitEffectFactory,
-                                gamePauser);
+                                gamePauser,
+                                itemPropertyEvaluator);
 
             if (ammoConfigs == null) throw new ArgumentNullException();
             _ammoConfigs = ammoConfigs;
         }
 
-        public AmmoStack Create(AmmoFactoryRequest request) =>
-            Create(request.Type, request.Size, request.Quality, request.Amount);
+        public AmmoSet Create(AmmoFactoryRequest request) =>
+            Create(request.Type, request.Size, request.Quality);
 
-        public AmmoStack Create(AmmoType type, ItemSize size, ItemQuality quality, int amount)
+        public AmmoSet Create(AmmoType type, Size size, Quality quality)
         {
-            Ammo ammo;
+            AmmoSet ammo;
 
             switch (type)
             {
                 case AmmoType.Regular:
                     {
                         var config = _ammoConfigs.RegularAmmoConfig;
-                        ammo = new RegularAmmo(_ammoServices, size, quality, config);
+                        ammo = new RegularAmmoSet(_ammoServices, size, quality, config);
 
                         break;
                     }
                 case AmmoType.Strange:
                     {
                         var config = _ammoConfigs.StrangeAmmoConfig;
-                        ammo = new StrangeAmmo(_ammoServices, size, quality, config);
+                        ammo = new StrangeAmmoSet(_ammoServices, size, quality, config);
 
                         break;
                     }
                 default:
                     {
                         var config = _ammoConfigs.RegularAmmoConfig;
-                        ammo = new RegularAmmo(_ammoServices, size, quality, config);
+                        ammo = new RegularAmmoSet(_ammoServices, size, quality, config);
 
                         break;
                     }
             }
 
-            AmmoStack stack = new(ammo, amount);
-            return stack;
+            return ammo;
+        }
+
+        public AmmoSet Create(AmmoSetSavableState savedState)
+        {
+            if (savedState is null) throw new ArgumentNullException();
+
+            if (savedState is RegularAmmoSetSavableState regularAmmoSetState)
+            {
+                RegularAmmoSetConfig config = _ammoConfigs.RegularAmmoConfig;
+                return new RegularAmmoSet(_ammoServices, config, regularAmmoSetState);
+            }
+
+            if (savedState is StrangeAmmoSetSavableState strangeAmmoSetState)
+            {
+                StrangeAmmoSetConfig config = _ammoConfigs.StrangeAmmoConfig;
+                return new StrangeAmmoSet(_ammoServices, config, strangeAmmoSetState);
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

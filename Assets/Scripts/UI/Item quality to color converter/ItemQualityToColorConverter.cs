@@ -1,4 +1,4 @@
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 
 using System;
 
@@ -16,6 +16,6 @@ namespace SpaceAce.UI
             _config = config;
         }
 
-        public Color32 GetQualityColor(ItemQuality quality) => _config.GetQualityColor(quality);
+        public Color32 GetQualityColor(Quality quality) => _config.GetQualityColor(quality);
     }
 }

@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-using SpaceAce.Gameplay.Inventories;
-
 using UnityEngine;
 
 namespace SpaceAce.Auxiliary
@@ -57,45 +55,8 @@ namespace SpaceAce.Auxiliary
             return generatedNumbers;
         }
 
-        public static float ModifyItemPropertyBySize(float value, float factorPerSize, ItemSize size)
-        {
-            return size switch
-            {
-                ItemSize.Small => value / factorPerSize,
-                ItemSize.Medium => value,
-                ItemSize.Large => value * factorPerSize,
-                _ => value
-            };
-        }
+        public static bool ValueInRange(Vector2 range, float value) => value >= range.x && value <= range.y;
 
-        public static float ModifyItemPropertyByQuality(float value, float factorPerQuality, ItemQuality quality)
-        {
-            if (factorPerQuality >= 1f)
-            {
-                return quality switch
-                {
-                    ItemQuality.Poor => value / factorPerQuality,
-                    ItemQuality.Common => value,
-                    ItemQuality.Uncommon => value * factorPerQuality,
-                    ItemQuality.Rare => value * Mathf.Pow(factorPerQuality, 2f),
-                    ItemQuality.Exotic => value * Mathf.Pow(factorPerQuality, 3f),
-                    ItemQuality.Epic => value * Mathf.Pow(factorPerQuality, 5f),
-                    ItemQuality.Legendary => value * Mathf.Pow(factorPerQuality, 7f),
-                    _ => value
-                };
-            }
-
-            return quality switch
-            {
-                ItemQuality.Poor => value * factorPerQuality,
-                ItemQuality.Common => value,
-                ItemQuality.Uncommon => value / factorPerQuality,
-                ItemQuality.Rare => value / Mathf.Pow(factorPerQuality, 2f),
-                ItemQuality.Exotic => value / Mathf.Pow(factorPerQuality, 3f),
-                ItemQuality.Epic => value / Mathf.Pow(factorPerQuality, 5f),
-                ItemQuality.Legendary => value / Mathf.Pow(factorPerQuality, 7f),
-                _ => value
-            };
-        }
+        public static bool ValueInRange(float min, float max, float value) => value >= min && value <= max;
     }
 }

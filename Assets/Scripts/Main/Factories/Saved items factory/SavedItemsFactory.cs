@@ -1,4 +1,4 @@
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Main.Localization;
 
 using System;
@@ -17,25 +17,25 @@ namespace SpaceAce.Main.Factories
             _services = new(localizer, gameStateLoader, ammoFactory);
         }
 
-        public ItemStack Recreate(ItemStackSavableState state)
+        public IItem Create(ItemSavableState state)
         {
             if (state is null) throw new ArgumentNullException();
             return state.Recreate(_services);
         }
 
-        public IEnumerable<ItemStack> BatchRecreate(IEnumerable<ItemStackSavableState> states)
+        public IEnumerable<IItem> BatchCreate(IEnumerable<ItemSavableState> states)
         {
             if (states is null) throw new ArgumentNullException();
 
-            List<ItemStack> groups = new();
+            List<IItem> items = new();
 
             foreach (var state in states)
             {
-                ItemStack group = Recreate(state);
-                groups.Add(group);
+                IItem item = Create(state);
+                items.Add(item);
             }
 
-            return groups;
+            return items;
         }
     }
 }

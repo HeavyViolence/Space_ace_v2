@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9badf7766dd58494996e6fae1e1b2ca8, type: 3}
+  m_Name: Strange ammo set config
+  m_EditorClassIdentifier: 
+  _price: {x: 200, y: 3000}
+  _shotAudio: {fileID: 11400000, guid: 01b3bbb0640ca144293f351a45cc7b8d, type: 2}
+  _projectileSkin: 0
+  _hitEffectSkin: 3
+  _amount: {x: 500, y: 1000}
+  _heatGeneration: {x: 3, y: 5}
+  _speed: {x: 70, y: 110}
+  _damage: {x: 30, y: 70}
+  _ammoLossProbability: {x: 0.01, y: 0.3}

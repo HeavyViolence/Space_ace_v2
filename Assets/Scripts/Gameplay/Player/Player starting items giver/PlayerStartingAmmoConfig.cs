@@ -1,4 +1,4 @@
-using SpaceAce.Gameplay.Inventories;
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main.Factories;
 
@@ -11,21 +11,15 @@ namespace SpaceAce.Gameplay.Players
     [Serializable]
     public sealed class PlayerStartingAmmoConfig
     {
-        public const int MinAmount = 1;
-        public const int MaxAmount = 1_000;
-
         [SerializeField]
         private AmmoType _type = AmmoType.Regular;
 
         [SerializeField]
-        private ItemSize _size = ItemSize.Medium;
+        private Size _size = Size.Medium;
 
         [SerializeField]
-        private ItemQuality _quality = ItemQuality.Common;
+        private Quality _quality = Quality.Common;
 
-        [SerializeField, Range(MinAmount, MaxAmount)]
-        private int _amount = MinAmount;
-
-        public AmmoFactoryRequest Request => new(_type, _size, _quality, _amount);
+        public AmmoFactoryRequest Request => new(_type, _size, _quality);
     }
 }

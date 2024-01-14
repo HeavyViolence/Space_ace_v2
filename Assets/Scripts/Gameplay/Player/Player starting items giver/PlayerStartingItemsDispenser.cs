@@ -86,15 +86,15 @@ namespace SpaceAce.Gameplay.Players
 
         public void AddAmmo()
         {
-            List<AmmoStack> startingAmmo = new();
+            List<AmmoSet> startingAmmo = new();
 
             foreach (var ammoRequest in _config.GetStartingAmmoRequests())
             {
-                AmmoStack ammo = _ammoFactory.Create(ammoRequest);
+                AmmoSet ammo = _ammoFactory.Create(ammoRequest);
                 startingAmmo.Add(ammo);
             }
 
-            _player.Inventory.Add(startingAmmo);
+            _player.Inventory.AddItems(startingAmmo);
         }
     }
 }
