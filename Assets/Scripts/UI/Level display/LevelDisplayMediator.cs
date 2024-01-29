@@ -56,7 +56,7 @@ namespace SpaceAce.UI
             _levelDisplay.Disable();
             _gamePauseDisplay.EnableAsync().Forget();
             _gamePauser.Pause();
-            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero, null).Forget();
+            AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();
         }
 
         #endregion

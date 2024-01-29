@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a00e3ee5c39bc54d94552eca627d910, type: 3}
   m_Name: Projectile factory config
   m_EditorClassIdentifier: 
-  _skins:
+  _playerProjectilesLayerName: Player projectiles
+  _enemyProjectilesLayerName: Enemy projectiles
+  _projectiles:
   - _skin: 0
     _prefab: {fileID: 1572496124263638045, guid: 179b641f37724204dac8e1f238827494, type: 3}
   - _skin: 1
@@ -35,8 +37,6 @@ MonoBehaviour:
     _prefab: {fileID: 8503966456865163755, guid: 4b692e6edfb472b4b853ce51a203f518, type: 3}
   - _skin: 10
     _prefab: {fileID: 7904691952544837413, guid: 5b47daa0f3b2b0a439008eda37193d92, type: 3}
-  - _skin: 11
-    _prefab: {fileID: 3994269715820132603, guid: b23a84af833b3d946b25e9957cdb8198, type: 3}
   - _skin: 12
     _prefab: {fileID: 3462597418696441308, guid: ce7cf8d0ee70f394cbb7136a690635a9, type: 3}
   - _skin: 13
@@ -49,11 +49,3 @@ MonoBehaviour:
     _prefab: {fileID: 4171533642903670789, guid: 19455ad0cc6b49243a07976dac7ce673, type: 3}
   - _skin: 17
     _prefab: {fileID: 5696661047170794080, guid: 0db1291e95c3e6d4a9f9e7cd44d3e29c, type: 3}
-  _playerProjectilesLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  _playerProjectilesSortingLayer: Player projectiles
-  _enemyProjectilesLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
-  _enemyProjectilesSortingLayer: Enemy projectiles

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Small weapons switch
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 4fb05e8d94a5e4370ae77a8faccf43fb, type: 3}
+  - {fileID: 8300000, guid: 40f886a831943406da411e56f8f80fa8, type: 3}
+  - {fileID: 8300000, guid: 16ffa4bbd665c4826ac8783a1fb8f343, type: 3}
+  - {fileID: 8300000, guid: c9040157e8a56472fb07d17f164af618, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0, y: 0}
+  _pitch: {x: 0.9, y: 1.1}

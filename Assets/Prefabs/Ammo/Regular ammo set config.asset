@@ -16,7 +16,7 @@ MonoBehaviour:
   _shotAudio: {fileID: 11400000, guid: 01b3bbb0640ca144293f351a45cc7b8d, type: 2}
   _projectileSkin: 0
   _hitEffectSkin: 4
-  _amount: {x: 1000, y: 7000}
+  _amount: {x: 1000, y: 9999}
   _heatGeneration: {x: 3, y: 5}
-  _speed: {x: 70, y: 110}
+  _speed: {x: 130, y: 170}
   _damage: {x: 30, y: 70}

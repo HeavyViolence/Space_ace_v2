@@ -1,5 +1,3 @@
-using NaughtyAttributes;
-
 using Newtonsoft.Json;
 
 using System;
@@ -22,41 +20,31 @@ namespace SpaceAce.Main
 
         public const float AmplitudeCutoff = 0.01f;
 
-        public static ShakeSettings Default => new(false, Vector2.zero, Vector2.zero, Vector2.zero);
+        public static ShakeSettings Default => new(true, MinAmplitude, MinAttenuation, MinFrequency);
 
-        [SerializeField]
-        private bool _enabled;
+        [SerializeField, JsonIgnore]
+        private bool _enabled = false;
 
-        [SerializeField, MinMaxSlider(MinAmplitude, MaxAmplitude)]
-        private Vector2 _amplitude;
+        [SerializeField, Range(MinAmplitude, MaxAmplitude), JsonIgnore]
+        private float _amplitude = MinAmplitude;
 
-        [SerializeField, MinMaxSlider(MinAttenuation, MaxAttenuation)]
-        private Vector2 _attenuation;
+        [SerializeField, Range(MinAttenuation, MaxAttenuation), JsonIgnore]
+        private float _attenuation = MinAttenuation;
 
-        [SerializeField, MinMaxSlider(MinFrequency, MaxFrequency)]
-        private Vector2 _frequency;
+        [SerializeField, Range(MinFrequency, MaxFrequency), JsonIgnore]
+        private float _frequency = MinFrequency;
 
-        [JsonIgnore]
         public bool Enabled => _enabled;
+        public float Amplitude => _amplitude;
+        public float Attenuation => _attenuation;
+        public float Frequency => _frequency;
 
-        [JsonIgnore]
-        public float Amplitude => UnityEngine.Random.Range(_amplitude.x, _amplitude.y);
-
-        [JsonIgnore]
-        public float Attenuation => UnityEngine.Random.Range(_attenuation.x, _attenuation.y);
-
-        [JsonIgnore]
-        public float Frequency => UnityEngine.Random.Range(_frequency.x, _frequency.y);
-
-        public ShakeSettings(bool enabled,
-                             Vector2 amplitudeRange,
-                             Vector2 attenuationRange,
-                             Vector2 frequencyRange)
+        public ShakeSettings(bool enabled, float amplitude, float attenuation, float frequency)
         {
             _enabled = enabled;
-            _amplitude = amplitudeRange;
-            _attenuation = attenuationRange;
-            _frequency = frequencyRange;
+            _amplitude = Mathf.Clamp(amplitude, MinAmplitude, MaxAmplitude);
+            _attenuation = Mathf.Clamp(attenuation, MinAttenuation, MaxAttenuation);
+            _frequency = Mathf.Clamp(frequency, MinFrequency, MaxFrequency);
         }
     }
 }

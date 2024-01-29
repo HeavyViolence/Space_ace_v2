@@ -40,6 +40,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToSmallWeapons",
+                    "type": "Button",
+                    "id": "44b34bea-740c-4392-9c31-2cdcd2a16329",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToMediumWeapons",
+                    "type": "Button",
+                    "id": "c014aa84-f387-4c9b-88d4-e4505a24c990",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToLargeWeapons",
+                    "type": "Button",
+                    "id": "0fa0376d-a06e-45ba-83a2-7bbe0bb13f8d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -183,6 +210,39 @@
                     "processors": "",
                     "groups": "Keyboard and mouse",
                     "action": "PreviousAmmo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7667b78b-8dbd-4f2c-937b-de6d6d062019",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and mouse",
+                    "action": "SwitchToSmallWeapons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21c127ea-9f73-4c41-8ee7-f87ae44961b6",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and mouse",
+                    "action": "SwitchToMediumWeapons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "25900854-1ccc-4270-a4c8-d385fb620fd2",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and mouse",
+                    "action": "SwitchToLargeWeapons",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

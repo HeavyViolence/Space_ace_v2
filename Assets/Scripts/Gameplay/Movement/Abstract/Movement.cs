@@ -41,25 +41,15 @@ namespace SpaceAce.Gameplay.Movement
             Body = GetComponent<Rigidbody2D>();
         }
 
-        public async UniTask WaitForEscapeAsync(Func<bool> condition, float delay, CancellationToken token = default)
+        protected virtual void OnDisable()
         {
-            while (MasterCameraHolder.InsideViewport(transform.position) == false)
-            {
-                if (token != default && token.IsCancellationRequested == true) return;
-                await UniTask.Yield();
-            }
+            Escaped = null;
+        }
 
-            while (MasterCameraHolder.InsideViewport(transform.position) == true)
-            {
-                if (token != default && token.IsCancellationRequested == true) return;
-                await UniTask.Yield();
-            }
-
-            while (condition() == false)
-            {
-                if (token != default && token.IsCancellationRequested == true) return;
-                await UniTask.Yield();
-            }
+        public async UniTask WaitForEscapeAsync(float delay = 0f, CancellationToken token = default)
+        {
+            await UniTask.WaitUntil(() => MasterCameraHolder.InsideViewport(transform.position) == true, PlayerLoopTiming.FixedUpdate, token);
+            await UniTask.WaitUntil(() => MasterCameraHolder.InsideViewport(transform.position) == false, PlayerLoopTiming.FixedUpdate, token);
 
             if (delay > 0f)
             {
@@ -67,12 +57,12 @@ namespace SpaceAce.Gameplay.Movement
 
                 while (escapeDelayTimer < delay)
                 {
-                    escapeDelayTimer += Time.deltaTime;
+                    escapeDelayTimer += Time.fixedDeltaTime;
 
-                    if (token != default && token.IsCancellationRequested == true) return;
-                    while (GamePauser.Paused == true) await UniTask.Yield();
+                    if (token.IsCancellationRequested == true) return;
+                    while (GamePauser.Paused == true) await UniTask.WaitForFixedUpdate();
 
-                    await UniTask.Yield();
+                    await UniTask.WaitForFixedUpdate();
                 }
             }
 

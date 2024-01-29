@@ -1,23 +1,18 @@
-using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Main.Factories;
 
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Shooting.Guns
 {
-    public abstract class Gun : MonoBehaviour
+    public sealed class Gun : MonoBehaviour
     {
         [SerializeField]
         private GunConfig _config;
 
         public Size AmmoSize => _config.AmmoSize;
-        public ProjectileRequestor ProjectileRequestor => _config.ProjectileRequestor;
-        public bool ShakeOnShotFired => _config.ShakeOnShotFired;
         public bool IsRightHanded => transform.localPosition.x > 0f;
         public float SignedConvergenceAngle => IsRightHanded ? -1f * _config.ConvergenceAngle : _config.ConvergenceAngle;
-
-        public virtual float FireRate => _config.FireRate;
-        public virtual float Dispersion => _config.Dispersion * AuxMath.RandomUnit;
+        public float FireRate => _config.FireRate;
+        public float Dispersion => _config.Dispersion;
     }
 }

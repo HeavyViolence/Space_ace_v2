@@ -9,6 +9,6 @@ namespace SpaceAce.Gameplay.Movement
     {
         event EventHandler Escaped;
 
-        UniTask WaitForEscapeAsync(Func<bool> condition, float delay, CancellationToken token = default);
+        UniTask WaitForEscapeAsync(float delay = 0f, CancellationToken token = default);
     }
 }

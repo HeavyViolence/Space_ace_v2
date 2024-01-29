@@ -14,28 +14,21 @@ namespace SpaceAce.Main
                                                                 ShakeSettings.Default,
                                                                 ShakeSettings.Default);
 
-        [SerializeField]
+        [SerializeField, JsonIgnore]
         private ShakeSettings _onShotFired;
 
-        [SerializeField]
+        [SerializeField, JsonIgnore]
         private ShakeSettings _onDefeat;
 
-        [SerializeField]
+        [SerializeField, JsonIgnore]
         private ShakeSettings _onCollision;
 
-        [SerializeField]
+        [SerializeField, JsonIgnore]
         private ShakeSettings _onHit;
 
-        [JsonIgnore]
         public ShakeSettings OnShotFired => _onShotFired;
-
-        [JsonIgnore]
         public ShakeSettings OnDefeat => _onDefeat;
-
-        [JsonIgnore]
         public ShakeSettings OnCollision => _onCollision;
-
-        [JsonIgnore]
         public ShakeSettings OnHit => _onHit;
 
         public MasterCameraShakerSettings(ShakeSettings onShotFired,
@@ -43,17 +36,10 @@ namespace SpaceAce.Main
                                           ShakeSettings onCollision,
                                           ShakeSettings onHit)
         {
-            _onShotFired = onShotFired ?? throw new ArgumentNullException(nameof(onShotFired),
-                $"Attempted to pass an empty {typeof(ShakeSettings)}!");
-
-            _onDefeat = onDefeat ?? throw new ArgumentNullException(nameof(onDefeat),
-                $"Attempted to pass an empty {typeof(ShakeSettings)}!");
-
-            _onCollision = onCollision ?? throw new ArgumentNullException(nameof(onCollision),
-                $"Attempted to pass an empty {typeof(ShakeSettings)}!");
-
-            _onHit = onHit ?? throw new ArgumentNullException(nameof(onHit),
-                $"Attempted to pass an empty {typeof(ShakeSettings)}!");
+            _onShotFired = onShotFired ?? throw new ArgumentNullException();
+            _onDefeat = onDefeat ?? throw new ArgumentNullException();
+            _onCollision = onCollision ?? throw new ArgumentNullException();
+            _onHit = onHit ?? throw new ArgumentNullException();
         }
     }
 }

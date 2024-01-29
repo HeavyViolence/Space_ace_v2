@@ -29,15 +29,17 @@ namespace SpaceAce.Main.Factories
             }
         }
 
-        public GameObject Create(PlayerShipType type)
+        public GameObject Create(PlayerShipType type, Vector3 position, Quaternion rotation)
         {
             if (_objectPool.TryGetValue(type, out var ship) == true)
             {
                 ship.SetActive(true);
+                ship.transform.SetPositionAndRotation(position, rotation);
+
                 return ship;
             }
 
-            return _diContainer.InstantiatePrefab(_playerShips[type]);
+            return _diContainer.InstantiatePrefab(_playerShips[type], position, rotation, null);
         }
 
         public void Release(GameObject instance, PlayerShipType type)

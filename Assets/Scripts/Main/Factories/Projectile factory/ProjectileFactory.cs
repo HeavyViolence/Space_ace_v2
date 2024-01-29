@@ -1,5 +1,6 @@
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Movement;
+using SpaceAce.Gameplay.Players;
 
 using System;
 using System.Collections.Generic;
@@ -15,52 +16,40 @@ namespace SpaceAce.Main.Factories
         private readonly Dictionary<ProjectileSkin, GameObject> _projectilePrefabs = new();
         private readonly Dictionary<ProjectileSkin, Stack<CachedProjectile>> _cachedProjectiles = new();
 
-        private readonly LayerMask _playerProjectilesLayerMask;
-        private readonly LayerMask _enemyProjectilesLayerMask;
-
-        private readonly string _playerProjectilesSortingLayer;
-        private readonly string _enemyProjectilesSortingLayer;
-
         private readonly DiContainer _diContainer;
 
-        public ProjectileFactory(ProjectileFactoryConfig config, DiContainer diContainer)
+        private readonly string _playerProjectilesLayerName;
+        private readonly string _enemyProjectilesLayerName;
+
+        public ProjectileFactory(DiContainer diContainer, ProjectileFactoryConfig config)
         {
+            _diContainer = diContainer ?? throw new ArgumentNullException();
+
             if (config == null) throw new ArgumentNullException();
 
-            foreach (var slot in config.Slots) _projectilePrefabs.Add(slot.Skin, slot.Prefab);
+            _playerProjectilesLayerName = config.PlayerProjectilesLayerName;
+            _enemyProjectilesLayerName = config.EnemyProjectilesLayerName;
 
-            _playerProjectilesLayerMask = config.PlayerProjectilesLayerMask;
-            _enemyProjectilesLayerMask = config.EnemyProjectilesLayerMask;
-
-            _playerProjectilesSortingLayer = config.PlayerProjectilesSortingLayer;
-            _enemyProjectilesSortingLayer = config.EnemyProjectilesSortingLayer;
-
-            _diContainer = diContainer ?? throw new ArgumentNullException();
+            foreach (ProjectileSlot slot in config.ProjectileSlots)
+                _projectilePrefabs.Add(slot.Skin, slot.Prefab);
         }
 
-        public CachedProjectile Create(ProjectileRequestor requestor, ProjectileSkin skin)
+        public CachedProjectile Create(object user, ProjectileSkin skin)
         {
             if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true && stack.Count > 0)
             {
                 CachedProjectile cachedProjectile = stack.Pop();
                 cachedProjectile.Instance.SetActive(true);
 
-                switch (requestor)
+                if (user is Player)
                 {
-                    case ProjectileRequestor.Player:
-                        {
-                            cachedProjectile.Instance.layer = _playerProjectilesLayerMask;
-                            cachedProjectile.SpriteRenderer.sortingLayerName = _playerProjectilesSortingLayer;
-
-                            break;
-                        }
-                    case ProjectileRequestor.Enemy:
-                        {
-                            cachedProjectile.Instance.layer = _enemyProjectilesLayerMask;
-                            cachedProjectile.SpriteRenderer.sortingLayerName = _enemyProjectilesSortingLayer;
-
-                            break;
-                        }
+                    cachedProjectile.Instance.layer = LayerMask.NameToLayer(_playerProjectilesLayerName);
+                    cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_playerProjectilesLayerName);
+                }
+                else
+                {
+                    cachedProjectile.Instance.layer = LayerMask.NameToLayer(_enemyProjectilesLayerName);
+                    cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_enemyProjectilesLayerName);
                 }
 
                 return cachedProjectile;
@@ -90,22 +79,15 @@ namespace SpaceAce.Main.Factories
                 if (behaviourSupplier == null)
                     throw new MissingComponentException($"Projectile is missing {typeof(IMovementBehaviourSupplier)}!");
 
-                switch (requestor)
+                if (user is Player)
                 {
-                    case ProjectileRequestor.Player:
-                        {
-                            newProjectile.layer = _playerProjectilesLayerMask;
-                            renderer.sortingLayerName = _playerProjectilesSortingLayer;
-
-                            break;
-                        }
-                    case ProjectileRequestor.Enemy:
-                        {
-                            newProjectile.layer = _enemyProjectilesLayerMask;
-                            renderer.sortingLayerName = _enemyProjectilesSortingLayer;
-
-                            break;
-                        }
+                    newProjectile.layer = LayerMask.NameToLayer(_playerProjectilesLayerName);
+                    renderer.sortingLayerID = SortingLayer.NameToID(_playerProjectilesLayerName);
+                }
+                else
+                {
+                    newProjectile.layer = LayerMask.NameToLayer(_enemyProjectilesLayerName);
+                    renderer.sortingLayerID = SortingLayer.NameToID(_enemyProjectilesLayerName);
                 }
 
                 return new(newProjectile, renderer, damageDealer, escapable, behaviourSupplier);

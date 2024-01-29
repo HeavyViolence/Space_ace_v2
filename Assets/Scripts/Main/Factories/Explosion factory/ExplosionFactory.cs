@@ -77,7 +77,7 @@ namespace SpaceAce.Main.Factories
         private void PlayExplosionEffects(ExplosionSize size, Vector3 position, CancellationToken token)
         {
             if (_explosionAudio.TryGetValue(size, out AudioCollection audio) == true)
-                _audioPlayer.PlayOnceAsync(audio.Random, position, null, token, true).Forget();
+                _audioPlayer.PlayOnceAsync(audio.Random, position, null, true, token).Forget();
             else throw new Exception($"Explosion audio of a requested size ({size}) doesn't exist!");
 
             _masterCameraShaker.ShakeOnDefeatAsync().Forget();

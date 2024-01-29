@@ -7,8 +7,6 @@ using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main.Factories;
 
-using System.Threading;
-
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
@@ -17,59 +15,53 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
     {
         public override AmmoType Type => AmmoType.Regular;
 
-        protected override ShootingBehaviour ShootingBehaviour => async delegate (Gun gun, CancellationToken token, object[] args)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun, object[] args)
         {
-            while (Amount > 0 && token.IsCancellationRequested == false)
+            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin);
+
+            float dispersion = AuxMath.RandomUnit * gun.Dispersion;
+
+            Vector2 projectileDirection = new(gun.transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.transform.up.y);
+            projectileDirection.Normalize();
+
+            Quaternion projectileRotation = gun.transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
+            projectileRotation.Normalize();
+
+            MovementData data = new(Speed, Speed, 0f, gun.transform.position, projectileDirection, projectileRotation, null, 0f, 0f);
+
+            projectile.Instance.transform.SetPositionAndRotation(gun.transform.position, projectileRotation);
+            projectile.MovementBehaviourSupplier.Supply(MovementBehaviour, data);
+
+            projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                CachedProjectile projectile = Services.ProjectileFactory.Create(gun.ProjectileRequestor, ProjectileSkin);
+                HitBehaviour?.Invoke(hitArgs, args);
 
-                float dispersion = AuxMath.RandomUnit * gun.Dispersion;
+                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
+            };
 
-                Vector2 projectileDirection = new(gun.SignedConvergenceAngle + dispersion, gun.transform.up.y);
-                projectileDirection.Normalize();
+            projectile.Escapable.WaitForEscapeAsync().Forget();
 
-                Quaternion projectileRotation = gun.transform.rotation * Quaternion.Euler(0f, 0f, dispersion);
-                projectileRotation.Normalize();
+            projectile.Escapable.Escaped += (sender, args) =>
+            {
+                MissBehaviour?.Invoke(args);
 
-                MovementData movementData = new(Speed, Speed, 0f, gun.transform.position, projectileDirection, projectileRotation, null, 0f, 0f);
+                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+            };
 
-                projectile.Instance.transform.SetPositionAndRotation(gun.transform.position, projectileRotation);
-                projectile.MovementBehaviourSupplier.Supply(MovementBehaviour, movementData);
+            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.transform.position, null, true).Forget();
 
-                projectile.DamageDealer.Hit += (sender, hitArgs) =>
-                {
-                    HitBehaviour?.Invoke(hitArgs, args);
+            Amount--;
+            Price -= ProjectilePrice;
 
-                    Services.ProjectileFactory.Release(projectile, ProjectileSkin);
-                    Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition, token).Forget();
-                };
+            await UniTask.WaitForSeconds(1f / gun.FireRate);
 
-                projectile.Escapable.WaitForEscapeAsync(() =>
-                Services.MasterCameraHolder.InsideViewport(projectile.Instance.transform.position), ProjectileReleaseDelay).Forget();
-
-                projectile.Escapable.Escaped += (sender, args) =>
-                {
-                    MissBehaviour?.Invoke(args);
-
-                    Services.ProjectileFactory.Release(projectile, ProjectileSkin);
-                };
-
-                Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.transform.position, null, token, true).Forget();
-                if (gun.ShakeOnShotFired == true) Services.MasterCameraShaker.ShakeOnShotFiredAsync(token).Forget();
-
-                RaiseShotEvent(HeatGeneration);
-                UpdatePrice();
-                Amount--;
-
-                while (Services.GamePauser.Paused == true) await UniTask.Yield();
-
-                await UniTask.WaitForSeconds(1f / gun.FireRate, false, PlayerLoopTiming.Update, token);
-            }
+            return new(1, HeatGeneration);
         };
 
         protected override MovementBehaviour MovementBehaviour => delegate (Rigidbody2D body, ref MovementData data)
         {
-            Vector2 velocity = data.InitialSpeed * Time.fixedDeltaTime * data.InitialVelocity;
+            Vector2 velocity = data.InitialVelocity * Time.fixedDeltaTime;
             body.MovePosition(body.position + velocity);
         };
 
@@ -83,17 +75,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public RegularAmmoSet(AmmoServices services,
                               Size size,
                               Quality quality,
-                              RegularAmmoSetConfig config) : base(services,
-                                                                  size,
-                                                                  quality,
-                                                                  config)
+                              RegularAmmoSetConfig config) : base(services, size, quality, config)
         { }
 
         public RegularAmmoSet(AmmoServices services,
                               RegularAmmoSetConfig config,
-                              RegularAmmoSetSavableState savedState) : base(services,
-                                                                            config,
-                                                                            savedState)
+                              RegularAmmoSetSavableState savedState) : base(services, config, savedState)
         { }
 
         public override async UniTask<string> GetNameAsync() =>

@@ -21,6 +21,11 @@ namespace SpaceAce.Gameplay.Items
 
         public AnimationCurve PriceInterpolationCurve => _priceInterpolationCurve;
 
+        [SerializeField]
+        private AnimationCurve _valueProbabilityCurvePerRange;
+
+        public AnimationCurve ValueProbabilityCurvePerRange => _valueProbabilityCurvePerRange;
+
         [SerializeField, Range(0f, 1f), Space]
         private float _smallSizePropertyFactor = 1f;
 

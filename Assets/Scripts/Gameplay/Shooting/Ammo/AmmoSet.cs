@@ -16,12 +16,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public abstract class AmmoSet : IItem, IEquatable<AmmoSet>
     {
-        protected const float ProjectileReleaseDelay = 1f;
-
         public event EventHandler Depleted;
-        public event EventHandler<ShotEventArgs> Shot;
-
-        private readonly float _projectilePrice;
 
         protected readonly AmmoServices Services;
 
@@ -46,7 +41,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             }
         }
 
-        public float Price { get; private set; }
+        public float Price { get; protected set; }
+        public float ProjectilePrice { get; }
         public float HeatGeneration { get; }
         public float Speed { get; }
         public float Damage { get; }
@@ -54,7 +50,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public bool Usable => Services.GameStateLoader.CurrentState == GameState.Level;
         public bool Tradable => Services.GameStateLoader.CurrentState == GameState.MainMenu;
 
-        protected abstract ShootingBehaviour ShootingBehaviour { get; }
+        protected abstract ShotBehaviourAsync ShotBehaviourAsync { get; }
         protected abstract MovementBehaviour MovementBehaviour { get; }
         protected abstract HitBehaviour HitBehaviour { get; }
         protected abstract MissBehaviour MissBehaviour { get; }
@@ -70,13 +66,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             HitEffectSkin = config.HitEffectSkin;
             ShotAudio = config.ShotAudio;
 
-            Amount = services.ItemPropertyEvaluator.Evaluate(config.Amount, true, quality, size);
+            Amount = services.ItemPropertyEvaluator.Evaluate(config.Amount, true, quality, size, SizeInfluence.None);
             Price = services.ItemPropertyEvaluator.EvaluatePrice(config.Price, quality, size);
-            HeatGeneration = services.ItemPropertyEvaluator.Evaluate(config.HeatGeneration, false, quality, size);
-            Speed = services.ItemPropertyEvaluator.Evaluate(config.Speed, true, quality, size);
-            Damage = services.ItemPropertyEvaluator.Evaluate(config.Damage, true, quality, size);
-
-            _projectilePrice = Price / Amount;
+            ProjectilePrice = Price / Amount;
+            HeatGeneration = services.ItemPropertyEvaluator.Evaluate(config.HeatGeneration, false, quality, size, SizeInfluence.Direct);
+            Speed = services.ItemPropertyEvaluator.Evaluate(config.Speed, true, quality, size, SizeInfluence.Inverted);
+            Damage = services.ItemPropertyEvaluator.Evaluate(config.Damage, true, quality, size, SizeInfluence.Direct);
         }
 
         public AmmoSet(AmmoServices services, AmmoSetConfig config, AmmoSetSavableState savedState)
@@ -92,14 +87,13 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ShotAudio = config.ShotAudio;
             Amount = savedState.Amount;
             Price = savedState.Price;
+            ProjectilePrice = Amount / Price;
             HeatGeneration = savedState.HeatGeneration;
             Speed = savedState.Speed;
             Damage = savedState.Damage;
-
-            _projectilePrice = Amount / Price;
         }
 
-        public async UniTask<bool> TryUseAsync(CancellationToken token = default, params object[] args)
+        public async UniTask<ItemUsageResult> TryUseAsync(object user, CancellationToken token = default, params object[] args)
         {
             if (Usable == true && args.Length > 0)
             {
@@ -107,23 +101,19 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 {
                     if (arg is Gun gun)
                     {
-                        await ShootingBehaviour.Invoke(gun, token, args);
-                        return true;
+                        ShotResult result = await ShotBehaviourAsync.Invoke(user, gun, args);
+                        return new(true, result);
                     }
                 }
             }
 
-            return false;
+            return new(false);
         }
 
         public abstract ItemSavableState GetSavableState();
 
         public abstract UniTask<string> GetNameAsync();
         public abstract UniTask<string> GetDescriptionAsync();
-
-        protected void RaiseShotEvent(float heatGenerated) => Shot?.Invoke(this, new(heatGenerated));
-
-        protected void UpdatePrice() => Price -= _projectilePrice;
 
         #region interfaces
 

@@ -75,7 +75,7 @@ namespace SpaceAce.Main.Audio
 
             while (true)
             {
-                await _audioPlayer.PlayOnceAsync(_music.NonRepeatingRandom, Vector3.zero, null, token, true);
+                await _audioPlayer.PlayOnceAsync(_music.NonRepeatingRandom, Vector3.zero, null, true, token);
                 await UniTask.WaitForSeconds(Settings.PlaybackDelay, true, PlayerLoopTiming.Update, token);
 
                 if (token.IsCancellationRequested == true)

@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 using UnityEngine;
 
@@ -30,10 +29,10 @@ namespace SpaceAce.Main.Factories
                 _hitEffectsPrefabs.Add(hitEffect.Skin, hitEffect.Prefab);
         }
 
-        public async UniTask CreateAsync(ProjectileHitEffectSkin skin, Vector3 position, CancellationToken token = default)
+        public async UniTask CreateAsync(ProjectileHitEffectSkin skin, Vector3 position)
         {
             CachedParticleSystem hitEffect = InstantiateHitEffect(skin, position);
-            await AwaitHitEffectToPlayAsync(hitEffect, token);
+            await AwaitHitEffectToPlayAsync(hitEffect);
             Release(hitEffect, skin);
         }
 
@@ -60,7 +59,7 @@ namespace SpaceAce.Main.Factories
             throw new Exception($"Hit effect of a requested skin ({skin}) doesn't exist!");
         }
 
-        private async UniTask AwaitHitEffectToPlayAsync(CachedParticleSystem instance, CancellationToken token)
+        private async UniTask AwaitHitEffectToPlayAsync(CachedParticleSystem instance)
         {
             float timer = 0f;
 
@@ -69,8 +68,6 @@ namespace SpaceAce.Main.Factories
                 timer += Time.deltaTime;
 
                 while (_gamePauser.Paused == true) await UniTask.Yield();
-
-                if (token != default && token.IsCancellationRequested == true) break;
 
                 await UniTask.Yield();
             }

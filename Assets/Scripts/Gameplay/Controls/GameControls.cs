@@ -62,6 +62,33 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchToSmallWeapons"",
+                    ""type"": ""Button"",
+                    ""id"": ""44b34bea-740c-4392-9c31-2cdcd2a16329"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchToMediumWeapons"",
+                    ""type"": ""Button"",
+                    ""id"": ""c014aa84-f387-4c9b-88d4-e4505a24c990"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchToLargeWeapons"",
+                    ""type"": ""Button"",
+                    ""id"": ""0fa0376d-a06e-45ba-83a2-7bbe0bb13f8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -207,6 +234,39 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
                     ""action"": ""PreviousAmmo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7667b78b-8dbd-4f2c-937b-de6d6d062019"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""SwitchToSmallWeapons"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21c127ea-9f73-4c41-8ee7-f87ae44961b6"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""SwitchToMediumWeapons"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25900854-1ccc-4270-a4c8-d385fb620fd2"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and mouse"",
+                    ""action"": ""SwitchToLargeWeapons"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -284,6 +344,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_NextAmmo = m_Player.FindAction("NextAmmo", throwIfNotFound: true);
         m_Player_PreviousAmmo = m_Player.FindAction("PreviousAmmo", throwIfNotFound: true);
+        m_Player_SwitchToSmallWeapons = m_Player.FindAction("SwitchToSmallWeapons", throwIfNotFound: true);
+        m_Player_SwitchToMediumWeapons = m_Player.FindAction("SwitchToMediumWeapons", throwIfNotFound: true);
+        m_Player_SwitchToLargeWeapons = m_Player.FindAction("SwitchToLargeWeapons", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
@@ -353,6 +416,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_NextAmmo;
     private readonly InputAction m_Player_PreviousAmmo;
+    private readonly InputAction m_Player_SwitchToSmallWeapons;
+    private readonly InputAction m_Player_SwitchToMediumWeapons;
+    private readonly InputAction m_Player_SwitchToLargeWeapons;
     public struct PlayerActions
     {
         private @GameControls m_Wrapper;
@@ -361,6 +427,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @NextAmmo => m_Wrapper.m_Player_NextAmmo;
         public InputAction @PreviousAmmo => m_Wrapper.m_Player_PreviousAmmo;
+        public InputAction @SwitchToSmallWeapons => m_Wrapper.m_Player_SwitchToSmallWeapons;
+        public InputAction @SwitchToMediumWeapons => m_Wrapper.m_Player_SwitchToMediumWeapons;
+        public InputAction @SwitchToLargeWeapons => m_Wrapper.m_Player_SwitchToLargeWeapons;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -382,6 +451,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @PreviousAmmo.started += instance.OnPreviousAmmo;
             @PreviousAmmo.performed += instance.OnPreviousAmmo;
             @PreviousAmmo.canceled += instance.OnPreviousAmmo;
+            @SwitchToSmallWeapons.started += instance.OnSwitchToSmallWeapons;
+            @SwitchToSmallWeapons.performed += instance.OnSwitchToSmallWeapons;
+            @SwitchToSmallWeapons.canceled += instance.OnSwitchToSmallWeapons;
+            @SwitchToMediumWeapons.started += instance.OnSwitchToMediumWeapons;
+            @SwitchToMediumWeapons.performed += instance.OnSwitchToMediumWeapons;
+            @SwitchToMediumWeapons.canceled += instance.OnSwitchToMediumWeapons;
+            @SwitchToLargeWeapons.started += instance.OnSwitchToLargeWeapons;
+            @SwitchToLargeWeapons.performed += instance.OnSwitchToLargeWeapons;
+            @SwitchToLargeWeapons.canceled += instance.OnSwitchToLargeWeapons;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -398,6 +476,15 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
             @PreviousAmmo.started -= instance.OnPreviousAmmo;
             @PreviousAmmo.performed -= instance.OnPreviousAmmo;
             @PreviousAmmo.canceled -= instance.OnPreviousAmmo;
+            @SwitchToSmallWeapons.started -= instance.OnSwitchToSmallWeapons;
+            @SwitchToSmallWeapons.performed -= instance.OnSwitchToSmallWeapons;
+            @SwitchToSmallWeapons.canceled -= instance.OnSwitchToSmallWeapons;
+            @SwitchToMediumWeapons.started -= instance.OnSwitchToMediumWeapons;
+            @SwitchToMediumWeapons.performed -= instance.OnSwitchToMediumWeapons;
+            @SwitchToMediumWeapons.canceled -= instance.OnSwitchToMediumWeapons;
+            @SwitchToLargeWeapons.started -= instance.OnSwitchToLargeWeapons;
+            @SwitchToLargeWeapons.performed -= instance.OnSwitchToLargeWeapons;
+            @SwitchToLargeWeapons.canceled -= instance.OnSwitchToLargeWeapons;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -484,6 +571,9 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnNextAmmo(InputAction.CallbackContext context);
         void OnPreviousAmmo(InputAction.CallbackContext context);
+        void OnSwitchToSmallWeapons(InputAction.CallbackContext context);
+        void OnSwitchToMediumWeapons(InputAction.CallbackContext context);
+        void OnSwitchToLargeWeapons(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

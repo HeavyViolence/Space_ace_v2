@@ -436,27 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f32f2b572780f3b4d8d95fb487c182af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _settings:
-    _onShotFired:
-      _enabled: 1
-      _amplitude: {x: 0.045, y: 0.055}
-      _attenuation: {x: 1.5, y: 2.5}
-      _frequency: {x: 1.5, y: 2.5}
-    _onDefeat:
-      _enabled: 1
-      _amplitude: {x: 0.45, y: 0.55}
-      _attenuation: {x: 1.5, y: 2.5}
-      _frequency: {x: 0.5, y: 1.5}
-    _onCollision:
-      _enabled: 1
-      _amplitude: {x: 0.15, y: 0.25}
-      _attenuation: {x: 1.5, y: 2.5}
-      _frequency: {x: 1.5, y: 2.5}
-    _onHit:
-      _enabled: 1
-      _amplitude: {x: 0.05, y: 0.15}
-      _attenuation: {x: 1.5, y: 2.5}
-      _frequency: {x: 1.5, y: 2.5}
+  _config: {fileID: 11400000, guid: bc9cfd07301965748969bfb6e84cab72, type: 2}
 --- !u!4 &491086736
 Transform:
   m_ObjectHideFlags: 0

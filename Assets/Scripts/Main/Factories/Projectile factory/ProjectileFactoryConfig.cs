@@ -1,5 +1,3 @@
-using NaughtyAttributes;
-
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -11,26 +9,17 @@ namespace SpaceAce.Main.Factories
     public sealed class ProjectileFactoryConfig : ScriptableObject
     {
         [SerializeField]
-        private List<ProjectileSlot> _skins;
+        private string _playerProjectilesLayerName;
 
         [SerializeField]
-        private LayerMask _playerProjectilesLayerMask;
+        private string _enemyProjectilesLayerName;
 
-        [SerializeField, SortingLayer]
-        private string _playerProjectilesSortingLayer;
+        [SerializeField, Space]
+        private List<ProjectileSlot> _projectiles;
 
-        [SerializeField]
-        private LayerMask _enemyProjectilesLayerMask;
+        public string PlayerProjectilesLayerName => _playerProjectilesLayerName;
+        public string EnemyProjectilesLayerName => _enemyProjectilesLayerName;
 
-        [SerializeField, SortingLayer]
-        private string _enemyProjectilesSortingLayer;
-
-        public IEnumerable<ProjectileSlot> Slots => _skins;
-
-        public LayerMask PlayerProjectilesLayerMask => _playerProjectilesLayerMask;
-        public string PlayerProjectilesSortingLayer => _playerProjectilesSortingLayer;
-
-        public LayerMask EnemyProjectilesLayerMask => _enemyProjectilesLayerMask;
-        public string EnemyProjectilesSortingLayer => _enemyProjectilesSortingLayer;
+        public IEnumerable<ProjectileSlot> ProjectileSlots => _projectiles;
     }
 }

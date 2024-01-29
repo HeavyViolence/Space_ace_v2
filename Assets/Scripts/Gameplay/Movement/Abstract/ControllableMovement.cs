@@ -61,7 +61,7 @@ namespace SpaceAce.Gameplay.Movement
         private void CollisionHitEventHandler(object sender, HitEventArgs e)
         {
             e.DamageReceiver.ApplyDamage(NextCollisionDamage);
-            AudioPlayer.PlayOnceAsync(_config.CollisionAudio.Random, e.HitPosition, null, default, true).Forget();
+            AudioPlayer.PlayOnceAsync(_config.CollisionAudio.Random, e.HitPosition, null, true).Forget();
             MasterCameraShaker.ShakeOnCollisionAsync().Forget();
         }
     }

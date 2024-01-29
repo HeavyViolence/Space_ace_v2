@@ -36,16 +36,16 @@ namespace SpaceAce.Main
 
         public void Initialize()
         {
-            _player.SpaceshipSpawned += PlayerSpaceshipSpawnedEventHandler;
-            _player.SpaceshipDefeated += PlayerSpaceshipDefeatedEventHandler;
+            _player.ShipSpawned += PlayerSpaceshipSpawnedEventHandler;
+            _player.ShipDefeated += PlayerSpaceshipDefeatedEventHandler;
 
             _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
         }
 
         public void Dispose()
         {
-            _player.SpaceshipSpawned -= PlayerSpaceshipSpawnedEventHandler;
-            _player.SpaceshipDefeated -= PlayerSpaceshipDefeatedEventHandler;
+            _player.ShipSpawned -= PlayerSpaceshipSpawnedEventHandler;
+            _player.ShipDefeated -= PlayerSpaceshipDefeatedEventHandler;
 
             _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
         }

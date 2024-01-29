@@ -47,13 +47,13 @@ namespace SpaceAce.Gameplay.Levels
         public void Initialize()
         {
             _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
-            _player.SpaceshipDefeated += PlayerSpaceshipDefeatedEventHandler;
+            _player.ShipDefeated += PlayerSpaceshipDefeatedEventHandler;
         }
 
         public void Dispose()
         {
             _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
-            _player.SpaceshipDefeated -= PlayerSpaceshipDefeatedEventHandler;
+            _player.ShipDefeated -= PlayerSpaceshipDefeatedEventHandler;
         }
 
         #endregion
@@ -69,7 +69,7 @@ namespace SpaceAce.Gameplay.Levels
         {
             LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
             LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
-            _audioPlayer.PlayOnceAsync(_levelFailedAudio.Random, Vector3.zero, null, CancellationToken.None).Forget();
+            _audioPlayer.PlayOnceAsync(_levelFailedAudio.Random, Vector3.zero).Forget();
         }
 
         #endregion

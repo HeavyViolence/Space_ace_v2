@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Empty ammo
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 6bc1ebadac91540c7a1214f0251280b1, type: 3}
+  - {fileID: 8300000, guid: 1f0b1350f738448c89d4b111b3208638, type: 3}
+  - {fileID: 8300000, guid: a2f292754081d414e9a44fd3906bc214, type: 3}
+  - {fileID: 8300000, guid: aa254eeacaa354b7abae1c207011c70f, type: 3}
+  - {fileID: 8300000, guid: 2457e0ce1ad6c4fc08572999a87ffeae, type: 3}
+  - {fileID: 8300000, guid: ce8fda5b85618499d9732dd9ccd335dc, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0, y: 0}
+  _pitch: {x: 0.9, y: 1.1}

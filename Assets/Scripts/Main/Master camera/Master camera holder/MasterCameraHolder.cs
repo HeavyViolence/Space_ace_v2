@@ -33,9 +33,9 @@ namespace SpaceAce.Main
 
         public float GetViewportLowerBoundWithOffset(float offsetFactor) => ViewportLowerBound * offsetFactor;
 
-        public bool InsideViewport(Vector2 position, float delta = 0f) => position.x + delta < ViewportLeftBound &&
-                                                                          position.x - delta > ViewportRightBound &&
-                                                                          position.y - delta > ViewportUpperBound &&
-                                                                          position.y + delta < ViewportLowerBound;
+        public bool InsideViewport(Vector2 position) => position.x > ViewportLeftBound &&
+                                                        position.x < ViewportRightBound &&
+                                                        position.y < ViewportUpperBound &&
+                                                        position.y > ViewportLowerBound;
     }
 }

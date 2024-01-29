@@ -28,7 +28,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         #region amount per set
 
         public const int MinAmount = 100;
-        public const int MaxAmount = 10_000;
+        public const int MaxAmount = 9_999;
 
         [SerializeField, MinMaxSlider(MinAmount, MaxAmount), Space]
         private Vector2Int _amount = new(MinAmount, MaxAmount);
@@ -51,8 +51,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         #region speed
 
-        public const float MinSpeed = 50f;
-        public const float MaxSpeed = 200f;
+        public const float MinSpeed = 70f;
+        public const float MaxSpeed = 300f;
 
         [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
         private Vector2 _speed = new(MinSpeed, MaxSpeed);

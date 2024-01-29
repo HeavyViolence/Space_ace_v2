@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9badf7766dd58494996e6fae1e1b2ca8, type: 3}
   m_Name: Strange ammo set config
   m_EditorClassIdentifier: 
-  _price: {x: 200, y: 3000}
+  _price: {x: 300, y: 3300}
   _shotAudio: {fileID: 11400000, guid: 01b3bbb0640ca144293f351a45cc7b8d, type: 2}
   _projectileSkin: 0
   _hitEffectSkin: 3
-  _amount: {x: 500, y: 1000}
+  _amount: {x: 500, y: 9999}
   _heatGeneration: {x: 3, y: 5}
-  _speed: {x: 70, y: 110}
+  _speed: {x: 130, y: 170}
   _damage: {x: 30, y: 70}
-  _ammoLossProbability: {x: 0.01, y: 0.3}
+  _ammoLossProbability: {x: 0.01, y: 0.2}

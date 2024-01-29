@@ -1,3 +1,5 @@
+using SpaceAce.Auxiliary;
+
 using System;
 using System.Collections.Generic;
 
@@ -11,19 +13,16 @@ namespace SpaceAce.Gameplay.Items
         private readonly Dictionary<Quality, Vector2> _badPropertyInterpolators;
         private readonly Dictionary<Quality, Vector2> _priceInterpolators;
 
-        private readonly float _smallSizePropertyFactor;
-        private readonly float _largeSizePropertyFactor;
+        private readonly ItemPropertyEvaluatorConfig _config;
 
         public ItemPropertyEvaluator(ItemPropertyEvaluatorConfig config)
         {
             if (config == null) throw new ArgumentNullException();
+            _config = config;
 
             _goodPropertyInterpolators = BuildPropertyInterpolation(config.GoodPropertyInterpolationCurve);
             _badPropertyInterpolators = BuildPropertyInterpolation(config.BadPropertyInterpolationCurve);
             _priceInterpolators = BuildPropertyInterpolation(config.PriceInterpolationCurve);
-
-            _smallSizePropertyFactor = config.SmallSizePropertyFactor;
-            _largeSizePropertyFactor = config.LargeSizePropertyFactor;
         }
 
         private Dictionary<Quality, Vector2> BuildPropertyInterpolation(AnimationCurve interpolationCurve)
@@ -42,14 +41,13 @@ namespace SpaceAce.Gameplay.Items
                 float rangeEndInterpolator = interpolationCurve.Evaluate(rangeEndEvaluator);
 
                 Quality quality = Enum.Parse<Quality>(itemQualities[i], true);
-
                 cache.Add(quality, new(rangeStartInterpolator, rangeEndInterpolator));
             }
 
             return cache;
         }
 
-        public float Evaluate(Vector2 range, bool goodProperty, Quality quality, Size size)
+        public float Evaluate(Vector2 range, bool goodProperty, Quality quality, Size size, SizeInfluence sizeInfluence)
         {
             float minValue, maxValue;
 
@@ -68,19 +66,37 @@ namespace SpaceAce.Gameplay.Items
                 maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
             }
 
-            float delta = (maxValue - minValue) / Mathf.Sqrt(5);
-            float value = UnityEngine.Random.Range(minValue + delta, maxValue - delta);
+            float evaluator = _config.ValueProbabilityCurvePerRange.Evaluate(AuxMath.RandomNormal);
+            float value = Mathf.Lerp(minValue, maxValue, evaluator);
 
-            return size switch
+            switch (size)
             {
-                Size.Small => value * _smallSizePropertyFactor,
-                Size.Medium => value,
-                Size.Large => value * _largeSizePropertyFactor,
-                _ => value
-            };
+                case Size.Small:
+                    {
+                        return sizeInfluence switch
+                        {
+                            SizeInfluence.Direct => value * _config.SmallSizePropertyFactor,
+                            SizeInfluence.Inverted => value / _config.SmallSizePropertyFactor,
+                            SizeInfluence.None => value,
+                            _ => value
+                        };
+                    }
+                case Size.Medium: return value;
+                case Size.Large:
+                    {
+                        return sizeInfluence switch
+                        {
+                            SizeInfluence.Direct => value * _config.LargeSizePropertyFactor,
+                            SizeInfluence.Inverted => value / _config.LargeSizePropertyFactor,
+                            SizeInfluence.None => value,
+                            _ => value
+                        };
+                    }
+                default: return value;
+            }
         }
 
-        public int Evaluate(Vector2Int range, bool goodProperty, Quality quality, Size size)
+        public int Evaluate(Vector2Int range, bool goodProperty, Quality quality, Size size, SizeInfluence sizeInfluence)
         {
             float minValue, maxValue;
 
@@ -99,16 +115,34 @@ namespace SpaceAce.Gameplay.Items
                 maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
             }
 
-            float delta = (maxValue - minValue) / Mathf.Sqrt(5);
-            float value = UnityEngine.Random.Range(minValue + delta, maxValue - delta);
+            float evaluator = _config.ValueProbabilityCurvePerRange.Evaluate(AuxMath.RandomNormal);
+            float value = Mathf.Lerp(minValue, maxValue, evaluator);
 
-            return size switch
+            switch (size)
             {
-                Size.Small => (int)(value * _smallSizePropertyFactor),
-                Size.Medium => (int)value,
-                Size.Large => (int)(value * _largeSizePropertyFactor),
-                _ => (int)value
-            };
+                case Size.Small:
+                    {
+                        return sizeInfluence switch
+                        {
+                            SizeInfluence.Direct => (int)(value * _config.SmallSizePropertyFactor),
+                            SizeInfluence.Inverted => (int)(value / _config.SmallSizePropertyFactor),
+                            SizeInfluence.None => (int)value,
+                            _ => (int)value
+                        };
+                    }
+                case Size.Medium: return (int)value;
+                case Size.Large:
+                    {
+                        return sizeInfluence switch
+                        {
+                            SizeInfluence.Direct => (int)(value * _config.LargeSizePropertyFactor),
+                            SizeInfluence.Inverted => (int)(value / _config.LargeSizePropertyFactor),
+                            SizeInfluence.None => (int)value,
+                            _ => (int)value
+                        };
+                    }
+                default: return (int)value;
+            }
         }
 
         public float EvaluatePrice(Vector2 priceRange, Quality quality, Size size)
@@ -117,14 +151,15 @@ namespace SpaceAce.Gameplay.Items
 
             float minPrice = Mathf.Lerp(priceRange.x, priceRange.y, rangeInterpolators.x);
             float maxPrice = Mathf.Lerp(priceRange.x, priceRange.y, rangeInterpolators.y);
-            float delta = (maxPrice - minPrice) / Mathf.Sqrt(5);
-            float price = UnityEngine.Random.Range(minPrice + delta, maxPrice - delta);
+
+            float evaluator = _config.ValueProbabilityCurvePerRange.Evaluate(AuxMath.RandomNormal);
+            float price = Mathf.Lerp(minPrice, maxPrice, evaluator);
 
             return size switch
             {
-                Size.Small => price * _smallSizePropertyFactor,
+                Size.Small => price * _config.SmallSizePropertyFactor,
                 Size.Medium => price,
-                Size.Large => price * _largeSizePropertyFactor,
+                Size.Large => price * _config.LargeSizePropertyFactor,
                 _ => price
             };
         }

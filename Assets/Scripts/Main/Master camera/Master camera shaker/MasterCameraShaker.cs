@@ -34,6 +34,8 @@ namespace SpaceAce.Main
 
         public const float AmplitudeCutoff = 0.01f;
 
+        private int _activeShakers = 0;
+
         private MasterCameraShakerSettings _settings = MasterCameraShakerSettings.Default;
 
         public MasterCameraShakerSettings Settings
@@ -95,6 +97,8 @@ namespace SpaceAce.Main
         {
             if (settings.Enabled == false) return;
 
+            _activeShakers++;
+
             float amplitude = settings.Amplitude;
             float attenuation = settings.Attenuation;
             float frequency = settings.Frequency;
@@ -104,23 +108,24 @@ namespace SpaceAce.Main
 
             while (timer < duration)
             {
-                if (token != default && token.IsCancellationRequested == true) break;
+                if (token.IsCancellationRequested == true) break;
 
                 timer += Time.fixedDeltaTime;
 
                 float delta = amplitude * Mathf.Exp(-1f * attenuation * timer) * Mathf.Sin(2f * Mathf.PI * frequency * timer);
-                float deltaX = delta * AuxMath.RandomSign;
-                float deltaY = delta * AuxMath.RandomSign;
-                var deltaPos = new Vector2(deltaX, deltaY);
+                Vector2 deltaPos = new(delta * AuxMath.RandomSign, delta * AuxMath.RandomSign);
 
-                _masterCameraBody.MovePosition(deltaPos);
+                if (_masterCameraBody != null) _masterCameraBody.MovePosition(_masterCameraBody.position + deltaPos);
+                else break;
 
                 while (_gamePauser.Paused == true) await UniTask.NextFrame();
 
                 await UniTask.WaitForFixedUpdate();
             }
 
-            _masterCameraBody.MovePosition(Vector2.zero);
+            _activeShakers--;
+
+            if (_activeShakers == 0 && _masterCameraBody != null) _masterCameraBody.position = Vector2.zero;
         }
 
         #region interfaces

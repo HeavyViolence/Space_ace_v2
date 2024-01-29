@@ -69,8 +69,8 @@ namespace SpaceAce.Main.Audio
         public async UniTask PlayOnceAsync(AudioProperties properties,
                                            Vector3 position,
                                            Transform anchor = null,
-                                           CancellationToken token = default,
-                                           bool obeyGamePause = false)
+                                           bool obeyGamePause = false,
+                                           CancellationToken token = default)
         {
             AudioSource source = FindAvailableAudioSource();
             AudioAccess access = ConfigureAudioSource(source, properties, position, anchor, false);
@@ -81,8 +81,7 @@ namespace SpaceAce.Main.Audio
             {
                 timer += Time.deltaTime;
 
-                if (token != default &&
-                    token.IsCancellationRequested == true) break;
+                if (token != default && token.IsCancellationRequested == true) break;
 
                 if (obeyGamePause == true && _gamePauser.Paused == true)
                 {

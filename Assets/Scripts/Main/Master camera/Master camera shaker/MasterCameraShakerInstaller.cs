@@ -7,13 +7,13 @@ namespace SpaceAce.Main
     public sealed class MasterCameraShakerInstaller : MonoInstaller
     {
         [SerializeField]
-        private MasterCameraShakerSettings _settings;
+        private MasterCameraShakerConfig _config;
 
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<MasterCameraShaker>()
                      .AsSingle()
-                     .WithArguments(_settings)
+                     .WithArguments(_config.Settings)
                      .NonLazy();
         }
     }

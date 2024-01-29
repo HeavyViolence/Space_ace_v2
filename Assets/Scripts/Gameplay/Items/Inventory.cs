@@ -27,20 +27,47 @@ namespace SpaceAce.Gameplay.Items
             _items = new(DefaultCapacity);
         }
 
-        public void AddItem(IItem item)
+        public bool TryAddItem(IItem item)
         {
             if (item is null) throw new ArgumentNullException();
+            if (ItemsCount == Capacity) return false;
 
             _items.Add(item);
             item.Depleted += (sender, args) => _items.Remove(item);
 
             ContentChanged?.Invoke(this, EventArgs.Empty);
+
+            return true;
         }
 
-        public void AddItems(IEnumerable<IItem> items)
+        public bool TryAddItems(IEnumerable<IItem> items, out IEnumerable<IItem> leftover)
         {
             if (items is null) throw new ArgumentNullException();
-            foreach (var item in items) AddItem(item);
+
+            if (ItemsCount == Capacity)
+            {
+                leftover = null;
+                return false;
+            }
+
+            List<IItem> surplus = new();
+
+            foreach (var item in items)
+            {
+                if (ItemsCount < Capacity) _items.Add(item);
+                else surplus.Add(item);
+            }
+
+            ContentChanged?.Invoke(this, EventArgs.Empty);
+
+            if (surplus.Count == 0)
+            {
+                leftover = null;
+                return true;
+            }
+
+            leftover = surplus;
+            return false;
         }
 
         public bool Contains(IItem item) => _items.Contains(item);
@@ -69,7 +96,7 @@ namespace SpaceAce.Gameplay.Items
 
         public IEnumerable<IItem> GetItems() => _items;
 
-        public IEnumerable<ItemSavableState> GetItemsSavableState()
+        public IEnumerable<ItemSavableState> GetItemsSavableStates()
         {
             List<ItemSavableState> states = new(_items.Count);
 

@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+
 using Newtonsoft.Json;
 
 using SpaceAce.Gameplay.Shooting.Ammo;
@@ -42,14 +44,7 @@ namespace SpaceAce.Gameplay.Players
         public void Initialize()
         {
             _savingSystem.Register(this);
-
-            if (_startingItemsDispenseTime < DateTime.Now) return;
-
-            AddCredits();
-            AddAmmo();
-
-            _startingItemsDispenseTime = DateTime.Now;
-            SavingRequested?.Invoke(this, EventArgs.Empty);
+            DispenseStartingItemsAsync().Forget();
         }
 
         public void Dispose()
@@ -79,13 +74,14 @@ namespace SpaceAce.Gameplay.Players
 
         #endregion
 
-        public void AddCredits()
+        private async UniTaskVoid DispenseStartingItemsAsync()
         {
-            _player.Wallet.AddCredits(_config.StartingCredits);
-        }
+            if (_startingItemsDispenseTime < DateTime.Now) return;
 
-        public void AddAmmo()
-        {
+            await UniTask.NextFrame();
+
+            _player.Wallet.AddCredits(_config.StartingCredits);
+
             List<AmmoSet> startingAmmo = new();
 
             foreach (var ammoRequest in _config.GetStartingAmmoRequests())
@@ -94,7 +90,10 @@ namespace SpaceAce.Gameplay.Players
                 startingAmmo.Add(ammo);
             }
 
-            _player.Inventory.AddItems(startingAmmo);
+            _player.Inventory.TryAddItems(startingAmmo, out _);
+
+            _startingItemsDispenseTime = DateTime.Now;
+            SavingRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 }

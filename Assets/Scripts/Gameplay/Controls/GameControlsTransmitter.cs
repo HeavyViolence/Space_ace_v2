@@ -19,6 +19,10 @@ namespace SpaceAce.Gameplay.Controls
         public event EventHandler<CallbackContext> SelectNextAmmo;
         public event EventHandler<CallbackContext> SelectPreviousAmmo;
 
+        public event EventHandler<CallbackContext> SwitchToSmallWeapons;
+        public event EventHandler<CallbackContext> SwitchToMediumWeapons;
+        public event EventHandler<CallbackContext> SwitchToLargeWeapons;
+
         public event EventHandler<CallbackContext> Fire;
         public event EventHandler<CallbackContext> Ceasefire;
 
@@ -63,6 +67,10 @@ namespace SpaceAce.Gameplay.Controls
             _gameControls.Player.PreviousAmmo.performed += (ctx) => SelectPreviousAmmo?.Invoke(this, ctx);
             _gameControls.Player.NextAmmo.performed += (ctx) => SelectNextAmmo?.Invoke(this, ctx);
 
+            _gameControls.Player.SwitchToSmallWeapons.performed += (ctx) => SwitchToSmallWeapons?.Invoke(this, ctx);
+            _gameControls.Player.SwitchToMediumWeapons.performed += (ctx) => SwitchToMediumWeapons?.Invoke(this, ctx);
+            _gameControls.Player.SwitchToLargeWeapons.performed += (ctx) => SwitchToLargeWeapons?.Invoke(this, ctx);
+
             _gameControls.Player.Fire.performed += (ctx) => Fire?.Invoke(this, ctx);
             _gameControls.Player.Fire.canceled += (ctx) => Ceasefire?.Invoke(this, ctx);
 
@@ -83,6 +91,10 @@ namespace SpaceAce.Gameplay.Controls
 
             _gameControls.Player.PreviousAmmo.performed -= (ctx) => SelectPreviousAmmo?.Invoke(this, ctx);
             _gameControls.Player.NextAmmo.performed -= (ctx) => SelectNextAmmo?.Invoke(this, ctx);
+
+            _gameControls.Player.SwitchToSmallWeapons.performed -= (ctx) => SwitchToSmallWeapons?.Invoke(this, ctx);
+            _gameControls.Player.SwitchToMediumWeapons.performed -= (ctx) => SwitchToMediumWeapons?.Invoke(this, ctx);
+            _gameControls.Player.SwitchToLargeWeapons.performed -= (ctx) => SwitchToLargeWeapons?.Invoke(this, ctx);
 
             _gameControls.Player.Fire.performed -= (ctx) => Fire?.Invoke(this, ctx);
             _gameControls.Player.Fire.canceled -= (ctx) => Ceasefire?.Invoke(this, ctx);

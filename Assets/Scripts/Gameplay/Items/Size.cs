@@ -4,6 +4,7 @@ namespace SpaceAce.Gameplay.Items
     {
         Small,
         Medium,
-        Large
+        Large,
+        None
     }
 }

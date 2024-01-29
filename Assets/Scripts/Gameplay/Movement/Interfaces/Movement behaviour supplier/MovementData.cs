@@ -22,7 +22,7 @@ namespace SpaceAce.Gameplay.Movement
         public Vector2 InitialVelocity => InitialDirection * InitialSpeed;
         public Vector2 CurrentVelocity => CurrentDirection * CurrentSpeed;
 
-        public Quaternion InitialRotation {  get; }
+        public Quaternion InitialRotation { get; }
         public Quaternion CurrentRotation { get; set; }
 
         public Transform Target { get; set; }
