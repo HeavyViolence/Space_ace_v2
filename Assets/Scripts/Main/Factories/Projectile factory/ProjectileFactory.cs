@@ -14,6 +14,8 @@ namespace SpaceAce.Main.Factories
     public sealed class ProjectileFactory
     {
         private readonly Dictionary<ProjectileSkin, GameObject> _projectilePrefabs = new();
+        private readonly Dictionary<ProjectileSkin, GameObject> _projectileAnchors = new();
+        private readonly GameObject _projectileMasterAnchor = new("Projectiles master anchor");
         private readonly Dictionary<ProjectileSkin, Stack<CachedProjectile>> _cachedProjectiles = new();
 
         private readonly DiContainer _diContainer;
@@ -31,7 +33,14 @@ namespace SpaceAce.Main.Factories
             _enemyProjectilesLayerName = config.EnemyProjectilesLayerName;
 
             foreach (ProjectileSlot slot in config.ProjectileSlots)
+            {
                 _projectilePrefabs.Add(slot.Skin, slot.Prefab);
+
+                GameObject anchor = new($"Projectile pool of {slot.Skin}");
+                anchor.transform.parent = _projectileMasterAnchor.transform;
+
+                _projectileAnchors.Add(slot.Skin, anchor);
+            }
         }
 
         public CachedProjectile Create(object user, ProjectileSkin skin)
@@ -39,6 +48,8 @@ namespace SpaceAce.Main.Factories
             if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true && stack.Count > 0)
             {
                 CachedProjectile cachedProjectile = stack.Pop();
+
+                cachedProjectile.Instance.transform.parent = null;
                 cachedProjectile.Instance.SetActive(true);
 
                 if (user is Player)
@@ -102,6 +113,7 @@ namespace SpaceAce.Main.Factories
 
             projectile.Instance.SetActive(false);
             projectile.Instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            projectile.Instance.transform.parent = _projectileAnchors[skin].transform;
 
             if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true)
             {

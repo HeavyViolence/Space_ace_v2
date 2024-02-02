@@ -9,6 +9,7 @@ namespace SpaceAce.Auxiliary
     public static class AuxMath
     {
         public const float Phi = 1.618_033f;
+        public const float E = 2.718_281f;
 
         public static float RandomNormal => UnityEngine.Random.Range(0f, 1f);
         public static float RandomUnit => UnityEngine.Random.Range(-1f, 1f);

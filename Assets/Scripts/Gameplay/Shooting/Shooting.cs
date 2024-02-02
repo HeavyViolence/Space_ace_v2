@@ -151,8 +151,7 @@ namespace SpaceAce.Gameplay.Shooting
                 {
                     ItemUsageResult usageResult = await _activeAmmo.TryUseAsync(user, token, gun);
 
-                    if (_config.ShakeOnShotFired == true)
-                        _masterCameraShaker.ShakeOnShotFiredAsync().Forget();
+                    if (_config.ShakeOnShotFired == true) _masterCameraShaker.ShakeOnShotFired();
 
                     foreach (object arg in usageResult.Args)
                         if (arg is ShotResult shotResult)

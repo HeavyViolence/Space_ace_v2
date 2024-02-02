@@ -13,7 +13,7 @@ namespace SpaceAce.Main
         {
             Container.BindInterfacesAndSelfTo<MasterCameraShaker>()
                      .AsSingle()
-                     .WithArguments(_config.Settings)
+                     .WithArguments(_config.Settings, _config.ShakeCurve)
                      .NonLazy();
         }
     }

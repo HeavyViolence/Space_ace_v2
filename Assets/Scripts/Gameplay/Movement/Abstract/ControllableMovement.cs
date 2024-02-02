@@ -53,8 +53,10 @@ namespace SpaceAce.Gameplay.Movement
             _collisionDamageDealer.Hit += CollisionHitEventHandler;
         }
 
-        protected virtual void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
+
             _collisionDamageDealer.Hit -= CollisionHitEventHandler;
         }
 
@@ -62,7 +64,7 @@ namespace SpaceAce.Gameplay.Movement
         {
             e.DamageReceiver.ApplyDamage(NextCollisionDamage);
             AudioPlayer.PlayOnceAsync(_config.CollisionAudio.Random, e.HitPosition, null, true).Forget();
-            MasterCameraShaker.ShakeOnCollisionAsync().Forget();
+            MasterCameraShaker.ShakeOnCollision();
         }
     }
 }

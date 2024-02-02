@@ -15,12 +15,14 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public partial class @GameControls: IInputActionCollection2, IDisposable
+namespace SpaceAce.Gameplay.Controls
 {
-    public InputActionAsset asset { get; }
-    public @GameControls()
+    public partial class @GameControls: IInputActionCollection2, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        public InputActionAsset asset { get; }
+        public @GameControls()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""GameControls"",
     ""maps"": [
         {
@@ -338,246 +340,247 @@ public partial class @GameControls: IInputActionCollection2, IDisposable
         }
     ]
 }");
+            // Player
+            m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+            m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+            m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+            m_Player_NextAmmo = m_Player.FindAction("NextAmmo", throwIfNotFound: true);
+            m_Player_PreviousAmmo = m_Player.FindAction("PreviousAmmo", throwIfNotFound: true);
+            m_Player_SwitchToSmallWeapons = m_Player.FindAction("SwitchToSmallWeapons", throwIfNotFound: true);
+            m_Player_SwitchToMediumWeapons = m_Player.FindAction("SwitchToMediumWeapons", throwIfNotFound: true);
+            m_Player_SwitchToLargeWeapons = m_Player.FindAction("SwitchToLargeWeapons", throwIfNotFound: true);
+            // Menu
+            m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+            m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
+            m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        public void Disable()
+        {
+            asset.Disable();
+        }
+
+        public IEnumerable<InputBinding> bindings => asset.bindings;
+
+        public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
+        {
+            return asset.FindAction(actionNameOrId, throwIfNotFound);
+        }
+
+        public int FindBinding(InputBinding bindingMask, out InputAction action)
+        {
+            return asset.FindBinding(bindingMask, out action);
+        }
+
         // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
-        m_Player_NextAmmo = m_Player.FindAction("NextAmmo", throwIfNotFound: true);
-        m_Player_PreviousAmmo = m_Player.FindAction("PreviousAmmo", throwIfNotFound: true);
-        m_Player_SwitchToSmallWeapons = m_Player.FindAction("SwitchToSmallWeapons", throwIfNotFound: true);
-        m_Player_SwitchToMediumWeapons = m_Player.FindAction("SwitchToMediumWeapons", throwIfNotFound: true);
-        m_Player_SwitchToLargeWeapons = m_Player.FindAction("SwitchToLargeWeapons", throwIfNotFound: true);
+        private readonly InputActionMap m_Player;
+        private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
+        private readonly InputAction m_Player_Movement;
+        private readonly InputAction m_Player_Fire;
+        private readonly InputAction m_Player_NextAmmo;
+        private readonly InputAction m_Player_PreviousAmmo;
+        private readonly InputAction m_Player_SwitchToSmallWeapons;
+        private readonly InputAction m_Player_SwitchToMediumWeapons;
+        private readonly InputAction m_Player_SwitchToLargeWeapons;
+        public struct PlayerActions
+        {
+            private @GameControls m_Wrapper;
+            public PlayerActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Movement => m_Wrapper.m_Player_Movement;
+            public InputAction @Fire => m_Wrapper.m_Player_Fire;
+            public InputAction @NextAmmo => m_Wrapper.m_Player_NextAmmo;
+            public InputAction @PreviousAmmo => m_Wrapper.m_Player_PreviousAmmo;
+            public InputAction @SwitchToSmallWeapons => m_Wrapper.m_Player_SwitchToSmallWeapons;
+            public InputAction @SwitchToMediumWeapons => m_Wrapper.m_Player_SwitchToMediumWeapons;
+            public InputAction @SwitchToLargeWeapons => m_Wrapper.m_Player_SwitchToLargeWeapons;
+            public InputActionMap Get() { return m_Wrapper.m_Player; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+            public void AddCallbacks(IPlayerActions instance)
+            {
+                if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @NextAmmo.started += instance.OnNextAmmo;
+                @NextAmmo.performed += instance.OnNextAmmo;
+                @NextAmmo.canceled += instance.OnNextAmmo;
+                @PreviousAmmo.started += instance.OnPreviousAmmo;
+                @PreviousAmmo.performed += instance.OnPreviousAmmo;
+                @PreviousAmmo.canceled += instance.OnPreviousAmmo;
+                @SwitchToSmallWeapons.started += instance.OnSwitchToSmallWeapons;
+                @SwitchToSmallWeapons.performed += instance.OnSwitchToSmallWeapons;
+                @SwitchToSmallWeapons.canceled += instance.OnSwitchToSmallWeapons;
+                @SwitchToMediumWeapons.started += instance.OnSwitchToMediumWeapons;
+                @SwitchToMediumWeapons.performed += instance.OnSwitchToMediumWeapons;
+                @SwitchToMediumWeapons.canceled += instance.OnSwitchToMediumWeapons;
+                @SwitchToLargeWeapons.started += instance.OnSwitchToLargeWeapons;
+                @SwitchToLargeWeapons.performed += instance.OnSwitchToLargeWeapons;
+                @SwitchToLargeWeapons.canceled += instance.OnSwitchToLargeWeapons;
+            }
+
+            private void UnregisterCallbacks(IPlayerActions instance)
+            {
+                @Movement.started -= instance.OnMovement;
+                @Movement.performed -= instance.OnMovement;
+                @Movement.canceled -= instance.OnMovement;
+                @Fire.started -= instance.OnFire;
+                @Fire.performed -= instance.OnFire;
+                @Fire.canceled -= instance.OnFire;
+                @NextAmmo.started -= instance.OnNextAmmo;
+                @NextAmmo.performed -= instance.OnNextAmmo;
+                @NextAmmo.canceled -= instance.OnNextAmmo;
+                @PreviousAmmo.started -= instance.OnPreviousAmmo;
+                @PreviousAmmo.performed -= instance.OnPreviousAmmo;
+                @PreviousAmmo.canceled -= instance.OnPreviousAmmo;
+                @SwitchToSmallWeapons.started -= instance.OnSwitchToSmallWeapons;
+                @SwitchToSmallWeapons.performed -= instance.OnSwitchToSmallWeapons;
+                @SwitchToSmallWeapons.canceled -= instance.OnSwitchToSmallWeapons;
+                @SwitchToMediumWeapons.started -= instance.OnSwitchToMediumWeapons;
+                @SwitchToMediumWeapons.performed -= instance.OnSwitchToMediumWeapons;
+                @SwitchToMediumWeapons.canceled -= instance.OnSwitchToMediumWeapons;
+                @SwitchToLargeWeapons.started -= instance.OnSwitchToLargeWeapons;
+                @SwitchToLargeWeapons.performed -= instance.OnSwitchToLargeWeapons;
+                @SwitchToLargeWeapons.canceled -= instance.OnSwitchToLargeWeapons;
+            }
+
+            public void RemoveCallbacks(IPlayerActions instance)
+            {
+                if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IPlayerActions instance)
+            {
+                foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public PlayerActions @Player => new PlayerActions(this);
+
         // Menu
-        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
-        m_Menu_Inventory = m_Menu.FindAction("Inventory", throwIfNotFound: true);
-    }
-
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    public void Disable()
-    {
-        asset.Disable();
-    }
-
-    public IEnumerable<InputBinding> bindings => asset.bindings;
-
-    public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
-    {
-        return asset.FindAction(actionNameOrId, throwIfNotFound);
-    }
-
-    public int FindBinding(InputBinding bindingMask, out InputAction action)
-    {
-        return asset.FindBinding(bindingMask, out action);
-    }
-
-    // Player
-    private readonly InputActionMap m_Player;
-    private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_Fire;
-    private readonly InputAction m_Player_NextAmmo;
-    private readonly InputAction m_Player_PreviousAmmo;
-    private readonly InputAction m_Player_SwitchToSmallWeapons;
-    private readonly InputAction m_Player_SwitchToMediumWeapons;
-    private readonly InputAction m_Player_SwitchToLargeWeapons;
-    public struct PlayerActions
-    {
-        private @GameControls m_Wrapper;
-        public PlayerActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
-        public InputAction @NextAmmo => m_Wrapper.m_Player_NextAmmo;
-        public InputAction @PreviousAmmo => m_Wrapper.m_Player_PreviousAmmo;
-        public InputAction @SwitchToSmallWeapons => m_Wrapper.m_Player_SwitchToSmallWeapons;
-        public InputAction @SwitchToMediumWeapons => m_Wrapper.m_Player_SwitchToMediumWeapons;
-        public InputAction @SwitchToLargeWeapons => m_Wrapper.m_Player_SwitchToLargeWeapons;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void AddCallbacks(IPlayerActions instance)
+        private readonly InputActionMap m_Menu;
+        private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
+        private readonly InputAction m_Menu_Back;
+        private readonly InputAction m_Menu_Inventory;
+        public struct MenuActions
         {
-            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Movement.started += instance.OnMovement;
-            @Movement.performed += instance.OnMovement;
-            @Movement.canceled += instance.OnMovement;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
-            @NextAmmo.started += instance.OnNextAmmo;
-            @NextAmmo.performed += instance.OnNextAmmo;
-            @NextAmmo.canceled += instance.OnNextAmmo;
-            @PreviousAmmo.started += instance.OnPreviousAmmo;
-            @PreviousAmmo.performed += instance.OnPreviousAmmo;
-            @PreviousAmmo.canceled += instance.OnPreviousAmmo;
-            @SwitchToSmallWeapons.started += instance.OnSwitchToSmallWeapons;
-            @SwitchToSmallWeapons.performed += instance.OnSwitchToSmallWeapons;
-            @SwitchToSmallWeapons.canceled += instance.OnSwitchToSmallWeapons;
-            @SwitchToMediumWeapons.started += instance.OnSwitchToMediumWeapons;
-            @SwitchToMediumWeapons.performed += instance.OnSwitchToMediumWeapons;
-            @SwitchToMediumWeapons.canceled += instance.OnSwitchToMediumWeapons;
-            @SwitchToLargeWeapons.started += instance.OnSwitchToLargeWeapons;
-            @SwitchToLargeWeapons.performed += instance.OnSwitchToLargeWeapons;
-            @SwitchToLargeWeapons.canceled += instance.OnSwitchToLargeWeapons;
-        }
+            private @GameControls m_Wrapper;
+            public MenuActions(@GameControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Back => m_Wrapper.m_Menu_Back;
+            public InputAction @Inventory => m_Wrapper.m_Menu_Inventory;
+            public InputActionMap Get() { return m_Wrapper.m_Menu; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+            public void AddCallbacks(IMenuActions instance)
+            {
+                if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
+            }
 
-        private void UnregisterCallbacks(IPlayerActions instance)
-        {
-            @Movement.started -= instance.OnMovement;
-            @Movement.performed -= instance.OnMovement;
-            @Movement.canceled -= instance.OnMovement;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
-            @NextAmmo.started -= instance.OnNextAmmo;
-            @NextAmmo.performed -= instance.OnNextAmmo;
-            @NextAmmo.canceled -= instance.OnNextAmmo;
-            @PreviousAmmo.started -= instance.OnPreviousAmmo;
-            @PreviousAmmo.performed -= instance.OnPreviousAmmo;
-            @PreviousAmmo.canceled -= instance.OnPreviousAmmo;
-            @SwitchToSmallWeapons.started -= instance.OnSwitchToSmallWeapons;
-            @SwitchToSmallWeapons.performed -= instance.OnSwitchToSmallWeapons;
-            @SwitchToSmallWeapons.canceled -= instance.OnSwitchToSmallWeapons;
-            @SwitchToMediumWeapons.started -= instance.OnSwitchToMediumWeapons;
-            @SwitchToMediumWeapons.performed -= instance.OnSwitchToMediumWeapons;
-            @SwitchToMediumWeapons.canceled -= instance.OnSwitchToMediumWeapons;
-            @SwitchToLargeWeapons.started -= instance.OnSwitchToLargeWeapons;
-            @SwitchToLargeWeapons.performed -= instance.OnSwitchToLargeWeapons;
-            @SwitchToLargeWeapons.canceled -= instance.OnSwitchToLargeWeapons;
-        }
+            private void UnregisterCallbacks(IMenuActions instance)
+            {
+                @Back.started -= instance.OnBack;
+                @Back.performed -= instance.OnBack;
+                @Back.canceled -= instance.OnBack;
+                @Inventory.started -= instance.OnInventory;
+                @Inventory.performed -= instance.OnInventory;
+                @Inventory.canceled -= instance.OnInventory;
+            }
 
-        public void RemoveCallbacks(IPlayerActions instance)
-        {
-            if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
+            public void RemoveCallbacks(IMenuActions instance)
+            {
+                if (m_Wrapper.m_MenuActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
 
-        public void SetCallbacks(IPlayerActions instance)
-        {
-            foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            public void SetCallbacks(IMenuActions instance)
+            {
+                foreach (var item in m_Wrapper.m_MenuActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_MenuActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
         }
-    }
-    public PlayerActions @Player => new PlayerActions(this);
-
-    // Menu
-    private readonly InputActionMap m_Menu;
-    private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
-    private readonly InputAction m_Menu_Back;
-    private readonly InputAction m_Menu_Inventory;
-    public struct MenuActions
-    {
-        private @GameControls m_Wrapper;
-        public MenuActions(@GameControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Back => m_Wrapper.m_Menu_Back;
-        public InputAction @Inventory => m_Wrapper.m_Menu_Inventory;
-        public InputActionMap Get() { return m_Wrapper.m_Menu; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
-        public void AddCallbacks(IMenuActions instance)
+        public MenuActions @Menu => new MenuActions(this);
+        private int m_KeyboardandmouseSchemeIndex = -1;
+        public InputControlScheme KeyboardandmouseScheme
         {
-            if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
-            @Back.started += instance.OnBack;
-            @Back.performed += instance.OnBack;
-            @Back.canceled += instance.OnBack;
-            @Inventory.started += instance.OnInventory;
-            @Inventory.performed += instance.OnInventory;
-            @Inventory.canceled += instance.OnInventory;
+            get
+            {
+                if (m_KeyboardandmouseSchemeIndex == -1) m_KeyboardandmouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard and mouse");
+                return asset.controlSchemes[m_KeyboardandmouseSchemeIndex];
+            }
         }
-
-        private void UnregisterCallbacks(IMenuActions instance)
+        public interface IPlayerActions
         {
-            @Back.started -= instance.OnBack;
-            @Back.performed -= instance.OnBack;
-            @Back.canceled -= instance.OnBack;
-            @Inventory.started -= instance.OnInventory;
-            @Inventory.performed -= instance.OnInventory;
-            @Inventory.canceled -= instance.OnInventory;
+            void OnMovement(InputAction.CallbackContext context);
+            void OnFire(InputAction.CallbackContext context);
+            void OnNextAmmo(InputAction.CallbackContext context);
+            void OnPreviousAmmo(InputAction.CallbackContext context);
+            void OnSwitchToSmallWeapons(InputAction.CallbackContext context);
+            void OnSwitchToMediumWeapons(InputAction.CallbackContext context);
+            void OnSwitchToLargeWeapons(InputAction.CallbackContext context);
         }
-
-        public void RemoveCallbacks(IMenuActions instance)
+        public interface IMenuActions
         {
-            if (m_Wrapper.m_MenuActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
+            void OnBack(InputAction.CallbackContext context);
+            void OnInventory(InputAction.CallbackContext context);
         }
-
-        public void SetCallbacks(IMenuActions instance)
-        {
-            foreach (var item in m_Wrapper.m_MenuActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_MenuActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public MenuActions @Menu => new MenuActions(this);
-    private int m_KeyboardandmouseSchemeIndex = -1;
-    public InputControlScheme KeyboardandmouseScheme
-    {
-        get
-        {
-            if (m_KeyboardandmouseSchemeIndex == -1) m_KeyboardandmouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard and mouse");
-            return asset.controlSchemes[m_KeyboardandmouseSchemeIndex];
-        }
-    }
-    public interface IPlayerActions
-    {
-        void OnMovement(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
-        void OnNextAmmo(InputAction.CallbackContext context);
-        void OnPreviousAmmo(InputAction.CallbackContext context);
-        void OnSwitchToSmallWeapons(InputAction.CallbackContext context);
-        void OnSwitchToMediumWeapons(InputAction.CallbackContext context);
-        void OnSwitchToLargeWeapons(InputAction.CallbackContext context);
-    }
-    public interface IMenuActions
-    {
-        void OnBack(InputAction.CallbackContext context);
-        void OnInventory(InputAction.CallbackContext context);
     }
 }

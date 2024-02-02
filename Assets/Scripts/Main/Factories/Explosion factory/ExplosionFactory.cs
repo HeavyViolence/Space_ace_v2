@@ -80,7 +80,7 @@ namespace SpaceAce.Main.Factories
                 _audioPlayer.PlayOnceAsync(audio.Random, position, null, true, token).Forget();
             else throw new Exception($"Explosion audio of a requested size ({size}) doesn't exist!");
 
-            _masterCameraShaker.ShakeOnDefeatAsync().Forget();
+            _masterCameraShaker.ShakeOnDefeat();
         }
 
         private async UniTask AwaitExplosionEffectToPlayAsync(CachedParticleSystem instance, CancellationToken token)

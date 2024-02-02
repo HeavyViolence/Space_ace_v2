@@ -18,6 +18,11 @@ namespace SpaceAce.Main
         [SerializeField, Space]
         private ShakeSettings _onHit = ShakeSettings.Default;
 
+        [SerializeField, Space]
+        private AnimationCurve _shakeCurve;
+
         public MasterCameraShakerSettings Settings => new(_onShotFired, _onDefeat, _onCollision, _onHit);
+
+        public AnimationCurve ShakeCurve => _shakeCurve;
     }
 }

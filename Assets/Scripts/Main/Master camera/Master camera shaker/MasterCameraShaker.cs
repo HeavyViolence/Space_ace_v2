@@ -1,12 +1,10 @@
-using Cysharp.Threading.Tasks;
-
 using Newtonsoft.Json;
 
 using SpaceAce.Auxiliary;
 using SpaceAce.Main.Saving;
 
 using System;
-using System.Threading;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -14,27 +12,19 @@ using Zenject;
 
 namespace SpaceAce.Main
 {
-    public sealed class MasterCameraShaker : IInitializable, IDisposable, ISavable
+    public sealed class MasterCameraShaker : IInitializable, IDisposable, ISavable, IFixedTickable
     {
         public event EventHandler SavingRequested;
+
+        private readonly HashSet<ShakeRequest> _shakeRequests = new();
+        private readonly HashSet<ShakeRequest> _shakeRequestsToBeDeleted = new();
 
         private readonly Rigidbody2D _masterCameraBody;
 
         private readonly GamePauser _gamePauser;
         private readonly ISavingSystem _savingSystem;
 
-        public const float MinAmplitude = 0.1f;
-        public const float MaxAmplitude = 1f;
-
-        public const float MinAttenuation = 0.1f;
-        public const float MaxAttenuation = 2f;
-
-        public const float MinFrequency = 0.1f;
-        public const float MaxFrequency = 10f;
-
-        public const float AmplitudeCutoff = 0.01f;
-
-        private int _activeShakers = 0;
+        private readonly AnimationCurve _shakeCurve;
 
         private MasterCameraShakerSettings _settings = MasterCameraShakerSettings.Default;
 
@@ -54,11 +44,16 @@ namespace SpaceAce.Main
         public string ID => "Camera shaking";
 
         public MasterCameraShaker(MasterCameraShakerSettings settings,
+                                  AnimationCurve shakeCurve,
                                   MasterCameraHolder masterCameraHolder,
                                   GamePauser gamePauser,
                                   ISavingSystem savingSystem)
         {
             _settings = settings ?? throw new ArgumentNullException();
+
+            if (shakeCurve == null) throw new ArgumentNullException();
+
+            _shakeCurve = shakeCurve;
 
             if (masterCameraHolder is null) throw new ArgumentNullException();
 
@@ -73,59 +68,51 @@ namespace SpaceAce.Main
             _savingSystem = savingSystem ?? throw new ArgumentNullException();
         }
 
-        public async UniTask ShakeOnShotFiredAsync(CancellationToken token = default)
+        public void ShakeOnShotFired() => _shakeRequests.Add(_settings.OnShotFired.NewShakeRequest);
+        public void ShakeOnDefeat() => _shakeRequests.Add(_settings.OnDefeat.NewShakeRequest);
+        public void ShakeOnCollision() => _shakeRequests.Add(_settings.OnCollision.NewShakeRequest);
+        public void ShakeOnHit() => _shakeRequests.Add(_settings.OnHit.NewShakeRequest);
+
+        private void ShakeMasterCamera()
         {
-            await ShakeAsync(Settings.OnShotFired, token);
-        }
+            if (_shakeRequests.Count == 0 || _gamePauser.Paused == true) return;
 
-        public async UniTask ShakeOnDefeatAsync(CancellationToken token = default)
-        {
-            await ShakeAsync(Settings.OnDefeat, token);
-        }
+            float totalAmplitude = 0f;
+            float averageAmplitude;
 
-        public async UniTask ShakeOnCollisionAsync(CancellationToken token = default)
-        {
-            await ShakeAsync(Settings.OnCollision, token);
-        }
+            float totalFrequency = 0f;
+            float averageFrequency;
 
-        public async UniTask ShakeOnHitAsync(CancellationToken token = default)
-        {
-            await ShakeAsync(Settings.OnHit, token);
-        }
+            int counter = 0;
 
-        private async UniTask ShakeAsync(ShakeSettings settings, CancellationToken token)
-        {
-            if (settings.Enabled == false) return;
-
-            _activeShakers++;
-
-            float amplitude = settings.Amplitude;
-            float attenuation = settings.Attenuation;
-            float frequency = settings.Frequency;
-
-            float timer = 0f;
-            float duration = -1f * Mathf.Log(AmplitudeCutoff) / attenuation;
-
-            while (timer < duration)
+            foreach (ShakeRequest request in _shakeRequests)
             {
-                if (token.IsCancellationRequested == true) break;
-
-                timer += Time.fixedDeltaTime;
-
-                float delta = amplitude * Mathf.Exp(-1f * attenuation * timer) * Mathf.Sin(2f * Mathf.PI * frequency * timer);
-                Vector2 deltaPos = new(delta * AuxMath.RandomSign, delta * AuxMath.RandomSign);
-
-                if (_masterCameraBody != null) _masterCameraBody.MovePosition(_masterCameraBody.position + deltaPos);
-                else break;
-
-                while (_gamePauser.Paused == true) await UniTask.NextFrame();
-
-                await UniTask.WaitForFixedUpdate();
+                totalAmplitude += request.CurrentAmplitude;
+                totalFrequency += request.CurrentFrequency;
+                counter++;
             }
 
-            _activeShakers--;
+            averageAmplitude = totalAmplitude / counter;
+            averageFrequency = totalFrequency / counter;
 
-            if (_activeShakers == 0 && _masterCameraBody != null) _masterCameraBody.position = Vector2.zero;
+            float delta = averageAmplitude * Mathf.Sin(2f * Mathf.PI * averageFrequency);
+            Vector2 position = new(AuxMath.RandomUnit * delta, AuxMath.RandomUnit * delta);
+
+            _masterCameraBody.MovePosition(position);
+
+            foreach (ShakeRequest request in _shakeRequests)
+            {
+                request.FixedUpdate(_shakeCurve);
+                if (request.NormalizedDuration >= 1f) _shakeRequestsToBeDeleted.Add(request);
+            }
+
+            if (_shakeRequestsToBeDeleted.Count > 0)
+            {
+                foreach (ShakeRequest request in _shakeRequestsToBeDeleted) _shakeRequests.Remove(request);
+                _shakeRequestsToBeDeleted.Clear();
+            }
+
+            if (_shakeRequests.Count == 0) _masterCameraBody.position = Vector2.zero;
         }
 
         #region interfaces
@@ -148,10 +135,7 @@ namespace SpaceAce.Main
             {
                 _settings = JsonConvert.DeserializeObject<MasterCameraShakerSettings>(state);
             }
-            catch (Exception)
-            {
-                _settings = MasterCameraShakerSettings.Default;
-            }
+            catch (Exception) { }
         }
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
@@ -159,6 +143,11 @@ namespace SpaceAce.Main
         public bool Equals(ISavable other) => other is not null && ID == other.ID;
 
         public override int GetHashCode() => ID.GetHashCode();
+
+        public void FixedTick()
+        {
+            ShakeMasterCamera();
+        }
 
         #endregion
     }

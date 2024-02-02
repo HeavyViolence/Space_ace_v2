@@ -15,4 +15,4 @@ MonoBehaviour:
   _ammoSize: 1
   _convergenceAngle: 1
   _fireRate: 7
-  _dispersion: 2
+  _dispersion: 3

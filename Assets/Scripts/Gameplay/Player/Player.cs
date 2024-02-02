@@ -161,7 +161,7 @@ namespace SpaceAce.Gameplay.Players
             if (_activeShip.TryGetComponent(out IMovementController movementController) == true)
                 _playerShipMovementController = movementController;
             else throw new MissingComponentException($"Player ship is missing {typeof(IMovementController)}!");
-
+            
             if (_activeShip.TryGetComponent(out Shooting.Shooting shooting) == true)
             {
                 _playerShipShooting = shooting;

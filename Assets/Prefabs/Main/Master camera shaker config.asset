@@ -14,21 +14,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _onShotFired:
     _enabled: 1
-    _amplitude: 0.03
-    _attenuation: 2
-    _frequency: 3
+    _amplitude: 0.1
+    _frequency: 60
+    _duration: 0.5
   _onDefeat:
     _enabled: 1
-    _amplitude: 0.3
-    _attenuation: 2
-    _frequency: 1
+    _amplitude: 0.5
+    _frequency: 30
+    _duration: 2
   _onCollision:
     _enabled: 1
-    _amplitude: 0.1
-    _attenuation: 2
-    _frequency: 3
+    _amplitude: 0.3
+    _frequency: 60
+    _duration: 1
   _onHit:
     _enabled: 1
-    _amplitude: 0.05
-    _attenuation: 2
-    _frequency: 3
+    _amplitude: 0.2
+    _frequency: 60
+    _duration: 0.5
+  _shakeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 6.153286
+      outSlope: 6.153286
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.29237947
+    - serializedVersion: 3
+      time: 0.5
+      value: 1.0023422
+      inSlope: -0.00410676
+      outSlope: -0.00410676
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.000077281635
+      outSlope: 0.000077281635
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
