@@ -6,6 +6,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                      menuName = "Space ace/Configs/Shooting/Ammo/Regular ammo set config")]
     public sealed class RegularAmmoSetConfig : AmmoSetConfig
     {
-
+        public override AmmoType AmmoType => AmmoType.Regular;
     }
 }

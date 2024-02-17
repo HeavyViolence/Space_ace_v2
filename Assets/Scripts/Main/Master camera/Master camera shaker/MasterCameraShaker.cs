@@ -103,7 +103,7 @@ namespace SpaceAce.Main
             foreach (ShakeRequest request in _shakeRequests)
             {
                 request.FixedUpdate(_shakeCurve);
-                if (request.NormalizedDuration >= 1f) _shakeRequestsToBeDeleted.Add(request);
+                if (request.NormalizedDuration > 1f) _shakeRequestsToBeDeleted.Add(request);
             }
 
             if (_shakeRequestsToBeDeleted.Count > 0)

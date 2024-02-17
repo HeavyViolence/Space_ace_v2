@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Explosive ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 760fbe664549c49f190fb01922eced0c, type: 3}
+  - {fileID: 8300000, guid: b744f3f2deb2048a58e807a9b7cf6715, type: 3}
+  - {fileID: 8300000, guid: 28ee02dd1f53842af83992866efb4518, type: 3}
+  - {fileID: 8300000, guid: 31c38d3179c4c4d1cb1b2015b7a24194, type: 3}
+  - {fileID: 8300000, guid: ed817ece231d44dc9b31585a1477473d, type: 3}
+  - {fileID: 8300000, guid: 335e1ebb09cea420087720bae565d609, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

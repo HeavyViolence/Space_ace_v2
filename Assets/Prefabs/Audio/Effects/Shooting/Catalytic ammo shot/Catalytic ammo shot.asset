@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Catalytic ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 1f81bde5444a14133a15bab22bacc2c3, type: 3}
+  - {fileID: 8300000, guid: 3273459d069f44d0fae7f7da961ab2cd, type: 3}
+  - {fileID: 8300000, guid: afebb7f1493734e00921062cd767cc42, type: 3}
+  - {fileID: 8300000, guid: 51f79e98632d94156948ea38dca07fa2, type: 3}
+  - {fileID: 8300000, guid: 9e1ea71e01d544fc7881c591dc408458, type: 3}
+  - {fileID: 8300000, guid: 8d1c3a4404d0b431f8e1d86d1658dc5f, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

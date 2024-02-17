@@ -45,9 +45,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1888948699123712
-    m_Localized: 'Size: {Size:choose(0|1|2):Small|Medium|Large}
+    m_Localized: 'Has a chance to not spend ammo on shot
 
-      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -63,10 +67,477 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
+  - m_Id: 12317482475180032
+    m_Localized: 'Fires multiple projectiles at once
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Projectiles per shot: {ProjectilesPerShot:n}'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 12318179463647232
+    m_Localized: Cluster ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12349501628338176
+    m_Localized: Critical ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12349631018422272
+    m_Localized: 'Has a chance to deal critical damage
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Critical damage probability: {CriticalDamageProbabilityPercentage:n}%
+
+      Critical
+      damage: {CriticalDamage:n} Hp'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 12476194334560256
+    m_Localized: 'Explodes on contact and deals area damage
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Explosion radius: {ExplosionRadius:n}
+      m
+
+      Explosion damage: {ExplosionDamage:n} Hp'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 12476189766963200
+    m_Localized: Explosive ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12684528916484096
+    m_Localized: Devastating ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12684535191162880
+    m_Localized: 'Damage increases with each consecutive hit of the same target,
+      but resets on a different target hit
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Damage increase per hit: {DamageIncreasePerHitPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 12711923333582848
+    m_Localized: Catalytic ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12711926269595648
+    m_Localized: 'Fire rate increases with each shot, but resets on ceasefire
+
+
+      Size:
+      {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Fire rate increase per shot: {FireRateIncreasePerShotPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 12727643840827392
+    m_Localized: Cooling ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12727647322099712
+    m_Localized: 'Heat generation decreases with each shot, but resets on ceasefire
+
+
+      Size:
+      {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Heat generation decrease per shot:
+      {HeatGenerationDecreasePerShotPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 13236392317800448
+    m_Localized: 'Dispersion decreases with each shot, but resets on ceasefire
+
+
+      Size:
+      {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Dispersion decrease per shot: {DispersionDecreasePerShotPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 13236389390176256
+    m_Localized: Stabilizing ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14534977734955008
+    m_Localized: Homing amo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14534982407409664
+    m_Localized: 'Projectiles automatically lock onto the nearest target in the direction
+      of a ship
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Homing speed: {HomingSpeed:n} deg/s
+
+      Targeting
+      width: {TargetingWidth:n} m'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 14866304199938048
+    m_Localized: Piercing ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14866307475689472
+    m_Localized: 'Has a greater speed and damage, penetrates multiple targets, but
+      heat generation increases with each shot
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Heat generation
+      increase per shot: {HeatGenerationIncreasePerShotPercentage:n}%
+
+      Speed:
+      {Speed:n} m/s
+
+      Damage: {Damage:n} Hp
+
+      Max hits: {ProjectileHits:n}'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 14893207241740288
+    m_Localized: Entangled ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14893212664975360
+    m_Localized: 'Ammo doesn''t deplete on shot. Lose additional ammo on miss, but
+      gain more ammo on hit
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Ammo loss on miss: {AmmoLossOnMiss:n}
+
+      Ammo
+      gain on hit: {AmmoGainOnHit:n}'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 15221844004425728
+    m_Localized: EMP ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15221847523446784
+    m_Localized: 'Increases target''s weapons jamming probability and dispersion.
+      Decreases target''s speed, armor, and fire rate
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      EMP strength: {EMPStrengthPercentage:n}%
+
+      EMP
+      duration: {EMPDuration:n} s'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 15782719346036736
+    m_Localized: Nanite ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15782722990886912
+    m_Localized: 'Deals additional damage over time that ignores armor. This effect
+      doesn''t stack
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Damape per second: {DamagePerSecond:n}
+      Hp/s
+
+      Damage duration: {DamageDuration:n} s'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 17057411063205888
+    m_Localized: Missile set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17057415727271936
+    m_Localized: 'Fast self-propelling contact ammo. Builds up speed over time. Has
+      homing capabilities. Deals great damage
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Homing speed: {HomingSpeed:n} Deg/s
+
+      Targeting
+      width: {TargetingWidth:n} m
+
+      Speed gain duration: {SpeedGainDuration:n}
+      s'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 17059262588375040
+    m_Localized: Explosive missile set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17059264731664384
+    m_Localized: 'Fast self-propelling contact ammo. Builds up speed over time. Has
+      homing capabilities. Deals great damage. Has additional area damage
+
+
+      Size:
+      {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Homing speed: {HomingSpeed:n} Deg/s
+
+      Targeting
+      width: {TargetingWidth:n} m
+
+      Speed gain duration: {SpeedGainDuration:n}
+      s
+
+      Explosion damage: {ExplosionDamage:n} Hp
+
+      Explosion radius :
+      {ExplosionRadius:n} m'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 17077571505475584
+    m_Localized: Nanite missile set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17077574206607360
+    m_Localized: 'Fast self-propelling contact ammo. Builds up speed over time. Has
+      homing capabilities. Deals great damage. Deals additional damage over time
+      to all targets caught inside the explosion area
+
+
+      Size: {Size:choose(0|1|2):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Homing speed: {HomingSpeed:n} Deg/s
+
+      Targeting
+      width: {TargetingWidth:n} m
+
+      Speed gain duration: {SpeedGainDuration:n}
+      s
+
+      Explosion radius : {ExplosionRadius:n} m
+
+      Damage per second:
+      {DamagePerSecond:n} Hp/s
+
+      Damage duration: {DamageDuration:n} s'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
   references:
     version: 2
     RefIds:
     - rid: 4327559728174727170
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00d0f508e11a040000d03524fdb50600
+        m_Entries: 00d0f508e11a040000d03524fdb5060000d0755fafc22b0000d0f589ecdf2b0000d0755b08532c0000d0357e84102d0000d0b5f96d292d0000d07551ba372d0000d035be6d062f0000d0354f7da3330000d035f0d3d0340000d0754a4ce9340000d0758e3014360000d0758d4d12380000d03515a1993c0000d075964f9b3c0000d03598f6ab3c00

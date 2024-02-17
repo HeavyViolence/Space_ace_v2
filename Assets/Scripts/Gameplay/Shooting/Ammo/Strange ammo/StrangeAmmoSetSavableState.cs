@@ -1,5 +1,4 @@
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Main.Factories;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
 {
@@ -7,16 +6,14 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
     {
         public float AmmoLossProbability { get; }
 
-        public StrangeAmmoSetSavableState(AmmoType type,
-                                          Size size,
+        public StrangeAmmoSetSavableState(Size size,
                                           Quality quality,
                                           float price,
                                           int amount,
                                           float heatGeneration,
                                           float speed,
                                           float damage,
-                                          float ammoLossProbability) : base(type,
-                                                                            size,
+                                          float ammoLossProbability) : base(size,
                                                                             quality,
                                                                             price,
                                                                             amount,
@@ -26,7 +23,5 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         {
             AmmoLossProbability = ammoLossProbability;
         }
-
-        public override IItem Recreate(SavedItemsServices services) => services.AmmoFactory.Create(this);
     }
 }

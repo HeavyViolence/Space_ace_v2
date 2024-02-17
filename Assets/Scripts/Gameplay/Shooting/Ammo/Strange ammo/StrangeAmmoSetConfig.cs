@@ -11,9 +11,11 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public const float MinAmmoLossProbability = 0f;
         public const float MaxAmmoLossProbability = 1f;
 
-        [SerializeField, MinMaxSlider(MinAmmoLossProbability, MaxAmmoLossProbability)]
+        [SerializeField, MinMaxSlider(MinAmmoLossProbability, MaxAmmoLossProbability), Space]
         private Vector2 _ammoLossProbability = new(MinAmmoLossProbability, MaxAmmoLossProbability);
 
         public Vector2 AmmoLossProbability => _ammoLossProbability;
+
+        public override AmmoType AmmoType => AmmoType.Strange;
     }
 }

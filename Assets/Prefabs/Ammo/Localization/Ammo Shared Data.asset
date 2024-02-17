@@ -16,19 +16,139 @@ MonoBehaviour:
   m_TableCollectionNameGuidString: 454c4003c36da6b4dac98f49dd34252d
   m_Entries:
   - m_Id: 10174713856
-    m_Key: Regular.Name
+    m_Key: Regular/Name
     m_Metadata:
       m_Items: []
   - m_Id: 1155453727133696
-    m_Key: Regular.Description
+    m_Key: Regular/Description
     m_Metadata:
       m_Items: []
   - m_Id: 1888902377230336
-    m_Key: Strange.Name
+    m_Key: Strange/Name
     m_Metadata:
       m_Items: []
   - m_Id: 1888948699123712
-    m_Key: Strange.Description
+    m_Key: Strange/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12317482475180032
+    m_Key: Cluster/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12318179463647232
+    m_Key: Cluster/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12349501628338176
+    m_Key: Critical/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12349631018422272
+    m_Key: Critical/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12476189766963200
+    m_Key: Explosive/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12476194334560256
+    m_Key: Explosive/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12684528916484096
+    m_Key: Devastating/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12684535191162880
+    m_Key: Devastating/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12711923333582848
+    m_Key: Catalytic/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12711926269595648
+    m_Key: Catalytic/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12727643840827392
+    m_Key: Cooling/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12727647322099712
+    m_Key: Cooling/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13236389390176256
+    m_Key: Stabilizing/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13236392317800448
+    m_Key: Stabilizing/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14534977734955008
+    m_Key: Homing/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14534982407409664
+    m_Key: Homing/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14866304199938048
+    m_Key: Piercing/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14866307475689472
+    m_Key: Piercing/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14893207241740288
+    m_Key: Entangled/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14893212664975360
+    m_Key: Entangled/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15221844004425728
+    m_Key: EMP/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15221847523446784
+    m_Key: EMP/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15782719346036736
+    m_Key: Nanite/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15782722990886912
+    m_Key: Nanite/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17057411063205888
+    m_Key: Missile/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17057415727271936
+    m_Key: Missile/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17059262588375040
+    m_Key: Explosive missile/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17059264731664384
+    m_Key: Explosive missile/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17077571505475584
+    m_Key: Nanite missile/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17077574206607360
+    m_Key: Nanite missile/Description
     m_Metadata:
       m_Items: []
   m_Metadata:

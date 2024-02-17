@@ -30,6 +30,8 @@ namespace SpaceAce.Gameplay.Movement
         public float HomingSpeed { get; set; }
         public float RotationsPerMinute { get; set; }
 
+        public AnimationCurve SpeedGainCurve { get; }
+
         public MovementData(float initialSpeed,
                             float finalSpeed,
                             float finalSpeedGainDuration,
@@ -38,7 +40,8 @@ namespace SpaceAce.Gameplay.Movement
                             Quaternion initialRotation,
                             Transform target,
                             float homingSpeed,
-                            float rotationsPerMinute)
+                            float rotationsPerMinute,
+                            AnimationCurve speedGainCurve = null)
         {
             Timer = 0f;
 
@@ -60,6 +63,8 @@ namespace SpaceAce.Gameplay.Movement
             HomingSpeed = Mathf.Clamp(homingSpeed, 0f, float.MaxValue);
 
             RotationsPerMinute = Mathf.Clamp(rotationsPerMinute, 0f, float.MaxValue);
+
+            SpeedGainCurve = speedGainCurve;
         }
     }
 }

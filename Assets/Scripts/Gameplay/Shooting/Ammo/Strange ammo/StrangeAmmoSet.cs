@@ -7,20 +7,20 @@ using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main.Factories;
 
+using System;
+
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
 {
-    public sealed class StrangeAmmoSet : AmmoSet
+    public sealed class StrangeAmmoSet : AmmoSet, IEquatable<StrangeAmmoSet>
     {
-        public override AmmoType Type => AmmoType.Strange;
-
         public float AmmoLossProbability { get; }
         public float AmmoLossProbabilityPercentage => AmmoLossProbability * 100f;
 
         protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun, object[] args)
         {
-            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin);
+            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
@@ -38,7 +38,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
                 HitBehaviour?.Invoke(hitArgs, args);
-
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
@@ -48,7 +47,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             projectile.Escapable.Escaped += (sender, args) =>
             {
                 MissBehaviour?.Invoke(args);
-
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
             };
 
@@ -57,7 +55,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             if (AuxMath.RandomNormal < AmmoLossProbability)
             {
                 Amount--;
-                Price -= ProjectilePrice;
+                Price -= ShotPrice;
             }
 
             await UniTask.WaitForSeconds(1f / gun.FireRate);
@@ -94,12 +92,23 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         }
 
         public override async UniTask<string> GetNameAsync() =>
-            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange.Name", this);
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange/Name", this);
 
         public override async UniTask<string> GetDescriptionAsync() =>
-            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange.Description", this);
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange/Description", this);
 
         public override ItemSavableState GetSavableState() =>
-            new StrangeAmmoSetSavableState(Type, Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, AmmoLossProbability);
+            new StrangeAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, AmmoLossProbability);
+
+        #region interfaces
+
+        public override bool Equals(AmmoSet ammo) => base.Equals(ammo) && Equals(ammo as StrangeAmmoSet);
+
+        public bool Equals(StrangeAmmoSet other) => other is not null &&
+                                                    AmmoLossProbability == other.AmmoLossProbability;
+
+        public override int GetHashCode() => base.GetHashCode() ^ AmmoLossProbability.GetHashCode();
+
+        #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace SpaceAce.Gameplay.Items
 {
     public sealed class Inventory
     {
-        public const int DefaultCapacity = 100;
+        public const int DefaultCapacity = 1000;
 
         public event EventHandler ContentChanged;
 
@@ -54,8 +54,15 @@ namespace SpaceAce.Gameplay.Items
 
             foreach (var item in items)
             {
-                if (ItemsCount < Capacity) _items.Add(item);
-                else surplus.Add(item);
+                if (ItemsCount < Capacity)
+                {
+                    _items.Add(item);
+                    item.Depleted += (sender, args) => _items.Remove(item);
+                }
+                else
+                {
+                    surplus.Add(item);
+                }
             }
 
             ContentChanged?.Invoke(this, EventArgs.Empty);
@@ -82,6 +89,7 @@ namespace SpaceAce.Gameplay.Items
 
             removedItem = _items[itemIndex];
             _items.RemoveAt(itemIndex);
+            ContentChanged?.Invoke(this, EventArgs.Empty);
 
             return true;
         }
@@ -92,6 +100,7 @@ namespace SpaceAce.Gameplay.Items
                 item.Depleted -= (sender, args) => _items.Remove(item);
 
             _items.Clear();
+            ContentChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public IEnumerable<IItem> GetItems() => _items;

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerProjectilesLayerName: Player projectiles
   _enemyProjectilesLayerName: Enemy projectiles
+  _smallProjectileScale: 0.618
+  _largeProjectileScale: 1.618
   _projectiles:
   - _skin: 0
     _prefab: {fileID: 1572496124263638045, guid: 179b641f37724204dac8e1f238827494, type: 3}
@@ -30,22 +32,28 @@ MonoBehaviour:
   - _skin: 6
     _prefab: {fileID: 1727354641205278791, guid: f85271b1a67579649b5e9bb7adf7f034, type: 3}
   - _skin: 7
-    _prefab: {fileID: 5157317533318652164, guid: 7c3758bad2e4cf045b8f9857a6165d38, type: 3}
+    _prefab: {fileID: 7192327137182060816, guid: 89f61363e58b5114d82d042744b5989f, type: 3}
   - _skin: 8
-    _prefab: {fileID: 321502585440893902, guid: 023e68f99401f6241bdbc4433c9f6888, type: 3}
+    _prefab: {fileID: 5157317533318652164, guid: 7c3758bad2e4cf045b8f9857a6165d38, type: 3}
   - _skin: 9
-    _prefab: {fileID: 8503966456865163755, guid: 4b692e6edfb472b4b853ce51a203f518, type: 3}
+    _prefab: {fileID: 321502585440893902, guid: 023e68f99401f6241bdbc4433c9f6888, type: 3}
   - _skin: 10
+    _prefab: {fileID: 8503966456865163755, guid: 4b692e6edfb472b4b853ce51a203f518, type: 3}
+  - _skin: 11
     _prefab: {fileID: 7904691952544837413, guid: 5b47daa0f3b2b0a439008eda37193d92, type: 3}
-  - _skin: 12
-    _prefab: {fileID: 3462597418696441308, guid: ce7cf8d0ee70f394cbb7136a690635a9, type: 3}
   - _skin: 13
-    _prefab: {fileID: 7947272341104339937, guid: ad9b93e2adea9084fbb3027a4d1fc4e5, type: 3}
+    _prefab: {fileID: 3462597418696441308, guid: ce7cf8d0ee70f394cbb7136a690635a9, type: 3}
   - _skin: 14
-    _prefab: {fileID: 6154359927303737994, guid: 29896d1d23786374aa8a5dd05d19e5de, type: 3}
+    _prefab: {fileID: 7947272341104339937, guid: ad9b93e2adea9084fbb3027a4d1fc4e5, type: 3}
   - _skin: 15
-    _prefab: {fileID: 4800051051940080158, guid: d09ba7c9184dc904599bf4e7edb53084, type: 3}
+    _prefab: {fileID: 6154359927303737994, guid: 29896d1d23786374aa8a5dd05d19e5de, type: 3}
   - _skin: 16
-    _prefab: {fileID: 4171533642903670789, guid: 19455ad0cc6b49243a07976dac7ce673, type: 3}
+    _prefab: {fileID: 4587014379329785256, guid: 8eba7a3443a60494cbea1e99ef35af46, type: 3}
   - _skin: 17
+    _prefab: {fileID: 4800051051940080158, guid: d09ba7c9184dc904599bf4e7edb53084, type: 3}
+  - _skin: 18
+    _prefab: {fileID: 4171533642903670789, guid: 19455ad0cc6b49243a07976dac7ce673, type: 3}
+  - _skin: 19
     _prefab: {fileID: 5696661047170794080, guid: 0db1291e95c3e6d4a9f9e7cd44d3e29c, type: 3}
+  - _skin: 20
+    _prefab: {fileID: 590469292079493857, guid: 1c4d7ba45377de34094189176a9c3f19, type: 3}

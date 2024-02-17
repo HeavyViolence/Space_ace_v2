@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea2093d9c54f5d4790e167fd3d59652, type: 3}
+  m_Name: Catalytic ammo set config
+  m_EditorClassIdentifier: 
+  _price: {x: 110, y: 1900}
+  _shotAudio: {fileID: 11400000, guid: 8fc5f64574f70d14ebbdb37f6a866b38, type: 2}
+  _projectileSkin: 0
+  _hitEffectSkin: 0
+  _amount: {x: 2000, y: 9999}
+  _heatGeneration: {x: 3, y: 5}
+  _speed: {x: 130, y: 170}
+  _damage: {x: 30, y: 70}
+  _fireRateFactorPerShot: {x: 1.05, y: 1.1}

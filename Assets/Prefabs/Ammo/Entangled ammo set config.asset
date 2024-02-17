@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0010cb12cd9dbbf4fbcbd94c5e5fdac1, type: 3}
+  m_Name: Entangled ammo set config
+  m_EditorClassIdentifier: 
+  _price: {x: 70, y: 1300}
+  _shotAudio: {fileID: 11400000, guid: 34002ef9133aadd4e9aa5efd5645a41e, type: 2}
+  _projectileSkin: 17
+  _hitEffectSkin: 1
+  _amount: {x: 300, y: 500}
+  _heatGeneration: {x: 3, y: 5}
+  _speed: {x: 130, y: 170}
+  _damage: {x: 30, y: 70}
+  _ammoLossOnMiss: {x: 2, y: 3}
+  _ammoGainOnHit: {x: 5, y: 7}

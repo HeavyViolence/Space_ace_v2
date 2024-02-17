@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Piercing ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: b40db3016532e40a1b3e8dd8f5eecc0a, type: 3}
+  - {fileID: 8300000, guid: b1937f3c2d16b4e9487e67f6ba041ddb, type: 3}
+  - {fileID: 8300000, guid: 503ea500211374b9e80d37a051438391, type: 3}
+  - {fileID: 8300000, guid: 6d7bf550d4bdf451f902b27eef2b9fee, type: 3}
+  - {fileID: 8300000, guid: dcbb71a801a7940e1beef660b7bc6b02, type: 3}
+  - {fileID: 8300000, guid: c597c80d14b8244a794f0f82f8715b7e, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

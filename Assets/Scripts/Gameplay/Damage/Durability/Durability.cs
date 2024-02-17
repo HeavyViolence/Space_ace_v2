@@ -8,24 +8,16 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Damage
 {
-    public abstract class Durability : MonoBehaviour
+    public sealed class Durability : MonoBehaviour
     {
         [SerializeField]
         private DurabilityConfig _config;
 
         private GamePauser _gamePauser;
 
-        protected virtual float MinInitialValue => _config.MinInitialValue;
-        protected virtual float MaxInitialValue => _config.MaxInitialValue;
-        protected virtual float RandomInitialValue => _config.RandomInitialValue;
-
-        protected virtual float MinInitialValueRegen => _config.MinInitialValueRegen;
-        protected virtual float MaxInitialValueRegen => _config.MaxInitialValueRegen;
-        protected virtual float RandomInitialValueRegen => _config.RandomInitialValueRegen;
-
-        public float Value { get; protected set; }
-        public float MaxValue { get; protected set; }
-        public float Regen { get; protected set; }
+        public float Value { get; private set; }
+        public float MaxValue { get; private set; }
+        public float Regen { get; private set; }
 
         [Inject]
         private void Construct(GamePauser gamePauser)
@@ -33,11 +25,11 @@ namespace SpaceAce.Gameplay.Damage
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
         }
 
-        protected virtual void OnEnable()
+        private void OnEnable()
         {
-            MaxValue = RandomInitialValue;
+            MaxValue = _config.RandomInitialValue;
             Value = MaxValue;
-            Regen = RandomInitialValueRegen;
+            Regen = _config.RandomInitialValueRegen;
         }
 
         private void Update()
@@ -51,6 +43,7 @@ namespace SpaceAce.Gameplay.Damage
         public void ApplyDamage(float damage)
         {
             if (damage <= 0f) throw new ArgumentOutOfRangeException();
+
             Value = Mathf.Clamp(Value - damage, 0f, MaxValue);
         }
     }

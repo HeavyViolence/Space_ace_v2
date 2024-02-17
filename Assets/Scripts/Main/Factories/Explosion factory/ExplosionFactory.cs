@@ -19,8 +19,10 @@ namespace SpaceAce.Main.Factories
         private readonly AudioPlayer _audioPlayer;
         private readonly MasterCameraShaker _masterCameraShaker;
         private readonly Dictionary<ExplosionSize, GameObject> _explosionPrefabs = new();
+        private readonly Dictionary<ExplosionSize, GameObject> _explosionAnchors = new();
         private readonly Dictionary<ExplosionSize, AudioCollection> _explosionAudio = new();
         private readonly Dictionary<ExplosionSize, Stack<CachedParticleSystem>> _explosionPool = new();
+        private readonly GameObject _masterAnchor = new("Explosions master anchor");
 
         public ExplosionFactory(DiContainer diContainer,
                                 GamePauser gamePauser,
@@ -39,6 +41,11 @@ namespace SpaceAce.Main.Factories
             {
                 _explosionPrefabs.Add(explosion.Size, explosion.Prefab);
                 _explosionAudio.Add(explosion.Size, explosion.Audio);
+
+                GameObject anchor = new($"{explosion.Size} explosions anchor");
+                anchor.transform.parent = _masterAnchor.transform;
+
+                _explosionAnchors.Add(explosion.Size, anchor);
             }
         }
 
@@ -69,6 +76,7 @@ namespace SpaceAce.Main.Factories
             else throw new Exception($"Explosion prefab of a requested size ({size}) doesn't exist!");
 
             cache.Instance.SetActive(true);
+            cache.Instance.transform.parent = null;
             cache.Instance.transform.position = position;
 
             return cache;
@@ -104,6 +112,7 @@ namespace SpaceAce.Main.Factories
             if (instance is null) throw new ArgumentNullException();
 
             instance.Instance.SetActive(false);
+            instance.Instance.transform.parent = _explosionAnchors[size].transform;
             instance.Instance.transform.position = Vector3.zero;
 
             if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true)

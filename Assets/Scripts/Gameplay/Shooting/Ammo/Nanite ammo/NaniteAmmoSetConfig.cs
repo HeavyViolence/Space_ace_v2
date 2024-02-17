@@ -1,0 +1,37 @@
+using NaughtyAttributes;
+
+using UnityEngine;
+
+namespace SpaceAce.Gameplay.Shooting.Ammo
+{
+    [CreateAssetMenu(fileName = "Nanite ammo set config",
+                     menuName = "Space ace/Configs/Shooting/Ammo/Nanite ammo set config")]
+    public sealed class NaniteAmmoSetConfig : AmmoSetConfig
+    {
+        public override AmmoType AmmoType => AmmoType.Nanite;
+
+        #region damage per second
+
+        public const float MinDamagePerSecond = 10f;
+        public const float MaxDamagePerSecond = 1000f;
+
+        [SerializeField, MinMaxSlider(MinDamagePerSecond, MaxDamagePerSecond), Space]
+        private Vector2 _damagePerSecond = new(MinDamagePerSecond, MaxDamagePerSecond);
+
+        public Vector2 DamagePerSecond => _damagePerSecond;
+
+        #endregion
+
+        #region damage duration
+
+        public const float MinDamageDuration = 1f;
+        public const float MaxDamageDuration = 10f;
+
+        [SerializeField, MinMaxSlider(MinDamageDuration, MaxDamageDuration)]
+        private Vector2 _damageDuration = new(MinDamageDuration, MaxDamageDuration);
+
+        public Vector2 DamageDuration => _damageDuration;
+
+        #endregion
+    }
+}

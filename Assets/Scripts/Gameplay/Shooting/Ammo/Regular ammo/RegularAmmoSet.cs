@@ -13,11 +13,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class RegularAmmoSet : AmmoSet
     {
-        public override AmmoType Type => AmmoType.Regular;
-
         protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun, object[] args)
         {
-            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin);
+            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
@@ -35,7 +33,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
                 HitBehaviour?.Invoke(hitArgs, args);
-
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
@@ -45,14 +42,13 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             projectile.Escapable.Escaped += (sender, args) =>
             {
                 MissBehaviour?.Invoke(args);
-
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
             };
 
             Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.transform.position, null, true).Forget();
 
             Amount--;
-            Price -= ProjectilePrice;
+            Price -= ShotPrice;
 
             await UniTask.WaitForSeconds(1f / gun.FireRate);
 
@@ -84,12 +80,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         { }
 
         public override async UniTask<string> GetNameAsync() =>
-            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular.Name", this);
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular/Name", this);
 
         public override async UniTask<string> GetDescriptionAsync() =>
-            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular.Description", this);
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular/Description", this);
 
         public override ItemSavableState GetSavableState() =>
-            new RegularAmmoSetSavableState(Type, Size, Quality, Price, Amount, HeatGeneration, Speed, Damage);
+            new RegularAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage);
     }
 }

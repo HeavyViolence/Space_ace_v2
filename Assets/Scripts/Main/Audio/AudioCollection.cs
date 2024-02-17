@@ -35,13 +35,13 @@ namespace SpaceAce.Main.Audio
         private AudioMixerGroup _outputAudioGroup;
 
         [SerializeField, MinMaxSlider(0f, 1f)]
-        private Vector2 _volume = new(1f, 1f);
+        private Vector2 _volume = new(0f, 1f);
 
         [SerializeField]
         private AudioPriority _priority = AudioPriority.Lowest;
 
         [SerializeField, MinMaxSlider(MinSpatialBlend, MaxSpatialBlend)]
-        private Vector2 _spatialBlend = new(0f, 0f);
+        private Vector2 _spatialBlend = new(0f, 1f);
 
         [SerializeField, MinMaxSlider(MinPitch, MaxPitch)]
         private Vector2 _pitch = new(MinPitch, MaxPitch);

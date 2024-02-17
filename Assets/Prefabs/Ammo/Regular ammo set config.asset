@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68e7d76edebc8949958f7558a995c42, type: 3}
   m_Name: Regular ammo set config
   m_EditorClassIdentifier: 
-  _price: {x: 50, y: 550}
+  _price: {x: 50, y: 700}
   _shotAudio: {fileID: 11400000, guid: 01b3bbb0640ca144293f351a45cc7b8d, type: 2}
   _projectileSkin: 0
   _hitEffectSkin: 4

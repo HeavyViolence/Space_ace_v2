@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Homing ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: d374193b8bba14b85bfd5b48b0083ca2, type: 3}
+  - {fileID: 8300000, guid: a501e5e2abc43494cb9cd50ce7f8136d, type: 3}
+  - {fileID: 8300000, guid: 6468d0ec16aac426e857a2d29c8accb1, type: 3}
+  - {fileID: 8300000, guid: af449cfdaa9f946ee87edf0e02ebf04e, type: 3}
+  - {fileID: 8300000, guid: e4144f4132c874d0aab1c2378ae5f977, type: 3}
+  - {fileID: 8300000, guid: ff9194ff3d3494a358df9ec6bfec78d7, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

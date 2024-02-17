@@ -13,8 +13,10 @@ namespace SpaceAce.Main.Factories
     {
         private readonly DiContainer _diContainer;
         private readonly GamePauser _gamePauser;
-        private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectsPrefabs = new();
+        private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectPrefabs = new();
+        private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectAnchors = new();
         private readonly Dictionary<ProjectileHitEffectSkin, Stack<CachedParticleSystem>> _hitEffectsPool = new();
+        private readonly GameObject _hitEffectsMasterAnchor = new("Projectile hit effects master anchor");
 
         public ProjectileHitEffectFactory(DiContainer diContainer,
                                           GamePauser gamePauser,
@@ -26,7 +28,14 @@ namespace SpaceAce.Main.Factories
             if (hitEffects is null) throw new ArgumentNullException();
 
             foreach (var hitEffect in hitEffects)
-                _hitEffectsPrefabs.Add(hitEffect.Skin, hitEffect.Prefab);
+            {
+                _hitEffectPrefabs.Add(hitEffect.Skin, hitEffect.Prefab);
+
+                GameObject anchor = new($"Anchor of: {hitEffect.Skin}");
+                anchor.transform.parent = _hitEffectsMasterAnchor.transform;
+
+                _hitEffectAnchors.Add(hitEffect.Skin, anchor);
+            }
         }
 
         public async UniTask CreateAsync(ProjectileHitEffectSkin skin, Vector3 position)
@@ -43,12 +52,13 @@ namespace SpaceAce.Main.Factories
                 CachedParticleSystem hitEffect = stack.Pop();
 
                 hitEffect.Instance.SetActive(true);
+                hitEffect.Instance.transform.parent = null;
                 hitEffect.Instance.transform.position = position;
 
                 return hitEffect;
             }
             
-            if (_hitEffectsPrefabs.TryGetValue(skin, out GameObject hitPrefab) == true)
+            if (_hitEffectPrefabs.TryGetValue(skin, out GameObject hitPrefab) == true)
             {
                 GameObject instance = _diContainer.InstantiatePrefab(hitPrefab);
 
@@ -78,6 +88,7 @@ namespace SpaceAce.Main.Factories
             if (instance is null) throw new ArgumentNullException();
 
             instance.Instance.SetActive(false);
+            instance.Instance.transform.parent = _hitEffectAnchors[skin].transform;
             instance.Instance.transform.position = Vector3.zero;
 
             if (_hitEffectsPool.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true)

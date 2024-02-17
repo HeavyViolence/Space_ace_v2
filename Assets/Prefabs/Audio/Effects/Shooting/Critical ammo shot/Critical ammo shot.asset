@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Critical ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 1ad60c868ef1c4913976603a882de62d, type: 3}
+  - {fileID: 8300000, guid: 0a1ff126ccbe04c5c862d6be3188cd0e, type: 3}
+  - {fileID: 8300000, guid: 0a6c76b9efde544a39a89e87a40bfc2e, type: 3}
+  - {fileID: 8300000, guid: 0d3edc405c2b3405c8fac4f95a193058, type: 3}
+  - {fileID: 8300000, guid: b06d67f0b31224d6bb60d979845eaec0, type: 3}
+  - {fileID: 8300000, guid: ff6a3a5ef13904feb8ab69af52f898fe, type: 3}
+  - {fileID: 8300000, guid: 458e5001927a24dc1b312fd321676a00, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

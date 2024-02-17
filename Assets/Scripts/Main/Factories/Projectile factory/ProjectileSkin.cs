@@ -9,6 +9,7 @@ namespace SpaceAce.Main.Factories
         RedBall,
         RedBallIntense,
         RedSphere,
+        RedMissile,
         Blue,
         BluePiercing,
         BlueLong,
@@ -17,8 +18,10 @@ namespace SpaceAce.Main.Factories
         BlueBall,
         BlueBallIntense,
         BlueSphere,
+        BlueMissile,
         Green,
         GreenBall,
-        GreenSphere
+        GreenSphere,
+        GreenMissile
     }
 }

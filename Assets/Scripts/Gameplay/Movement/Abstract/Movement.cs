@@ -53,11 +53,11 @@ namespace SpaceAce.Gameplay.Movement
 
             if (delay > 0f)
             {
-                float escapeDelayTimer = 0f;
+                float timer = 0f;
 
-                while (escapeDelayTimer < delay)
+                while (timer <= delay)
                 {
-                    escapeDelayTimer += Time.fixedDeltaTime;
+                    timer += Time.fixedDeltaTime;
 
                     if (token.IsCancellationRequested == true) return;
                     while (GamePauser.Paused == true) await UniTask.WaitForFixedUpdate();

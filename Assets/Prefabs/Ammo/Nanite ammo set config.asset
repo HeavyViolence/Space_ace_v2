@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650db4460936e5f489c01ccfaab7bd1a, type: 3}
+  m_Name: Nanite ammo set config
+  m_EditorClassIdentifier: 
+  _price: {x: 130, y: 2300}
+  _shotAudio: {fileID: 11400000, guid: 8de725938d6b7024aa077602a36d909b, type: 2}
+  _projectileSkin: 11
+  _hitEffectSkin: 0
+  _amount: {x: 1000, y: 9999}
+  _heatGeneration: {x: 3, y: 5}
+  _speed: {x: 130, y: 170}
+  _damage: {x: 30, y: 50}
+  _damagePerSecond: {x: 70, y: 130}
+  _damageDuration: {x: 3, y: 7}

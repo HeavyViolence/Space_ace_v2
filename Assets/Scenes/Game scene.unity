@@ -832,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6a563d343381f458d667cd534d1ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ammoConfigs: {fileID: 11400000, guid: d1e02f9a4e7eb2745b60ab9f8e7e378e, type: 2}
+  _config: {fileID: 11400000, guid: 182d55dac66ff1842b991d0f92381a8c, type: 2}
 --- !u!4 &932082425
 Transform:
   m_ObjectHideFlags: 0

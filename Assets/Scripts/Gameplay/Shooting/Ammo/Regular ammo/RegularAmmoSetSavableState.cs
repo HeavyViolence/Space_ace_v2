@@ -1,19 +1,16 @@
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Main.Factories;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class RegularAmmoSetSavableState : AmmoSetSavableState
     {
-        public RegularAmmoSetSavableState(AmmoType type,
-                                          Size size,
+        public RegularAmmoSetSavableState(Size size,
                                           Quality quality,
                                           float price,
                                           int amount,
                                           float heatGeneration,
                                           float speed,
-                                          float damage) : base(type,
-                                                               size,
+                                          float damage) : base(size,
                                                                quality,
                                                                price,
                                                                amount,
@@ -22,7 +19,5 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                                                                damage)
         {
         }
-
-        public override IItem Recreate(SavedItemsServices services) => services.AmmoFactory.Create(this);
     }
 }

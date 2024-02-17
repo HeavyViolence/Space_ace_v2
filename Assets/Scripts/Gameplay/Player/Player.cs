@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
+using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories;
 using SpaceAce.Main.Saving;
@@ -21,7 +22,11 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace SpaceAce.Gameplay.Players
 {
-    public sealed class Player : IInitializable, IDisposable, ISavable, IFixedTickable
+    public sealed class Player : IInitializable,
+                                 IDisposable,
+                                 ISavable,
+                                 IFixedTickable,
+                                 IAmmoObservable
     {
         public event EventHandler ShipSpawned, ShipDefeated;
         public event EventHandler SavingRequested;
@@ -74,6 +79,8 @@ namespace SpaceAce.Gameplay.Players
         }
 
         #region interfaces
+
+        public Shooting.Shooting Shooting => _playerShipShooting;
 
         public void Initialize()
         {
