@@ -142,7 +142,7 @@ namespace SpaceAce.Main.Factories
 
         public void Release(CachedProjectile projectile, ProjectileSkin skin)
         {
-            if (projectile is null) throw new ArgumentNullException();
+            if (projectile.Incomplete == true) throw new ArgumentNullException();
 
             projectile.Instance.SetActive(false);
             projectile.Instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);

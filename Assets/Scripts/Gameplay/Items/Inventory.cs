@@ -1,5 +1,3 @@
-using SpaceAce.Auxiliary;
-
 using System;
 using System.Collections.Generic;
 
@@ -11,20 +9,19 @@ namespace SpaceAce.Gameplay.Items
 
         public event EventHandler ContentChanged;
 
-        private readonly List<IItem> _items;
+        private readonly HashSet<IItem> _items;
 
+        public int Capacity { get; }
         public int ItemsCount => _items.Count;
-        public int Capacity => _items.Capacity;
+        public float FillNormalized => (float)ItemsCount / Capacity;
+        public float FillPercentage => FillNormalized * 100f;
 
-        public Inventory(int capacity)
+        public Inventory(int capacity = DefaultCapacity)
         {
             if (capacity <= 0) throw new ArgumentOutOfRangeException();
-            _items = new(Capacity);
-        }
 
-        public Inventory()
-        {
-            _items = new(DefaultCapacity);
+            Capacity = capacity;
+            _items = new(capacity);
         }
 
         public bool TryAddItem(IItem item)
@@ -79,19 +76,15 @@ namespace SpaceAce.Gameplay.Items
 
         public bool Contains(IItem item) => _items.Contains(item);
 
-        public bool TryRemoveItem(int itemIndex, out IItem removedItem)
+        public bool TryRemoveItem(IItem itemToRemove)
         {
-            if (AuxMath.ValueInRange(0, ItemsCount - 1, itemIndex) == false)
+            if (_items.Remove(itemToRemove) == true)
             {
-                removedItem = null;
-                return false;
+                ContentChanged?.Invoke(this, EventArgs.Empty);
+                return true;
             }
 
-            removedItem = _items[itemIndex];
-            _items.RemoveAt(itemIndex);
-            ContentChanged?.Invoke(this, EventArgs.Empty);
-
-            return true;
+            return false;
         }
 
         public void Clear()

@@ -5,15 +5,15 @@ using UnityEngine;
 namespace SpaceAce.Main.Factories
 {
     [Serializable]
-    public sealed class PlayerShipSlot
+    public sealed class ShipSlot
     {
         [SerializeField]
-        private PlayerShipType _shipType;
+        private ShipType _shipType;
 
         [SerializeField]
         private GameObject _prefab;
 
-        public PlayerShipType ShipType => _shipType;
+        public ShipType ShipType => _shipType;
 
         public GameObject Prefab => _prefab;
     }

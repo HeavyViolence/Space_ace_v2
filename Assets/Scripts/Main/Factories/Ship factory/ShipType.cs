@@ -1,6 +1,6 @@
 namespace SpaceAce.Main.Factories
 {
-    public enum PlayerShipType
+    public enum ShipType
     {
         Ship1Mk1,
         Ship1Mk2,

@@ -68,8 +68,8 @@ namespace SpaceAce.UI
                                      Localizer localizer,
                                      LevelUnlocker levelUnlocker,
                                      BestLevelRunStatisticsCollector bestLevelRunStatisticsCollector) : base(assets.Display,
-                                                                                                              assets.Settings,
-                                                                                                              localizer)
+                                                                                                             assets.Settings,
+                                                                                                             localizer)
         {
             if (assets.LevelButton == null) throw new ArgumentNullException();
 

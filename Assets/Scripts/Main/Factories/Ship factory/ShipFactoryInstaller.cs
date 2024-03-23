@@ -4,14 +4,14 @@ using Zenject;
 
 namespace SpaceAce.Main.Factories
 {
-    public sealed class PlayerShipFactoryInstaller : MonoInstaller
+    public sealed class ShipFactoryInstaller : MonoInstaller
     {
         [SerializeField]
-        private PlayerShipFactoryConfig _config;
+        private ShipFactoryConfig _config;
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<PlayerShipFactory>()
+            Container.BindInterfacesAndSelfTo<ShipFactory>()
                      .AsSingle()
                      .WithArguments(_config.Content)
                      .NonLazy();

@@ -3,7 +3,7 @@ using UnityEngine.Audio;
 
 namespace SpaceAce.Main.Audio
 {
-    public sealed class AudioProperties
+    public readonly struct AudioProperties
     {
         public AudioClip Clip { get; }
         public AudioMixerGroup OutputAudioGroup { get; }

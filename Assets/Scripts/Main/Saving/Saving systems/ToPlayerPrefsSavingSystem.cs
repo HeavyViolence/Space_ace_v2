@@ -8,6 +8,12 @@ namespace SpaceAce.Main.Saving
 {
     public sealed class ToPlayerPrefsSavingSystem : ISavingSystem
     {
+        public event EventHandler SavingCompleted;
+        public event EventHandler SavingFailed;
+
+        public event EventHandler LoadingCompleted;
+        public event EventHandler LoadingFailed;
+
         private readonly UTF8Encoding _UTF8 = new(true, true);
         private readonly HashSet<ISavable> _savableEntities = new();
         private readonly IKeyGenerator _keyGenerator;
@@ -60,8 +66,13 @@ namespace SpaceAce.Main.Saving
                 string encryptedStateAsUTF8 = _UTF8.GetString(encryptedByteState);
 
                 PlayerPrefs.SetString(entity.ID, encryptedStateAsUTF8);
+
+                SavingCompleted?.Invoke(this, EventArgs.Empty);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                SavingFailed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void LoadStateFromPlayerPrefs(ISavable entity)
@@ -78,8 +89,13 @@ namespace SpaceAce.Main.Saving
 
                     string state = _UTF8.GetString(decryptedByteState);
                     entity.SetState(state);
+
+                    LoadingCompleted?.Invoke(this, EventArgs.Empty);
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    LoadingFailed?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }

@@ -35,7 +35,6 @@ namespace SpaceAce.UI
         }
 
         public abstract UniTask EnableAsync();
-
         public abstract void Disable();
     }
 }

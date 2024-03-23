@@ -7,13 +7,20 @@ using UnityEngine;
 
 namespace SpaceAce.Main.Factories
 {
-    public sealed class CachedProjectile
+    public readonly struct CachedProjectile
     {
         public GameObject Instance { get; }
         public SpriteRenderer SpriteRenderer { get; }
         public DamageDealer DamageDealer { get; }
         public IEscapable Escapable { get; }
         public IMovementBehaviourSupplier MovementBehaviourSupplier { get; }
+
+        public bool Incomplete => Instance == null ||
+                                  SpriteRenderer == null ||
+                                  DamageDealer == null ||
+                                  DamageDealer == null ||
+                                  Escapable == null ||
+                                  MovementBehaviourSupplier == null;
 
         public CachedProjectile(GameObject instance,
                                 SpriteRenderer spriteRenderer,

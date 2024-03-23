@@ -81,7 +81,7 @@ namespace SpaceAce.Main.Audio
             {
                 timer += Time.deltaTime;
 
-                if (token != default && token.IsCancellationRequested == true) break;
+                if (token.IsCancellationRequested == true) break;
 
                 if (obeyGamePause == true && _gamePauser.Paused == true)
                 {
@@ -101,17 +101,17 @@ namespace SpaceAce.Main.Audio
         public async UniTask PlayInLoopAsync(AudioProperties properties,
                                              Vector3 position,
                                              Transform anchor = null,
-                                             CancellationToken token = default,
-                                             bool obeyGamePause = false)
+                                             bool obeyGamePause = false,
+                                             CancellationToken token = default)
         {
             AudioSource source = FindAvailableAudioSource();
             AudioAccess access = ConfigureAudioSource(source, properties, position, anchor, true);
 
-            float timer = 0f;
-
             if (token == default)
             {
-                while (timer < access.PlaybackDuration)
+                float timer = 0f;
+
+                while (timer < properties.Clip.length)
                 {
                     timer += Time.deltaTime;
 
@@ -208,10 +208,6 @@ namespace SpaceAce.Main.Audio
                                                  Transform anchor,
                                                  bool loop)
         {
-            if (properties is null)
-                throw new ArgumentNullException(nameof(properties),
-                    $"Attempted to pass an empty {typeof(AudioProperties)}!");
-
             AudioAccess access;
             var id = Guid.NewGuid();
 
@@ -240,7 +236,7 @@ namespace SpaceAce.Main.Audio
                 source.loop = false;
                 source.transform.position = position;
 
-                access = new AudioAccess(id, properties.Clip.length / properties.Pitch);
+                access = new AudioAccess(id, properties.Clip.length);
             }
 
             source.gameObject.SetActive(true);

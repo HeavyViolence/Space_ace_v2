@@ -9,6 +9,12 @@ namespace SpaceAce.Main.Saving
 {
     public sealed class ToFileSavingSystem : ISavingSystem
     {
+        public event EventHandler SavingCompleted;
+        public event EventHandler SavingFailed;
+
+        public event EventHandler LoadingCompleted;
+        public event EventHandler LoadingFailed;
+
         private const string SavesExtension = ".save";
 
         private readonly UTF8Encoding _UTF8 = new(true, true);
@@ -69,8 +75,13 @@ namespace SpaceAce.Main.Saving
 
                 string saveFilePath = GetSaveFilePath(entity.ID);
                 File.WriteAllBytes(saveFilePath, encryptedByteState);
+
+                SavingCompleted?.Invoke(this, EventArgs.Empty);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                SavingFailed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void LoadStateFromFile(ISavable entity)
@@ -88,8 +99,13 @@ namespace SpaceAce.Main.Saving
 
                     string state = _UTF8.GetString(decryptedByteState);
                     entity.SetState(state);
+
+                    LoadingCompleted?.Invoke(this, EventArgs.Empty);
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    LoadingFailed?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 

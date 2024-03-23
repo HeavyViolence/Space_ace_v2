@@ -1362,7 +1362,7 @@ GameObject:
   - component: {fileID: 1627518980}
   - component: {fileID: 1627518979}
   m_Layer: 0
-  m_Name: Player ship factory
+  m_Name: Ship factory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

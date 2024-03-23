@@ -33,9 +33,7 @@ namespace SpaceAce.UI
 
         public MainMenuDisplay(VisualTreeAsset displayAsset,
                                PanelSettings settings,
-                               Localizer localizer) : base(displayAsset,
-                                                           settings,
-                                                           localizer) { }
+                               Localizer localizer) : base(displayAsset, settings, localizer) { }
 
         public override async UniTask EnableAsync()
         {
@@ -73,7 +71,7 @@ namespace SpaceAce.UI
             _cheatsButton.clicked += CheatsButtonClickedEventHandler;
 
             var operation = LocalizationSettings.InitializationOperation;
-            await UniTask.WaitUntil(() => operation.IsDone);
+            await UniTask.WaitUntil(() => operation.IsDone == true);
 
             string localizedPlayButtonText = await Localizer.GetLocalizedStringAsync("Main menu", "Play button text");
             string localizedInventoryButtonText = await Localizer.GetLocalizedStringAsync("Main menu", "Inventory button text");
