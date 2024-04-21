@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpaceAce.Gameplay.Items
 {
@@ -43,7 +44,7 @@ namespace SpaceAce.Gameplay.Items
 
             if (ItemsCount == Capacity)
             {
-                leftover = null;
+                leftover = Enumerable.Empty<IItem>();
                 return false;
             }
 
@@ -66,7 +67,7 @@ namespace SpaceAce.Gameplay.Items
 
             if (surplus.Count == 0)
             {
-                leftover = null;
+                leftover = Enumerable.Empty<IItem>();
                 return true;
             }
 

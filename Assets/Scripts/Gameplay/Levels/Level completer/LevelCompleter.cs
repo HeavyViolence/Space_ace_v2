@@ -5,7 +5,6 @@ using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 
 using System;
-using System.Threading;
 
 using UnityEngine;
 

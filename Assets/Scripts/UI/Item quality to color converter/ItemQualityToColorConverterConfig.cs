@@ -9,27 +9,27 @@ namespace SpaceAce.UI
     public sealed class ItemQualityToColorConverterConfig : ScriptableObject
     {
         [SerializeField]
-        private Color32 _commonQualityColor;
+        private Color _commonQualityColor;
 
         [SerializeField]
-        private Color32 _uncommonQualityColor;
+        private Color _uncommonQualityColor;
 
         [SerializeField]
-        private Color32 _rareQualityColor;
+        private Color _rareQualityColor;
 
         [SerializeField]
-        private Color32 _exceptionalQualityColor;
+        private Color _exceptionalQualityColor;
 
         [SerializeField]
-        private Color32 _exoticQualityColor;
+        private Color _exoticQualityColor;
 
         [SerializeField]
-        private Color32 _epicQualityColor;
+        private Color _epicQualityColor;
 
         [SerializeField]
-        private Color32 _legendaryQualityColor;
+        private Color _legendaryQualityColor;
 
-        public Color32 GetQualityColor(Quality quality)
+        public Color GetQualityColor(Quality quality)
         {
             return quality switch
             {

@@ -28,22 +28,21 @@ namespace SpaceAce.UI
 
         public override async UniTask EnableAsync()
         {
-            if (Enabled == true) return;
+            if (Active == true) return;
 
             DisplayedDocument.visualTreeAsset = DisplayAsset;
             DisplayedDocument.rootVisualElement.style.opacity = 0;
 
-            Enabled = true;
-
-            await UniTask.NextFrame();
+            await base.EnableAsync();
         }
 
-        public override void Disable()
+        public override async UniTask DisableAsync()
         {
-            if (Enabled == false) return;
+            if (Active == false) return;
 
             DisplayedDocument.visualTreeAsset = null;
-            Enabled = false;
+
+            await base.DisableAsync();
         }
 
         public async UniTask FadeInAndOutAsync(float duration)
@@ -62,7 +61,7 @@ namespace SpaceAce.UI
                 await UniTask.NextFrame();
             }
 
-            Disable();
+            await DisableAsync();
         }
     }
 }

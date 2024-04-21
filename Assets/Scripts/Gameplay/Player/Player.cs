@@ -5,9 +5,12 @@ using Newtonsoft.Json;
 using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
+using SpaceAce.Gameplay.Shooting;
+using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories;
 using SpaceAce.Main.Saving;
+using SpaceAce.UI;
 
 using System;
 using System.Collections.Generic;
@@ -24,7 +27,9 @@ namespace SpaceAce.Gameplay.Players
     public sealed class Player : IInitializable,
                                  IDisposable,
                                  ISavable,
-                                 IFixedTickable
+                                 IFixedTickable,
+                                 IAmmoObservable,
+                                 IEntityView
     {
         public event EventHandler ShipSpawned, ShipDefeated;
         public event EventHandler SavingRequested;
@@ -34,7 +39,7 @@ namespace SpaceAce.Gameplay.Players
             TypeNameHandling = TypeNameHandling.Auto 
         };
 
-        private readonly ShipFactory _shipFactory;
+        private readonly PlayerShipFactory _playerShipFactory;
         private readonly SavedItemsFactory _savedItemsFactory;
         private readonly Vector3 _shipSpawnPosition = Vector3.zero;
         private readonly ISavingSystem _savingSystem;
@@ -49,11 +54,18 @@ namespace SpaceAce.Gameplay.Players
         public Wallet Wallet { get; }
         public Experience Experience { get; }
         public Inventory Inventory { get; }
-        public ShipType SelectedShipType { get; set; }
+        public PlayerShipType SelectedShipType { get; set; }
 
         public string ID => "Player";
 
-        public Player(ShipFactory playerShipFactory,
+        public Shooting.Shooting Shooter => _activeShip.Shooting;
+
+        public IDurabilityView DurabilityView => _activeShip.Durability;
+        public IArmorView ArmorView => _activeShip.Armor;
+        public IShooterView ShooterView => _activeShip.Shooting;
+        public IDestroyable Destroyable => _activeShip.Destroyable;
+
+        public Player(PlayerShipFactory playerShipFactory,
                       SavedItemsFactory savedItemsFactory,
                       Vector3 shipSpawnPosition,
                       ISavingSystem savingSystem,
@@ -61,7 +73,7 @@ namespace SpaceAce.Gameplay.Players
                       GameControlsTransmitter gameControlsTransmitter,
                       GamePauser gamePauser)
         {
-            _shipFactory = playerShipFactory ?? throw new ArgumentNullException();
+            _playerShipFactory = playerShipFactory ?? throw new ArgumentNullException();
             _savedItemsFactory = savedItemsFactory ?? throw new ArgumentNullException();
             _shipSpawnPosition = shipSpawnPosition;
             _savingSystem = savingSystem ?? throw new ArgumentNullException();
@@ -118,11 +130,8 @@ namespace SpaceAce.Gameplay.Players
                 Experience.Add(playerState.Experience);
                 SelectedShipType = playerState.SelectedShip;
 
-                if (playerState.InventoryContent is not null)
-                {
-                    IEnumerable<IItem> content = _savedItemsFactory.BatchCreate(playerState.InventoryContent);
-                    Inventory.TryAddItems(content, out _);
-                }
+                IEnumerable<IItem> inventoryContent = _savedItemsFactory.BatchCreate(playerState.InventoryContent);
+                Inventory.TryAddItems(inventoryContent, out _);
             }
             catch (Exception) { }
         }
@@ -157,10 +166,10 @@ namespace SpaceAce.Gameplay.Players
 
         private void SpawnPlayerShip()
         {
-            _activeShip = _shipFactory.Create(SelectedShipType, _shipSpawnPosition, Quaternion.identity);
+            _activeShip = _playerShipFactory.Create(SelectedShipType, _shipSpawnPosition, Quaternion.identity);
 
             _activeShip.Shooting.BindInventory(Inventory);
-            _activeShip.Destroyable.Destroyed += PlayerShipDefeatedEventHandler;
+            _activeShip.Destroyable.Destroyed += (s, e) => ShipDefeated?.Invoke(this, e);
 
             _gameControlsTransmitter.SwitchToSmallWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
             _gameControlsTransmitter.SwitchToMediumWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
@@ -189,9 +198,9 @@ namespace SpaceAce.Gameplay.Players
             _gameControlsTransmitter.Fire -= FireEventHandler;
             _gameControlsTransmitter.Ceasefire -= CeasefireEventHandler;
 
-            _activeShip.Destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
+            _activeShip.Destroyable.Destroyed -= (s, e) => ShipDefeated?.Invoke(this, e);
 
-            _shipFactory.Release(_activeShip, SelectedShipType);
+            _playerShipFactory.Release(_activeShip, SelectedShipType);
         }
 
         private void PlayerShipDefeatedEventHandler(object sender, DestroyedEventArgs e)
@@ -209,8 +218,7 @@ namespace SpaceAce.Gameplay.Players
             _shootingCancellation.Cancel();
             _shootingCancellation.Dispose();
 
-            _shipFactory.Release(_activeShip, SelectedShipType);
-            ShipDefeated?.Invoke(this, EventArgs.Empty);
+            _playerShipFactory.Release(_activeShip, SelectedShipType);
         }
 
         private void FireEventHandler(object sender, CallbackContext e)

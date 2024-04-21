@@ -77,7 +77,7 @@ namespace SpaceAce.UI
 
         private async UniTask MainMenuButtonClickedEventHandlerAsync(object sender, EventArgs e)
         {
-            _gamePauseDisplay.Disable();
+            _gamePauseDisplay.DisableAsync().Forget();
             _screenFader.FadeInAndOutAsync(_settings.FadingDuration).Forget();
             AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
 
@@ -89,7 +89,7 @@ namespace SpaceAce.UI
 
         private void ResumeButtonClickedEventHandler(object sender, EventArgs e)
         {
-            _gamePauseDisplay.Disable();
+            _gamePauseDisplay.DisableAsync().Forget();
             _levelDisplay.EnableAsync().Forget();
             _gamePauser.Resume();
             AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
@@ -102,9 +102,9 @@ namespace SpaceAce.UI
 
         private void GoToPreviousMenuEventHandler(object sender, CallbackContext e)
         {
-            if (_gamePauseDisplay.Enabled == false) return;
+            if (_gamePauseDisplay.Active == false) return;
 
-            _gamePauseDisplay.Disable();
+            _gamePauseDisplay.DisableAsync().Forget();
             _levelDisplay.EnableAsync().Forget();
             _gamePauser.Resume();
             AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();

@@ -1,3 +1,4 @@
+using SpaceAce.Auxiliary;
 using SpaceAce.Main;
 
 using System;
@@ -8,16 +9,58 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Damage
 {
-    public sealed class Durability : MonoBehaviour
+    public sealed class Durability : MonoBehaviour, IDurabilityView
     {
+        public event EventHandler<FloatValueChangedEventArgs> ValueChanged, MaxValueChanged, RegenChanged;
+
         [SerializeField]
         private DurabilityConfig _config;
 
         private GamePauser _gamePauser;
 
-        public float Value { get; private set; }
-        public float MaxValue { get; private set; }
-        public float Regen { get; private set; }
+        public Sprite Icon => _config.Icon;
+
+        private float _value;
+        public float Value
+        {
+            get => _value;
+
+            set
+            {
+                float oldValue = _value;
+                _value = value;
+
+                ValueChanged?.Invoke(this, new(oldValue, value));
+            }
+        }
+
+        private float _maxValue;
+        public float MaxValue
+        {
+            get => _maxValue;
+
+            set
+            {
+                float oldValue = _maxValue;
+                _maxValue = value;
+
+                MaxValueChanged?.Invoke(this, new(oldValue, value));
+            }
+        }
+
+        private float _regen;
+        public float Regen
+        {
+            get => _regen;
+
+            set
+            {
+                float oldValue = _regen;
+                _regen = value;
+
+                RegenChanged?.Invoke(this, new(oldValue, value));
+            }
+        }
 
         [Inject]
         private void Construct(GamePauser gamePauser)

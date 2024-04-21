@@ -85,6 +85,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public override async UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular/Description", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular/Code", this);
+
         public override ItemSavableState GetSavableState() =>
             new RegularAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage);
     }

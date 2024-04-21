@@ -81,7 +81,7 @@ namespace SpaceAce.UI
 
         public override async UniTask EnableAsync()
         {
-            if (Enabled == true) return;
+            if (Active == true) return;
 
             DisplayedDocument.visualTreeAsset = DisplayAsset;
             DisplayedDocument.rootVisualElement.style.opacity = 0;
@@ -95,19 +95,19 @@ namespace SpaceAce.UI
             await UpdateBestLevelRunStatisticsDisplayAsync(0, localizedFont);
 
             DisplayedDocument.rootVisualElement.style.opacity = 1;
-            Enabled = true;
+            Active = true;
         }
 
-        public override void Disable()
+        public override async UniTask DisableAsync()
         {
-            if (Enabled == false) return;
+            if (Active == false) return;
 
             DisplayedDocument.visualTreeAsset = null;
 
             ClearButtons();
             ClearBestLevelRunStatisticsDisplay();
 
-            Enabled = false;
+            await base.DisableAsync();
         }
 
         private async UniTask UpdateHeadlineAsync(Font font)

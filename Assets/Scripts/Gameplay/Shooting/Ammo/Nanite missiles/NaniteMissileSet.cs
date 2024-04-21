@@ -55,6 +55,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Nanite missile/Name", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Nanite missile/Code", this);
+
         public override ItemSavableState GetSavableState() => new NaniteMissileSetSavableState(Size,
                                                                                                Quality,
                                                                                                Price,

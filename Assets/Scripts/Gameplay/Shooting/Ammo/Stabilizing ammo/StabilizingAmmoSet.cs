@@ -26,7 +26,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             if (user is IAmmoObservable observable)
             {
-                if (observable.Shooting.FirstShotInLine == true) _currentDispersionFactor = 1f;
+                if (observable.Shooter.FirstShotInLine == true) _currentDispersionFactor = 1f;
                 else _currentDispersionFactor *= DispersionFactorPerShot;
             }
             else
@@ -105,6 +105,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Stabilizing/Name", this);
+
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Stabilizing/Code", this);
 
         public override ItemSavableState GetSavableState() =>
             new StabilizingAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, DispersionFactorPerShot);

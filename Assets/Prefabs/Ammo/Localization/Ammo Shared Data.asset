@@ -151,6 +151,82 @@ MonoBehaviour:
     m_Key: Nanite missile/Description
     m_Metadata:
       m_Items: []
+  - m_Id: 31959519956684800
+    m_Key: Regular/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31960840361332736
+    m_Key: Strange/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31961799636406272
+    m_Key: Catalytic/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963155948490752
+    m_Key: Cluster/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963429773627392
+    m_Key: Cooling/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963662427475968
+    m_Key: Critical/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963894741585920
+    m_Key: Explosive/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31964553159233536
+    m_Key: Devastating/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31964623308967936
+    m_Key: Stabilizing/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31965145155883008
+    m_Key: Homing/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31965702377558016
+    m_Key: Piercing/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31965831725699072
+    m_Key: Entangled/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31966635249487872
+    m_Key: EMP/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31966776723361792
+    m_Key: Nanite/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31967160762224640
+    m_Key: Missile/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31967295504240640
+    m_Key: New Entry
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31967320993026048
+    m_Key: Explosive missile/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31968057357619200
+    m_Key: Nanite missile/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32253922403274752
+    m_Key: Out of ammo warning
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

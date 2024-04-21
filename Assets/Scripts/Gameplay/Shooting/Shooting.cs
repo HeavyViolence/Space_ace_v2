@@ -6,6 +6,7 @@ using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
+using SpaceAce.Main.Localization;
 
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,14 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Shooting
 {
-    public sealed class Shooting : MonoBehaviour, IEMPTarget
+    public sealed class Shooting : MonoBehaviour, IShooterView, IEMPTarget
     {
-        public event EventHandler Started, Stopped;
+        public event EventHandler ShootingStarted, ShootingStopped;
         public event EventHandler Overheated, CooledDown;
+
+        public event EventHandler<WeaponChangedEventArgs> WeaponChanged;
+        public event EventHandler<AmmoChangedEventArgs> AmmoChanged;
+        public event EventHandler<OutOfAmmoEventArgs> OutOfAmmo;
 
         private readonly List<Gun> _availableGuns = new();
         private List<AmmoSet> _availableAmmo;
@@ -28,7 +33,6 @@ namespace SpaceAce.Gameplay.Shooting
         private List<Gun> _activeGuns;
 
         private List<AmmoSet> _ammoForActiveWeapons;
-        private AmmoSet _activeAmmo;
 
         [SerializeField]
         private ShootingConfig _config;
@@ -40,6 +44,7 @@ namespace SpaceAce.Gameplay.Shooting
         private GamePauser _gamePauser;
         private AudioPlayer _audioPlayer;
         private MasterCameraShaker _masterCameraShaker;
+        private Localizer _localizer;
         private Inventory _userInventory;
 
         private bool _weaponsSwitchEnabled = true;
@@ -72,9 +77,12 @@ namespace SpaceAce.Gameplay.Shooting
         public float MaxAmmoSwitchDuration => _config.MaxInitialAmmoSwitchDuration;
         public float RandomAmmoSwitchDuration => _config.RandomInitialAmmoSwitchDuration;
 
+        public AmmoSet ActiveAmmo { get; private set; }
+
         public float Heat { get; private set; }
         public float HeatCapacity { get; private set; }
         public float HeatNormalized => Heat / HeatCapacity;
+        public float HeatPercentage => HeatNormalized * 100f;
         public float OverheatDuration { get; private set; }
 
         public bool Overheat { get; private set; }
@@ -86,14 +94,18 @@ namespace SpaceAce.Gameplay.Shooting
         public int ActiveAmmoIndex { get; private set; }
         public int AmmoCountForActiveWeapons => _ammoForActiveWeapons.Count;
 
+        public Gun FirstActiveGun => _activeGuns[0];
+
         [Inject]
         private void Construct(GamePauser gamePauser,
                                AudioPlayer audioPlayer,
-                               MasterCameraShaker masterCameraShaker)
+                               MasterCameraShaker masterCameraShaker,
+                               Localizer localizer)
         {
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
             _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
+            _localizer = localizer ?? throw new ArgumentNullException();
         }
 
         private void Awake()
@@ -129,6 +141,15 @@ namespace SpaceAce.Gameplay.Shooting
             return _baseHeatLossRate * factor * Time.deltaTime;
         }
 
+        public float GetDamagePerSecond()
+        {
+            float damagePerSecond = 0f;
+
+            foreach (Gun gun in _activeGuns) damagePerSecond += gun.FireRate / _activeGuns.Count * ActiveAmmo.Damage;
+
+            return damagePerSecond;
+        }
+
         public async UniTask FireAsync(object user, CancellationToken token)
         {
             if (Overheat == true) return;
@@ -143,7 +164,7 @@ namespace SpaceAce.Gameplay.Shooting
             }
 
             Firing = true;
-            Started?.Invoke(this, EventArgs.Empty);
+            ShootingStarted?.Invoke(this, EventArgs.Empty);
             FirstShotInLine = true;
 
             while (HeatNormalized < 1f)
@@ -156,7 +177,7 @@ namespace SpaceAce.Gameplay.Shooting
 
                     if (AuxMath.RandomNormal < _empFactor)
                     {
-                        usageResult = await _activeAmmo.TryUseAsync(user, token, gun);
+                        usageResult = await ActiveAmmo.TryUseAsync(user, token, gun);
                     }
                     else
                     {
@@ -173,12 +194,17 @@ namespace SpaceAce.Gameplay.Shooting
                     if (token.IsCancellationRequested == true)
                     {
                         Firing = false;
-                        Stopped?.Invoke(this, EventArgs.Empty);
+                        ShootingStopped?.Invoke(this, EventArgs.Empty);
 
                         return;
                     }
 
-                    if (HeatNormalized == 1f) await PerformOverheatAsync();
+                    if (HeatNormalized == 1f)
+                    {
+                        await PerformOverheatAsync();
+                        return;
+                    }
+
                     if (FirstShotInLine == true) FirstShotInLine = false;
                 }
             }
@@ -189,7 +215,7 @@ namespace SpaceAce.Gameplay.Shooting
             if (Overheat == true) return;
 
             Firing = false;
-            Stopped?.Invoke(this, EventArgs.Empty);
+            ShootingStopped?.Invoke(this, EventArgs.Empty);
 
             Overheat = true;
             Overheated?.Invoke(this, EventArgs.Empty);
@@ -244,21 +270,35 @@ namespace SpaceAce.Gameplay.Shooting
 
             _weaponsSwitchEnabled = false;
 
-            List<Gun> newActiveGuns = new();
+            List<Gun> activeGuns = new();
 
             foreach (var gun in _availableGuns)
                 if (gun.AmmoSize == size)
-                    newActiveGuns.Add(gun);
+                    activeGuns.Add(gun);
 
             List<AmmoSet> ammoSetsForActiveGuns = GetAmmo(size);
 
-            if (newActiveGuns.Count > 0 && ammoSetsForActiveGuns.Count > 0)
+            if (activeGuns.Count > 0 && ammoSetsForActiveGuns.Count > 0)
             {
-                _activeGuns = newActiveGuns;
+                AmmoSet previousAmmo = ActiveAmmo;
+
+                _activeGuns = activeGuns;
+                WeaponChanged?.Invoke(this, new(_activeGuns[0]));
+
                 _ammoForActiveWeapons = ammoSetsForActiveGuns;
                 ActiveAmmoIndex = 0;
-                _activeAmmo = _ammoForActiveWeapons[0];
+                ActiveAmmo = _ammoForActiveWeapons[0];
                 ActiveWeaponsSize = size;
+
+                if (AmmoCountForActiveWeapons == 0)
+                {
+                    string outOfAmmoWarning = await _localizer.GetLocalizedStringAsync("Ammo", "Out of ammo warning", this);
+                    OutOfAmmo?.Invoke(this, new(outOfAmmoWarning));
+                }
+                else
+                {
+                    AmmoChanged?.Invoke(this, new(ActiveAmmo, previousAmmo));
+                }
 
                 switch (size)
                 {
@@ -271,7 +311,7 @@ namespace SpaceAce.Gameplay.Shooting
 
                             break;
                         }
-                        case Size.Medium:
+                    case Size.Medium:
                         {
                             if (_config.MediumWeaponsSwitchAudio == null)
                                 await UniTask.WaitForSeconds(RandomMediumWeaponsSwitchDuration);
@@ -280,7 +320,7 @@ namespace SpaceAce.Gameplay.Shooting
 
                             break;
                         }
-                        case Size.Large:
+                    case Size.Large:
                         {
                             if (_config.LargeWeaponsSwitchAudio == null)
                                 await UniTask.WaitForSeconds(RandomLargeWeaponsSwitchDuration);
@@ -329,8 +369,20 @@ namespace SpaceAce.Gameplay.Shooting
             if (_config.AmmoSwitchAudio == null) await UniTask.WaitForSeconds(RandomAmmoSwitchDuration);
             else await _audioPlayer.PlayOnceAsync(_config.AmmoSwitchAudio.Random, transform.position, transform, true);
 
+            AmmoSet previousAmmo = ActiveAmmo;
+
             ActiveAmmoIndex = ActiveAmmoIndex++ % AmmoCountForActiveWeapons;
-            _activeAmmo = _ammoForActiveWeapons[ActiveAmmoIndex];
+            ActiveAmmo = _ammoForActiveWeapons[ActiveAmmoIndex];
+
+            if (AmmoCountForActiveWeapons == 0)
+            {
+                string outOfAmmoWarning = await _localizer.GetLocalizedStringAsync("Ammo", "Out of ammo warning", this);
+                OutOfAmmo?.Invoke(this, new(outOfAmmoWarning));
+            }
+            else
+            {
+                AmmoChanged?.Invoke(this, new(ActiveAmmo, previousAmmo));
+            }
 
             return true;
         }
@@ -346,7 +398,18 @@ namespace SpaceAce.Gameplay.Shooting
             if (ActiveAmmoIndex == 0) ActiveAmmoIndex = AmmoCountForActiveWeapons - 1;
             else ActiveAmmoIndex--;
 
-            _activeAmmo = _ammoForActiveWeapons[ActiveAmmoIndex];
+            AmmoSet previousAmmo = ActiveAmmo;
+            ActiveAmmo = _ammoForActiveWeapons[ActiveAmmoIndex];
+
+            if (AmmoCountForActiveWeapons == 0)
+            {
+                string outOfAmmoWarning = await _localizer.GetLocalizedStringAsync("Ammo", "Out of ammo warning", this);
+                OutOfAmmo?.Invoke(this, new(outOfAmmoWarning));
+            }
+            else
+            {
+                AmmoChanged?.Invoke(this, new(ActiveAmmo, previousAmmo));
+            }
 
             return true;
         }
@@ -358,7 +421,7 @@ namespace SpaceAce.Gameplay.Shooting
             _availableAmmo = GetAvailableAmmo();
             _ammoForActiveWeapons = GetAmmo(ActiveWeaponsSize);
 
-            if (Firing = false && _activeAmmo.Amount == 0)
+            if (Firing = false && ActiveAmmo.Amount == 0)
             {
                 bool switchedFromDepletedAmmo = await TrySwitchToNextAmmoAsync();
                 if (switchedFromDepletedAmmo == false) await TrySwitchToWorkingWeapons();

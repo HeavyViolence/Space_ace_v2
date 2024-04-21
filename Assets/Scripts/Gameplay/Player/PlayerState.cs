@@ -1,6 +1,7 @@
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Main.Factories;
 
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -9,22 +10,22 @@ namespace SpaceAce.Gameplay.Players
 {
     public sealed class PlayerState
     {
-        public static PlayerState Default => new(0f, 0f, ShipType.Ship1Mk1, null);
+        public static PlayerState Default => new(0f, 0f, PlayerShipType.Ship1Mk1, null);
 
         public float Credits { get; }
         public float Experience { get; }
-        public ShipType SelectedShip { get; }
+        public PlayerShipType SelectedShip { get; }
         public IEnumerable<ItemSavableState> InventoryContent { get; }
 
         public PlayerState(float credits,
                            float experience,
-                           ShipType selectedShip,
+                           PlayerShipType selectedShip,
                            IEnumerable<ItemSavableState> inventoryContent)
         {
             Credits = Mathf.Clamp(credits, 0f, float.MaxValue);
             Experience = Mathf.Clamp(experience, 0f, float.MaxValue);
             SelectedShip = selectedShip;
-            InventoryContent = inventoryContent;
+            InventoryContent = inventoryContent ?? throw new ArgumentNullException();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             if (user is IAmmoObservable observable)
             {
-                if (observable.Shooting.FirstShotInLine == true) _currentHeatGenerationFactor = 1f;
+                if (observable.Shooter.FirstShotInLine == true) _currentHeatGenerationFactor = 1f;
                 else _currentHeatGenerationFactor *= HeatGenerationFactorPerShot;
             }
             else
@@ -105,6 +105,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Cooling/Name", this);
+
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Cooling/Code", this);
 
         public override ItemSavableState GetSavableState() =>
             new CoolingAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, HeatGenerationFactorPerShot);

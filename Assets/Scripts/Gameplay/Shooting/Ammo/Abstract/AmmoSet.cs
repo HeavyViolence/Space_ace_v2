@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
@@ -16,6 +17,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public abstract class AmmoSet : IItem, IEquatable<AmmoSet>
     {
+        public event EventHandler<IntValueChangedEventArgs> AmountChanged;
         public event EventHandler Depleted;
 
         protected readonly AmmoServices Services;
@@ -34,7 +36,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             protected set
             {
+                int oldAmount = _amount;
+
                 _amount = Mathf.Clamp(value, 0, int.MaxValue);
+
+                AmountChanged?.Invoke(this, new(oldAmount, _amount));
+
                 if (_amount == 0) Depleted?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -111,6 +118,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public abstract ItemSavableState GetSavableState();
 
         public abstract UniTask<string> GetNameAsync();
+        public abstract UniTask<string> GetTypeCodeAsync();
         public abstract UniTask<string> GetDescriptionAsync();
 
         #region interfaces

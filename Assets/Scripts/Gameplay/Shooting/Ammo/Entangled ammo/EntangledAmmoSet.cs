@@ -100,6 +100,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Entangled/Name", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Entangled/Code", this);
+
         public override ItemSavableState GetSavableState() =>
             new EntangledAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, AmmoLossOnMiss, AmmoGainOnHit);
 

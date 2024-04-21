@@ -16,6 +16,6 @@ namespace SpaceAce.UI
             _config = config;
         }
 
-        public Color32 GetQualityColor(Quality quality) => _config.GetQualityColor(quality);
+        public Color GetQualityColor(Quality quality) => _config.GetQualityColor(quality);
     }
 }

@@ -32,7 +32,7 @@ namespace SpaceAce.UI
 
         public override async UniTask EnableAsync()
         {
-            if (Enabled == true) return;
+            if (Active == true) return;
 
             DisplayedDocument.visualTreeAsset = DisplayAsset;
             DisplayedDocument.rootVisualElement.style.opacity = 0f;
@@ -82,12 +82,13 @@ namespace SpaceAce.UI
             _mainMenuButton.RegisterCallback<PointerOverEvent>((e) => PointerOverEventHandler(e));
 
             DisplayedDocument.rootVisualElement.style.opacity = 1f;
-            Enabled = true;
+
+            await base.EnableAsync();
         }
 
-        public override void Disable()
+        public override async UniTask DisableAsync()
         {
-            if (Enabled == false) return;
+            if (Active == false) return;
 
             _resumeButton.clicked -= ResumeButtonClickedEventHandler;
             _resumeButton.UnregisterCallback<PointerOverEvent>((e) => PointerOverEventHandler(e));
@@ -106,7 +107,8 @@ namespace SpaceAce.UI
             _mainMenuButton = null;
 
             DisplayedDocument.visualTreeAsset = null;
-            Enabled = false;
+
+            await base.DisableAsync();
         }
 
         #region event handlers

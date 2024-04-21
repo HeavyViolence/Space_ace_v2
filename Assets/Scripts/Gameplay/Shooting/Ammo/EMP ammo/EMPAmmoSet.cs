@@ -104,6 +104,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "EMP/Name", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "EMP/Code", this);
+
         public override ItemSavableState GetSavableState() =>
             new EMPAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, EMPStrength, EMPDuration);
 

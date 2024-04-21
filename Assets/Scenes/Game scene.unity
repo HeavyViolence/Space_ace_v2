@@ -587,6 +587,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1760196244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &609943255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 609943256}
+  m_Layer: 0
+  m_Name: Auxiliary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &609943256
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609943255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 902416689}
+  m_Father: {fileID: 1668263260}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &682217347
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,6 +834,51 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1729592697}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &902416687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 902416689}
+  - component: {fileID: 902416688}
+  m_Layer: 0
+  m_Name: Easing service
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &902416688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902416687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aaee3fcbf8d23145ab4be7938e734ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: b8fd2024306d5cc4e987cd7d39fb3feb, type: 2}
+--- !u!4 &902416689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902416687}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 609943256}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932082423
 GameObject:
@@ -1362,7 +1439,7 @@ GameObject:
   - component: {fileID: 1627518980}
   - component: {fileID: 1627518979}
   m_Layer: 0
-  m_Name: Ship factory
+  m_Name: Player ship factory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1380,7 +1457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4773929c27f251e41b5e3f8c2b001aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _config: {fileID: 11400000, guid: 0409e51f13e356544a309fe507520cc2, type: 2}
+  _config: {fileID: 11400000, guid: 11714aaf66b27cb46a7409546158b502, type: 2}
 --- !u!4 &1627518980
 Transform:
   m_ObjectHideFlags: 0
@@ -1460,6 +1537,7 @@ MonoBehaviour:
   - {fileID: 1859438393}
   - {fileID: 2009711677}
   - {fileID: 682217348}
+  - {fileID: 902416688}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -1494,6 +1572,7 @@ Transform:
   - {fileID: 1760196244}
   - {fileID: 1740687918}
   - {fileID: 685356404}
+  - {fileID: 609943256}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1729592696
@@ -1663,6 +1742,7 @@ MonoBehaviour:
   _display: {fileID: 9197481963319205126, guid: 462044782a20a214c88878f7c7ac6031, type: 3}
   _settings: {fileID: 11400000, guid: 5a12fd6cc38a7484eaa995a83d149dca, type: 2}
   _uiAudio: {fileID: 11400000, guid: e8091a309e24cf14a9db7c09ebdf21cd, type: 2}
+  _config: {fileID: 11400000, guid: 913f077723b01e44b813f31431e2b993, type: 2}
 --- !u!1 &1859438392
 GameObject:
   m_ObjectHideFlags: 0

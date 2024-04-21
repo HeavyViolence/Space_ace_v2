@@ -18,6 +18,9 @@ namespace SpaceAce.UI
         [SerializeField]
         private UIAudio _uiAudio;
 
+        [SerializeField]
+        private LevelDisplayMediatorConfig _config;
+
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<LevelDisplay>()
@@ -27,7 +30,7 @@ namespace SpaceAce.UI
 
             Container.BindInterfacesAndSelfTo<LevelDisplayMediator>()
                      .AsSingle()
-                     .WithArguments(_uiAudio)
+                     .WithArguments(_uiAudio, _config)
                      .NonLazy();
         }
     }

@@ -98,6 +98,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Critical/Name", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Critical/Code", this);
+
         public override ItemSavableState GetSavableState() =>
             new CriticalAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, CriticalDamageProbability, CriticalDamage);
 

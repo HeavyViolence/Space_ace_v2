@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 
@@ -12,14 +13,28 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Damage
 {
-    public sealed class Armor : MonoBehaviour, IEMPTarget
+    public sealed class Armor : MonoBehaviour, IArmorView, IEMPTarget
     {
+        public event EventHandler<FloatValueChangedEventArgs> ValueChanged;
+
         [SerializeField]
         private ArmorConfig _config;
 
         private GamePauser _gamePauser;
 
-        public float Value { get; private set; }
+        private float _value;
+        public float Value
+        {
+            get => _value;
+
+            set
+            {
+                float oldValue = _value;
+                _value = value;
+
+                ValueChanged?.Invoke(this, new(oldValue, value));
+            }
+        }
 
         [Inject]
         private void Construct(GamePauser gamePauser)

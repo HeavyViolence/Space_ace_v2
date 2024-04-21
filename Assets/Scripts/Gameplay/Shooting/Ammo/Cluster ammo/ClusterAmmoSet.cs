@@ -96,6 +96,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public override async UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Cluster/Name", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Cluster/Code", this);
+
         public override ItemSavableState GetSavableState() =>
             new ClusterAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, ProjectilesPerShot);
 

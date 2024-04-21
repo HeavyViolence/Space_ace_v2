@@ -24,9 +24,10 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1155453727133696
-    m_Localized: 'Size: {Size:choose(0|1|2):Small|Medium|Large}
+    m_Localized: 'Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
-      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -48,10 +49,10 @@ MonoBehaviour:
     m_Localized: 'Has a chance to not spend ammo on shot
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -71,10 +72,10 @@ MonoBehaviour:
     m_Localized: 'Fires multiple projectiles at once
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -101,11 +102,12 @@ MonoBehaviour:
   - m_Id: 12349631018422272
     m_Localized: 'Has a chance to deal critical damage
 
+      
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -128,10 +130,10 @@ MonoBehaviour:
     m_Localized: 'Explodes on contact and deals area damage
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -163,10 +165,10 @@ MonoBehaviour:
       but resets on a different target hit
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -191,9 +193,10 @@ MonoBehaviour:
 
 
       Size:
-      {Size:choose(0|1|2):Small|Medium|Large}
+      {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
-      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -218,9 +221,10 @@ MonoBehaviour:
 
 
       Size:
-      {Size:choose(0|1|2):Small|Medium|Large}
+      {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
-      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -242,9 +246,10 @@ MonoBehaviour:
 
 
       Size:
-      {Size:choose(0|1|2):Small|Medium|Large}
+      {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
-      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -273,10 +278,10 @@ MonoBehaviour:
       of a ship
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -304,21 +309,18 @@ MonoBehaviour:
       heat generation increases with each shot
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
 
       Heat generation: {HeatGeneration:n} MJ
 
-      Heat generation
-      increase per shot: {HeatGenerationIncreasePerShotPercentage:n}%
-
-      Speed:
-      {Speed:n} m/s
+      Speed: {Speed:n}
+      m/s
 
       Damage: {Damage:n} Hp
 
@@ -335,10 +337,10 @@ MonoBehaviour:
       gain more ammo on hit
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -366,10 +368,10 @@ MonoBehaviour:
       Decreases target''s speed, armor, and fire rate
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -397,10 +399,10 @@ MonoBehaviour:
       doesn''t stack
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -428,10 +430,10 @@ MonoBehaviour:
       homing capabilities. Deals great damage
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -463,9 +465,10 @@ MonoBehaviour:
 
 
       Size:
-      {Size:choose(0|1|2):Small|Medium|Large}
+      {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
-      Quality: {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -502,10 +505,10 @@ MonoBehaviour:
       to all targets caught inside the explosion area
 
 
-      Size: {Size:choose(0|1|2):Small|Medium|Large}
+      Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
       Quality:
-      {Quality:choose(0|1|2|3|4|5|6):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
 
       Price:
       ${Price:n}
@@ -534,6 +537,78 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
+  - m_Id: 31959519956684800
+    m_Localized: RGRL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31960840361332736
+    m_Localized: STRN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31961799636406272
+    m_Localized: CTLT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963155948490752
+    m_Localized: CLRT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963429773627392
+    m_Localized: CLNG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963662427475968
+    m_Localized: CRTC
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31963894741585920
+    m_Localized: EXPL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31964553159233536
+    m_Localized: DVST
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31964623308967936
+    m_Localized: STBL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31965145155883008
+    m_Localized: HMNG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31965702377558016
+    m_Localized: PRCG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31965831725699072
+    m_Localized: ENTG
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31966635249487872
+    m_Localized: EMP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31966776723361792
+    m_Localized: NNT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31967160762224640
+    m_Localized: MSL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31967320993026048
+    m_Localized: XMSL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31968057357619200
+    m_Localized: NMSL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32253922403274752
+    m_Localized: Out of ammo
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

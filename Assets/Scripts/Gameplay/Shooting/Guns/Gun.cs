@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
+using SpaceAce.Main.Localization;
 
 using System;
 using System.Threading;
@@ -19,6 +20,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         private GunConfig _config;
 
         private GamePauser _gamePauser;
+        private Localizer _localizer;
 
         public Size AmmoSize => _config.AmmoSize;
         public bool IsRightHanded => transform.localPosition.x > 0f;
@@ -27,10 +29,14 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         public float Dispersion => _config.Dispersion / _empFactor;
 
         [Inject]
-        private void Construct(GamePauser gamePauser)
+        private void Construct(GamePauser gamePauser, Localizer localzier)
         {
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _localizer = localzier ?? throw new ArgumentNullException();
         }
+
+        public async UniTask<string> GetSizeCodeAsync() =>
+            await _localizer.GetLocalizedStringAsync("Guns", "Size code", this);
 
         #region EMP target interface
 

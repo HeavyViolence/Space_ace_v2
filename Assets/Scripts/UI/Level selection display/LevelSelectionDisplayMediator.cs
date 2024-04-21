@@ -84,14 +84,14 @@ namespace SpaceAce.UI
 
         private void MainMenuButtonClickedEventHandler(object sender, EventArgs e)
         {
-            _levelSelectionDisplay.Disable();
+            _levelSelectionDisplay.DisableAsync().Forget();
             _mainMenuDisplay.EnableAsync().Forget();
             AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();
         }
 
         private async UniTask BattleButtonClickedEventHandlerAsync(object sender, EventArgs e)
         {
-            _levelSelectionDisplay.Disable();
+            _levelSelectionDisplay.DisableAsync().Forget();
             _screenFader.FadeInAndOutAsync(_settings.FadingDuration).Forget();
             AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
 
@@ -118,9 +118,9 @@ namespace SpaceAce.UI
 
         private void GoToPreviousMenuEventHandler(object sender, CallbackContext e)
         {
-            if (_levelSelectionDisplay.Enabled == false) return;
+            if (_levelSelectionDisplay.Active == false) return;
 
-            _levelSelectionDisplay.Disable();
+            _levelSelectionDisplay.DisableAsync().Forget();
             _mainMenuDisplay.EnableAsync().Forget();
             AudioPlayer.PlayOnceAsync(UIAudio.BackwardClick.Random, Vector3.zero).Forget();
         }

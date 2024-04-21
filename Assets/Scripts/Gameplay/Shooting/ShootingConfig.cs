@@ -19,7 +19,7 @@ namespace SpaceAce.Gameplay.Shooting
         public const float MaxBaseHeatLossRate = 100f;
 
         public const float MinOverheatDuration = 1f;
-        public const float MaxOverheatDuration = 5f;
+        public const float MaxOverheatDuration = 10f;
 
         [SerializeField, MinMaxSlider(MinHeatCapacity, MaxHeatCapacity)]
         private Vector2 _heatCapacity = new(MinHeatCapacity, MaxHeatCapacity);

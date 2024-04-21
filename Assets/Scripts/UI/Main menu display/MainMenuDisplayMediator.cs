@@ -44,7 +44,7 @@ namespace SpaceAce.UI
 
         private void PlayButtonClickedEventHandler(object sender, EventArgs e)
         {
-            _mainMenuDisplay.Disable();
+            _mainMenuDisplay.DisableAsync().Forget();
             _levelSelectionDisplay.EnableAsync().Forget();
             AudioPlayer.PlayOnceAsync(UIAudio.ForwardClick.Random, Vector3.zero).Forget();
         }

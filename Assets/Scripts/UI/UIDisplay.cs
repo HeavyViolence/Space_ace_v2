@@ -11,13 +11,15 @@ namespace SpaceAce.UI
 {
     public abstract class UIDisplay
     {
+        public event EventHandler Enabled, Disabled;
+
         protected readonly VisualTreeAsset DisplayAsset;
         protected readonly UIDocument DisplayedDocument;
         protected readonly Localizer Localizer;
 
         protected abstract string DisplayHolderName { get; }
 
-        public bool Enabled { get; protected set; } = false;
+        public bool Active { get; protected set; } = false;
 
         public UIDisplay(VisualTreeAsset displayAsset, PanelSettings settings, Localizer localizer)
         {
@@ -34,7 +36,20 @@ namespace SpaceAce.UI
             DisplayedDocument.panelSettings = settings;
         }
 
-        public abstract UniTask EnableAsync();
-        public abstract void Disable();
+        public virtual async UniTask EnableAsync()
+        {
+            await UniTask.Yield();
+
+            Active = true;
+            Enabled?.Invoke(this, EventArgs.Empty);
+        }
+
+        public virtual async UniTask DisableAsync()
+        {
+            await UniTask.Yield();
+
+            Active = false;
+            Disabled?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

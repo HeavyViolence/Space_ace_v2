@@ -15,9 +15,13 @@ namespace SpaceAce.Gameplay.Levels
         private readonly GamePauser _gamePauser;
 
         private float _timer = 0f;
-        private bool _paused = true;
+        private bool _stopwatchPaused = false;
 
-        public TimeSpan Stopwatch { get; private set; }
+        private TimeSpan _stopwatch;
+
+        public int Minutes => _stopwatch.Minutes;
+        public int Seconds => _stopwatch.Seconds;
+        public int Milliseconds => _stopwatch.Milliseconds;
 
         public LevelStopwatch(GameStateLoader gameStateLoader,
                               LevelCompleter levelCompleter,
@@ -44,24 +48,29 @@ namespace SpaceAce.Gameplay.Levels
             _levelCompleter.LevelConcluded -= LevelConcludedEventHandler;
         }
 
+        public void Tick()
+        {
+            if (_gameStateLoader.CurrentState != GameState.Level ||
+                _gamePauser.Paused == true ||
+                _stopwatchPaused == true)
+            {
+                return;
+            }
+
+            _timer += Time.deltaTime;
+            _stopwatch = TimeSpan.FromSeconds(_timer);
+        }
+
         public void Pause()
         {
-            if (_paused == true) return;
-            _paused = true;
+            if (_stopwatchPaused == true) return;
+            _stopwatchPaused = true;
         }
 
         public void Resume()
         {
-            if (_paused == false) return;
-            _paused = false;
-        }
-
-        public void Tick()
-        {
-            if (_paused == true) return;
-
-            _timer += Time.deltaTime;
-            Stopwatch = TimeSpan.FromSeconds(_timer);
+            if (_stopwatchPaused == false) return;
+            _stopwatchPaused = false;
         }
 
         #endregion
@@ -70,14 +79,15 @@ namespace SpaceAce.Gameplay.Levels
 
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
-            _paused = false;
             _timer = 0f;
-            Stopwatch = TimeSpan.Zero;
+            _stopwatch = TimeSpan.Zero;
+
+            Resume();
         }
 
         private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
         {
-            _paused = true;
+            Pause();
         }
 
         #endregion

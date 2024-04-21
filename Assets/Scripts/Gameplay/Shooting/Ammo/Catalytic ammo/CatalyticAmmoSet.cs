@@ -59,10 +59,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             if (user is IAmmoObservable observable)
             {
-                if (observable.Shooting.FirstShotInLine == true)
-                    _currentFireRateFactorPerShot = 1f;
-                else
-                    _currentFireRateFactorPerShot *= FireRateFactorPerShot;
+                if (observable.Shooter.FirstShotInLine == true) _currentFireRateFactorPerShot = 1f;
+                else _currentFireRateFactorPerShot *= FireRateFactorPerShot;
             }
             else
             {
@@ -108,6 +106,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         public async override UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Catalytic/Name", this);
+
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Catalytic/Code", this);
 
         public override ItemSavableState GetSavableState() =>
             new CatalyticAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, FireRateFactorPerShot);

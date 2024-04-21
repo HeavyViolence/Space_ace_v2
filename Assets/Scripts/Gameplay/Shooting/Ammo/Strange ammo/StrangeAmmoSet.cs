@@ -97,6 +97,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public override async UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange/Description", this);
 
+        public async override UniTask<string> GetTypeCodeAsync() =>
+            await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange/Code", this);
+
         public override ItemSavableState GetSavableState() =>
             new StrangeAmmoSetSavableState(Size, Quality, Price, Amount, HeatGeneration, Speed, Damage, AmmoLossProbability);
 

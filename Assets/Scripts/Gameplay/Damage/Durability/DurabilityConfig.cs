@@ -16,7 +16,11 @@ namespace SpaceAce.Gameplay.Damage
         public const float MinInitialRegen = 0f;
         public const float MaxInitialRegen = 1_000f;
 
-        [SerializeField, MinMaxSlider(MinInitialDurability, MaxInitialDurability)]
+        [SerializeField] private Sprite _icon;
+
+        public Sprite Icon => _icon;
+
+        [SerializeField, MinMaxSlider(MinInitialDurability, MaxInitialDurability), Space]
         private Vector2 _durability = new(MinInitialDurability, MaxInitialDurability);
 
         public float MinInitialValue => _durability.x;
@@ -30,7 +34,7 @@ namespace SpaceAce.Gameplay.Damage
         public float MaxInitialValueRegen => _regen.y;
         public float RandomInitialValueRegen => Random.Range(_regen.x, _regen.y);
 
-        [SerializeField]
+        [SerializeField, Space]
         private ExplosionSize _explosionSize = ExplosionSize.Tiny;
 
         public ExplosionSize ExplosionSize => _explosionSize;

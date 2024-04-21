@@ -52,7 +52,7 @@ namespace SpaceAce.Gameplay.Movement
             if (Body.position.y > UpperBound) y = Mathf.Clamp(y, -1f, 0f);
             if (Body.position.y < LowerBound) y = Mathf.Clamp(y, 0f, 1f);
 
-            return new Vector2(x, y);
+            return new(x, y);
         }
     }
 }
