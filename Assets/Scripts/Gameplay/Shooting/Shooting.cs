@@ -158,7 +158,9 @@ namespace SpaceAce.Gameplay.Shooting
             if (AmmoCountForActiveWeapons == 0)
             {
                 if (_config.EmptyAmmoAudio != null)
+                {
                     await _audioPlayer.PlayOnceAsync(_config.EmptyAmmoAudio.Random, transform.position, transform, true);
+                }
 
                 return;
             }
@@ -173,24 +175,6 @@ namespace SpaceAce.Gameplay.Shooting
 
                 foreach (Gun gun in _activeGuns)
                 {
-                    ItemUsageResult usageResult;
-
-                    if (AuxMath.RandomNormal < _empFactor)
-                    {
-                        usageResult = await ActiveAmmo.TryUseAsync(user, token, gun);
-                    }
-                    else
-                    {
-                        await UniTask.WaitForSeconds(1f / gun.FireRate);
-                        usageResult = new(false);
-                    }
-
-                    if (_config.ShakeOnShotFired == true) _masterCameraShaker.ShakeOnShotFired();
-
-                    foreach (object arg in usageResult.Args)
-                        if (arg is ShotResult shotResult)
-                            Heat = Mathf.Clamp(Heat + shotResult.Heat, 0f, HeatCapacity);
-
                     if (token.IsCancellationRequested == true)
                     {
                         Firing = false;
@@ -198,6 +182,22 @@ namespace SpaceAce.Gameplay.Shooting
 
                         return;
                     }
+
+                    ShotResult shotResult;
+
+                    if (AuxMath.RandomNormal < _empFactor)
+                    {
+                        shotResult = await ActiveAmmo.FireAsync(user, gun);
+                    }
+                    else
+                    {
+                        await UniTask.WaitForSeconds(1f / gun.FireRate);
+                        shotResult = ShotResult.None;
+                    }
+
+                    Heat = Mathf.Clamp(Heat + shotResult.Heat, 0f, HeatCapacity);
+
+                    if (_config.ShakeOnShotFired == true) _masterCameraShaker.ShakeOnShotFired();
 
                     if (HeatNormalized == 1f)
                     {

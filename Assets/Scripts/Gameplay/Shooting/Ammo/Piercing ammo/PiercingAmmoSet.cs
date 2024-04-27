@@ -22,7 +22,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float HeatGenerationFactorPerShot { get; }
         public float HeatGenerationIncreasePerShotPercentage => (HeatGenerationFactorPerShot - 1f) * 100f;
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun, object[] args)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun)
         {
             CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
@@ -41,7 +41,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                HitBehaviour?.Invoke(hitArgs, args);
+                HitBehaviour?.Invoke(hitArgs);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
 
                 if (projectile.DamageDealer.HitCount == ProjectileHits)
@@ -52,7 +52,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
-                MissBehaviour?.Invoke(args);
+                MissBehaviour?.Invoke();
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
             };
 
@@ -82,7 +82,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             body.MovePosition(body.position + velocity);
         };
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs, object[] args)
+        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
         };

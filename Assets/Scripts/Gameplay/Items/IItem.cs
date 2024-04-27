@@ -17,7 +17,7 @@ namespace SpaceAce.Gameplay.Items
         bool Usable { get; }
         bool Tradable { get; }
 
-        UniTask<ItemUsageResult> TryUseAsync(object user, CancellationToken token = default, params object[] args);
+        UniTask<bool> TryUseAsync(object user, CancellationToken token = default);
 
         UniTask<string> GetNameAsync();
         UniTask<string> GetDescriptionAsync();

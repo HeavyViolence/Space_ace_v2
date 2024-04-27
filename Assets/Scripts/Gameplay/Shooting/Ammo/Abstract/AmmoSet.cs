@@ -52,7 +52,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float Speed { get; }
         public float Damage { get; }
 
-        public bool Usable => Services.GameStateLoader.CurrentState == GameState.Level;
+        public bool Usable => false;
         public bool Tradable => Services.GameStateLoader.CurrentState == GameState.MainMenu;
 
         protected abstract ShotBehaviourAsync ShotBehaviourAsync { get; }
@@ -98,21 +98,23 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             Damage = savedState.Damage;
         }
 
-        public async UniTask<ItemUsageResult> TryUseAsync(object user, CancellationToken token = default, params object[] args)
+        public async UniTask<bool> TryUseAsync(object user, CancellationToken token = default)
         {
-            if (Usable == true && args.Length > 0)
+            await UniTask.Yield();
+            return false;
+        }
+
+        public async UniTask<ShotResult> FireAsync(object user, Gun gun)
+        {
+            if (user is null) throw new ArgumentNullException();
+            if (gun == null) throw new ArgumentNullException();
+
+            if (Services.GameStateLoader.CurrentState == GameState.Level)
             {
-                foreach (object arg in args)
-                {
-                    if (arg is Gun gun)
-                    {
-                        ShotResult result = await ShotBehaviourAsync.Invoke(user, gun, args);
-                        return new(true, result);
-                    }
-                }
+                return await ShotBehaviourAsync.Invoke(user, gun);
             }
 
-            return new(false);
+            return ShotResult.None;
         }
 
         public abstract ItemSavableState GetSavableState();

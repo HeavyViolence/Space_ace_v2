@@ -17,15 +17,19 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float DamagePerSecond => _nanites.DamagePerSecond;
         public float DamageDuration => _nanites.DamageDuration;
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs, object[] args)
+        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
 
             RaycastHit2D[] hits = Physics2D.CircleCastAll(hitArgs.HitPosition, ExplosionRadius, Vector2.zero);
 
             foreach (RaycastHit2D hit in hits)
+            {
                 if (hit.collider.gameObject.TryGetComponent(out INaniteTarget target) == true)
+                {
                     target.TryApplyNanitesAsync(_nanites).Forget();
+                }
+            }
         };
 
         public NaniteMissileSet(AmmoServices services,

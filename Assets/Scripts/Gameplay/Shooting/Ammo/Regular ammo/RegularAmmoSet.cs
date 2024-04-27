@@ -13,7 +13,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class RegularAmmoSet : AmmoSet
     {
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun, object[] args)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun)
         {
             CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
@@ -32,7 +32,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                HitBehaviour?.Invoke(hitArgs, args);
+                HitBehaviour?.Invoke(hitArgs);
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
@@ -41,7 +41,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
-                MissBehaviour?.Invoke(args);
+                MissBehaviour?.Invoke();
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
             };
 
@@ -61,7 +61,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             body.MovePosition(body.position + velocity);
         };
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs, object[] args)
+        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
         };
