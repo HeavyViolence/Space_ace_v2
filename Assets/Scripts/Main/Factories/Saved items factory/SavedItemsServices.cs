@@ -1,8 +1,9 @@
+using SpaceAce.Main.Factories.AmmoFactories;
 using SpaceAce.Main.Localization;
 
 using System;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.SavedItemsFactories
 {
     public readonly struct SavedItemsServices
     {

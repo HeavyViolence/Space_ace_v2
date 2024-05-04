@@ -48,8 +48,10 @@ namespace SpaceAce.Gameplay.Movement
             else throw new MissingComponentException(nameof(DamageDealer));
         }
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             _collisionDamageDealer.Hit += CollisionHitEventHandler;
         }
 

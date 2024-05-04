@@ -10,7 +10,7 @@ using UnityEngine;
 
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.PlayerShipFactories
 {
     public sealed class PlayerShipFactory
     {
@@ -50,13 +50,13 @@ namespace SpaceAce.Main.Factories
 
                 if (shipObject.TryGetComponent(out Durability durability) == false) throw new MissingComponentException(nameof(Durability));
                 if (shipObject.TryGetComponent(out Armor armor) == false) throw new MissingComponentException(nameof(Armor));
-                if (shipObject.TryGetComponent(out IMovementController movement) == false) throw new MissingComponentException(nameof(IMovementController));
                 if (shipObject.TryGetComponent(out Shooting shooting) == false) throw new MissingComponentException(nameof(Shooting));
+                if (shipObject.TryGetComponent(out IMovementController movement) == false) throw new MissingComponentException(nameof(IMovementController));
                 if (shipObject.TryGetComponent(out IDamageable damageable) == false) throw new MissingComponentException(nameof(IDamageable));
                 if (shipObject.TryGetComponent(out IDestroyable destroyable) == false) throw new MissingComponentException(nameof(IDestroyable));
                 if (shipObject.TryGetComponent(out IEscapable escapable) == false) throw new MissingComponentException(nameof(IEscapable));
 
-                CachedShip cache = new(shipObject, durability, armor, movement, shooting, damageable, destroyable, escapable);
+                CachedShip cache = new(shipObject, durability, armor, shooting, movement, damageable, destroyable, escapable);
 
                 shipObject.SetActive(true);
                 shipObject.transform.SetPositionAndRotation(position, rotation);

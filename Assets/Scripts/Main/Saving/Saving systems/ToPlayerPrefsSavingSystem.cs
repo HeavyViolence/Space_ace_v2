@@ -62,8 +62,8 @@ namespace SpaceAce.Main.Saving
                 byte[] byteState = _UTF8.GetBytes(state);
 
                 byte[] key = _keyGenerator.GenerateKey(entity.ID);
-                byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
-                string encryptedStateAsUTF8 = _UTF8.GetString(encryptedByteState);
+                byte[] encryptedState = _encryptor.Encrypt(byteState, key);
+                string encryptedStateAsUTF8 = _UTF8.GetString(encryptedState);
 
                 PlayerPrefs.SetString(entity.ID, encryptedStateAsUTF8);
 
@@ -82,12 +82,12 @@ namespace SpaceAce.Main.Saving
                 try
                 {
                     string savedState = PlayerPrefs.GetString(entity.ID, string.Empty);
-                    byte[] encryptedByteState = _UTF8.GetBytes(savedState);
+                    byte[] encryptedState = _UTF8.GetBytes(savedState);
 
                     byte[] key = _keyGenerator.GenerateKey(entity.ID);
-                    byte[] decryptedByteState = _encryptor.Decrypt(encryptedByteState, key);
+                    byte[] decryptedState = _encryptor.Decrypt(encryptedState, key);
 
-                    string state = _UTF8.GetString(decryptedByteState);
+                    string state = _UTF8.GetString(decryptedState);
                     entity.SetState(state);
 
                     LoadingCompleted?.Invoke(this, EventArgs.Empty);

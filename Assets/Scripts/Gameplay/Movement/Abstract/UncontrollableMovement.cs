@@ -7,8 +7,10 @@ namespace SpaceAce.Gameplay.Movement
         private MovementBehaviour _behaviour;
         private MovementData _data;
 
-        protected virtual void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             _behaviour = null;
             _data = null;
         }

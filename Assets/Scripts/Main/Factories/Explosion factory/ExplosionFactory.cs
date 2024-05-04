@@ -10,7 +10,7 @@ using UnityEngine;
 
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ExplosionFactories
 {
     public class ExplosionFactory
     {
@@ -22,7 +22,7 @@ namespace SpaceAce.Main.Factories
         private readonly Dictionary<ExplosionSize, GameObject> _explosionAnchors = new();
         private readonly Dictionary<ExplosionSize, AudioCollection> _explosionAudio = new();
         private readonly Dictionary<ExplosionSize, Stack<CachedParticleSystem>> _explosionPool = new();
-        private readonly GameObject _masterAnchor = new("Explosions master anchor");
+        private readonly GameObject _masterAnchor = new("Explosion object pools");
 
         public ExplosionFactory(DiContainer diContainer,
                                 GamePauser gamePauser,
@@ -42,7 +42,7 @@ namespace SpaceAce.Main.Factories
                 _explosionPrefabs.Add(explosion.Size, explosion.Prefab);
                 _explosionAudio.Add(explosion.Size, explosion.Audio);
 
-                GameObject anchor = new($"{explosion.Size} explosions anchor");
+                GameObject anchor = new($"{explosion.Size.ToString().ToLower()} explosions anchor");
                 anchor.transform.parent = _masterAnchor.transform;
 
                 _explosionAnchors.Add(explosion.Size, anchor);
@@ -60,26 +60,29 @@ namespace SpaceAce.Main.Factories
 
         private CachedParticleSystem InstantiateExplosion(ExplosionSize size, Vector3 position)
         {
-            CachedParticleSystem cache;
-
-            if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true && stack.Count > 0)
+            if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) &&
+                stack.TryPop(out CachedParticleSystem system) == true)
             {
-                cache = stack.Pop();
+                system.Object.SetActive(true);
+                system.Transform.parent = null;
+                system.Transform.position = position;
+
+                return system;
             }
-            else if (_explosionPrefabs.TryGetValue(size, out GameObject explosionPrefab) == true)
+
+            if (_explosionPrefabs.TryGetValue(size, out GameObject explosionPrefab) == true)
             {
                 GameObject instance = _diContainer.InstantiatePrefab(explosionPrefab);
 
-                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true) cache = new(instance, pauser);
-                else throw new MissingComponentException();
+                if (instance.TryGetComponent(out Transform transform) == false) throw new MissingComponentException($"{typeof(Transform)}");
+                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == false) throw new MissingComponentException($"{typeof(ParticleSystemPauser)}");
+
+                transform.position = position;
+
+                return new(instance, transform, pauser);
             }
-            else throw new Exception($"Explosion prefab of a requested size ({size}) doesn't exist!");
 
-            cache.Instance.SetActive(true);
-            cache.Instance.transform.parent = null;
-            cache.Instance.transform.position = position;
-
-            return cache;
+            throw new Exception($"Explosion prefab of a requested size ({size}) doesn't exist in the config!");
         }
 
         private void PlayExplosionEffects(ExplosionSize size, Vector3 position, CancellationToken token)
@@ -109,11 +112,9 @@ namespace SpaceAce.Main.Factories
 
         private void Release(CachedParticleSystem instance, ExplosionSize size)
         {
-            if (instance is null) throw new ArgumentNullException();
-
-            instance.Instance.SetActive(false);
-            instance.Instance.transform.parent = _explosionAnchors[size].transform;
-            instance.Instance.transform.position = Vector3.zero;
+            instance.Object.SetActive(false);
+            instance.Transform.parent = _explosionAnchors[size].transform;
+            instance.Transform.position = Vector3.zero;
 
             if (_explosionPool.TryGetValue(size, out Stack<CachedParticleSystem> stack) == true)
             {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.AmmoFactories
 {
     [CreateAssetMenu(fileName = "Ammo factory config",
                      menuName = "Space ace/Configs/Factories/Ammo factory config")]
@@ -42,7 +42,9 @@ namespace SpaceAce.Main.Factories
             int ammoTypesAmount = Enum.GetValues(typeof(AmmoType)).Length;
 
             if (ammoTypesAmount != _ammoConfigs.Count)
+            {
                 throw new Exception("Amount of added ammo configs doesn't match to the total ammo types amount there are!");
+            }
 
             string[] ammoTypesNames = Enum.GetNames(typeof(AmmoType));
 
@@ -61,8 +63,9 @@ namespace SpaceAce.Main.Factories
         public T GetAmmoConfig<T>() where T : AmmoSetConfig
         {
             foreach (var config in _ammoConfigs)
-                if (config.GetType() == typeof(T))
-                    return (T)config;
+            {
+                if (config.GetType() == typeof(T)) return (T)config;
+            }
 
             throw new MissingMemberException(typeof(T).FullName);
         }
@@ -72,8 +75,9 @@ namespace SpaceAce.Main.Factories
             float seed = AuxMath.RandomNormal;
 
             foreach (var entry in _ammoTypesSpawnProbabilityDistribution)
-                if (AuxMath.ValueInRange(entry.Key, seed) == true)
-                    return entry.Value;
+            {
+                if (AuxMath.ValueInRange(entry.Key, seed) == true) return entry.Value;
+            }
 
             return AmmoType.Regular;
         }

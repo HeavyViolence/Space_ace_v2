@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
+using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.PlayerShipFactories;
+using SpaceAce.Main.Factories.SavedItemsFactories;
 using SpaceAce.Main.Saving;
 using SpaceAce.UI;
 
@@ -63,6 +65,7 @@ namespace SpaceAce.Gameplay.Players
         public IDurabilityView DurabilityView => _activeShip.Durability;
         public IArmorView ArmorView => _activeShip.Armor;
         public IShooterView ShooterView => _activeShip.Shooting;
+        public IEscapable Escapable => _activeShip.Escapable;
         public IDestroyable Destroyable => _activeShip.Destroyable;
 
         public Player(PlayerShipFactory playerShipFactory,
@@ -230,6 +233,7 @@ namespace SpaceAce.Gameplay.Players
         private void CeasefireEventHandler(object sender, CallbackContext e)
         {
             _shootingCancellation.Cancel();
+            _shootingCancellation.Dispose();
             _shootingCancellation = null;
         }
 

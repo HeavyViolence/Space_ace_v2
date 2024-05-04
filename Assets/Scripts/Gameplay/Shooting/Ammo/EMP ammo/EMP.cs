@@ -27,8 +27,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float GetCurrentFactor(float timer)
         {
             if (timer < 0f) throw new ArgumentOutOfRangeException();
-            if (timer >= 1f) return 1f;
-
             return 1f - Strength * _strengthOverTime.Evaluate(timer / Duration);
         }
     }

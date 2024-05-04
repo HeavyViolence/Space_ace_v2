@@ -1,11 +1,14 @@
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main.Audio;
+using SpaceAce.Main.Factories.ProjectileFactories;
+using SpaceAce.Main.Factories.ProjectileHitEffectFactories;
 using SpaceAce.Main.Localization;
+using SpaceAce.UI;
 
 using System;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.AmmoFactories
 {
     public sealed class AmmoFactory
     {
@@ -24,6 +27,7 @@ namespace SpaceAce.Main.Factories
                            GamePauser gamePauser,
                            ItemPropertyEvaluator itemPropertyEvaluator,
                            ItemQualityToSpawnProbabilityConverter itemQualityToSpawnProbabilityConverter,
+                           ItemIconProvider itemIconProvider,
                            AmmoFactoryConfig config)
         {
             _ammoServices = new(gameStateLoader,
@@ -34,7 +38,8 @@ namespace SpaceAce.Main.Factories
                                 projectileFactory,
                                 projectileHitEffectFactory,
                                 gamePauser,
-                                itemPropertyEvaluator);
+                                itemPropertyEvaluator,
+                                itemIconProvider);
 
             if (config == null) throw new ArgumentNullException();
             _config = config;

@@ -1,5 +1,5 @@
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.PlayerShipFactories;
 
 using System;
 using System.Collections.Generic;

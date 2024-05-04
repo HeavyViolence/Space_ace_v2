@@ -17,11 +17,14 @@ namespace SpaceAce.Gameplay.Movement
     {
         public event EventHandler Escaped;
 
-        protected GamePauser GamePauser;
-        protected AudioPlayer AudioPlayer;
-        protected MasterCameraHolder MasterCameraHolder;
-        protected MasterCameraShaker MasterCameraShaker;
+        private float _escapeDelay;
+        private CancellationTokenSource _escapeCancellation;
 
+        protected Transform Transform { get; private set; }
+        protected GamePauser GamePauser { get; private set; }
+        protected AudioPlayer AudioPlayer { get; private set; }
+        protected MasterCameraHolder MasterCameraHolder {  get; private set; }
+        protected MasterCameraShaker MasterCameraShaker { get; private set; }
         protected Rigidbody2D Body { get; private set; }
 
         [Inject]
@@ -38,35 +41,55 @@ namespace SpaceAce.Gameplay.Movement
 
         protected virtual void Awake()
         {
+            Transform = transform;
             Body = GetComponent<Rigidbody2D>();
+        }
+
+        protected virtual void OnEnable()
+        {
+            _escapeDelay = 0f;
+            _escapeCancellation = new();
+
+            WaitForEscapeAsync(_escapeCancellation.Token).Forget();
         }
 
         protected virtual void OnDisable()
         {
+            _escapeCancellation.Cancel();
+            _escapeCancellation.Dispose();
+
+            _escapeCancellation = null;
             Escaped = null;
         }
 
-        public async UniTask WaitForEscapeAsync(float delay = 0f, CancellationToken token = default)
+        private async UniTask WaitForEscapeAsync(CancellationToken token)
         {
-            await UniTask.WaitUntil(() => MasterCameraHolder.InsideViewport(transform.position) == true, PlayerLoopTiming.FixedUpdate, token);
-            await UniTask.WaitUntil(() => MasterCameraHolder.InsideViewport(transform.position) == false, PlayerLoopTiming.FixedUpdate, token);
+            await UniTask.WaitUntil(() => MasterCameraHolder.InsideViewport(Transform.position) == true, PlayerLoopTiming.FixedUpdate, token);
+            await UniTask.WaitForFixedUpdate(token);
+            await UniTask.WaitUntil(() => MasterCameraHolder.InsideViewport(Transform.position) == false, PlayerLoopTiming.FixedUpdate, token);
 
-            if (delay > 0f)
+            if (_escapeDelay > 0f)
             {
                 float timer = 0f;
 
-                while (timer <= delay)
+                while (timer < _escapeDelay)
                 {
+                    if (token.IsCancellationRequested == true) return;
+
                     timer += Time.fixedDeltaTime;
 
-                    if (token.IsCancellationRequested == true) return;
-                    while (GamePauser.Paused == true) await UniTask.WaitForFixedUpdate();
-
-                    await UniTask.WaitForFixedUpdate();
+                    await UniTask.WaitUntil(() => GamePauser.Paused == false, PlayerLoopTiming.FixedUpdate, token);
+                    await UniTask.WaitForFixedUpdate(token);
                 }
             }
 
             Escaped?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SetEscapeDelay(float delay)
+        {
+            if (delay < 0f) throw new ArgumentOutOfRangeException();
+            _escapeDelay = delay;
         }
     }
 }

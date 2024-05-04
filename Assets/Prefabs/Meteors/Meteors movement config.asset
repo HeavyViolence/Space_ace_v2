@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d7aefd68694584490fb04593c605e5, type: 3}
+  m_Name: Meteors movement config
+  m_EditorClassIdentifier: 
+  _horizontalSpeed: {x: 0, y: 0}
+  _verticalSpeed: {x: 0, y: 0}
+  _spatialSpeed: {x: 30, y: 70}
+  _rotationSpeed: {x: 0, y: 10}
+  _upperBoundDisplacement: 1
+  _lowerBoundDisplacement: 1
+  _leftBoundDisplacement: 1
+  _rightBoundDisplacement: 1
+  _collisionDamage: {x: 2000, y: 3000}
+  _collisionAudio: {fileID: 11400000, guid: df5831f1ecc6c7849aec438c5fbc94a4, type: 2}

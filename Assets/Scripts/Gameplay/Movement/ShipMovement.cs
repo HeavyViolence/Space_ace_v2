@@ -27,15 +27,15 @@ namespace SpaceAce.Gameplay.Movement
             Body.MovePosition(Body.position + velocity);
         }
 
-        public void Rotate(Vector3 mouseWorldPosition)
+        public void Rotate(Vector3 targetPosition)
         {
-            float clampedY = Mathf.Clamp(mouseWorldPosition.y, 0f, float.PositiveInfinity);
+            float clampedY = Mathf.Clamp(targetPosition.y, 0f, float.PositiveInfinity);
 
-            Vector3 clampedMouseWorldPosition = new(mouseWorldPosition.x, clampedY, mouseWorldPosition.z);
+            Vector3 clampedMouseWorldPosition = new(targetPosition.x, clampedY, targetPosition.z);
             Vector3 clampedMouseDirection = transform.position - clampedMouseWorldPosition;
 
             Quaternion clampedMouseRotation = Quaternion.LookRotation(clampedMouseDirection, Vector3.forward);
-            Quaternion interpolatedMouseRotation = Quaternion.Lerp(transform.rotation, clampedMouseRotation, Time.fixedDeltaTime * _rotationSpeed);
+            Quaternion interpolatedMouseRotation = Quaternion.Lerp(Transform.rotation, clampedMouseRotation, Time.fixedDeltaTime * _rotationSpeed);
 
             Body.MoveRotation(interpolatedMouseRotation);
         }

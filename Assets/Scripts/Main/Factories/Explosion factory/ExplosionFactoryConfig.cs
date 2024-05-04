@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ExplosionFactories
 {
     [CreateAssetMenu(fileName = "Explosion factory config",
                      menuName = "Space ace/Configs/Factories/Explosion factory config")]

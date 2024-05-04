@@ -4,12 +4,10 @@ using System;
 
 public sealed class WeaponChangedEventArgs : EventArgs
 {
-    public Gun FirstActiveGun;
+    public IGun FirstActiveGun;
 
-    public WeaponChangedEventArgs(Gun firstActiveGun)
+    public WeaponChangedEventArgs(IGun firstActiveGun)
     {
-        if (firstActiveGun == null) throw new ArgumentNullException();
-
-        FirstActiveGun = firstActiveGun;
+        FirstActiveGun = firstActiveGun ?? throw new ArgumentNullException();
     }
 }

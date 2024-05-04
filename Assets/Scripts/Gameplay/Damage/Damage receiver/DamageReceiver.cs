@@ -1,8 +1,11 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Gameplay.Movement;
+using SpaceAce.Gameplay.Shooting;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.ExplosionFactories;
+using SpaceAce.UI;
 
 using System;
 using System.Threading;
@@ -15,7 +18,7 @@ namespace SpaceAce.Gameplay.Damage
 {
     [RequireComponent(typeof(Durability))]
     [RequireComponent(typeof(Armor))]
-    public sealed class DamageReceiver : MonoBehaviour, IDamageable, IDestroyable, INaniteTarget
+    public sealed class DamageReceiver : MonoBehaviour, IDamageable, IDestroyable, IEntityView, INaniteTarget
     {
         public event EventHandler<DamageReceivedEventArgs> DamageReceived;
         public event EventHandler<DestroyedEventArgs> Destroyed;
@@ -32,6 +35,12 @@ namespace SpaceAce.Gameplay.Damage
 
         public Guid ID { get; private set; }
 
+        public IDurabilityView DurabilityView => _durability;
+        public IArmorView ArmorView => _armor;
+        public IShooterView ShooterView { get; private set; }
+        public IEscapable Escapable { get; private set; }
+        public IDestroyable Destroyable => this;
+
         [Inject]
         private void Construct(ExplosionFactory factory, GamePauser gamePauser)
         {
@@ -41,9 +50,12 @@ namespace SpaceAce.Gameplay.Damage
 
         private void Awake()
         {
+            ID = Guid.NewGuid();
+
             _durability = FindDurabilityComponent();
             _armor = FindArmorComponent();
-            ID = Guid.NewGuid();
+            ShooterView = FindShooterComponent();
+            Escapable = FindEscapableComponent();
         }
 
         private void OnEnable()
@@ -61,13 +73,25 @@ namespace SpaceAce.Gameplay.Damage
         private Durability FindDurabilityComponent()
         {
             if (gameObject.TryGetComponent(out Durability durability) == true) return durability;
-            else throw new MissingComponentException($"Game object is missing {typeof(Durability)} component!");
+            throw new MissingComponentException($"Game object is missing {typeof(Durability)} component!");
         }
 
         private Armor FindArmorComponent()
         {
             if (gameObject.TryGetComponent(out Armor armor) == true) return armor;
-            else throw new MissingComponentException($"Game object is missing {typeof(Armor)} component!");
+            throw new MissingComponentException($"Game object is missing {typeof(Armor)} component!");
+        }
+
+        private Shooting.Shooting FindShooterComponent()
+        {
+            if (gameObject.TryGetComponent(out Shooting.Shooting shooting) == true) return shooting;
+            return null;
+        }
+
+        private IEscapable FindEscapableComponent()
+        {
+            if (gameObject.TryGetComponent(out IEscapable escapable) == true) return escapable;
+            throw new MissingComponentException($"Game object is missing {typeof(IEscapable)} component!");
         }
 
         public void ApplyDamage(float damage)

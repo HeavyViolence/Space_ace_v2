@@ -1,10 +1,11 @@
 using SpaceAce.Gameplay.Items;
+using SpaceAce.Main.Factories.AmmoFactories;
 using SpaceAce.Main.Localization;
 
 using System;
 using System.Collections.Generic;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.SavedItemsFactories
 {
     public sealed class SavedItemsFactory
     {

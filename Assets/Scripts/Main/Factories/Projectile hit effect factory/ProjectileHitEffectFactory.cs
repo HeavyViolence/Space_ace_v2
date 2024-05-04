@@ -7,34 +7,40 @@ using UnityEngine;
 
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
 {
     public sealed class ProjectileHitEffectFactory
     {
         private readonly DiContainer _diContainer;
         private readonly GamePauser _gamePauser;
         private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectPrefabs = new();
-        private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectAnchors = new();
-        private readonly Dictionary<ProjectileHitEffectSkin, Stack<CachedParticleSystem>> _hitEffectsPool = new();
-        private readonly GameObject _hitEffectsMasterAnchor = new("Projectile hit effects master anchor");
+        private readonly Dictionary<ProjectileHitEffectSkin, Stack<CachedParticleSystem>> _objtectPools = new();
+        private readonly Dictionary<ProjectileHitEffectSkin, Transform> _objectPoolsAnchors = new();
+        private readonly GameObject _masterAnchor = new("Projectile hit effects pools");
 
         public ProjectileHitEffectFactory(DiContainer diContainer,
                                           GamePauser gamePauser,
-                                          IEnumerable<ProjectileHitEffectFactoryConfigSlot> hitEffects)
+                                          ProjectileHitEffectFactoryConfig config)
         {
             _diContainer = diContainer ?? throw new ArgumentNullException();
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
 
-            if (hitEffects is null) throw new ArgumentNullException();
+            if (config == null) throw new ArgumentNullException();
+            _hitEffectPrefabs = new(config.GetHitEffectsPrefabs());
 
-            foreach (var hitEffect in hitEffects)
+            BuildObjectPoolsAnchors();
+        }
+
+        private void BuildObjectPoolsAnchors()
+        {
+            Array skins = Enum.GetValues(typeof(ProjectileHitEffectSkin));
+
+            foreach (ProjectileHitEffectSkin skin in skins)
             {
-                _hitEffectPrefabs.Add(hitEffect.Skin, hitEffect.Prefab);
+                GameObject anchor = new($"Anchor of {skin.ToString().ToLower()}");
+                anchor.transform.parent = _masterAnchor.transform;
 
-                GameObject anchor = new($"Anchor of: {hitEffect.Skin}");
-                anchor.transform.parent = _hitEffectsMasterAnchor.transform;
-
-                _hitEffectAnchors.Add(hitEffect.Skin, anchor);
+                _objectPoolsAnchors.Add(skin, anchor.transform);
             }
         }
 
@@ -47,23 +53,27 @@ namespace SpaceAce.Main.Factories
 
         private CachedParticleSystem InstantiateHitEffect(ProjectileHitEffectSkin skin, Vector3 position)
         {
-            if (_hitEffectsPool.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true && stack.Count > 0)
+            if (_objtectPools.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true &&
+                stack.TryPop(out CachedParticleSystem system) == true)
             {
-                CachedParticleSystem hitEffect = stack.Pop();
+                system.Object.SetActive(true);
+                system.Transform.parent = null;
+                system.Transform.position = position;
 
-                hitEffect.Instance.SetActive(true);
-                hitEffect.Instance.transform.parent = null;
-                hitEffect.Instance.transform.position = position;
-
-                return hitEffect;
+                return system;
             }
             
             if (_hitEffectPrefabs.TryGetValue(skin, out GameObject hitPrefab) == true)
             {
                 GameObject instance = _diContainer.InstantiatePrefab(hitPrefab);
 
-                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == true) return new(instance, pauser);
-                else throw new MissingComponentException($"Hit prefab is missing {typeof(ParticleSystemPauser)}!");
+                if (instance.TryGetComponent(out Transform transform) == false) throw new MissingComponentException($"{typeof(Transform)}");
+                if (instance.TryGetComponent(out ParticleSystemPauser pauser) == false) throw new MissingComponentException($"{typeof(ParticleSystemPauser)}!");
+
+                transform.parent = null;
+                transform.position = position;
+
+                return new(instance, transform, pauser);
             }
 
             throw new Exception($"Hit effect of a requested skin ({skin}) doesn't exist!");
@@ -85,13 +95,11 @@ namespace SpaceAce.Main.Factories
 
         private void Release(CachedParticleSystem instance, ProjectileHitEffectSkin skin)
         {
-            if (instance is null) throw new ArgumentNullException();
+            instance.Object.SetActive(false);
+            instance.Transform.parent = _objectPoolsAnchors[skin].transform;
+            instance.Transform.position = Vector3.zero;
 
-            instance.Instance.SetActive(false);
-            instance.Instance.transform.parent = _hitEffectAnchors[skin].transform;
-            instance.Instance.transform.position = Vector3.zero;
-
-            if (_hitEffectsPool.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true)
+            if (_objtectPools.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true)
             {
                 stack.Push(instance);
             }
@@ -100,7 +108,7 @@ namespace SpaceAce.Main.Factories
                 Stack<CachedParticleSystem> newStack = new();
                 newStack.Push(instance);
 
-                _hitEffectsPool.Add(skin, newStack);
+                _objtectPools.Add(skin, newStack);
             }
         }
     }

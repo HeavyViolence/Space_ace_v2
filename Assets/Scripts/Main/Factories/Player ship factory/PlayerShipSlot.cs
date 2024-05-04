@@ -2,7 +2,7 @@ using System;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.PlayerShipFactories
 {
     [Serializable]
     public sealed class PlayerShipSlot

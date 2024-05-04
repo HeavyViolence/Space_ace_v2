@@ -6,7 +6,7 @@ using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Gameplay.Shooting.Guns;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.ProjectileFactories;
 
 using System;
 
@@ -22,32 +22,32 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float TargetingWidth { get; }
         public float SpeedGainDuration { get; }
 
-        protected sealed override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun)
+        protected sealed override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
         {
             CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
-            Vector2 projectileDirection = new(gun.transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.transform.up.y);
+            Vector2 projectileDirection = new(gun.Transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.Transform.up.y);
             projectileDirection.Normalize();
 
-            Quaternion projectileRotation = gun.transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
+            Quaternion projectileRotation = gun.Transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
             projectileRotation.Normalize();
 
             Vector2 boxSize = new(TargetingWidth, TargetingWidth);
-            Vector2 boxDirection = new(gun.transform.up.x, gun.transform.up.y);
+            Vector2 boxDirection = new(gun.Transform.up.x, gun.Transform.up.y);
 
             int layerMask;
 
             if (user is Player) layerMask = LayerMask.GetMask("Enemies", "Bosses", "Meteors", "Wrecks");
             else layerMask = LayerMask.GetMask("Player");
 
-            RaycastHit2D hit = Physics2D.BoxCast(gun.transform.position, boxSize, 0f, boxDirection, float.PositiveInfinity, layerMask);
+            RaycastHit2D hit = Physics2D.BoxCast(gun.Transform.position, boxSize, 0f, boxDirection, float.PositiveInfinity, layerMask);
             Transform target = hit.transform;
 
-            MovementData data = new(0f, Speed, SpeedGainDuration, gun.transform.position, projectileDirection, projectileRotation, target, HomingSpeed, 0f, _speedGainCurve);
+            MovementData data = new(0f, Speed, SpeedGainDuration, gun.Transform.position, projectileDirection, projectileRotation, target, HomingSpeed, 0f, _speedGainCurve);
 
-            projectile.Instance.transform.SetPositionAndRotation(gun.transform.position, projectileRotation);
+            projectile.Object.transform.SetPositionAndRotation(gun.Transform.position, projectileRotation);
             projectile.MovementBehaviourSupplier.Supply(MovementBehaviour, data);
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
@@ -56,8 +56,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
-
-            projectile.Escapable.WaitForEscapeAsync().Forget();
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
@@ -68,7 +66,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             Amount--;
             Price -= ShotPrice;
 
-            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.transform.position, null, true).Forget();
+            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
 
             await UniTask.WaitForSeconds(1f / gun.FireRate);
 
@@ -82,14 +80,11 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             float currentSpeedEvaluator = data.SpeedGainCurve.Evaluate(data.Timer / data.FinalSpeedGainDuration);
             data.CurrentSpeed = Mathf.Lerp(data.InitialSpeed, data.FinalSpeed, currentSpeedEvaluator);
 
-            Vector2 velocity;
-
             if (data.CurrentDirection == Vector3.zero) data.CurrentDirection = data.InitialDirection;
 
             if (data.Target == null)
             {
-                velocity = data.CurrentVelocity * Time.fixedDeltaTime;
-                body.MovePosition(body.position + velocity);
+                body.MovePosition(body.position + data.CurrentVelocityPerFixedUpdate);
             }
             else
             {
@@ -107,15 +102,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                                                                   data.HomingSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime,
                                                                   1f).normalized;
 
-                    velocity = data.CurrentVelocity * Time.fixedDeltaTime;
-
-                    body.MovePosition(body.position + velocity);
+                    body.MovePosition(body.position + data.CurrentVelocityPerFixedUpdate);
                     body.MoveRotation(data.CurrentRotation);
                 }
                 else
                 {
-                    velocity = data.CurrentVelocity * Time.fixedDeltaTime;
-                    body.MovePosition(body.position + velocity);
+                    body.MovePosition(body.position + data.CurrentVelocityPerFixedUpdate);
                 }
             }
         };

@@ -1,6 +1,6 @@
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.SavedItemsFactories
 {
     public sealed class SavedItemsFactoryInstaller : MonoInstaller
     {

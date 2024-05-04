@@ -4,5 +4,5 @@ using SpaceAce.Gameplay.Shooting.Guns;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
 {
-    public delegate UniTask<ShotResult> ShotBehaviourAsync(object user, Gun gun);
+    public delegate UniTask<ShotResult> ShotBehaviourAsync(object user, IGun gun);
 }

@@ -2,7 +2,7 @@ using System;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
 {
     [Serializable]
     public sealed class ProjectileHitEffectFactoryConfigSlot

@@ -10,14 +10,14 @@ using UnityEngine;
 
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ProjectileFactories
 {
     public sealed class ProjectileFactory
     {
         private readonly Dictionary<ProjectileSkin, GameObject> _projectilePrefabs = new();
-        private readonly Dictionary<ProjectileSkin, GameObject> _projectileAnchors = new();
-        private readonly GameObject _projectileMasterAnchor = new("Projectiles master anchor");
         private readonly Dictionary<ProjectileSkin, Stack<CachedProjectile>> _cachedProjectiles = new();
+        private readonly Dictionary<ProjectileSkin, GameObject> _projectileAnchors = new();
+        private readonly GameObject _projectileMasterAnchor = new("Projectiles object pools");
 
         private readonly DiContainer _diContainer;
         private readonly ProjectileFactoryConfig _config;
@@ -33,7 +33,7 @@ namespace SpaceAce.Main.Factories
             {
                 _projectilePrefabs.Add(slot.Skin, slot.Prefab);
 
-                GameObject anchor = new($"Projectile pool of {slot.Skin}");
+                GameObject anchor = new($"Projectile pool of {slot.Skin.ToString().ToLower()}");
                 anchor.transform.parent = _projectileMasterAnchor.transform;
 
                 _projectileAnchors.Add(slot.Skin, anchor);
@@ -42,12 +42,11 @@ namespace SpaceAce.Main.Factories
 
         public CachedProjectile Create(object user, ProjectileSkin skin, Size size)
         {
-            if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true && stack.Count > 0)
+            if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true &&
+                stack.TryPop(out CachedProjectile cache) == true)
             {
-                CachedProjectile cachedProjectile = stack.Pop();
-
-                cachedProjectile.Instance.transform.parent = null;
-                cachedProjectile.Instance.SetActive(true);
+                cache.Object.SetActive(true);
+                cache.Transform.parent = null;
 
                 Vector3 scale = Vector3.one;
 
@@ -65,20 +64,20 @@ namespace SpaceAce.Main.Factories
                         }
                 }
 
-                cachedProjectile.Instance.transform.localScale = scale;
+                cache.Transform.localScale = scale;
 
                 if (user is Player)
                 {
-                    cachedProjectile.Instance.layer = LayerMask.NameToLayer(_config.PlayerProjectilesLayerName);
-                    cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.PlayerProjectilesLayerName);
+                    cache.Object.layer = LayerMask.NameToLayer(_config.PlayerProjectilesLayerName);
+                    cache.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.PlayerProjectilesLayerName);
                 }
                 else
                 {
-                    cachedProjectile.Instance.layer = LayerMask.NameToLayer(_config.EnemyProjectilesLayerName);
-                    cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
+                    cache.Object.layer = LayerMask.NameToLayer(_config.EnemyProjectilesLayerName);
+                    cache.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
                 }
 
-                return cachedProjectile;
+                return cache;
             }
 
             if (_projectilePrefabs.TryGetValue(skin, out GameObject projectilePrefab) == true)
@@ -101,27 +100,13 @@ namespace SpaceAce.Main.Factories
                         }
                 }
 
-                newProjectile.transform.localScale = scale;
+                if (newProjectile.TryGetComponent(out SpriteRenderer renderer) == false) throw new MissingComponentException($"{typeof(SpriteRenderer)}");
+                if (newProjectile.TryGetComponent(out Transform transform) == false) throw new MissingComponentException($"{typeof(Transform)}");
+                if (newProjectile.TryGetComponent(out DamageDealer damageDealer) == false) throw new MissingComponentException($"{typeof(DamageDealer)}");
+                if (newProjectile.TryGetComponent(out IEscapable escapable) == false) throw new MissingComponentException($"{typeof(IEscapable)}");
+                if (newProjectile.TryGetComponent(out IMovementBehaviourSupplier supplier) == false) throw new MissingComponentException($"{typeof(IMovementBehaviourSupplier)}");
 
-                var renderer = newProjectile.GetComponentInChildren<SpriteRenderer>();
-
-                if (renderer == null)
-                    throw new MissingComponentException($"Projectile is missing {typeof(SpriteRenderer)}!");
-
-                var damageDealer = newProjectile.GetComponentInChildren<DamageDealer>();
-
-                if (damageDealer == null)
-                    throw new MissingComponentException($"Projectile is missing {typeof(DamageDealer)}!");
-
-                var escapable = newProjectile.GetComponentInChildren<IEscapable>();
-
-                if (escapable == null)
-                    throw new Exception($"Projectile doesn't implement {typeof(IEscapable)}!");
-
-                var behaviourSupplier = newProjectile.GetComponentInChildren<IMovementBehaviourSupplier>();
-
-                if (behaviourSupplier == null)
-                    throw new Exception($"Projectile doesn't implement {typeof(IMovementBehaviourSupplier)}!");
+                transform.localScale = scale;
 
                 if (user is Player)
                 {
@@ -134,20 +119,20 @@ namespace SpaceAce.Main.Factories
                     renderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
                 }
 
-                return new(newProjectile, renderer, damageDealer, escapable, behaviourSupplier);
+                return new(newProjectile, transform, renderer, damageDealer, escapable, supplier);
             }
 
-            throw new Exception($"{typeof(ProjectileFactory)} doesn't contain a projectile prefab of {skin}!");
+            throw new Exception($"Projectile of a requested skin ({skin}) doesn't exist in the config!");
         }
 
         public void Release(CachedProjectile projectile, ProjectileSkin skin)
         {
             if (projectile.Incomplete == true) throw new ArgumentNullException();
 
-            projectile.Instance.SetActive(false);
-            projectile.Instance.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-            projectile.Instance.transform.localScale = Vector3.one;
-            projectile.Instance.transform.parent = _projectileAnchors[skin].transform;
+            projectile.Object.SetActive(false);
+            projectile.Transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            projectile.Transform.localScale = Vector3.one;
+            projectile.Transform.parent = _projectileAnchors[skin].transform;
 
             if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true)
             {

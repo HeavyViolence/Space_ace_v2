@@ -1,7 +1,7 @@
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.AmmoFactories
 {
     public readonly struct AmmoFactoryRequest
     {
@@ -9,9 +9,7 @@ namespace SpaceAce.Main.Factories
         public Size Size { get; }
         public Quality Quality { get; }
 
-        public AmmoFactoryRequest(AmmoType type,
-                                  Size size,
-                                  Quality quality)
+        public AmmoFactoryRequest(AmmoType type, Size size, Quality quality)
         {
             Type = type;
             Size = size;

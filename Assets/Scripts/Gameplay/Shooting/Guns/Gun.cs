@@ -14,7 +14,7 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Shooting.Guns
 {
-    public sealed class Gun : MonoBehaviour, IEMPTarget
+    public sealed class Gun : MonoBehaviour, IGun, IEMPTarget
     {
         [SerializeField]
         private GunConfig _config;
@@ -22,6 +22,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         private GamePauser _gamePauser;
         private Localizer _localizer;
 
+        public Transform Transform { get; private set; }
         public Size AmmoSize => _config.AmmoSize;
         public bool IsRightHanded => transform.localPosition.x > 0f;
         public float SignedConvergenceAngle => IsRightHanded ? -1f * _config.ConvergenceAngle : _config.ConvergenceAngle;
@@ -33,6 +34,11 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         {
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
             _localizer = localzier ?? throw new ArgumentNullException();
+        }
+
+        private void Awake()
+        {
+            Transform = transform;
         }
 
         public async UniTask<string> GetSizeCodeAsync() =>
@@ -48,15 +54,11 @@ namespace SpaceAce.Gameplay.Shooting.Guns
             if (_empActive == true) return false;
 
             _empActive = true;
-
             float timer = 0f;
 
             while (timer < emp.Duration)
             {
-                if (gameObject == null) return false;
-
-                if (token.IsCancellationRequested == true ||
-                    gameObject.activeInHierarchy == false)
+                if (token.IsCancellationRequested == true || gameObject.activeInHierarchy == false)
                 {
                     _empFactor = 1f;
                     _empActive = false;
@@ -64,12 +66,11 @@ namespace SpaceAce.Gameplay.Shooting.Guns
                     return false;
                 }
 
-                if (_gamePauser.Paused == true) await UniTask.Yield();
-
                 timer += Time.deltaTime;
 
                 _empFactor = emp.GetCurrentFactor(timer);
 
+                await UniTask.WaitUntil(() => _gamePauser.Paused == false, PlayerLoopTiming.Update, token);
                 await UniTask.Yield();
             }
 

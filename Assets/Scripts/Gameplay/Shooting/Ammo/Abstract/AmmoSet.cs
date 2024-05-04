@@ -6,7 +6,8 @@ using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.ProjectileFactories;
+using SpaceAce.Main.Factories.ProjectileHitEffectFactories;
 
 using System;
 using System.Threading;
@@ -22,6 +23,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         protected readonly AmmoServices Services;
 
+        public Sprite Icon => Services.ItemIconProvider.GetItemIcon(this);
         public AudioCollection ShotAudio { get; }
 
         public Size Size { get; }
@@ -104,7 +106,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             return false;
         }
 
-        public async UniTask<ShotResult> FireAsync(object user, Gun gun)
+        public async UniTask<ShotResult> FireAsync(object user, IGun gun)
         {
             if (user is null) throw new ArgumentNullException();
             if (gun == null) throw new ArgumentNullException();

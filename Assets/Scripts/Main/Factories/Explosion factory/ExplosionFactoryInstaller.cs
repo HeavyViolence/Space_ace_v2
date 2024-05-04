@@ -2,7 +2,7 @@ using UnityEngine;
 
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ExplosionFactories
 {
     public sealed class ExplosionFactoryInstaller : MonoInstaller
     {

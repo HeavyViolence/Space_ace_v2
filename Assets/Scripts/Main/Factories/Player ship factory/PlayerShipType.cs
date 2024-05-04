@@ -1,4 +1,4 @@
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.PlayerShipFactories
 {
     public enum PlayerShipType
     {

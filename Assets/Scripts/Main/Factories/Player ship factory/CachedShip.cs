@@ -7,15 +7,15 @@ using System;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.PlayerShipFactories
 {
     public readonly struct CachedShip
     {
         public GameObject Ship { get; }
         public Durability Durability { get; }
         public Armor Armor { get; }
-        public IMovementController Movement { get; }
         public Shooting Shooting { get; }
+        public IMovementController Movement { get; }
         public IDamageable Damageable { get; }
         public IDestroyable Destroyable { get; }
         public IEscapable Escapable { get; }
@@ -23,8 +23,8 @@ namespace SpaceAce.Main.Factories
         public bool Incomplete => Ship == null ||
                                   Durability == null ||
                                   Armor == null ||
-                                  Movement is null ||
                                   Shooting == null ||
+                                  Movement is null ||
                                   Damageable is null ||
                                   Destroyable is null ||
                                   Escapable is null;
@@ -32,8 +32,8 @@ namespace SpaceAce.Main.Factories
         public CachedShip(GameObject ship,
                           Durability durability,
                           Armor armor,
-                          IMovementController movement,
                           Shooting shooting,
+                          IMovementController movement,
                           IDamageable damageable,
                           IDestroyable destroyable,
                           IEscapable escapable)
@@ -47,10 +47,10 @@ namespace SpaceAce.Main.Factories
             if (armor == null) throw new ArgumentNullException();
             Armor = armor;
 
-            Movement = movement ?? throw new ArgumentNullException();
-
             if (shooting == null) throw new ArgumentNullException();
             Shooting = shooting;
+
+            Movement = movement ?? throw new ArgumentNullException();
 
             Damageable = damageable ?? throw new ArgumentNullException();
             Destroyable = destroyable ?? throw new ArgumentNullException();

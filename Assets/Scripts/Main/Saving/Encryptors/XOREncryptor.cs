@@ -6,8 +6,10 @@ namespace SpaceAce.Main.Saving
     {
         public byte[] Encrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0) throw new ArgumentNullException();
-            if (key is null || key.Length != IKeyGenerator.ByteKeyLength) throw new ArgumentNullException();
+            if (data is null) throw new ArgumentNullException();
+            if (key is null) throw new ArgumentNullException();
+
+            if (data.Length == 0 || key.Length == 0) return data;
 
             byte[] output = new byte[data.Length];
 
@@ -19,8 +21,10 @@ namespace SpaceAce.Main.Saving
 
         public byte[] Decrypt(byte[] data, byte[] key)
         {
-            if (data is null || data.Length == 0) throw new ArgumentNullException();
-            if (key is null || key.Length != IKeyGenerator.ByteKeyLength) throw new ArgumentNullException();
+            if (data is null) throw new ArgumentNullException();
+            if (key is null) throw new ArgumentNullException();
+
+            if (data.Length == 0 || key.Length == 0) return data;
 
             byte[] output = new byte[data.Length];
 

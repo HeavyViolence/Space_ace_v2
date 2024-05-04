@@ -3,11 +3,15 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 
+using UnityEngine;
+
 namespace SpaceAce.Gameplay.Items
 {
     public interface IItem : IEquatable<IItem>
     {
         event EventHandler Depleted;
+
+        Sprite Icon { get; }
 
         Size Size { get; }
         Quality Quality { get; }

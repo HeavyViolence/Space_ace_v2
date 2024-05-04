@@ -1,4 +1,4 @@
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.ExplosionFactories;
 
 using UnityEngine;
 

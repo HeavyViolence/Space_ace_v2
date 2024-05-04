@@ -1,5 +1,5 @@
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.SavedItemsFactories;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
 {

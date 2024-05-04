@@ -14,7 +14,7 @@ namespace SpaceAce.Gameplay.Shooting
         event EventHandler<AmmoChangedEventArgs> AmmoChanged;
         event EventHandler<OutOfAmmoEventArgs> OutOfAmmo;
 
-        Gun FirstActiveGun { get; }
+        IGun FirstActiveGun { get; }
         AmmoSet ActiveAmmo { get; }
 
         float Heat { get; }

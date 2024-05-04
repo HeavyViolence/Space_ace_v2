@@ -5,7 +5,7 @@ using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.ProjectileFactories;
 
 using System;
 
@@ -18,21 +18,21 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public int AmmoLossOnMiss { get; }
         public int AmmoGainOnHit { get; }
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, Gun gun)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
         {
             CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
-            Vector2 projectileDirection = new(gun.transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.transform.up.y);
+            Vector2 projectileDirection = new(gun.Transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.Transform.up.y);
             projectileDirection.Normalize();
 
-            Quaternion projectileRotation = gun.transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
+            Quaternion projectileRotation = gun.Transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
             projectileRotation.Normalize();
 
-            MovementData data = new(Speed, Speed, 0f, gun.transform.position, projectileDirection, projectileRotation, null, 0f, 0f);
+            MovementData data = new(Speed, Speed, 0f, gun.Transform.position, projectileDirection, projectileRotation, null, 0f, 0f);
 
-            projectile.Instance.transform.SetPositionAndRotation(gun.transform.position, projectileRotation);
+            projectile.Object.transform.SetPositionAndRotation(gun.Transform.position, projectileRotation);
             projectile.MovementBehaviourSupplier.Supply(MovementBehaviour, data);
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
@@ -42,15 +42,13 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
 
-            projectile.Escapable.WaitForEscapeAsync().Forget();
-
             projectile.Escapable.Escaped += (sender, args) =>
             {
                 MissBehaviour?.Invoke();
                 Services.ProjectileFactory.Release(projectile, ProjectileSkin);
             };
 
-            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.transform.position, null, true).Forget();
+            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
 
             await UniTask.WaitForSeconds(1f / gun.FireRate);
 
@@ -59,8 +57,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         protected override MovementBehaviour MovementBehaviour => delegate (Rigidbody2D body, ref MovementData data)
         {
-            Vector2 velocity = data.InitialVelocity * Time.fixedDeltaTime;
-            body.MovePosition(body.position + velocity);
+            body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         };
 
         protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)

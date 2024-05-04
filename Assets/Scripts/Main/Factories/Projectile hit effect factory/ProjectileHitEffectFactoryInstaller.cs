@@ -2,7 +2,7 @@ using UnityEngine;
 
 using Zenject;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
 {
     public sealed class ProjectileHitEffectFactoryInstaller : MonoInstaller
     {
@@ -13,7 +13,7 @@ namespace SpaceAce.Main.Factories
         {
             Container.BindInterfacesAndSelfTo<ProjectileHitEffectFactory>()
                      .AsSingle()
-                     .WithArguments(_config.HitEffects)
+                     .WithArguments(_config)
                      .NonLazy();
         }
     }

@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 
 using SpaceAce.Gameplay.Shooting.Ammo;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.AmmoFactories;
 using SpaceAce.Main.Saving;
 
 using System;

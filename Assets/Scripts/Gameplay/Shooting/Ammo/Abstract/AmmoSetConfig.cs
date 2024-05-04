@@ -2,7 +2,8 @@ using NaughtyAttributes;
 
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Main.Audio;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.ProjectileFactories;
+using SpaceAce.Main.Factories.ProjectileHitEffectFactories;
 
 using UnityEngine;
 

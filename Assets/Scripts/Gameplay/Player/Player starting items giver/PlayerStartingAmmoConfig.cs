@@ -1,6 +1,6 @@
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
-using SpaceAce.Main.Factories;
+using SpaceAce.Main.Factories.AmmoFactories;
 
 using System;
 

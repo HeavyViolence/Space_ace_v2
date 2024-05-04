@@ -1,7 +1,4 @@
 using System;
-using System.Threading;
-
-using Cysharp.Threading.Tasks;
 
 namespace SpaceAce.Gameplay.Movement
 {
@@ -9,6 +6,6 @@ namespace SpaceAce.Gameplay.Movement
     {
         event EventHandler Escaped;
 
-        UniTask WaitForEscapeAsync(float delay = 0f, CancellationToken token = default);
+        void SetEscapeDelay(float delay);
     }
 }

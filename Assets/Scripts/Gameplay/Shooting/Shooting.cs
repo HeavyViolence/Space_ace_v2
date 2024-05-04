@@ -27,10 +27,10 @@ namespace SpaceAce.Gameplay.Shooting
         public event EventHandler<AmmoChangedEventArgs> AmmoChanged;
         public event EventHandler<OutOfAmmoEventArgs> OutOfAmmo;
 
-        private readonly List<Gun> _availableGuns = new();
+        private readonly List<IGun> _availableGuns = new();
         private List<AmmoSet> _availableAmmo;
 
-        private List<Gun> _activeGuns;
+        private List<IGun> _activeGuns;
 
         private List<AmmoSet> _ammoForActiveWeapons;
 
@@ -94,7 +94,7 @@ namespace SpaceAce.Gameplay.Shooting
         public int ActiveAmmoIndex { get; private set; }
         public int AmmoCountForActiveWeapons => _ammoForActiveWeapons.Count;
 
-        public Gun FirstActiveGun => _activeGuns[0];
+        public IGun FirstActiveGun => _activeGuns[0];
 
         [Inject]
         private void Construct(GamePauser gamePauser,
@@ -110,7 +110,7 @@ namespace SpaceAce.Gameplay.Shooting
 
         private void Awake()
         {
-            _availableGuns.AddRange(gameObject.GetComponentsInChildren<Gun>());
+            _availableGuns.AddRange(gameObject.GetComponentsInChildren<IGun>());
         }
 
         private void OnEnable()
@@ -145,7 +145,7 @@ namespace SpaceAce.Gameplay.Shooting
         {
             float damagePerSecond = 0f;
 
-            foreach (Gun gun in _activeGuns) damagePerSecond += gun.FireRate / _activeGuns.Count * ActiveAmmo.Damage;
+            foreach (IGun gun in _activeGuns) damagePerSecond += gun.FireRate / _activeGuns.Count * ActiveAmmo.Damage;
 
             return damagePerSecond;
         }
@@ -173,7 +173,7 @@ namespace SpaceAce.Gameplay.Shooting
             {
                 while (_gamePauser.Paused == true) await UniTask.Yield();
 
-                foreach (Gun gun in _activeGuns)
+                foreach (IGun gun in _activeGuns)
                 {
                     if (token.IsCancellationRequested == true)
                     {
@@ -270,9 +270,9 @@ namespace SpaceAce.Gameplay.Shooting
 
             _weaponsSwitchEnabled = false;
 
-            List<Gun> activeGuns = new();
+            List<IGun> activeGuns = new();
 
-            foreach (var gun in _availableGuns)
+            foreach (IGun gun in _availableGuns)
                 if (gun.AmmoSize == size)
                     activeGuns.Add(gun);
 

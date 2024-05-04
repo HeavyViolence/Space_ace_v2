@@ -4,7 +4,7 @@ using System;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ExplosionFactories
 {
     [Serializable]
     public sealed class ExplosionSlot

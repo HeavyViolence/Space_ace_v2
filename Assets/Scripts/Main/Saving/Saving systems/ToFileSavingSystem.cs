@@ -57,9 +57,7 @@ namespace SpaceAce.Main.Saving
             foreach (var entity in _savableEntities)
             {
                 string saveFilePath = GetSaveFilePath(entity.ID);
-
-                if (File.Exists(saveFilePath) == true)
-                    File.Delete(saveFilePath);
+                if (File.Exists(saveFilePath) == true) File.Delete(saveFilePath);
             }
         }
 
@@ -71,10 +69,10 @@ namespace SpaceAce.Main.Saving
                 byte[] byteState = _UTF8.GetBytes(state);
 
                 byte[] key = _keyGenerator.GenerateKey(entity.ID);
-                byte[] encryptedByteState = _encryptor.Encrypt(byteState, key);
+                byte[] encryptedState = _encryptor.Encrypt(byteState, key);
 
                 string saveFilePath = GetSaveFilePath(entity.ID);
-                File.WriteAllBytes(saveFilePath, encryptedByteState);
+                File.WriteAllBytes(saveFilePath, encryptedState);
 
                 SavingCompleted?.Invoke(this, EventArgs.Empty);
             }
@@ -92,12 +90,12 @@ namespace SpaceAce.Main.Saving
             {
                 try
                 {
-                    byte[] encryptedByteState = File.ReadAllBytes(saveFilePath);
+                    byte[] encryptedState = File.ReadAllBytes(saveFilePath);
 
                     byte[] key = _keyGenerator.GenerateKey(entity.ID);
-                    byte[] decryptedByteState = _encryptor.Decrypt(encryptedByteState, key);
+                    byte[] decryptedState = _encryptor.Decrypt(encryptedState, key);
 
-                    string state = _UTF8.GetString(decryptedByteState);
+                    string state = _UTF8.GetString(decryptedState);
                     entity.SetState(state);
 
                     LoadingCompleted?.Invoke(this, EventArgs.Empty);

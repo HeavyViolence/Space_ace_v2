@@ -20,7 +20,9 @@ namespace SpaceAce.Gameplay.Movement
         public Vector3 CurrentDirection { get; set; }
 
         public Vector2 InitialVelocity => InitialDirection * InitialSpeed;
+        public Vector2 InitialVelocityPerFixedUpdate => InitialVelocity * Time.fixedDeltaTime;
         public Vector2 CurrentVelocity => CurrentDirection * CurrentSpeed;
+        public Vector2 CurrentVelocityPerFixedUpdate => CurrentVelocity * Time.fixedDeltaTime;
 
         public Quaternion InitialRotation { get; }
         public Quaternion CurrentRotation { get; set; }

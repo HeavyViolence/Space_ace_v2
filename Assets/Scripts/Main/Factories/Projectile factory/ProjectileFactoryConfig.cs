@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace SpaceAce.Main.Factories
+namespace SpaceAce.Main.Factories.ProjectileFactories
 {
     [CreateAssetMenu(fileName = "Projectile factory config",
                      menuName = "Space ace/Configs/Factories/Projectile factory config")]

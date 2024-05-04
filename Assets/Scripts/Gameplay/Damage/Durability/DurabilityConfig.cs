@@ -33,10 +33,5 @@ namespace SpaceAce.Gameplay.Damage
         public float MinInitialValueRegen => _regen.x;
         public float MaxInitialValueRegen => _regen.y;
         public float RandomInitialValueRegen => Random.Range(_regen.x, _regen.y);
-
-        [SerializeField, Space]
-        private ExplosionSize _explosionSize = ExplosionSize.Tiny;
-
-        public ExplosionSize ExplosionSize => _explosionSize;
     }
 }
