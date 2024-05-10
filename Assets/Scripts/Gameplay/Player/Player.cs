@@ -50,7 +50,6 @@ namespace SpaceAce.Gameplay.Players
         private readonly GamePauser _gamePauser;
 
         private CachedShip _activeShip;
-
         private CancellationTokenSource _shootingCancellation;
 
         public Wallet Wallet { get; }
@@ -159,6 +158,7 @@ namespace SpaceAce.Gameplay.Players
 
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
+            _shootingCancellation = new();
             SpawnPlayerShip();
         }
 
@@ -172,7 +172,7 @@ namespace SpaceAce.Gameplay.Players
             _activeShip = _playerShipFactory.Create(SelectedShipType, _shipSpawnPosition, Quaternion.identity);
 
             _activeShip.Shooting.BindInventory(Inventory);
-            _activeShip.Destroyable.Destroyed += (s, e) => ShipDefeated?.Invoke(this, e);
+            _activeShip.Destroyable.Destroyed += PlayerShipDefeatedEventHandler;
 
             _gameControlsTransmitter.SwitchToSmallWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
             _gameControlsTransmitter.SwitchToMediumWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
@@ -201,7 +201,7 @@ namespace SpaceAce.Gameplay.Players
             _gameControlsTransmitter.Fire -= FireEventHandler;
             _gameControlsTransmitter.Ceasefire -= CeasefireEventHandler;
 
-            _activeShip.Destroyable.Destroyed -= (s, e) => ShipDefeated?.Invoke(this, e);
+            _activeShip.Destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
 
             _playerShipFactory.Release(_activeShip, SelectedShipType);
         }
@@ -218,10 +218,13 @@ namespace SpaceAce.Gameplay.Players
             _gameControlsTransmitter.Fire -= FireEventHandler;
             _gameControlsTransmitter.Ceasefire -= CeasefireEventHandler;
 
-            _shootingCancellation.Cancel();
-            _shootingCancellation.Dispose();
+            _shootingCancellation?.Cancel();
+            _shootingCancellation?.Dispose();
+            _shootingCancellation = null;
 
             _playerShipFactory.Release(_activeShip, SelectedShipType);
+
+            ShipDefeated?.Invoke(this, e);
         }
 
         private void FireEventHandler(object sender, CallbackContext e)

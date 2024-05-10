@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e8c83c31c0958947b0fb604a126ee9e, type: 3}
   m_Name: Meteors damage receiver config
   m_EditorClassIdentifier: 
-  _explosionSize: 2
+  _explosionSize: 1
+  _explosionAudio: {fileID: 11400000, guid: 2bdbbbbd6c261dc45a25d8526da15138, type: 2}
   _shakeOnDefeat: 1
   _indestructible: 0

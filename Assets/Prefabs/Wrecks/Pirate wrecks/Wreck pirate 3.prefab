@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8319719598772375798
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 523957100794006499, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 965524988217480239, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_Name
+      value: Wreck pirate 3 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093062928981937944, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093062928981937944, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093062928981937944, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5171254853096424332, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fbc51975d06837847a6ad0ab7fad2abb, type: 3}
+    - target: {fileID: 5171254853096424332, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097690595459323447, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_Size.x
+      value: 0.88411516
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097690595459323447, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_Size.y
+      value: 1.9540231
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097690595459323447, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.14954081
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097690595459323447, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.005061865
+      objectReference: {fileID: 0}
+    - target: {fileID: 6805013781419973602, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 50abf32168e7031419566a25d3be383e, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}

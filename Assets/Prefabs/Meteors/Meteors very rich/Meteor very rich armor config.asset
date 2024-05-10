@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ae3fe9acbdec94db74f36d077867fe, type: 3}
   m_Name: Meteor very rich armor config
   m_EditorClassIdentifier: 
-  _armor: {x: 170, y: 190}
+  _armor: {x: 130, y: 170}

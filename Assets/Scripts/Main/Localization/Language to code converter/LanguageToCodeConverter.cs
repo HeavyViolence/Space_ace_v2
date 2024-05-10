@@ -4,14 +4,12 @@ namespace SpaceAce.Main.Localization
     {
         public string GetLanguageCode(Language language)
         {
-            string code = language switch
+            return language switch
             {
                 Language.EnglishUnitedStates => "en-US",
                 Language.Russian => "ru-RU",
                 _ => "en-US"
             };
-
-            return code;
         }
     }
 }

@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 
 using SpaceAce.Auxiliary;
+using SpaceAce.Gameplay.Experience;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 
@@ -13,7 +14,7 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Damage
 {
-    public sealed class Armor : MonoBehaviour, IArmorView, IEMPTarget
+    public sealed class Armor : MonoBehaviour, IArmorView, IExperienceSource, IEMPTarget
     {
         public event EventHandler<FloatValueChangedEventArgs> ValueChanged;
 
@@ -52,6 +53,8 @@ namespace SpaceAce.Gameplay.Damage
             if (damage < 0f) throw new ArgumentOutOfRangeException();
             return damage * damage / Value;
         }
+
+        public float GetExperience() => Value;
 
         #region EMP target interface
 

@@ -104,7 +104,7 @@ namespace SpaceAce.Main.Factories.ExplosionFactories
 
                 while (_gamePauser.Paused == true) await UniTask.Yield();
 
-                if (token != default && token.IsCancellationRequested == true) break;
+                if (token != default && token.IsCancellationRequested == true) return;
 
                 await UniTask.Yield();
             }

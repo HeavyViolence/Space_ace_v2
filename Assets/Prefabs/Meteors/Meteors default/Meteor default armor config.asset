@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ae3fe9acbdec94db74f36d077867fe, type: 3}
   m_Name: Meteor default armor config
   m_EditorClassIdentifier: 
-  _armor: {x: 110, y: 130}
+  _armor: {x: 70, y: 110}

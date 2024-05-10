@@ -1,3 +1,4 @@
+using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.UI;
 
@@ -11,11 +12,13 @@ namespace SpaceAce.Main.Factories.MeteorFactories
     {
         public GameObject Object { get; }
         public Transform Transform { get; }
+        public DamageDealer DamageDealer { get; }
         public IMovementBehaviourSupplier MovementSupplier { get; }
         public IEntityView View { get; }
 
         public CachedMeteor(GameObject obj,
                             Transform transform,
+                            DamageDealer damageDealer,
                             IMovementBehaviourSupplier supplier,
                             IEntityView view)
         {
@@ -24,6 +27,9 @@ namespace SpaceAce.Main.Factories.MeteorFactories
 
             if (transform == null) throw new ArgumentNullException();
             Transform = transform;
+
+            if (damageDealer == null) throw new ArgumentNullException();
+            DamageDealer = damageDealer;
 
             MovementSupplier = supplier ?? throw new ArgumentNullException();
             View = view ?? throw new ArgumentNullException();

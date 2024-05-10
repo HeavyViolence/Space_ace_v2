@@ -1,3 +1,4 @@
+using SpaceAce.Main.Audio;
 using SpaceAce.Main.Factories.ExplosionFactories;
 
 using UnityEngine;
@@ -12,12 +13,17 @@ namespace SpaceAce.Gameplay.Damage
         private ExplosionSize _explosionSize = ExplosionSize.Default;
 
         [SerializeField]
+        private AudioCollection _explosionAudio;
+
+        [SerializeField]
         private bool _shakeOnDefeat = false;
 
         [SerializeField]
         private bool _indestructible = false;
 
         public ExplosionSize ExplosionSize => _explosionSize;
+
+        public AudioCollection ExplosionAudio => _explosionAudio;
 
         public bool ShakeOnDefeat => _shakeOnDefeat;
 

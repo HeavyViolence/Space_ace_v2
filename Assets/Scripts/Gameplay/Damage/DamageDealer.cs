@@ -8,7 +8,14 @@ namespace SpaceAce.Gameplay.Damage
     {
         public event EventHandler<HitEventArgs> Hit;
 
+        private Transform _transform;
+
         public int HitCount { get; private set; } = 0;
+
+        private void Awake()
+        {
+            _transform = transform;
+        }
 
         private void OnDisable()
         {
@@ -21,7 +28,7 @@ namespace SpaceAce.Gameplay.Damage
             if (collider.gameObject.TryGetComponent(out IDamageable damageReceiver) == true)
             {
                 HitCount++;
-                Hit?.Invoke(this, new(transform.position, damageReceiver, collider.gameObject));
+                Hit?.Invoke(this, new(_transform.position, damageReceiver, collider.gameObject));
             }
         }
     }

@@ -1,13 +1,14 @@
 using Cysharp.Threading.Tasks;
 
 using SpaceAce.Gameplay.Damage;
+using SpaceAce.Gameplay.Experience;
 
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement
 {
     [RequireComponent(typeof(DamageDealer))]
-    public abstract class ControllableMovement : Movement
+    public abstract class ControllableMovement : Movement, IExperienceSource
     {
         [SerializeField] private MovementConfig _config;
 
@@ -67,6 +68,12 @@ namespace SpaceAce.Gameplay.Movement
             e.DamageReceiver.ApplyDamage(NextCollisionDamage);
             AudioPlayer.PlayOnceAsync(_config.CollisionAudio.Random, e.HitPosition, null, true).Forget();
             MasterCameraShaker.ShakeOnCollision();
+        }
+
+        public float GetExperience()
+        {
+            if (MaxHorizontalSpeed != 0f && MaxVerticalSpeed != 0f) return MaxHorizontalSpeed + MaxVerticalSpeed;
+            return MaxSpatialSpeed;
         }
     }
 }

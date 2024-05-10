@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9364d5c09271754db9afcfaf9508a22, type: 3}
+  m_Name: Wreck factory config
+  m_EditorClassIdentifier: 
+  _wrecks:
+  - _type: 0
+    _prefab: {fileID: 2995219854151376575, guid: e057e05cf81562649883cc10c469e27c, type: 3}
+  - _type: 1
+    _prefab: {fileID: 965524988217480239, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+  - _type: 2
+    _prefab: {fileID: 9084797533956965593, guid: e2201aa95279998419a65327a4684725, type: 3}
+  - _type: 3
+    _prefab: {fileID: 2259314861686593238, guid: 6ac8263aa72f4e24d9a406141de1532b, type: 3}
+  - _type: 4
+    _prefab: {fileID: 304796198848593659, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
+  - _type: 5
+    _prefab: {fileID: 5653817660515976627, guid: 336cd971e61c5f54886e4f8cb3248fbc, type: 3}
+  - _type: 6
+    _prefab: {fileID: 7183419831727781947, guid: 76adff251804bf14fb47677c042b63e0, type: 3}
+  - _type: 7
+    _prefab: {fileID: 1375787738536658403, guid: 6d60b46af55fb5e41a93c57f851da1f4, type: 3}
+  - _type: 8
+    _prefab: {fileID: 4439937985452822301, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
+  - _type: 9
+    _prefab: {fileID: 6588122999490706018, guid: 99500d03bf6582747af83d5c0aceea9e, type: 3}
+  - _type: 10
+    _prefab: {fileID: 2677020843489360657, guid: 48e6842840c013b499457f3b206b6b11, type: 3}
+  - _type: 11
+    _prefab: {fileID: 3267021784621291143, guid: 18e31f0f075051e4abbef06fac911538, type: 3}

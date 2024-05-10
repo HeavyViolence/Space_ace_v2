@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 
 using SpaceAce.Auxiliary;
+using SpaceAce.Main.Audio;
 using SpaceAce.Main.Factories.MeteorFactories;
 
 using System;
@@ -168,6 +169,23 @@ namespace SpaceAce.Gameplay.Meteors
 
             return width;
         }
+
+        #endregion
+
+        #region collisions
+
+        public const float MinCollisionDamage = 0f;
+        public const float MaxCollisionDamage = 10_000f;
+
+        [SerializeField, HorizontalLine, MinMaxSlider(MinCollisionDamage, MaxCollisionDamage)]
+        private Vector2 _collisionDamage = new(MinCollisionDamage, MaxCollisionDamage);
+
+        public float GetCollisionDamage() => UnityEngine.Random.Range(_collisionDamage.x, _collisionDamage.y);
+
+        [SerializeField]
+        private AudioCollection _collisionAudio;
+
+        public AudioCollection CollisionAudio => _collisionAudio;
 
         #endregion
 

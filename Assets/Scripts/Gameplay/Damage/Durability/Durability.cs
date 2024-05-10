@@ -1,4 +1,5 @@
 using SpaceAce.Auxiliary;
+using SpaceAce.Gameplay.Experience;
 using SpaceAce.Main;
 
 using System;
@@ -9,7 +10,7 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Damage
 {
-    public sealed class Durability : MonoBehaviour, IDurabilityView
+    public sealed class Durability : MonoBehaviour, IDurabilityView, IExperienceSource
     {
         public event EventHandler<FloatValueChangedEventArgs> ValueChanged, MaxValueChanged, RegenChanged;
 
@@ -62,6 +63,8 @@ namespace SpaceAce.Gameplay.Damage
             }
         }
 
+        private float _regainedValue;
+
         [Inject]
         private void Construct(GamePauser gamePauser)
         {
@@ -73,6 +76,7 @@ namespace SpaceAce.Gameplay.Damage
             MaxValue = _config.RandomInitialValue;
             Value = MaxValue;
             Regen = _config.RandomInitialValueRegen;
+            _regainedValue = 0f;
         }
 
         private void Update()
@@ -80,14 +84,20 @@ namespace SpaceAce.Gameplay.Damage
             if (Value == 0f || _gamePauser.Paused == true) return;
 
             if (Regen > 0f && Value < MaxValue)
-                Value += Time.deltaTime * Regen;
+            {
+                float valueGainThisFrame = Time.deltaTime * Regen;
+
+                Value += valueGainThisFrame;
+                _regainedValue += valueGainThisFrame;
+            }
         }
 
         public void ApplyDamage(float damage)
         {
             if (damage <= 0f) throw new ArgumentOutOfRangeException();
-
             Value = Mathf.Clamp(Value - damage, 0f, MaxValue);
         }
+
+        public float GetExperience() => MaxValue + _regainedValue;
     }
 }

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef93b841122cd944cbb4e365cef2f911, type: 3}
+  m_Name: Boss experience collector config
+  m_EditorClassIdentifier: 
+  _experienceFactor: 1
+  _enableDissipation: 1
+  _dissipationDuration: 300
+  _dissipationOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.001498773
+      outSlope: 0.001498773
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.99883723
+    - serializedVersion: 3
+      time: 0.5
+      value: 0.7
+      inSlope: -1.8278031
+      outSlope: -1.8278031
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.1976744
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.4
+      inSlope: -0.0026914773
+      outSlope: -0.0026914773
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

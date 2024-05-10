@@ -4,11 +4,8 @@ namespace SpaceAce.Main.Saving
 {
     public interface ISavingSystem
     {
-        public event EventHandler SavingCompleted;
-        public event EventHandler SavingFailed;
-
-        public event EventHandler LoadingCompleted;
-        public event EventHandler LoadingFailed;
+        public event EventHandler<SuccessEventArgs> SavingCompleted, LoadingCompleted;
+        public event EventHandler<FailEventArgs> SavingFailed, LoadingFailed;
 
         void Register(ISavable entity);
         void Deregister(ISavable entity);

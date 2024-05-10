@@ -2,7 +2,7 @@ using SpaceAce.UI;
 
 using System;
 
-namespace SpaceAce.Main.Factories.MeteorFactories
+namespace SpaceAce.Gameplay.Meteors
 {
     public sealed class MeteorSpawnedEventArgs : EventArgs
     {

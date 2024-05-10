@@ -1,9 +1,11 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Gameplay.Experience;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
+using SpaceAce.Main.Audio;
 using SpaceAce.Main.Factories.ExplosionFactories;
 using SpaceAce.UI;
 
@@ -18,7 +20,11 @@ namespace SpaceAce.Gameplay.Damage
 {
     [RequireComponent(typeof(Durability))]
     [RequireComponent(typeof(Armor))]
-    public sealed class DamageReceiver : MonoBehaviour, IDamageable, IDestroyable, IEntityView, INaniteTarget
+    [RequireComponent(typeof(ExperienceCollector))]
+    public sealed class DamageReceiver : MonoBehaviour, IDamageable,
+                                                        IDestroyable,
+                                                        IEntityView,
+                                                        INaniteTarget
     {
         public event EventHandler<DamageReceivedEventArgs> DamageReceived;
         public event EventHandler<DestroyedEventArgs> Destroyed;
@@ -28,10 +34,14 @@ namespace SpaceAce.Gameplay.Damage
 
         private ExplosionFactory _explosionFactory;
         private GamePauser _gamePauser;
-        private float _lifeTimer;
+        private AudioPlayer _audioPlayer;
+        private MasterCameraShaker _masterCameraShaker;
+        private float _lifeTime;
 
+        private Transform _transform;
         private Durability _durability;
         private Armor _armor;
+        private ExperienceCollector _experienceCollector;
 
         public Guid ID { get; private set; }
 
@@ -42,32 +52,38 @@ namespace SpaceAce.Gameplay.Damage
         public IDestroyable Destroyable => this;
 
         [Inject]
-        private void Construct(ExplosionFactory factory, GamePauser gamePauser)
+        private void Construct(ExplosionFactory factory,
+                               GamePauser gamePauser,
+                               AudioPlayer audioPlayer,
+                               MasterCameraShaker masterCameraShaker)
         {
             _explosionFactory = factory ?? throw new ArgumentNullException();
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
+            _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
+            _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
         }
 
         private void Awake()
         {
             ID = Guid.NewGuid();
 
+            _transform = transform;
             _durability = FindDurabilityComponent();
             _armor = FindArmorComponent();
+            _experienceCollector = FindExperienceCollector();
             ShooterView = FindShooterComponent();
             Escapable = FindEscapableComponent();
         }
 
         private void OnEnable()
         {
-            _lifeTimer = 0f;
+            _lifeTime = 0f;
         }
 
         private void Update()
         {
             if (_gamePauser.Paused == true) return;
-
-            _lifeTimer += Time.deltaTime;
+            _lifeTime += Time.deltaTime;
         }
 
         private Durability FindDurabilityComponent()
@@ -94,6 +110,12 @@ namespace SpaceAce.Gameplay.Damage
             throw new MissingComponentException($"Game object is missing {typeof(IEscapable)} component!");
         }
 
+        private ExperienceCollector FindExperienceCollector()
+        {
+            if (gameObject.TryGetComponent(out ExperienceCollector collector) == true) return collector;
+            throw new MissingComponentException($"Game object is missing {typeof(ExperienceCollector)} component!");
+        }
+
         public void ApplyDamage(float damage)
         {
             if (damage <= 0f) throw new ArgumentOutOfRangeException();
@@ -106,7 +128,9 @@ namespace SpaceAce.Gameplay.Damage
             if (_durability.Value == 0f)
             {
                 _explosionFactory.CreateAsync(_config.ExplosionSize, transform.position).Forget();
-                Destroyed?.Invoke(this, new(transform.position, _lifeTimer, 0f, 0f));
+                _masterCameraShaker.ShakeOnDefeat();
+                _audioPlayer.PlayOnceAsync(_config.ExplosionAudio.Random, _transform.position, null, true).Forget();
+                Destroyed?.Invoke(this, new(_transform.position, _lifeTime, _experienceCollector.GetExperience(_lifeTime)));
             }
         }
 
@@ -145,7 +169,7 @@ namespace SpaceAce.Gameplay.Damage
                 {
                     _nanitesActive = false;
                     _explosionFactory.CreateAsync(_config.ExplosionSize, transform.position).Forget();
-                    Destroyed?.Invoke(this, new(transform.position, _lifeTimer, 0f, 0f));
+                    Destroyed?.Invoke(this, new(_transform.position, _lifeTime, _experienceCollector.GetExperience(_lifeTime)));
 
                     return true;
                 }

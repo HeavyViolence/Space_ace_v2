@@ -90,9 +90,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   _waveDelay: {x: 15, y: 30}
   _spawnDelay: {x: 15, y: 30}
-  _showerSpawnDelay: {x: 3, y: 5}
+  _showerSpawnDelay: {x: 3, y: 6}
   _waveLength: {x: 10, y: 20}
-  _showerWaveLength: {x: 30, y: 50}
+  _showerWaveLength: {x: 10, y: 20}
   _spawnWidthProbability:
     serializedVersion: 2
     m_Curve:
@@ -159,3 +159,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _collisionDamage: {x: 3000, y: 5000}
+  _collisionAudio: {fileID: 11400000, guid: df5831f1ecc6c7849aec438c5fbc94a4, type: 2}

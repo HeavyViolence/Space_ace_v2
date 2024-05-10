@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Player ship damage receiver config
   m_EditorClassIdentifier: 
   _explosionSize: 3
+  _explosionAudio: {fileID: 11400000, guid: f680a9d2fbd43f24aae72dcce60ed3ff, type: 2}
   _shakeOnDefeat: 1
   _indestructible: 0

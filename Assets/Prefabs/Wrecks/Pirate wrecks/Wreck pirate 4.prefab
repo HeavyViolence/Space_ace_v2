@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7010167126737457679
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2876337463922067137, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_Size.x
+      value: 1.1304966
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876337463922067137, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_Size.y
+      value: 1.9840697
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876337463922067137, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.06979877
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876337463922067137, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.08207303
+      objectReference: {fileID: 0}
+    - target: {fileID: 3244235639004203796, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 8ea9064e1e15d6540b21ef91c4a8ee3d, type: 2}
+    - target: {fileID: 3798337713975661434, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: aef8f54b2adfe074ebe839787f862c98, type: 3}
+    - target: {fileID: 3798337713975661434, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9084797533956965593, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: m_Name
+      value: Wreck pirate 4 Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e2201aa95279998419a65327a4684725, type: 3}

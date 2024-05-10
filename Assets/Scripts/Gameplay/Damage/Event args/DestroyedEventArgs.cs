@@ -1,3 +1,5 @@
+using SpaceAce.Gameplay.Experience;
+
 using System;
 
 using UnityEngine;
@@ -8,20 +10,15 @@ namespace SpaceAce.Gameplay.Damage
     {
         public Vector3 DeathPosition { get; }
         public float Lifetime { get; }
-        public float ExperienceEarned { get; }
-        public float ExperienceLost { get; }
-        public float ExperienceTotal => ExperienceEarned + ExperienceLost;
-        public float ExperienceEfficiency => ExperienceEarned / ExperienceTotal;
+        public ExperienceDrop Experience { get; }
 
         public DestroyedEventArgs(Vector3 deathPosition,
                                   float lifetime,
-                                  float experienceEarned,
-                                  float experienceLost)
+                                  ExperienceDrop experience)
         {
             DeathPosition = deathPosition;
             Lifetime = lifetime;
-            ExperienceEarned = experienceEarned;
-            ExperienceLost = experienceLost;
+            Experience = experience;
         }
     }
 }

@@ -1,3 +1,4 @@
+using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.UI;
 
@@ -58,12 +59,13 @@ namespace SpaceAce.Main.Factories.MeteorFactories
                 GameObject meteor = _container.InstantiatePrefab(prefab);
 
                 if (meteor.TryGetComponent(out Transform transform) == false) throw new MissingComponentException($"{typeof(Transform)}");
+                if (meteor.TryGetComponent(out DamageDealer damageDealer) == false) throw new MissingComponentException($"{typeof(DamageDealer)}");
                 if (meteor.TryGetComponent(out IMovementBehaviourSupplier supplier) == false) throw new MissingComponentException($"{typeof(IMovementBehaviourSupplier)}");
                 if (meteor.TryGetComponent(out IEntityView view) == false) throw new MissingComponentException($"{typeof(IEntityView)}");
 
                 transform.position = position;
 
-                return new(meteor, transform, supplier, view);
+                return new(meteor, transform, damageDealer, supplier, view);
             }
 
             throw new MissingMemberException($"There is no meteor prefab of type {type} in the config!");

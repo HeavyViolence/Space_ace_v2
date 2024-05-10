@@ -1,8 +1,10 @@
+using SpaceAce.Gameplay.Experience;
+
 using System;
 
 namespace SpaceAce.Gameplay.Movement
 {
-    public abstract class UncontrollableMovement : Movement, IMovementBehaviourSupplier
+    public abstract class UncontrollableMovement : Movement, IMovementBehaviourSupplier, IExperienceSource
     {
         private MovementBehaviour _behaviour;
         private MovementData _data;
@@ -21,10 +23,16 @@ namespace SpaceAce.Gameplay.Movement
             _behaviour(Body, ref _data);
         }
 
+        #region interfaces
+
         public void Supply(MovementBehaviour behaviour, MovementData data)
         {
             _behaviour = behaviour ?? throw new ArgumentNullException();
             _data = data ?? throw new ArgumentNullException();
         }
+
+        public float GetExperience() => _data.InitialSpeed;
+
+        #endregion
     }
 }

@@ -47,7 +47,7 @@ namespace SpaceAce.Main.Localization
             LocalizedString localizedString = new(tableName, entryName) { Arguments = arguments };
 
             var operation = localizedString.GetLocalizedStringAsync();
-            await UniTask.WaitUntil(() => operation.IsDone);
+            await UniTask.WaitUntil(() => operation.IsDone == true);
 
             return operation.Result;
         }
@@ -55,7 +55,7 @@ namespace SpaceAce.Main.Localization
         public async UniTask<Font> GetLocalizedFontAsync()
         {
             var operation = _localizedFont.LoadAssetAsync();
-            await UniTask.WaitUntil(() => operation.IsDone);
+            await UniTask.WaitUntil(() => operation.IsDone == true);
 
             return operation.Result;
         }
@@ -65,12 +65,12 @@ namespace SpaceAce.Main.Localization
             if (_initialized == true && language == ActiveLanguage) return;
 
             var operation = LocalizationSettings.InitializationOperation;
-            await UniTask.WaitUntil(() => operation.IsDone);
+            await UniTask.WaitUntil(() => operation.IsDone == true);
 
             string activeLanguageCode = _languageToCodeConverter.GetLanguageCode(language);
             Locale activeLocale = null;
 
-            foreach (var locale in LocalizationSettings.AvailableLocales.Locales)
+            foreach (Locale locale in LocalizationSettings.AvailableLocales.Locales)
                 if (locale.Identifier.Code == activeLanguageCode)
                     activeLocale = locale;
 

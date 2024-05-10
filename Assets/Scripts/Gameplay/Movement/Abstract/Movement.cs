@@ -25,18 +25,21 @@ namespace SpaceAce.Gameplay.Movement
         protected AudioPlayer AudioPlayer { get; private set; }
         protected MasterCameraHolder MasterCameraHolder {  get; private set; }
         protected MasterCameraShaker MasterCameraShaker { get; private set; }
+        protected GameStateLoader GameStateLoader { get; private set; }
         protected Rigidbody2D Body { get; private set; }
 
         [Inject]
         private void Construct(GamePauser gamePauser,
                                AudioPlayer audioPlayer,
                                MasterCameraHolder masterCameraHolder,
-                               MasterCameraShaker masterCameraShaker)
+                               MasterCameraShaker masterCameraShaker,
+                               GameStateLoader gameStateLoader)
         {
             GamePauser = gamePauser ?? throw new ArgumentNullException();
             AudioPlayer = audioPlayer ?? throw new ArgumentNullException();
             MasterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException();
             MasterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
+            GameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
         }
 
         protected virtual void Awake()
@@ -47,6 +50,8 @@ namespace SpaceAce.Gameplay.Movement
 
         protected virtual void OnEnable()
         {
+            GameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
+
             _escapeDelay = 0f;
             _escapeCancellation = new();
 
@@ -55,10 +60,12 @@ namespace SpaceAce.Gameplay.Movement
 
         protected virtual void OnDisable()
         {
+            GameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
+
             _escapeCancellation.Cancel();
             _escapeCancellation.Dispose();
-
             _escapeCancellation = null;
+
             Escaped = null;
         }
 
@@ -83,6 +90,11 @@ namespace SpaceAce.Gameplay.Movement
                 }
             }
 
+            Escaped?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void MainMenuLoadedEventHandler(object sender, EventArgs e)
+        {
             Escaped?.Invoke(this, EventArgs.Empty);
         }
 

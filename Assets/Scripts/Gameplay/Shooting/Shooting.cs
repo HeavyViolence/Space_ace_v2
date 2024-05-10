@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 
 using SpaceAce.Auxiliary;
+using SpaceAce.Gameplay.Experience;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Gameplay.Shooting.Guns;
@@ -18,7 +19,7 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Shooting
 {
-    public sealed class Shooting : MonoBehaviour, IShooterView, IEMPTarget
+    public sealed class Shooting : MonoBehaviour, IShooterView, IExperienceSource, IEMPTarget
     {
         public event EventHandler ShootingStarted, ShootingStopped;
         public event EventHandler Overheated, CooledDown;
@@ -472,5 +473,7 @@ namespace SpaceAce.Gameplay.Shooting
         }
 
         #endregion
+
+        public float GetExperience() => GetDamagePerSecond();
     }
 }

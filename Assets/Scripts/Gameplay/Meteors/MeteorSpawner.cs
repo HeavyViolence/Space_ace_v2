@@ -4,6 +4,7 @@ using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Levels;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Main;
+using SpaceAce.Main.Audio;
 using SpaceAce.Main.Factories.MeteorFactories;
 
 using System;
@@ -22,7 +23,7 @@ namespace SpaceAce.Gameplay.Meteors
 
         public event EventHandler SpawnStarted, SpawnEnded;
         public event EventHandler WaveStarted, WaveEnded;
-        public event EventHandler MeteorShowerStarted, MeteorShowerEnded;
+        public event EventHandler ShowerStarted, ShowerEnded;
         public event EventHandler<MeteorSpawnedEventArgs> MeteorSpawned;
         public event EventHandler MeteorEscaped, MeteorDestroyed;
 
@@ -32,6 +33,7 @@ namespace SpaceAce.Gameplay.Meteors
         private readonly LevelCompleter _levelCompleter;
         private readonly GamePauser _gamePauser;
         private readonly MasterCameraHolder _masterCameraHolder;
+        private readonly AudioPlayer _audioPlayer;
 
         private CancellationTokenSource _spawnCancellation;
 
@@ -42,7 +44,8 @@ namespace SpaceAce.Gameplay.Meteors
                              GameStateLoader gameStateLoader,
                              LevelCompleter levelCompleter,
                              GamePauser gamePauser,
-                             MasterCameraHolder masterCameraHolder)
+                             MasterCameraHolder masterCameraHolder,
+                             AudioPlayer audioPlayer)
         {
             if (config == null) throw new ArgumentNullException();
             _config = config;
@@ -52,29 +55,20 @@ namespace SpaceAce.Gameplay.Meteors
             _levelCompleter = levelCompleter ?? throw new ArgumentNullException();
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
             _masterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException();
+            _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
         }
 
         #region interfaces
 
         public void Initialize()
         {
-            _gameStateLoader.LevelLoaded += async (s, e) =>
-            {
-                _spawnCancellation = new();
-                await LevelLoadedEventHandlerAsync(e, _spawnCancellation.Token);
-            };
-
+            _gameStateLoader.LevelLoaded += async (s, e) => await LevelLoadedEventHandlerAsync(e);
             _levelCompleter.LevelConcluded += LevelConcludedEventHandler;
         }
 
         public void Dispose()
         {
-            _gameStateLoader.LevelLoaded -= async (s, e) =>
-            {
-                _spawnCancellation = new();
-                await LevelLoadedEventHandlerAsync(e, _spawnCancellation.Token);
-            };
-
+            _gameStateLoader.LevelLoaded -= async (s, e) => await LevelLoadedEventHandlerAsync(e);
             _levelCompleter.LevelConcluded -= LevelConcludedEventHandler;
         }
 
@@ -82,9 +76,10 @@ namespace SpaceAce.Gameplay.Meteors
 
         #region event handlers
 
-        private async UniTask LevelLoadedEventHandlerAsync(LevelLoadedEventArgs e, CancellationToken token)
+        private async UniTask LevelLoadedEventHandlerAsync(LevelLoadedEventArgs e)
         {
-            await SpawnAsync(e.LevelIndex, token);
+            _spawnCancellation = new();
+            await SpawnAsync(e.LevelIndex, _spawnCancellation.Token);
         }
 
         private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
@@ -103,12 +98,14 @@ namespace SpaceAce.Gameplay.Meteors
             {
                 MeteorWave wave = _config.NextWave(levelIndex);
 
-                if (wave.MeteorShower == true) MeteorShowerStarted?.Invoke(this, EventArgs.Empty);
+                if (wave.MeteorShower == true) ShowerStarted?.Invoke(this, EventArgs.Empty);
                 else WaveStarted?.Invoke(this, EventArgs.Empty);
 
                 foreach (MeteorWaveSlot slot in wave)
                 {
                     await WaitForDelayAsync(slot.SpawnDelay, token);
+
+                    if (token.IsCancellationRequested == true) break;
 
                     Vector3 spawnPosition = GetSpawnPosition();
                     Vector3 targetPosition = GetTargetPosition();
@@ -135,10 +132,16 @@ namespace SpaceAce.Gameplay.Meteors
                         MeteorDestroyed?.Invoke(this, EventArgs.Empty);
                     };
 
+                    meteor.DamageDealer.Hit += (s, e) =>
+                    {
+                        e.DamageReceiver.ApplyDamage(_config.GetCollisionDamage());
+                        _audioPlayer.PlayOnceAsync(_config.CollisionAudio.Random, e.HitPosition, null, true).Forget();
+                    };
+
                     MeteorSpawned?.Invoke(this, new(meteor.View));
                 }
 
-                if (wave.MeteorShower == true) MeteorShowerEnded?.Invoke(this, EventArgs.Empty);
+                if (wave.MeteorShower == true) ShowerEnded?.Invoke(this, EventArgs.Empty);
                 else WaveEnded?.Invoke(this, EventArgs.Empty);
             }
 
