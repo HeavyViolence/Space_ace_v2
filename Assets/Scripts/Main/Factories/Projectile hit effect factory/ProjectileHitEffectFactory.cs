@@ -14,7 +14,7 @@ namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
         private readonly DiContainer _diContainer;
         private readonly GamePauser _gamePauser;
         private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectPrefabs = new();
-        private readonly Dictionary<ProjectileHitEffectSkin, Stack<CachedParticleSystem>> _objtectPools = new();
+        private readonly Dictionary<ProjectileHitEffectSkin, Stack<ParticleSystemCache>> _objtectPools = new();
         private readonly Dictionary<ProjectileHitEffectSkin, Transform> _objectPoolsAnchors = new();
         private readonly GameObject _masterAnchor = new("Projectile hit effects pools");
 
@@ -46,15 +46,15 @@ namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
 
         public async UniTask CreateAsync(ProjectileHitEffectSkin skin, Vector3 position)
         {
-            CachedParticleSystem hitEffect = InstantiateHitEffect(skin, position);
+            ParticleSystemCache hitEffect = InstantiateHitEffect(skin, position);
             await AwaitHitEffectToPlayAsync(hitEffect);
-            Release(hitEffect, skin);
+            Release(skin, hitEffect);
         }
 
-        private CachedParticleSystem InstantiateHitEffect(ProjectileHitEffectSkin skin, Vector3 position)
+        private ParticleSystemCache InstantiateHitEffect(ProjectileHitEffectSkin skin, Vector3 position)
         {
-            if (_objtectPools.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true &&
-                stack.TryPop(out CachedParticleSystem system) == true)
+            if (_objtectPools.TryGetValue(skin, out Stack<ParticleSystemCache> stack) == true &&
+                stack.TryPop(out ParticleSystemCache system) == true)
             {
                 system.Object.SetActive(true);
                 system.Transform.parent = null;
@@ -73,13 +73,13 @@ namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
                 transform.parent = null;
                 transform.position = position;
 
-                return new(instance, transform, pauser);
+                return new(instance, pauser);
             }
 
             throw new Exception($"Hit effect of a requested skin ({skin}) doesn't exist!");
         }
 
-        private async UniTask AwaitHitEffectToPlayAsync(CachedParticleSystem instance)
+        private async UniTask AwaitHitEffectToPlayAsync(ParticleSystemCache instance)
         {
             float timer = 0f;
 
@@ -93,19 +93,21 @@ namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
             }
         }
 
-        private void Release(CachedParticleSystem instance, ProjectileHitEffectSkin skin)
+        private void Release(ProjectileHitEffectSkin skin, ParticleSystemCache instance)
         {
+            if (instance is null) throw new ArgumentNullException();
+
             instance.Object.SetActive(false);
             instance.Transform.parent = _objectPoolsAnchors[skin].transform;
             instance.Transform.position = Vector3.zero;
 
-            if (_objtectPools.TryGetValue(skin, out Stack<CachedParticleSystem> stack) == true)
+            if (_objtectPools.TryGetValue(skin, out Stack<ParticleSystemCache> stack) == true)
             {
                 stack.Push(instance);
             }
             else
             {
-                Stack<CachedParticleSystem> newStack = new();
+                Stack<ParticleSystemCache> newStack = new();
                 newStack.Push(instance);
 
                 _objtectPools.Add(skin, newStack);

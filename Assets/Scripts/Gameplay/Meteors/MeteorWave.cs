@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace SpaceAce.Gameplay.Meteors
 {
-    public readonly struct MeteorWave : IEnumerable<MeteorWaveSlot>
+    public sealed record MeteorWave : IEnumerable<MeteorWaveSlot>
     {
         private readonly IEnumerable<MeteorWaveSlot> _slots;
 
-        public readonly bool MeteorShower { get; }
+        public bool MeteorShower { get; }
         public int Size => _slots.Count();
 
         public MeteorWave(IEnumerable<MeteorWaveSlot> slots, bool meteorShower)

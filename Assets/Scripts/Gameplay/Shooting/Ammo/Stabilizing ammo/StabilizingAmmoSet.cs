@@ -4,6 +4,7 @@ using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
+using SpaceAce.Gameplay.Players;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main.Factories.ProjectileFactories;
 
@@ -20,18 +21,18 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float DispersionFactorPerShot { get; }
         public float DispersionDecreasePerShotPercentage => (1f - DispersionFactorPerShot) * 100f;
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object shooter, IGun gun)
         {
-            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
+            ProjectileCache projectile = Services.ProjectileFactory.Create(shooter, ProjectileSkin, Size);
 
-            if (user is IAmmoObservable observable)
+            if (shooter is IAmmoObservable observable)
             {
                 if (observable.Shooter.FirstShotInLine == true) _currentDispersionFactor = 1f;
                 else _currentDispersionFactor *= DispersionFactorPerShot;
             }
             else
             {
-                throw new Exception($"{nameof(StabilizingAmmoSet)} user doesn't implement {typeof(IAmmoObservable)}!");
+                throw new MissingComponentException($"{typeof(IAmmoObservable)}");
             }
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion * _currentDispersionFactor;
@@ -49,19 +50,22 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                HitBehaviour?.Invoke(hitArgs);
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                HitBehaviour?.Invoke(shooter, hitArgs);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
-                MissBehaviour?.Invoke();
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                MissBehaviour?.Invoke(shooter);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
             };
 
-            Amount--;
-            Price -= ShotPrice;
+            if (shooter is Player)
+            {
+                Amount--;
+                Price -= ShotPrice;
+            }
 
             Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
 
@@ -75,7 +79,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         };
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
+        protected override HitBehaviour HitBehaviour => delegate (object shooter, HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
         };

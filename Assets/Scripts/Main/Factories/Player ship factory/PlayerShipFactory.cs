@@ -16,37 +16,49 @@ namespace SpaceAce.Main.Factories.PlayerShipFactories
     {
         private readonly DiContainer _diContainer;
         private readonly Dictionary<PlayerShipType, GameObject> _shipPrefabs = new();
-        private readonly Dictionary<PlayerShipType, Stack<CachedShip>> _objectPool = new();
+        private readonly Dictionary<PlayerShipType, Stack<ShipCache>> _objectPool = new();
+        private readonly Dictionary<PlayerShipType, Transform> _objectPoolsAnchors = new();
+        private readonly GameObject _masterAnchor = new("Player ship object pools");
 
-        public PlayerShipFactory(DiContainer container, IEnumerable<PlayerShipSlot> slots)
+        public PlayerShipFactory(IEnumerable<KeyValuePair<PlayerShipType, GameObject>> prefabs, DiContainer container)
         {
+            if (prefabs is null) throw new ArgumentNullException();
+            _shipPrefabs = new(prefabs);
+
             _diContainer = container ?? throw new ArgumentNullException();
 
-            if (slots is not null)
+            BuildObjectPoolsAnchors();
+        }
+
+        private void BuildObjectPoolsAnchors()
+        {
+            Array types = Enum.GetValues(typeof(PlayerShipType));
+
+            foreach (PlayerShipType type in types)
             {
-                foreach (var slot in slots)
-                    if (_shipPrefabs.ContainsKey(slot.Type) == false)
-                        _shipPrefabs.Add(slot.Type, slot.Prefab);
-            }
-            else
-            {
-                throw new ArgumentNullException();
+                GameObject anchor = new($"{type.ToString().ToLower()}");
+                anchor.transform.parent = _masterAnchor.transform;
+
+                _objectPoolsAnchors.Add(type, anchor.transform);
             }
         }
 
-        public CachedShip Create(PlayerShipType type, Vector3 position, Quaternion rotation)
+        public ShipCache Create(PlayerShipType type, Vector3 position, Quaternion rotation)
         {
-            if (_objectPool.TryGetValue(type, out Stack<CachedShip> pool) == true &&
-                pool.TryPop(out CachedShip ship) == true)
+            if (_objectPool.TryGetValue(type, out Stack<ShipCache> pool) == true &&
+                pool.TryPop(out ShipCache ship) == true)
             {
-                ship.Ship.SetActive(true);
-                ship.Ship.transform.SetPositionAndRotation(position, rotation);
+                ship.Object.SetActive(true);
+                ship.Transform.SetPositionAndRotation(position, rotation);
+                ship.Transform.parent = null;
 
                 return ship;
             }
-            else
+
+            if (_shipPrefabs.TryGetValue(type, out GameObject prefab) == true)
             {
-                GameObject shipObject = _diContainer.InstantiatePrefab(_shipPrefabs[type], position, rotation, null);
+                GameObject shipObject = _diContainer.InstantiatePrefab(prefab, position, rotation, null);
+                shipObject.SetActive(true);
 
                 if (shipObject.TryGetComponent(out Durability durability) == false) throw new MissingComponentException(nameof(Durability));
                 if (shipObject.TryGetComponent(out Armor armor) == false) throw new MissingComponentException(nameof(Armor));
@@ -56,29 +68,29 @@ namespace SpaceAce.Main.Factories.PlayerShipFactories
                 if (shipObject.TryGetComponent(out IDestroyable destroyable) == false) throw new MissingComponentException(nameof(IDestroyable));
                 if (shipObject.TryGetComponent(out IEscapable escapable) == false) throw new MissingComponentException(nameof(IEscapable));
 
-                CachedShip cache = new(shipObject, durability, armor, shooting, movement, damageable, destroyable, escapable);
-
-                shipObject.SetActive(true);
-                shipObject.transform.SetPositionAndRotation(position, rotation);
+                ShipCache cache = new(shipObject, durability, armor, shooting, movement, damageable, destroyable, escapable);
 
                 return cache;
             }
+
+            throw new MissingMemberException($"There is no player ship prefab of type {type} in the config!");
         }
 
-        public void Release(CachedShip cache, PlayerShipType type)
+        public void Release(PlayerShipType type, ShipCache cache)
         {
-            if (cache.Incomplete == true) throw new ArgumentNullException();
+            if (cache is null) throw new ArgumentNullException();
 
-            cache.Ship.SetActive(false);
-            cache.Ship.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            cache.Object.SetActive(false);
+            cache.Transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            cache.Transform.parent = _objectPoolsAnchors[type];
 
-            if (_objectPool.TryGetValue(type, out Stack<CachedShip> pool) == true)
+            if (_objectPool.TryGetValue(type, out Stack<ShipCache> pool) == true)
             {
                 pool.Push(cache);
             }
             else
             {
-                Stack<CachedShip> newPool = new();
+                Stack<ShipCache> newPool = new();
                 newPool.Push(cache);
 
                 _objectPool.Add(type, newPool);

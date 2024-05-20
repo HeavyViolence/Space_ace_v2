@@ -4,6 +4,7 @@ using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
+using SpaceAce.Gameplay.Players;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main.Factories.ProjectileFactories;
 
@@ -18,9 +19,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float AmmoLossProbability { get; }
         public float AmmoLossProbabilityPercentage => AmmoLossProbability * 100f;
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object shooter, IGun gun)
         {
-            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
+            ProjectileCache projectile = Services.ProjectileFactory.Create(shooter, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
@@ -37,20 +38,20 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                HitBehaviour?.Invoke(hitArgs);
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                HitBehaviour?.Invoke(shooter, hitArgs);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
-                MissBehaviour?.Invoke();
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                MissBehaviour?.Invoke(shooter);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
             };
 
             Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
 
-            if (AuxMath.RandomNormal < AmmoLossProbability)
+            if (shooter is Player && AuxMath.RandomNormal < AmmoLossProbability)
             {
                 Amount--;
                 Price -= ShotPrice;
@@ -66,7 +67,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         };
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
+        protected override HitBehaviour HitBehaviour => delegate (object shooter, HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
         };

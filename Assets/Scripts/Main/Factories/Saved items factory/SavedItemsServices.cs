@@ -5,7 +5,7 @@ using System;
 
 namespace SpaceAce.Main.Factories.SavedItemsFactories
 {
-    public readonly struct SavedItemsServices
+    public sealed record SavedItemsServices
     {
         public Localizer Localizer { get; }
         public GameStateLoader GameStateLoader { get; }

@@ -49,7 +49,7 @@ namespace SpaceAce.Gameplay.Players
         private readonly GameControlsTransmitter _gameControlsTransmitter;
         private readonly GamePauser _gamePauser;
 
-        private CachedShip _activeShip;
+        private ShipCache _activeShip;
         private CancellationTokenSource _shootingCancellation;
 
         public Wallet Wallet { get; }
@@ -61,11 +61,11 @@ namespace SpaceAce.Gameplay.Players
 
         public Shooting.Shooting Shooter => _activeShip.Shooting;
 
-        public IDurabilityView DurabilityView => _activeShip.Durability;
-        public IArmorView ArmorView => _activeShip.Armor;
-        public IShooterView ShooterView => _activeShip.Shooting;
-        public IEscapable Escapable => _activeShip.Escapable;
-        public IDestroyable Destroyable => _activeShip.Destroyable;
+        public IDurabilityView DurabilityView => _activeShip?.Durability;
+        public IArmorView ArmorView => _activeShip?.Armor;
+        public IShooterView ShooterView => _activeShip?.Shooting;
+        public IEscapable Escapable => _activeShip?.Escapable;
+        public IDestroyable Destroyable => _activeShip?.Destroyable;
 
         public Player(PlayerShipFactory playerShipFactory,
                       SavedItemsFactory savedItemsFactory,
@@ -189,8 +189,6 @@ namespace SpaceAce.Gameplay.Players
 
         private void ReleasePlayerShip()
         {
-            if (_activeShip.Incomplete == true) return;
-
             _gameControlsTransmitter.SwitchToSmallWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
             _gameControlsTransmitter.SwitchToMediumWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
             _gameControlsTransmitter.SwitchToLargeWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
@@ -203,7 +201,7 @@ namespace SpaceAce.Gameplay.Players
 
             _activeShip.Destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
 
-            _playerShipFactory.Release(_activeShip, SelectedShipType);
+            _playerShipFactory.Release(SelectedShipType, _activeShip);
         }
 
         private void PlayerShipDefeatedEventHandler(object sender, DestroyedEventArgs e)
@@ -222,7 +220,7 @@ namespace SpaceAce.Gameplay.Players
             _shootingCancellation?.Dispose();
             _shootingCancellation = null;
 
-            _playerShipFactory.Release(_activeShip, SelectedShipType);
+            _playerShipFactory.Release(SelectedShipType, _activeShip);
 
             ShipDefeated?.Invoke(this, e);
         }

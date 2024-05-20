@@ -10,7 +10,7 @@ using System;
 
 namespace SpaceAce.Gameplay.Shooting.Ammo
 {
-    public readonly struct AmmoServices
+    public sealed record AmmoServices
     {
         public GameStateLoader GameStateLoader { get; }
         public Localizer Localizer { get; }

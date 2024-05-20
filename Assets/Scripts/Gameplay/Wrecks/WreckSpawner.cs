@@ -62,13 +62,13 @@ namespace SpaceAce.Gameplay.Wrecks
 
         public void Initialize()
         {
-            _gameStateLoader.LevelLoaded += async (s, e) => await LevelLoadedEventHandlerAsync(e);
+            _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
             _levelCompleter.LevelConcluded += LevelConcludedEventHandler;
         }
 
         public void Dispose()
         {
-            _gameStateLoader.LevelLoaded -= async (s, e) => await LevelLoadedEventHandlerAsync(e);
+            _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
             _levelCompleter.LevelConcluded -= LevelConcludedEventHandler;
         }
 
@@ -76,16 +76,16 @@ namespace SpaceAce.Gameplay.Wrecks
 
         #region event handlers
 
-        private async UniTask LevelLoadedEventHandlerAsync(LevelLoadedEventArgs e)
+        private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
             _spawnCancellation = new();
-            await SpawnAsync(e.LevelIndex, _spawnCancellation.Token);
+            SpawnAsync(e.LevelIndex, _spawnCancellation.Token).Forget();
         }
 
         private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
         {
-            _spawnCancellation.Cancel();
-            _spawnCancellation.Dispose();
+            _spawnCancellation?.Cancel();
+            _spawnCancellation?.Dispose();
             _spawnCancellation = null;
         }
 
@@ -105,17 +105,16 @@ namespace SpaceAce.Gameplay.Wrecks
                 {
                     await WaitForDelayAsync(slot.SpawnDelay, token);
 
-                    if (token.IsCancellationRequested == true) break;
-
                     Vector3 spawnPosition = GetSpawnPosition();
                     Vector3 targetPosition = GetTargetPosition();
                     Vector3 movementDirection = (targetPosition - spawnPosition).normalized;
+                    Quaternion spawnRotation = GetSpawnRotation();
 
-                    CachedWreck wreck = _wreckFactory.Create(slot.Type, spawnPosition);
+                    WreckCache wreck = _wreckFactory.Create(slot.Type, spawnPosition, spawnRotation);
                     wreck.Transform.localScale = slot.Scale;
                     wreck.Transform.rotation = Quaternion.Euler(0f, 0f, AuxMath.DegreesPerRotation * AuxMath.RandomNormal);
 
-                    MovementData data = new(slot.Speed, slot.Speed, 0f, spawnPosition, movementDirection, wreck.Transform.rotation, null, 0f, 0f, null);
+                    MovementData data = new(slot.Speed, slot.Speed, 0f, spawnPosition, movementDirection, spawnRotation, null, 0f, 0f, null);
                     wreck.MovementSupplier.Supply(WreckMovement, data);
 
                     wreck.View.Escapable.SetEscapeDelay(EscapeDelay);
@@ -139,6 +138,10 @@ namespace SpaceAce.Gameplay.Wrecks
                     };
 
                     WreckSpawned?.Invoke(this, new(wreck.View));
+
+                    await UniTask.WaitUntil(() => _gamePauser.Paused == false, PlayerLoopTiming.Update, token);
+
+                    if (token.IsCancellationRequested == true) break;
                 }
 
                 if (wave.WreckShower == true) ShowerEnded?.Invoke(this, EventArgs.Empty);
@@ -188,6 +191,8 @@ namespace SpaceAce.Gameplay.Wrecks
 
             return new Vector3(x, y, 0f);
         }
+
+        private Quaternion GetSpawnRotation() => Quaternion.Euler(0f, 0f, AuxMath.DegreesPerRotation * AuxMath.RandomNormal);
 
         private MovementBehaviour WreckMovement => delegate (Rigidbody2D body, ref MovementData data)
         {

@@ -85,7 +85,7 @@ namespace SpaceAce.UI
 
         public void Tick()
         {
-            if (_gamePauser.Paused == true) return;
+            if (_gameStateLoader.CurrentState != GameState.Level && _gamePauser.Paused == true) return;
 
             _levelDisplay.UpdateLevelStopwatchView(_levelStopwatch.Minutes, _levelStopwatch.Seconds, _levelStopwatch.Milliseconds);
             _levelDisplay.UpdatePlayerShipMaxDurabilityView(_playerShipMaxDurability, _playerShipDurabilityRegen);

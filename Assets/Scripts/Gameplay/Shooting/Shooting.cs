@@ -47,6 +47,7 @@ namespace SpaceAce.Gameplay.Shooting
         private MasterCameraShaker _masterCameraShaker;
         private Localizer _localizer;
         private Inventory _userInventory;
+        private Transform _transform;
 
         private bool _weaponsSwitchEnabled = true;
 
@@ -111,6 +112,7 @@ namespace SpaceAce.Gameplay.Shooting
 
         private void Awake()
         {
+            _transform = transform;
             _availableGuns.AddRange(gameObject.GetComponentsInChildren<IGun>());
         }
 
@@ -151,8 +153,10 @@ namespace SpaceAce.Gameplay.Shooting
             return damagePerSecond;
         }
 
-        public async UniTask FireAsync(object user, CancellationToken token)
+        public async UniTask FireAsync(object shooter, CancellationToken token)
         {
+            if (shooter is null) throw new ArgumentNullException();
+
             if (Overheat == true) return;
             if (Firing == true) return;
 
@@ -160,7 +164,7 @@ namespace SpaceAce.Gameplay.Shooting
             {
                 if (_config.EmptyAmmoAudio != null)
                 {
-                    await _audioPlayer.PlayOnceAsync(_config.EmptyAmmoAudio.Random, transform.position, transform, true);
+                    await _audioPlayer.PlayOnceAsync(_config.EmptyAmmoAudio.Random, _transform.position, _transform, true);
                 }
 
                 return;
@@ -188,7 +192,7 @@ namespace SpaceAce.Gameplay.Shooting
 
                     if (AuxMath.RandomNormal < _empFactor)
                     {
-                        shotResult = await ActiveAmmo.FireAsync(user, gun);
+                        shotResult = await ActiveAmmo.FireAsync(shooter, gun);
                     }
                     else
                     {
@@ -236,7 +240,7 @@ namespace SpaceAce.Gameplay.Shooting
             }
             else
             {
-                await _audioPlayer.PlayOnceAsync(_config.OverheatAudio.Random, transform.position, transform, true);
+                await _audioPlayer.PlayOnceAsync(_config.OverheatAudio.Random, _transform.position, _transform, true);
             }
 
             Heat = 0f;
@@ -308,7 +312,7 @@ namespace SpaceAce.Gameplay.Shooting
                             if (_config.SmallWeaponsSwitchAudio == null)
                                 await UniTask.WaitForSeconds(RandomSmallWeaponsSwitchDuration);
                             else
-                                await _audioPlayer.PlayOnceAsync(_config.SmallWeaponsSwitchAudio.Random, transform.position, transform, true);
+                                await _audioPlayer.PlayOnceAsync(_config.SmallWeaponsSwitchAudio.Random, _transform.position, _transform, true);
 
                             break;
                         }
@@ -317,7 +321,7 @@ namespace SpaceAce.Gameplay.Shooting
                             if (_config.MediumWeaponsSwitchAudio == null)
                                 await UniTask.WaitForSeconds(RandomMediumWeaponsSwitchDuration);
                             else
-                                await _audioPlayer.PlayOnceAsync(_config.MediumWeaponsSwitchAudio.Random, transform.position, transform, true);
+                                await _audioPlayer.PlayOnceAsync(_config.MediumWeaponsSwitchAudio.Random, _transform.position, _transform, true);
 
                             break;
                         }
@@ -326,7 +330,7 @@ namespace SpaceAce.Gameplay.Shooting
                             if (_config.LargeWeaponsSwitchAudio == null)
                                 await UniTask.WaitForSeconds(RandomLargeWeaponsSwitchDuration);
                             else
-                                await _audioPlayer.PlayOnceAsync(_config.LargeWeaponsSwitchAudio.Random, transform.position, transform, true);
+                                await _audioPlayer.PlayOnceAsync(_config.LargeWeaponsSwitchAudio.Random, _transform.position, _transform, true);
 
                             break;
                         }
@@ -368,7 +372,7 @@ namespace SpaceAce.Gameplay.Shooting
             if (AmmoCountForActiveWeapons <= 1) return false;
 
             if (_config.AmmoSwitchAudio == null) await UniTask.WaitForSeconds(RandomAmmoSwitchDuration);
-            else await _audioPlayer.PlayOnceAsync(_config.AmmoSwitchAudio.Random, transform.position, transform, true);
+            else await _audioPlayer.PlayOnceAsync(_config.AmmoSwitchAudio.Random, _transform.position, _transform, true);
 
             AmmoSet previousAmmo = ActiveAmmo;
 
@@ -394,7 +398,7 @@ namespace SpaceAce.Gameplay.Shooting
             if (AmmoCountForActiveWeapons <= 1) return false;
 
             if (_config.AmmoSwitchAudio == null) await UniTask.WaitForSeconds(RandomAmmoSwitchDuration);
-            else await _audioPlayer.PlayOnceAsync(_config.AmmoSwitchAudio.Random, transform.position, transform, true);
+            else await _audioPlayer.PlayOnceAsync(_config.AmmoSwitchAudio.Random, _transform.position, _transform, true);
 
             if (ActiveAmmoIndex == 0) ActiveAmmoIndex = AmmoCountForActiveWeapons - 1;
             else ActiveAmmoIndex--;
@@ -422,7 +426,7 @@ namespace SpaceAce.Gameplay.Shooting
             _availableAmmo = GetAvailableAmmo();
             _ammoForActiveWeapons = GetAmmo(ActiveWeaponsSize);
 
-            if (Firing = false && ActiveAmmo.Amount == 0)
+            if (Firing == false && ActiveAmmo.Amount == 0)
             {
                 bool switchedFromDepletedAmmo = await TrySwitchToNextAmmoAsync();
                 if (switchedFromDepletedAmmo == false) await TrySwitchToWorkingWeapons();

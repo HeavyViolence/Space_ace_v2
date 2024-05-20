@@ -4,6 +4,7 @@ using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
+using SpaceAce.Gameplay.Players;
 using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main.Factories.ProjectileFactories;
 
@@ -15,14 +16,14 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class CatalyticAmmoSet : AmmoSet, IEquatable<CatalyticAmmoSet>
     {
-        private float _currentFireRateFactorPerShot = 1f;
+        private float _fireRateFactor = 1f;
 
         public float FireRateFactorPerShot { get; }
         public float FireRateIncreasePerShotPercentage => (FireRateFactorPerShot - 1f) * 100f;
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object shooter, IGun gun)
         {
-            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
+            ProjectileCache projectile = Services.ProjectileFactory.Create(shooter, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
@@ -39,34 +40,36 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                HitBehaviour?.Invoke(hitArgs);
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                HitBehaviour?.Invoke(shooter, hitArgs);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
-                MissBehaviour?.Invoke();
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                MissBehaviour?.Invoke(shooter);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
             };
 
-            Amount--;
-            Price -= ShotPrice;
+            if (shooter is Player)
+            {
+                Amount--;
+                Price -= ShotPrice;
+            }
 
             Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
 
-            if (user is IAmmoObservable observable)
+            if (shooter is IAmmoObservable observable)
             {
-                if (observable.Shooter.FirstShotInLine == true) _currentFireRateFactorPerShot = 1f;
-                else _currentFireRateFactorPerShot *= FireRateFactorPerShot;
+                if (observable.Shooter.FirstShotInLine == true) _fireRateFactor = 1f;
+                else _fireRateFactor *= FireRateFactorPerShot;
             }
             else
             {
-                throw new Exception($"{nameof(CatalyticAmmoSet)} user doesn't implement {typeof(IAmmoObservable)}!");
+                throw new MissingComponentException($"{nameof(CatalyticAmmoSet)} shooter doesn't implement {typeof(IAmmoObservable)}!");
             }
 
-            float clampedFireRate = Mathf.Clamp(gun.FireRate * _currentFireRateFactorPerShot, GunConfig.MinFireRate, GunConfig.MaxFireRate);
-            await UniTask.WaitForSeconds(1f / clampedFireRate);
+            await UniTask.WaitForSeconds(1f / gun.FireRate * _fireRateFactor);
 
             return new(1, HeatGeneration);
         };
@@ -76,7 +79,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         };
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
+        protected override HitBehaviour HitBehaviour => delegate (object shooter, HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
         };

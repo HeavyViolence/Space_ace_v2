@@ -30,7 +30,7 @@ namespace SpaceAce.Main
             MainMenuLoadingStarted?.Invoke(this, new(clampedDelay));
             CurrentState = GameState.MainMenuLoading;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(clampedDelay));
+            await UniTask.WaitForSeconds(clampedDelay);
 
             MainMenuLoaded?.Invoke(this, EventArgs.Empty);
             CurrentState = GameState.MainMenu;
@@ -47,7 +47,7 @@ namespace SpaceAce.Main
             LevelLoadingStarted?.Invoke(this, new(levelIndex, clampedDelay));
             CurrentState = GameState.LevelLoading;
 
-            await UniTask.Delay(TimeSpan.FromSeconds(clampedDelay));
+            await UniTask.WaitForSeconds(clampedDelay);
 
             LevelLoaded?.Invoke(this, new(levelIndex));
             CurrentState = GameState.Level;

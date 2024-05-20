@@ -36,12 +36,16 @@ namespace SpaceAce.Gameplay.Damage
         private GamePauser _gamePauser;
         private AudioPlayer _audioPlayer;
         private MasterCameraShaker _masterCameraShaker;
-        private float _lifeTime;
-
+        private MasterCameraHolder _masterCameraHolder;
         private Transform _transform;
         private Durability _durability;
         private Armor _armor;
         private ExperienceCollector _experienceCollector;
+
+        private float _lifeTime;
+
+        private bool _invulnerable = false;
+        private CancellationTokenSource _invulnerabilityCancellation;
 
         public Guid ID { get; private set; }
 
@@ -55,12 +59,14 @@ namespace SpaceAce.Gameplay.Damage
         private void Construct(ExplosionFactory factory,
                                GamePauser gamePauser,
                                AudioPlayer audioPlayer,
-                               MasterCameraShaker masterCameraShaker)
+                               MasterCameraShaker masterCameraShaker,
+                               MasterCameraHolder masterCameraHolder)
         {
             _explosionFactory = factory ?? throw new ArgumentNullException();
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
             _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
+            _masterCameraHolder = masterCameraHolder ?? throw new ArgumentNullException();
         }
 
         private void Awake()
@@ -78,6 +84,19 @@ namespace SpaceAce.Gameplay.Damage
         private void OnEnable()
         {
             _lifeTime = 0f;
+            
+            if (_config.Invulnerable == true)
+            {
+                _invulnerabilityCancellation = new();
+                MakeInvulnerableForDurationAsync(_config.InvulnerabilityDuration, _invulnerabilityCancellation.Token).Forget();
+            }
+        }
+
+        private void OnDisable()
+        {
+            _invulnerabilityCancellation?.Cancel();
+            _invulnerabilityCancellation?.Dispose();
+            _invulnerabilityCancellation = null;
         }
 
         private void Update()
@@ -116,18 +135,40 @@ namespace SpaceAce.Gameplay.Damage
             throw new MissingComponentException($"Game object is missing {typeof(ExperienceCollector)} component!");
         }
 
+        private async UniTask MakeInvulnerableForDurationAsync(float duration, CancellationToken token)
+        {
+            _invulnerable = true;
+
+            await UniTask.WaitUntil(() => _masterCameraHolder.InsideViewport(_transform.position) == true, PlayerLoopTiming.FixedUpdate, token);
+
+            float timer = 0f;
+
+            while (timer < duration)
+            {
+                if (token.IsCancellationRequested == true) break;
+
+                timer += Time.fixedDeltaTime;
+
+                await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                await UniTask.WaitForFixedUpdate();
+            }
+
+            _invulnerable = false;
+        }
+
         public void ApplyDamage(float damage)
         {
+            if (_masterCameraHolder.InsideViewport(_transform.position) == false || _invulnerable == true) return;
             if (damage <= 0f) throw new ArgumentOutOfRangeException();
 
             float damageToBeDealt = _armor.GetReducedDamage(damage);
 
             _durability.ApplyDamage(damageToBeDealt);
-            DamageReceived?.Invoke(this, new(damage, damageToBeDealt, transform.position));
+            DamageReceived?.Invoke(this, new(damage, damageToBeDealt, _transform.position));
 
             if (_durability.Value == 0f)
             {
-                _explosionFactory.CreateAsync(_config.ExplosionSize, transform.position).Forget();
+                _explosionFactory.CreateAsync(_config.ExplosionSize, _transform.position).Forget();
                 _masterCameraShaker.ShakeOnDefeat();
                 _audioPlayer.PlayOnceAsync(_config.ExplosionAudio.Random, _transform.position, null, true).Forget();
                 Destroyed?.Invoke(this, new(_transform.position, _lifeTime, _experienceCollector.GetExperience(_lifeTime)));
@@ -147,33 +188,13 @@ namespace SpaceAce.Gameplay.Damage
 
             while (timer < nanites.DamageDuration)
             {
-                if (gameObject == null) return false;
-
-                if (token.IsCancellationRequested == true ||
-                    gameObject.activeInHierarchy == false)
-                {
-                    _nanitesActive = false;
-                    return false;
-                }
-
-                if (_gamePauser.Paused == true) await UniTask.Yield();
+                if (token.IsCancellationRequested == true || gameObject.activeInHierarchy == false) break;
 
                 timer += Time.deltaTime;
 
-                float damage = nanites.DamagePerSecond * Time.deltaTime;
+                _durability.ApplyDamage(nanites.DamagePerSecond * Time.deltaTime);
 
-                _durability.ApplyDamage(damage);
-                DamageReceived?.Invoke(this, new(damage, damage, transform.position));
-
-                if (_durability.Value == 0f)
-                {
-                    _nanitesActive = false;
-                    _explosionFactory.CreateAsync(_config.ExplosionSize, transform.position).Forget();
-                    Destroyed?.Invoke(this, new(_transform.position, _lifeTime, _experienceCollector.GetExperience(_lifeTime)));
-
-                    return true;
-                }
-
+                await UniTask.WaitUntil(() => _gamePauser.Paused == false, PlayerLoopTiming.Update, token);
                 await UniTask.Yield();
             }
 

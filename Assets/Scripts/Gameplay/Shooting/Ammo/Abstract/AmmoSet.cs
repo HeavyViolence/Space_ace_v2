@@ -106,15 +106,13 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             return false;
         }
 
-        public async UniTask<ShotResult> FireAsync(object user, IGun gun)
+        public async UniTask<ShotResult> FireAsync(object shooter, IGun gun)
         {
-            if (user is null) throw new ArgumentNullException();
-            if (gun == null) throw new ArgumentNullException();
+            if (shooter is null) throw new ArgumentNullException();
+            if (gun is null) throw new ArgumentNullException();
 
             if (Services.GameStateLoader.CurrentState == GameState.Level)
-            {
-                return await ShotBehaviourAsync.Invoke(user, gun);
-            }
+                return await ShotBehaviourAsync.Invoke(shooter, gun);
 
             return ShotResult.None;
         }

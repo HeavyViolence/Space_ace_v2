@@ -10,7 +10,7 @@ namespace SpaceAce.Gameplay.Damage
                      menuName = "Space ace/Configs/Damage/Durability config")]
     public sealed class DurabilityConfig : ScriptableObject
     {
-        public const float MinInitialDurability = 100f;
+        public const float MinInitialDurability = 1f;
         public const float MaxInitialDurability = 1_000_000f;
 
         public const float MinInitialRegen = 0f;

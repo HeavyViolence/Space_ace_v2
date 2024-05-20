@@ -2,7 +2,7 @@ using System;
 
 namespace SpaceAce.Main.Audio
 {
-    public sealed class AudioAccess : IEquatable<AudioAccess>
+    public sealed record AudioAccess : IEquatable<AudioAccess>
     {
         public static AudioAccess None = new(Guid.Empty, 0f);
 
@@ -19,28 +19,9 @@ namespace SpaceAce.Main.Audio
             PlaybackDuration = playbackDuration;
         }
 
-        public override bool Equals(object obj) => Equals(obj as AudioAccess);
-
         public bool Equals(AudioAccess other) => other is not null &&
                                                  other.ID == ID &&
                                                  other.PlaybackDuration == PlaybackDuration;
-
-        public static bool operator ==(AudioAccess x, AudioAccess y)
-        {
-            if (x is null)
-            {
-                if (y is null)
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return x.Equals(y);
-        }
-
-        public static bool operator !=(AudioAccess x, AudioAccess y) => !(x == y);
 
         public override int GetHashCode() => ID.GetHashCode() ^ PlaybackDuration.GetHashCode();
     }

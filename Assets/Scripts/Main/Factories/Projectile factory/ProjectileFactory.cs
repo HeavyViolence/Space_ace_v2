@@ -15,8 +15,8 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
     public sealed class ProjectileFactory
     {
         private readonly Dictionary<ProjectileSkin, GameObject> _projectilePrefabs = new();
-        private readonly Dictionary<ProjectileSkin, Stack<CachedProjectile>> _cachedProjectiles = new();
-        private readonly Dictionary<ProjectileSkin, GameObject> _projectileAnchors = new();
+        private readonly Dictionary<ProjectileSkin, Stack<ProjectileCache>> _cachedProjectiles = new();
+        private readonly Dictionary<ProjectileSkin, Transform> _projectileAnchors = new();
         private readonly GameObject _projectileMasterAnchor = new("Projectiles object pools");
 
         private readonly DiContainer _diContainer;
@@ -33,114 +33,87 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
             {
                 _projectilePrefabs.Add(slot.Skin, slot.Prefab);
 
-                GameObject anchor = new($"Projectile pool of {slot.Skin.ToString().ToLower()}");
+                GameObject anchor = new($"Projectile pool of {slot.Skin}");
                 anchor.transform.parent = _projectileMasterAnchor.transform;
 
-                _projectileAnchors.Add(slot.Skin, anchor);
+                _projectileAnchors.Add(slot.Skin, anchor.transform);
             }
         }
 
-        public CachedProjectile Create(object user, ProjectileSkin skin, Size size)
+        public ProjectileCache Create(object user, ProjectileSkin skin, Size size)
         {
-            if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true &&
-                stack.TryPop(out CachedProjectile cache) == true)
+            ProjectileCache cachedProjectile;
+            Vector3 scale = Vector3.one;
+
+            if (_cachedProjectiles.TryGetValue(skin, out Stack<ProjectileCache> stack) == true &&
+                stack.TryPop(out ProjectileCache cache) == true)
             {
-                cache.Object.SetActive(true);
-                cache.Transform.parent = null;
-
-                Vector3 scale = Vector3.one;
-
-                switch (size)
+                cachedProjectile = cache;
+            }
+            else
+            {
+                if (_projectilePrefabs.TryGetValue(skin, out GameObject projectilePrefab) == true)
                 {
-                    case Size.Small:
-                        {
-                            scale = new(_config.SmallProjectileScale, _config.SmallProjectileScale, _config.SmallProjectileScale);
-                            break;
-                        }
-                    case Size.Large:
-                        {
-                            scale = new(_config.LargeProjectileScale, _config.LargeProjectileScale, _config.LargeProjectileScale);
-                            break;
-                        }
-                }
+                    GameObject newProjectile = _diContainer.InstantiatePrefab(projectilePrefab);
 
-                cache.Transform.localScale = scale;
+                    if (newProjectile.TryGetComponent(out SpriteRenderer renderer) == false) throw new MissingComponentException($"{typeof(SpriteRenderer)}");
+                    if (newProjectile.TryGetComponent(out DamageDealer damageDealer) == false) throw new MissingComponentException($"{typeof(DamageDealer)}");
+                    if (newProjectile.TryGetComponent(out IEscapable escapable) == false) throw new MissingComponentException($"{typeof(IEscapable)}");
+                    if (newProjectile.TryGetComponent(out IMovementBehaviourSupplier supplier) == false) throw new MissingComponentException($"{typeof(IMovementBehaviourSupplier)}");
 
-                if (user is Player)
-                {
-                    cache.Object.layer = LayerMask.NameToLayer(_config.PlayerProjectilesLayerName);
-                    cache.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.PlayerProjectilesLayerName);
+                    cachedProjectile = new(newProjectile, renderer, damageDealer, escapable, supplier);
                 }
-                else
-                {
-                    cache.Object.layer = LayerMask.NameToLayer(_config.EnemyProjectilesLayerName);
-                    cache.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
-                }
-
-                return cache;
+                else throw new Exception($"Projectile of a requested skin ({skin}) doesn't exist in the config!");
             }
 
-            if (_projectilePrefabs.TryGetValue(skin, out GameObject projectilePrefab) == true)
+            switch (size)
             {
-                GameObject newProjectile = _diContainer.InstantiatePrefab(projectilePrefab);
-
-                Vector3 scale = Vector3.one;
-
-                switch (size)
-                {
-                    case Size.Small:
-                        {
-                            scale = new(_config.SmallProjectileScale, _config.SmallProjectileScale, _config.SmallProjectileScale);
-                            break;
-                        }
-                    case Size.Large:
-                        {
-                            scale = new(_config.LargeProjectileScale, _config.LargeProjectileScale, _config.LargeProjectileScale);
-                            break;
-                        }
-                }
-
-                if (newProjectile.TryGetComponent(out SpriteRenderer renderer) == false) throw new MissingComponentException($"{typeof(SpriteRenderer)}");
-                if (newProjectile.TryGetComponent(out Transform transform) == false) throw new MissingComponentException($"{typeof(Transform)}");
-                if (newProjectile.TryGetComponent(out DamageDealer damageDealer) == false) throw new MissingComponentException($"{typeof(DamageDealer)}");
-                if (newProjectile.TryGetComponent(out IEscapable escapable) == false) throw new MissingComponentException($"{typeof(IEscapable)}");
-                if (newProjectile.TryGetComponent(out IMovementBehaviourSupplier supplier) == false) throw new MissingComponentException($"{typeof(IMovementBehaviourSupplier)}");
-
-                transform.localScale = scale;
-
-                if (user is Player)
-                {
-                    newProjectile.layer = LayerMask.NameToLayer(_config.PlayerProjectilesLayerName);
-                    renderer.sortingLayerID = SortingLayer.NameToID(_config.PlayerProjectilesLayerName);
-                }
-                else
-                {
-                    newProjectile.layer = LayerMask.NameToLayer(_config.EnemyProjectilesLayerName);
-                    renderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
-                }
-
-                return new(newProjectile, transform, renderer, damageDealer, escapable, supplier);
+                case Size.Small:
+                    {
+                        scale = new(_config.SmallProjectileScale, _config.SmallProjectileScale, _config.SmallProjectileScale);
+                        break;
+                    }
+                case Size.Large:
+                    {
+                        scale = new(_config.LargeProjectileScale, _config.LargeProjectileScale, _config.LargeProjectileScale);
+                        break;
+                    }
             }
 
-            throw new Exception($"Projectile of a requested skin ({skin}) doesn't exist in the config!");
+            cachedProjectile.Object.SetActive(true);
+            cachedProjectile.Transform.parent = null;
+            cachedProjectile.Transform.localScale = scale;
+
+            if (user is Player)
+            {
+                cachedProjectile.Object.layer = LayerMask.NameToLayer(_config.PlayerProjectilesLayerName);
+                cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.PlayerProjectilesLayerName);
+            }
+            else
+            {
+                cachedProjectile.Object.layer = LayerMask.NameToLayer(_config.EnemyProjectilesLayerName);
+                cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
+            }
+
+            return cachedProjectile;
         }
 
-        public void Release(CachedProjectile projectile, ProjectileSkin skin)
+        public void Release(ProjectileSkin skin, ProjectileCache projectile)
         {
-            if (projectile.Incomplete == true) throw new ArgumentNullException();
+            if (projectile is null) throw new ArgumentNullException();
 
             projectile.Object.SetActive(false);
             projectile.Transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             projectile.Transform.localScale = Vector3.one;
-            projectile.Transform.parent = _projectileAnchors[skin].transform;
+            projectile.Transform.parent = _projectileAnchors[skin];
 
-            if (_cachedProjectiles.TryGetValue(skin, out Stack<CachedProjectile> stack) == true)
+            if (_cachedProjectiles.TryGetValue(skin, out Stack<ProjectileCache> stack) == true)
             {
                 stack.Push(projectile);
             }
             else
             {
-                Stack<CachedProjectile> newStack = new();
+                Stack<ProjectileCache> newStack = new();
                 newStack.Push(projectile);
 
                 _cachedProjectiles.Add(skin, newStack);

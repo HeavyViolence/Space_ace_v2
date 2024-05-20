@@ -14,7 +14,7 @@ namespace SpaceAce.Main.Factories.WreckFactories
     public sealed class WreckFactory
     {
         private readonly Dictionary<WreckType, GameObject> _prefabs;
-        private readonly Dictionary<WreckType, Stack<CachedWreck>> _objectPools = new();
+        private readonly Dictionary<WreckType, Stack<WreckCache>> _objectPools = new();
         private readonly Dictionary<WreckType, Transform> _objectPoolsAnchors = new();
         private readonly GameObject _masterAnchor = new($"Wreck object pools");
         private readonly DiContainer _container;
@@ -42,49 +42,48 @@ namespace SpaceAce.Main.Factories.WreckFactories
             }
         }
 
-        public CachedWreck Create(WreckType type, Vector3 position)
+        public WreckCache Create(WreckType type, Vector3 position, Quaternion rotation)
         {
-            if (_objectPools.TryGetValue(type, out Stack<CachedWreck> pool) == true &&
-                pool.TryPop(out CachedWreck cache) == true)
+            if (_objectPools.TryGetValue(type, out Stack<WreckCache> pool) == true &&
+                pool.TryPop(out WreckCache cache) == true)
             {
                 cache.Object.SetActive(true);
+                cache.Transform.SetPositionAndRotation(position, rotation);
                 cache.Transform.parent = null;
-                cache.Transform.position = position;
 
                 return cache;
             }
 
             if (_prefabs.TryGetValue(type, out GameObject prefab) == true)
             {
-                GameObject wreck = _container.InstantiatePrefab(prefab);
+                GameObject wreck = _container.InstantiatePrefab(prefab, position, rotation, null);
 
-                if (wreck.TryGetComponent(out Transform transform) == false) throw new MissingComponentException($"{typeof(Transform)}");
                 if (wreck.TryGetComponent(out DamageDealer damageDealer) == false) throw new MissingComponentException($"{typeof(DamageDealer)}");
                 if (wreck.TryGetComponent(out IMovementBehaviourSupplier supplier) == false) throw new MissingComponentException($"{typeof(IMovementBehaviourSupplier)}");
                 if (wreck.TryGetComponent(out IEntityView view) == false) throw new MissingComponentException($"{typeof(IEntityView)}");
 
-                transform.position = position;
-
-                return new(wreck, transform, damageDealer, supplier, view);
+                return new(wreck, damageDealer, supplier, view);
             }
 
             throw new MissingMemberException($"There is no wreck prefab of type {type} in the config!");
         }
 
-        public void Release(WreckType type, CachedWreck wreck)
+        public void Release(WreckType type, WreckCache wreck)
         {
+            if (wreck is null) throw new ArgumentNullException();
+
             wreck.Object.SetActive(false);
+            wreck.Transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             wreck.Transform.parent = _objectPoolsAnchors[type];
-            wreck.Transform.position = Vector3.zero;
             wreck.Transform.localScale = Vector3.one;
 
-            if (_objectPools.TryGetValue(type, out Stack<CachedWreck> pool) == true)
+            if (_objectPools.TryGetValue(type, out Stack<WreckCache> pool) == true)
             {
                 pool.Push(wreck);
             }
             else
             {
-                Stack<CachedWreck> newPool = new();
+                Stack<WreckCache> newPool = new();
                 newPool.Push(wreck);
 
                 _objectPools.Add(type, newPool);

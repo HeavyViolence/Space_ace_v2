@@ -5,17 +5,17 @@ using System.Linq;
 
 namespace SpaceAce.Gameplay.Wrecks
 {
-    public readonly struct WreckWave : IEnumerable<WreckWaveSlot>
+    public sealed record WreckWave : IEnumerable<WreckWaveSlot>
     {
         private readonly IEnumerable<WreckWaveSlot> _slots;
 
-        public readonly bool WreckShower { get; }
+        public bool WreckShower { get; }
         public int Size => _slots.Count();
 
-        public WreckWave(IEnumerable<WreckWaveSlot> slots, bool meteorShower)
+        public WreckWave(IEnumerable<WreckWaveSlot> slots, bool wreckShower)
         {
             _slots = slots ?? throw new ArgumentNullException();
-            WreckShower = meteorShower;
+            WreckShower = wreckShower;
         }
 
         public float GetDuration()

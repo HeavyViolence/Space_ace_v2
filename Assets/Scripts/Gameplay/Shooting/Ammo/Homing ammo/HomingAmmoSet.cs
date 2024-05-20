@@ -19,9 +19,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float HomingSpeed { get; }
         public float TargetingWidth { get; }
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
+        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object shooter, IGun gun)
         {
-            CachedProjectile projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
+            ProjectileCache projectile = Services.ProjectileFactory.Create(shooter, ProjectileSkin, Size);
 
             float dispersion = AuxMath.RandomUnit * gun.Dispersion;
 
@@ -36,8 +36,17 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             int layerMask;
 
-            if (user is Player) layerMask = LayerMask.GetMask("Enemies", "Bosses", "Meteors", "Wrecks");
-            else layerMask = LayerMask.GetMask("Player");
+            if (shooter is Player)
+            {
+                layerMask = LayerMask.GetMask("Enemies", "Bosses", "Meteors", "Wrecks");
+
+                Amount--;
+                Price -= ShotPrice;
+            }
+            else
+            {
+                layerMask = LayerMask.GetMask("Player");
+            }
 
             RaycastHit2D hit = Physics2D.BoxCast(gun.Transform.position, boxSize, 0f, boxDirection, float.PositiveInfinity, layerMask);
             Transform target = hit.transform;
@@ -49,19 +58,16 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
             {
-                HitBehaviour?.Invoke(hitArgs);
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                HitBehaviour?.Invoke(shooter, hitArgs);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
                 Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, hitArgs.HitPosition).Forget();
             };
 
             projectile.Escapable.Escaped += (sender, args) =>
             {
-                MissBehaviour?.Invoke();
-                Services.ProjectileFactory.Release(projectile, ProjectileSkin);
+                MissBehaviour?.Invoke(shooter);
+                Services.ProjectileFactory.Release(ProjectileSkin, projectile);
             };
-
-            Amount--;
-            Price -= ShotPrice;
 
             Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
 
@@ -104,7 +110,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             }
         };
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
+        protected override HitBehaviour HitBehaviour => delegate (object shooter, HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
         };

@@ -63,7 +63,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _speed: {x: 7, y: 13}
-  _showerSpeed: {x: 13, y: 19}
+  _showerSpeed: {x: 13, y: 17}
   _speedProbability:
     serializedVersion: 2
     m_Curve:
@@ -88,10 +88,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _waveDelay: {x: 15, y: 30}
-  _spawnDelay: {x: 15, y: 30}
+  _waveDelay: {x: 20, y: 40}
+  _spawnDelay: {x: 20, y: 40}
   _showerSpawnDelay: {x: 3, y: 6}
-  _waveLength: {x: 10, y: 20}
+  _waveLength: {x: 3, y: 5}
   _showerWaveLength: {x: 10, y: 20}
   _spawnWidthProbability:
     serializedVersion: 2

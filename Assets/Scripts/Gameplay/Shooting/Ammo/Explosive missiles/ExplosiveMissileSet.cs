@@ -14,7 +14,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float ExplosionDamage { get; }
         public float ExplosionRadius { get; }
 
-        protected override HitBehaviour HitBehaviour => delegate (HitEventArgs hitArgs)
+        protected override HitBehaviour HitBehaviour => delegate (object shooter, HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
 
