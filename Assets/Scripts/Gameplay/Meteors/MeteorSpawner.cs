@@ -25,7 +25,6 @@ namespace SpaceAce.Gameplay.Meteors
         public event EventHandler WaveStarted, WaveEnded;
         public event EventHandler ShowerStarted, ShowerEnded;
         public event EventHandler<MeteorSpawnedEventArgs> MeteorSpawned;
-        public event EventHandler MeteorEscaped, MeteorDestroyed;
 
         private readonly MeteorSpawnerConfig _config;
         private readonly MeteorFactory _meteorFactory;
@@ -79,7 +78,7 @@ namespace SpaceAce.Gameplay.Meteors
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
             _spawnCancellation = new();
-            SpawnAsync(e.LevelIndex, _spawnCancellation.Token).Forget();
+            SpawnAsync(e.Level, _spawnCancellation.Token).Forget();
         }
 
         private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
@@ -117,18 +116,8 @@ namespace SpaceAce.Gameplay.Meteors
                     meteor.MovementSupplier.Supply(MeteorMovement, data);
 
                     meteor.View.Escapable.SetEscapeDelay(EscapeDelay);
-
-                    meteor.View.Escapable.Escaped += (s, e) =>
-                    {
-                        _meteorFactory.Release(slot.Type, meteor);
-                        MeteorEscaped?.Invoke(this, EventArgs.Empty);
-                    };
-
-                    meteor.View.Destroyable.Destroyed += (s, e) =>
-                    {
-                        _meteorFactory.Release(slot.Type, meteor);
-                        MeteorDestroyed?.Invoke(this, EventArgs.Empty);
-                    };
+                    meteor.View.Escapable.Escaped += (s, e) => _meteorFactory.Release(slot.Type, meteor);
+                    meteor.View.Destroyable.Destroyed += (s, e) => _meteorFactory.Release(slot.Type, meteor);
 
                     meteor.DamageDealer.Hit += (s, e) =>
                     {

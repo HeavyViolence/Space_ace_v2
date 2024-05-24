@@ -8,26 +8,12 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
                      menuName = "Space ace/Configs/Factories/Projectile factory config")]
     public sealed class ProjectileFactoryConfig : ScriptableObject
     {
-        #region layers
-
-        [SerializeField]
-        private string _playerProjectilesLayerName;
-
-        public string PlayerProjectilesLayerName => _playerProjectilesLayerName;
-
-        [SerializeField]
-        private string _enemyProjectilesLayerName;
-        
-        public string EnemyProjectilesLayerName => _enemyProjectilesLayerName;
-
-        #endregion
-
         #region projectile scale per size
 
         public const float MinProjectileScale = 0.5f;
         public const float MaxProjectileScale = 2f;
 
-        [SerializeField, Range(MinProjectileScale, MaxProjectileScale), Space]
+        [SerializeField, Range(MinProjectileScale, MaxProjectileScale)]
         private float _smallProjectileScale = MinProjectileScale;
 
         public float SmallProjectileScale => _smallProjectileScale;

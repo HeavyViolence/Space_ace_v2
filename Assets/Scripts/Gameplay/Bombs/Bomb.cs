@@ -8,6 +8,8 @@ namespace SpaceAce.Gameplay.Bombs
     [RequireComponent(typeof(Durability))]
     public sealed class Bomb : MonoBehaviour, IExperienceSource
     {
+        private static int s_damageMask;
+
         [SerializeField]
         private BombConfig _config;
 
@@ -19,6 +21,8 @@ namespace SpaceAce.Gameplay.Bombs
 
         private void Awake()
         {
+            s_damageMask = LayerMask.GetMask("Player", "Enemies", "Bosses", "Meteors", "Wrecks", "Bombs");
+
             _durability = GetComponent<Durability>();
             _transform = transform;
         }
@@ -32,8 +36,7 @@ namespace SpaceAce.Gameplay.Bombs
         {
             if (_durability.Value > 0f) return;
 
-            int layerMask = LayerMask.GetMask("Player", "Enemies", "Bosses", "Meteors", "Wrecks", "Bombs");
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(_transform.position, ExplosionRadius, Vector2.zero, float.PositiveInfinity, layerMask);
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(_transform.position, ExplosionRadius, Vector2.zero, float.PositiveInfinity, s_damageMask);
 
             foreach (RaycastHit2D hit in hits)
             {

@@ -20,8 +20,7 @@ public sealed class BombSpawner : IInitializable, IDisposable
 
     public event EventHandler SpawnStarted, SpawnEnded;
     public event EventHandler WaveStarted, WaveEnded;
-    public event EventHandler BombSpawned;
-    public event EventHandler BombEscaped, BombDestroyed;
+    public event EventHandler<BombSpawnedEventArgs> BombSpawned;
 
     private readonly BombSpawnerConfig _config;
     private readonly BombFactory _bombFactory;
@@ -72,7 +71,7 @@ public sealed class BombSpawner : IInitializable, IDisposable
     private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
     {
         _spawnCancellation = new();
-        SpawnAsync(e.LevelIndex, _spawnCancellation.Token).Forget();
+        SpawnAsync(e.Level, _spawnCancellation.Token).Forget();
     }
 
     private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
@@ -106,20 +105,10 @@ public sealed class BombSpawner : IInitializable, IDisposable
                 bomb.MovementSupplier.Supply(MeteorMovement, data);
 
                 bomb.View.Escapable.SetEscapeDelay(EscapeDelay);
+                bomb.View.Escapable.Escaped += (s, e) => _bombFactory.Release(slot.Size, bomb);
+                bomb.View.Destroyable.Destroyed += (s, e) => _bombFactory.Release(slot.Size, bomb);
 
-                bomb.View.Escapable.Escaped += (s, e) =>
-                {
-                    _bombFactory.Release(slot.Size, bomb);
-                    BombEscaped?.Invoke(this, EventArgs.Empty);
-                };
-
-                bomb.View.Destroyable.Destroyed += (s, e) =>
-                {
-                    _bombFactory.Release(slot.Size, bomb);
-                    BombDestroyed?.Invoke(this, EventArgs.Empty);
-                };
-
-                BombSpawned?.Invoke(this, EventArgs.Empty);
+                BombSpawned?.Invoke(this, new(bomb.View));
 
                 await UniTask.WaitUntil(() => _gamePauser.Paused == false, PlayerLoopTiming.Update, token);
 

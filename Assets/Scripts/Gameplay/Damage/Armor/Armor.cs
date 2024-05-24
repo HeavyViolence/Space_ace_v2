@@ -30,10 +30,8 @@ namespace SpaceAce.Gameplay.Damage
 
             set
             {
-                float oldValue = _value;
+                ValueChanged?.Invoke(this, new(_value, value));
                 _value = value;
-
-                ValueChanged?.Invoke(this, new(oldValue, value));
             }
         }
 

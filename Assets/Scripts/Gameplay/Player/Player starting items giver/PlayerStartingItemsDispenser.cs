@@ -22,7 +22,7 @@ namespace SpaceAce.Gameplay.Players
         private readonly ISavingSystem _savingSystem;
         private readonly PlayerStartingItemsDispenserConfig _config;
 
-        private DateTime _startingItemsDispenseTime = DateTime.MaxValue;
+        private DateTime _startingItemsDispenseTime = DateTime.MaxValue.ToUniversalTime();
 
         public string ID => "Player starting items dispenser";
 
@@ -62,7 +62,7 @@ namespace SpaceAce.Gameplay.Players
             }
             catch (Exception)
             {
-                _startingItemsDispenseTime = DateTime.MaxValue;
+                _startingItemsDispenseTime = DateTime.MaxValue.ToUniversalTime();
             }
         }
 
@@ -76,7 +76,7 @@ namespace SpaceAce.Gameplay.Players
 
         private async UniTaskVoid DispenseStartingItemsAsync()
         {
-            if (_startingItemsDispenseTime < DateTime.Now) return;
+            if (_startingItemsDispenseTime < DateTime.UtcNow) return;
 
             await UniTask.NextFrame();
 
@@ -92,7 +92,7 @@ namespace SpaceAce.Gameplay.Players
 
             _player.Inventory.TryAddItems(startingAmmo, out _);
 
-            _startingItemsDispenseTime = DateTime.Now;
+            _startingItemsDispenseTime = DateTime.UtcNow;
             SavingRequested?.Invoke(this, EventArgs.Empty);
         }
     }

@@ -11,22 +11,21 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class ExplosiveMissileSet : MissileSet, IEquatable<ExplosiveMissileSet>
     {
+        private static readonly int s_damageMask = LayerMask.GetMask("Player", "Enemies", "Bosses", "Meteors", "Wrecks", "Bombs");
+
         public float ExplosionDamage { get; }
         public float ExplosionRadius { get; }
 
         protected override HitBehaviour HitBehaviour => delegate (object shooter, HitEventArgs hitArgs)
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
-
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(hitArgs.HitPosition, ExplosionRadius, Vector2.zero);
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(hitArgs.HitPosition, ExplosionRadius, Vector2.zero, float.PositiveInfinity, s_damageMask);
 
             foreach (RaycastHit2D hit in hits)
             {
                 if (hit.collider.gameObject.TryGetComponent(out IDamageable damageReceiver) == true)
                 {
-                    float explosionDamageFactor = Mathf.Lerp(ExplosionDamage, 0f, hit.distance / ExplosionRadius);
-                    float explosionDamage = ExplosionDamage * explosionDamageFactor;
-
+                    float explosionDamage = Mathf.Lerp(ExplosionDamage, 0f, hit.distance / ExplosionRadius);
                     damageReceiver.ApplyDamage(explosionDamage);
                 }
             }

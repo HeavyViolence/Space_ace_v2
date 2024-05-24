@@ -22,9 +22,8 @@ namespace SpaceAce.UI
         private Label _playerShipArmorLabel;
         private Label _playerShipAmmoLabel;
 
-        private Label _levelCreditRewardLabel;
+        private Label _levelCreditsRewardLabel;
         private Label _levelExperienceRewardLabel;
-
         private Label _levelStopwatchLabel;
 
         public LevelDisplay(VisualTreeAsset displayAsset,
@@ -57,11 +56,11 @@ namespace SpaceAce.UI
             _playerShipAmmoLabel = DisplayedDocument.rootVisualElement.Q<Label>("Player-ship-ammo-label");
             _playerShipAmmoLabel.style.unityFont = _localizedFont;
 
-            _levelCreditRewardLabel = DisplayedDocument.rootVisualElement.Q<Label>("Level-credit-reward-label");
-            _levelCreditRewardLabel.style.unityFont = _localizedFont;
+            _levelCreditsRewardLabel = DisplayedDocument.rootVisualElement.Q<Label>("Level-credits-reward-label");
+            _levelCreditsRewardLabel.style.unityFont = _localizedFont;
 
             _levelExperienceRewardLabel = DisplayedDocument.rootVisualElement.Q<Label>("Level-experience-reward-label");
-            _levelCreditRewardLabel.style.unityFont = _localizedFont;
+            _levelCreditsRewardLabel.style.unityFont = _localizedFont;
 
             _levelStopwatchLabel = DisplayedDocument.rootVisualElement.Q<Label>("Level-stopwatch-label");
             _levelStopwatchLabel.style.unityFont = _localizedFont;
@@ -84,7 +83,7 @@ namespace SpaceAce.UI
             _playerShipArmorLabel = null;
             _playerShipAmmoLabel = null;
 
-            _levelCreditRewardLabel = null;
+            _levelCreditsRewardLabel = null;
             _levelExperienceRewardLabel = null;
 
             _levelStopwatchLabel = null;
@@ -104,7 +103,7 @@ namespace SpaceAce.UI
             _playerShipIcon.style.backgroundImage = icon.texture;
         }
 
-        public void UpdatePlayerShipMaxDurabilityView(float maxValue, float regen)
+        public void UpdatePlayerShipDurabilityView(float maxValue, float regen)
         {
             if (Active == false) return;
 
@@ -177,7 +176,7 @@ namespace SpaceAce.UI
 
         #region level stopwatch
 
-        public void UpdateLevelStopwatchView(int minutes, int seconds, int milliseconds)
+        public void UpdateLevelStopwatch(int minutes, int seconds, int milliseconds)
         {
             if (Active == false) return;
 
@@ -186,6 +185,26 @@ namespace SpaceAce.UI
             if (milliseconds < 0) throw new ArgumentOutOfRangeException();
 
             _levelStopwatchLabel.text = $"{minutes:d2}:{seconds:d2}.{milliseconds / 10:d2}";
+        }
+
+        #endregion
+
+        #region level reward
+
+        public void UpdateCreditsReward(float value)
+        {
+            if (Active == false) return;
+            if (value < 0f) throw new ArgumentOutOfRangeException();
+
+            _levelCreditsRewardLabel.text = $"{value:n0}";
+        }
+
+        public void UpdateExperienceReward(float value)
+        {
+            if (Active == false) return;
+            if (value < 0f) throw new ArgumentOutOfRangeException();
+
+            _levelExperienceRewardLabel.text = $"{value:n0}";
         }
 
         #endregion

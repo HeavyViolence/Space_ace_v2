@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a00e3ee5c39bc54d94552eca627d910, type: 3}
   m_Name: Projectile factory config
   m_EditorClassIdentifier: 
-  _playerProjectilesLayerName: Player projectiles
-  _enemyProjectilesLayerName: Enemy projectiles
   _smallProjectileScale: 0.618
   _largeProjectileScale: 1.618
   _projectiles:

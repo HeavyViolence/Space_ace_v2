@@ -16,6 +16,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class ExplosiveAmmoSet : AmmoSet, IEquatable<ExplosiveAmmoSet>
     {
+        private static readonly int s_explosionDamageMask = LayerMask.GetMask("Player", "Enemies", "Bosses", "Meteors", "Wrecks", "Bombs");
+
         public float ExplosionRadius { get; }
         public float ExplosionDamage { get; }
 
@@ -71,7 +73,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         {
             hitArgs.DamageReceiver.ApplyDamage(Damage);
 
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(hitArgs.HitPosition, ExplosionRadius, Vector2.zero);
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(hitArgs.HitPosition, ExplosionRadius, Vector2.zero, float.PositiveInfinity, s_explosionDamageMask);
 
             foreach (RaycastHit2D hit in hits)
             {

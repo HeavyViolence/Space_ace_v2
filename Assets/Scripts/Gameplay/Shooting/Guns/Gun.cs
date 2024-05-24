@@ -58,13 +58,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
 
             while (timer < emp.Duration)
             {
-                if (token.IsCancellationRequested == true || gameObject.activeInHierarchy == false)
-                {
-                    _empFactor = 1f;
-                    _empActive = false;
-
-                    return false;
-                }
+                if (token.IsCancellationRequested == true || gameObject.activeInHierarchy == false) break;
 
                 timer += Time.deltaTime;
 

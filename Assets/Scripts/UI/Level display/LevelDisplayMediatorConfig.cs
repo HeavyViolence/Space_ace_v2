@@ -1,3 +1,5 @@
+using SpaceAce.Auxiliary.Easing;
+
 using System;
 
 using UnityEngine;
@@ -11,7 +13,7 @@ namespace SpaceAce.UI
         #region update duration
 
         public const float MinUpdateDuration = 0.1f;
-        public const float MaxUpdateDuration = 3f;
+        public const float MaxUpdateDuration = 10f;
 
         [SerializeField, Range(MinUpdateDuration, MaxUpdateDuration)]
         private float _updateDuration = MinUpdateDuration;
@@ -20,15 +22,33 @@ namespace SpaceAce.UI
 
         #endregion
 
+        #region update easing
+
+        [SerializeField]
+        private EasingMode _updateEasing = EasingMode.Smooth;
+
+        public EasingMode UpdateEasing => _updateEasing;
+
+        #endregion
+
         #region bar update duration
 
         public const float MinBarUpdateDuration = 0.1f;
-        public const float MaxBarUpdateDuration = 1f;
+        public const float MaxBarUpdateDuration = 10f;
 
-        [SerializeField, Range(MinBarUpdateDuration, MaxBarUpdateDuration)]
+        [SerializeField, Range(MinBarUpdateDuration, MaxBarUpdateDuration), Space]
         private float _barUpdateDuration = MinBarUpdateDuration;
 
         public float BarUpdateDuration => _barUpdateDuration;
+
+        #endregion
+
+        #region bar update easing
+
+        [SerializeField]
+        private EasingMode _barUpdateEasing = EasingMode.Fast;
+
+        public EasingMode BarUpdateEasing => _barUpdateEasing;
 
         #endregion
 

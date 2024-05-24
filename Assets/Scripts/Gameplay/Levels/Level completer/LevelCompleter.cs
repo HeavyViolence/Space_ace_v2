@@ -61,13 +61,13 @@ namespace SpaceAce.Gameplay.Levels
 
         private void MainMenuLoadingStartedEventHandler(object sender, MainMenuLoadingStartedEventArgs e)
         {
-            LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
+            LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevel));
         }
 
         private void PlayerSpaceshipDefeatedEventHandler(object sender, EventArgs e)
         {
-            LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
-            LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevelIndex));
+            LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevel));
+            LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevel));
             _audioPlayer.PlayOnceAsync(_levelFailedAudio.Random, Vector3.zero).Forget();
         }
 

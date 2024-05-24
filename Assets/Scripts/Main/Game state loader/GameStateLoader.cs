@@ -18,7 +18,7 @@ namespace SpaceAce.Main
         public event EventHandler<LevelLoadedEventArgs> LevelLoaded;
 
         public GameState CurrentState { get; private set; } = GameState.MainMenu;
-        public int LoadedLevelIndex { get; private set; } = 0;
+        public int LoadedLevel { get; private set; } = 0;
 
         public async UniTask LoadMainMenuAsync(float delay)
         {
@@ -34,24 +34,24 @@ namespace SpaceAce.Main
 
             MainMenuLoaded?.Invoke(this, EventArgs.Empty);
             CurrentState = GameState.MainMenu;
-            LoadedLevelIndex = 0;
+            LoadedLevel = 0;
         }
 
-        public async UniTask LoadLevelAsync(int levelIndex, float delay)
+        public async UniTask LoadLevelAsync(int level, float delay)
         {
-            if (levelIndex <= 0) throw new ArgumentOutOfRangeException();
-            if (LoadedLevelIndex == levelIndex) return;
+            if (level <= 0) throw new ArgumentOutOfRangeException();
+            if (LoadedLevel == level) return;
 
             float clampedDelay = Mathf.Clamp(delay, MinLoadingDelay, MaxLoadingDelay);
 
-            LevelLoadingStarted?.Invoke(this, new(levelIndex, clampedDelay));
+            LevelLoadingStarted?.Invoke(this, new(level, clampedDelay));
             CurrentState = GameState.LevelLoading;
 
             await UniTask.WaitForSeconds(clampedDelay);
 
-            LevelLoaded?.Invoke(this, new(levelIndex));
+            LevelLoaded?.Invoke(this, new(level));
             CurrentState = GameState.Level;
-            LoadedLevelIndex = levelIndex;
+            LoadedLevel = level;
         }
     }
 }

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308bd5967393e9142b0f0c10d1db2a42, type: 3}
   m_Name: Level display mediator config
   m_EditorClassIdentifier: 
-  _updateDuration: 1
-  _barUpdateDuration: 0.3
+  _updateDuration: 2
+  _updateEasing: 2
+  _barUpdateDuration: 0.5
+  _barUpdateEasing: 2
   _heatGradient:
     serializedVersion: 2
     key0: {r: 0, g: 1, b: 1, a: 0.61960787}

@@ -4,20 +4,15 @@ namespace SpaceAce.Main
 {
     public sealed class LevelLoadingStartedEventArgs : EventArgs
     {
-        public int LevelIndex { get; }
+        public int Level { get; }
         public float LoadingDelay { get; }
 
-        public LevelLoadingStartedEventArgs(int levelIndex, float loadingDelay)
+        public LevelLoadingStartedEventArgs(int index, float loadingDelay)
         {
-            if (levelIndex < 1)
-                throw new ArgumentOutOfRangeException(nameof(levelIndex),
-                    "Level index must be greater than 0!");
+            if (index < 1) throw new ArgumentOutOfRangeException();
+            Level = index;
 
-            if (loadingDelay <= 0f)
-                throw new ArgumentOutOfRangeException(nameof(loadingDelay),
-                    "Loading delay must be greater than 0!");
-
-            LevelIndex = levelIndex;
+            if (loadingDelay <= 0f) throw new ArgumentOutOfRangeException();
             LoadingDelay = loadingDelay;
         }
     }

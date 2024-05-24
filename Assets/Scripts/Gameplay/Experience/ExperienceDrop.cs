@@ -4,8 +4,8 @@ namespace SpaceAce.Gameplay.Experience
 {
     public readonly struct ExperienceDrop
     {
-        float Gain { get; }
-        float Loss { get; }
+        public float Gain { get; }
+        public float Loss { get; }
 
         public float Total => Gain + Loss;
         public float Efficiency => Gain / Total;

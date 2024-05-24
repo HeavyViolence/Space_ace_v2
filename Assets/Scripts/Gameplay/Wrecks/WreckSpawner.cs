@@ -25,7 +25,6 @@ namespace SpaceAce.Gameplay.Wrecks
         public event EventHandler WaveStarted, WaveEnded;
         public event EventHandler ShowerStarted, ShowerEnded;
         public event EventHandler<WreckSpawnedEventArgs> WreckSpawned;
-        public event EventHandler WreckEscaped, WreckDestroyed;
 
         private readonly WreckSpawnerConfig _config;
         private readonly WreckFactory _wreckFactory;
@@ -79,7 +78,7 @@ namespace SpaceAce.Gameplay.Wrecks
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
             _spawnCancellation = new();
-            SpawnAsync(e.LevelIndex, _spawnCancellation.Token).Forget();
+            SpawnAsync(e.Level, _spawnCancellation.Token).Forget();
         }
 
         private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
@@ -118,18 +117,8 @@ namespace SpaceAce.Gameplay.Wrecks
                     wreck.MovementSupplier.Supply(WreckMovement, data);
 
                     wreck.View.Escapable.SetEscapeDelay(EscapeDelay);
-
-                    wreck.View.Escapable.Escaped += (s, e) =>
-                    {
-                        _wreckFactory.Release(slot.Type, wreck);
-                        WreckEscaped?.Invoke(this, EventArgs.Empty);
-                    };
-
-                    wreck.View.Destroyable.Destroyed += (s, e) =>
-                    {
-                        _wreckFactory.Release(slot.Type, wreck);
-                        WreckDestroyed?.Invoke(this, EventArgs.Empty);
-                    };
+                    wreck.View.Escapable.Escaped += (s, e) => _wreckFactory.Release(slot.Type, wreck);
+                    wreck.View.Destroyable.Destroyed += (s, e) => _wreckFactory.Release(slot.Type, wreck);
 
                     wreck.DamageDealer.Hit += (s, e) =>
                     {

@@ -28,10 +28,8 @@ namespace SpaceAce.Gameplay.Damage
 
             set
             {
-                float oldValue = _value;
+                ValueChanged?.Invoke(this, new(_value, value));
                 _value = value;
-
-                ValueChanged?.Invoke(this, new(oldValue, value));
             }
         }
 
@@ -42,10 +40,8 @@ namespace SpaceAce.Gameplay.Damage
 
             set
             {
-                float oldValue = _maxValue;
+                MaxValueChanged?.Invoke(this, new(_maxValue, value));
                 _maxValue = value;
-
-                MaxValueChanged?.Invoke(this, new(oldValue, value));
             }
         }
 
@@ -56,10 +52,8 @@ namespace SpaceAce.Gameplay.Damage
 
             set
             {
-                float oldValue = _regen;
+                RegenChanged?.Invoke(this, new(_regen, value));
                 _regen = value;
-
-                RegenChanged?.Invoke(this, new(oldValue, value));
             }
         }
 

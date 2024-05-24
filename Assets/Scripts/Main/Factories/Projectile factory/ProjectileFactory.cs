@@ -14,6 +14,12 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
 {
     public sealed class ProjectileFactory
     {
+        private static readonly int s_playerProjectilesLayerMask = LayerMask.NameToLayer("Player projectiles");
+        private static readonly int s_enemyProjectilesLayerMask = LayerMask.NameToLayer("Enemy projectiles");
+
+        private static readonly int s_playerProjectilesSortingLayer = SortingLayer.NameToID("Player projectiles");
+        private static readonly int s_enemyProjectilesSortingLayer = SortingLayer.NameToID("Enemy projectiles");
+
         private readonly Dictionary<ProjectileSkin, GameObject> _projectilePrefabs = new();
         private readonly Dictionary<ProjectileSkin, Stack<ProjectileCache>> _cachedProjectiles = new();
         private readonly Dictionary<ProjectileSkin, Transform> _projectileAnchors = new();
@@ -86,13 +92,13 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
 
             if (user is Player)
             {
-                cachedProjectile.Object.layer = LayerMask.NameToLayer(_config.PlayerProjectilesLayerName);
-                cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.PlayerProjectilesLayerName);
+                cachedProjectile.Object.layer = s_playerProjectilesLayerMask;
+                cachedProjectile.SpriteRenderer.sortingLayerID = s_playerProjectilesSortingLayer;
             }
             else
             {
-                cachedProjectile.Object.layer = LayerMask.NameToLayer(_config.EnemyProjectilesLayerName);
-                cachedProjectile.SpriteRenderer.sortingLayerID = SortingLayer.NameToID(_config.EnemyProjectilesLayerName);
+                cachedProjectile.Object.layer = s_enemyProjectilesLayerMask;
+                cachedProjectile.SpriteRenderer.sortingLayerID = s_enemyProjectilesSortingLayer;
             }
 
             return cachedProjectile;

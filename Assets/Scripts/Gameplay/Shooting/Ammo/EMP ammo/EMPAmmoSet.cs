@@ -76,9 +76,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             hitArgs.DamageReceiver.ApplyDamage(Damage);
 
             foreach (var target in hitArgs.ObjectBeingHit.GetComponentsInChildren<IEMPTarget>())
-            {
                 target.TryApplyEMPAsync(_emp).Forget();
-            }
         };
 
         protected override MissBehaviour MissBehaviour => null;
