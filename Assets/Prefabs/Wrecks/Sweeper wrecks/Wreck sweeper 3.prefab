@@ -27,7 +27,7 @@ PrefabInstance:
     - target: {fileID: 611309570482173359, guid: 99500d03bf6582747af83d5c0aceea9e, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: 1ca825b2c3e1977479dec60ce6081b3d, type: 2}
+      objectReference: {fileID: 11400000, guid: 40bd4707a250db34c843092ce1a45a43, type: 2}
     - target: {fileID: 1281399206260370881, guid: 99500d03bf6582747af83d5c0aceea9e, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -78,8 +78,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6588122999490706018, guid: 99500d03bf6582747af83d5c0aceea9e, type: 3}
       propertyPath: m_Name
-      value: Wreck sweeper 3 Variant
+      value: Wreck sweeper 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8435551063796320226, guid: 99500d03bf6582747af83d5c0aceea9e, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: d8e74109d2d55434f8456fa2b208c92f, type: 2}
     - target: {fileID: 9000243136792617301, guid: 99500d03bf6582747af83d5c0aceea9e, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1

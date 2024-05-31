@@ -4,6 +4,8 @@ namespace SpaceAce.Gameplay.Experience
 {
     public readonly struct ExperienceDrop
     {
+        public static ExperienceDrop None => new(0f, 0f);
+
         public float Gain { get; }
         public float Loss { get; }
 
@@ -23,8 +25,6 @@ namespace SpaceAce.Gameplay.Experience
 
         public static ExperienceDrop operator +(ExperienceDrop left, ExperienceDrop right) =>
             new(left.Gain + right.Gain, left.Loss + right.Loss);
-
-        public static ExperienceDrop None => new(0f, 0f);
 
         #endregion
     }

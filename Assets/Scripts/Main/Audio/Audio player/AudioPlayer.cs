@@ -29,7 +29,7 @@ namespace SpaceAce.Main.Audio
         private readonly Dictionary<Guid, AudioSource> _activeAudioSources = new(MaxAudioSources);
         private readonly Stack<AudioSource> _availableAudioSources = new(MaxAudioSources);
 
-        public string ID => "Audio settings";
+        public string SavedDataName => "Audio settings";
 
         private AudioPlayerSettings _settings = AudioPlayerSettings.Default;
         public AudioPlayerSettings Settings
@@ -302,9 +302,9 @@ namespace SpaceAce.Main.Audio
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && other.ID == ID;
+        public bool Equals(ISavable other) => other is not null && other.SavedDataName == SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         #endregion
     }

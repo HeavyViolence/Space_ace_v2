@@ -71,7 +71,7 @@ public sealed class BombSpawner : IInitializable, IDisposable
     private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
     {
         _spawnCancellation = new();
-        SpawnAsync(e.Level, _spawnCancellation.Token).Forget();
+        SpawnAsync(_spawnCancellation.Token).Forget();
     }
 
     private void LevelConcludedEventHandler(object sender, LevelEndedEventArgs e)
@@ -81,19 +81,31 @@ public sealed class BombSpawner : IInitializable, IDisposable
         _spawnCancellation = null;
     }
 
-    private async UniTask SpawnAsync(int levelIndex, CancellationToken token)
+    private async UniTask SpawnAsync(CancellationToken token)
     {
         SpawnStarted?.Invoke(this, EventArgs.Empty);
         SpawnActive = true;
 
         while (token.IsCancellationRequested == false)
         {
-            BombWave wave = _config.NextWave(levelIndex);
+            BombWave wave = _config.NextWave();
             WaveStarted?.Invoke(this, EventArgs.Empty);
 
             foreach (BombWaveSlot slot in wave)
             {
-                await WaitForDelayAsync(slot.SpawnDelay, token);
+                float timer = 0f;
+
+                while (timer < slot.SpawnDelay)
+                {
+                    if (token.IsCancellationRequested == true) break;
+
+                    timer += Time.deltaTime;
+
+                    await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                    await UniTask.Yield();
+                }
+
+                if (token.IsCancellationRequested == true) break;
 
                 Vector3 spawnPosition = GetSpawnPosition();
                 Vector3 targetPosition = GetTargetPosition(spawnPosition.x);
@@ -109,10 +121,6 @@ public sealed class BombSpawner : IInitializable, IDisposable
                 bomb.View.Destroyable.Destroyed += (s, e) => _bombFactory.Release(slot.Size, bomb);
 
                 BombSpawned?.Invoke(this, new(bomb.View));
-
-                await UniTask.WaitUntil(() => _gamePauser.Paused == false, PlayerLoopTiming.Update, token);
-
-                if (token.IsCancellationRequested == true) break;
             }
 
             WaveEnded?.Invoke(this, EventArgs.Empty);

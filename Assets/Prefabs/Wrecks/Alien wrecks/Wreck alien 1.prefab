@@ -50,8 +50,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2259314861686593238, guid: 6ac8263aa72f4e24d9a406141de1532b, type: 3}
       propertyPath: m_Name
-      value: Wreck alien 1 Variant
+      value: Wreck alien 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3541549960226007894, guid: 6ac8263aa72f4e24d9a406141de1532b, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: e1af7ba0ffe67c6429ed7ec9eccedcaf, type: 2}
     - target: {fileID: 3997436409523761107, guid: 6ac8263aa72f4e24d9a406141de1532b, type: 3}
       propertyPath: _config
       value: 

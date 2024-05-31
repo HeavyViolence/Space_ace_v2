@@ -12,7 +12,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         #region ammo loss on miss
 
-        public const int MinAmmoLossOnMiss = 2;
+        public const int MinAmmoLossOnMiss = 1;
         public const int MaxAmmoLossOnMiss = 20;
 
         [SerializeField, MinMaxSlider(MinAmmoLossOnMiss, MaxAmmoLossOnMiss), Space]
@@ -24,8 +24,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         #region ammo gain on hit
 
-        public const int MinAmmoGainOnHit = 3;
-        public const int MaxAmmoGainOnHit = 30;
+        public const int MinAmmoGainOnHit = 1;
+        public const int MaxAmmoGainOnHit = 20;
 
         [SerializeField, MinMaxSlider(MinAmmoGainOnHit, MaxAmmoGainOnHit)]
         private Vector2Int _ammoGainOnHit = new(MinAmmoGainOnHit, MaxAmmoGainOnHit);

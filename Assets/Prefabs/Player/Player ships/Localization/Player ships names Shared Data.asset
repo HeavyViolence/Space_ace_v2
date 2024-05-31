@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Player ships names Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Player ships names
+  m_TableCollectionNameGuidString: 4d88acf4857a1c94ea1870460bbb4a98
+  m_Entries:
+  - m_Id: 119067234304
+    m_Key: Tempest Mk.1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350064332800
+    m_Key: Tempest Mk.2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 397141200896
+    m_Key: Tempest Mk.3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 485808787456
+    m_Key: Tempest Mk.4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 535276408832
+    m_Key: Tempest Mk.5
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 129448298071457794
+  references:
+    version: 2
+    RefIds:
+    - rid: 129448298071457794
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1716706516528

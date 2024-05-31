@@ -47,6 +47,30 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ru-RU
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0ed4f82d61e9db4bb1fa16a4da29c7c
+    m_Address: Player ships names_ru-RU
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru-RU
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e567c4f452b92be4382122d044df59bd
+    m_Address: Meteors names_ru-RU
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru-RU
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 429d6eeed628c784f8a36039510f0848
+    m_Address: Wrecks names_ru-RU
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru-RU
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d856773dbc75ec8489dbf013ac41e197
+    m_Address: Bombs names_ru-RU
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru-RU
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: dcb4bb72737eed14d92942ca7458de1c, type: 2}
   m_SchemaSet:

@@ -35,7 +35,7 @@ PrefabInstance:
     - target: {fileID: 2116723789264390782, guid: 336cd971e61c5f54886e4f8cb3248fbc, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: 0521e7ab01ddc334aa90d06b02b9a1a9, type: 2}
+      objectReference: {fileID: 11400000, guid: 82d70cf3421959246bf49ba683c3df9f, type: 2}
     - target: {fileID: 4923884500406704767, guid: 336cd971e61c5f54886e4f8cb3248fbc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -78,8 +78,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5653817660515976627, guid: 336cd971e61c5f54886e4f8cb3248fbc, type: 3}
       propertyPath: m_Name
-      value: Wreck alien 3 Variant
+      value: Wreck alien 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6920567241551673395, guid: 336cd971e61c5f54886e4f8cb3248fbc, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: c0337b1a5920d734a9476122cc3d3045, type: 2}
     - target: {fileID: 7637149149261995652, guid: 336cd971e61c5f54886e4f8cb3248fbc, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1

@@ -21,7 +21,7 @@ namespace SpaceAce.Gameplay.Levels
         private readonly LevelStopwatch _levelStopwatch;
         private readonly Player _player;
 
-        public string ID => "Best levels runs statistics";
+        public string SavedDataName => "Best levels runs statistics";
 
         public BestLevelRunStatisticsCollector(ISavingSystem savingSystem,
                                                LevelCompleter levelCompleter,
@@ -56,9 +56,9 @@ namespace SpaceAce.Gameplay.Levels
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && ID == other.ID;
+        public bool Equals(ISavable other) => other is not null && SavedDataName == other.SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         public string GetState() => JsonConvert.SerializeObject(_statistics);
 

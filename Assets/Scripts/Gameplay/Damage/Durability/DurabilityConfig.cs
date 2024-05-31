@@ -1,7 +1,5 @@
 using NaughtyAttributes;
 
-using SpaceAce.Main.Factories;
-
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Damage
@@ -15,10 +13,6 @@ namespace SpaceAce.Gameplay.Damage
 
         public const float MinInitialRegen = 0f;
         public const float MaxInitialRegen = 1_000f;
-
-        [SerializeField] private Sprite _icon;
-
-        public Sprite Icon => _icon;
 
         [SerializeField, MinMaxSlider(MinInitialDurability, MaxInitialDurability), Space]
         private Vector2 _durability = new(MinInitialDurability, MaxInitialDurability);

@@ -2117,8 +2117,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _display: {fileID: 9197481963319205126, guid: 462044782a20a214c88878f7c7ac6031, type: 3}
   _settings: {fileID: 11400000, guid: 5a12fd6cc38a7484eaa995a83d149dca, type: 2}
+  _config: {fileID: 11400000, guid: 8ebf1f3e8176a8f46ab73e2a94090006, type: 2}
   _uiAudio: {fileID: 11400000, guid: e8091a309e24cf14a9db7c09ebdf21cd, type: 2}
-  _config: {fileID: 11400000, guid: 913f077723b01e44b813f31431e2b993, type: 2}
 --- !u!1 &1859438392
 GameObject:
   m_ObjectHideFlags: 0

@@ -49,6 +49,27 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d88acf4857a1c94ea1870460bbb4a98
+    m_Address: Assets/Prefabs/Player/Player ships/Ship 1.1/Player ships names Shared
+      Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc64de1d377e09349b1d8e020a5d8bca
+    m_Address: Assets/Prefabs/Meteors/Localization/Meteors names Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e65ed0ca80d4bb4a97ce05c677b2faf
+    m_Address: Assets/Prefabs/Wrecks/Localization/Wrecks names Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64ee04d3904c6b94f8a16e3309de0692
+    m_Address: Assets/Prefabs/Bombs/Localization/Bombs names Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: dcb4bb72737eed14d92942ca7458de1c, type: 2}
   m_SchemaSet:

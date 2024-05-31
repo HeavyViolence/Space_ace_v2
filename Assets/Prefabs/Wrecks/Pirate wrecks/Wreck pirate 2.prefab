@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 571260746108052287, guid: e057e05cf81562649883cc10c469e27c, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 3b0747191ff006d478373d1f7ae6278b, type: 2}
     - target: {fileID: 2572236534560997747, guid: e057e05cf81562649883cc10c469e27c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -50,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2995219854151376575, guid: e057e05cf81562649883cc10c469e27c, type: 3}
       propertyPath: m_Name
-      value: Wreck pirate 2 Variant
+      value: Wreck pirate 2
       objectReference: {fileID: 0}
     - target: {fileID: 7148602017928661276, guid: e057e05cf81562649883cc10c469e27c, type: 3}
       propertyPath: m_Sprite
@@ -79,7 +83,7 @@ PrefabInstance:
     - target: {fileID: 8829114312195330418, guid: e057e05cf81562649883cc10c469e27c, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: ee448dccb8098d14a8a6a524f38ae8ef, type: 2}
+      objectReference: {fileID: 11400000, guid: b4277d89dbf1f354ab124624656ef5ac, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

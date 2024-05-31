@@ -24,6 +24,8 @@ namespace SpaceAce.Gameplay.Shooting
         public event EventHandler ShootingStarted, ShootingStopped;
         public event EventHandler Overheated, CooledDown;
 
+        public event EventHandler<FloatValueChangedEventArgs> HeatValueChanged, HeatCapacityChanged;
+
         public event EventHandler<WeaponChangedEventArgs> WeaponChanged;
         public event EventHandler<AmmoChangedEventArgs> AmmoChanged;
         public event EventHandler<OutOfAmmoEventArgs> OutOfAmmo;
@@ -81,8 +83,30 @@ namespace SpaceAce.Gameplay.Shooting
 
         public AmmoSet ActiveAmmo { get; private set; }
 
-        public float Heat { get; private set; }
-        public float HeatCapacity { get; private set; }
+        private float _heat;
+        public float Heat
+        {
+            get => _heat;
+
+            private set
+            {
+                HeatValueChanged?.Invoke(this, new(_heat, value));
+                _heat = value;
+            }
+        }
+
+        private float _heatCapacity;
+        public float HeatCapacity
+        {
+            get => _heatCapacity;
+
+            private set
+            {
+                HeatCapacityChanged?.Invoke(this, new(_heatCapacity, value));
+                _heatCapacity = value;
+            }
+        }
+
         public float HeatNormalized => Heat / HeatCapacity;
         public float HeatPercentage => HeatNormalized * 100f;
         public float OverheatDuration { get; private set; }
@@ -128,7 +152,7 @@ namespace SpaceAce.Gameplay.Shooting
 
         private void OnDisable()
         {
-            _userInventory.ContentChanged -= async (sender, args) => await InventoryContentChangedEventHandlerAsync(sender, args);
+            _userInventory.ContentChanged -= async (_, _) => await UpdateAvailableAmmoAsync();
         }
 
         private void Update()
@@ -225,22 +249,18 @@ namespace SpaceAce.Gameplay.Shooting
             Overheat = true;
             Overheated?.Invoke(this, EventArgs.Empty);
 
-            if (_config.OverheatAudio == null)
+            _audioPlayer.PlayOnceAsync(_config.OverheatAudio.Random, _transform.position, _transform, true).Forget();
+
+            float timer = 0f;
+
+            while (timer < OverheatDuration)
             {
-                float timer = 0f;
+                timer += Time.deltaTime;
 
-                while (timer < OverheatDuration)
-                {
-                    timer += Time.deltaTime;
+                Heat = Mathf.Lerp(HeatCapacity, 0f, timer / OverheatDuration);
 
-                    while (_gamePauser.Paused == true) await UniTask.Yield();
-
-                    await UniTask.Yield();
-                }
-            }
-            else
-            {
-                await _audioPlayer.PlayOnceAsync(_config.OverheatAudio.Random, _transform.position, _transform, true);
+                await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                await UniTask.Yield();
             }
 
             Heat = 0f;
@@ -255,7 +275,7 @@ namespace SpaceAce.Gameplay.Shooting
 
             TrySwitchToWorkingWeapons().Forget();
 
-            _userInventory.ContentChanged += async (sender, args) => await InventoryContentChangedEventHandlerAsync(sender, args);
+            _userInventory.ContentChanged += async (_, _) => await UpdateAvailableAmmoAsync();
         }
 
         private async UniTask<bool> TrySwitchToWorkingWeapons()
@@ -421,7 +441,7 @@ namespace SpaceAce.Gameplay.Shooting
 
         #region event handlers
 
-        private async UniTask InventoryContentChangedEventHandlerAsync(object sender, EventArgs e)
+        private async UniTask UpdateAvailableAmmoAsync()
         {
             _availableAmmo = GetAvailableAmmo();
             _ammoForActiveWeapons = GetAmmo(ActiveWeaponsSize);

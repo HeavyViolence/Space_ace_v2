@@ -26,9 +26,9 @@ namespace SpaceAce.Gameplay.Wrecks
         [SerializeField]
         private AnimationCurve _wreckShowerProbability;
 
-        private bool IsWreckShower(int levelIndex)
+        private bool IsWreckShower(int level)
         {
-            float evaluator = Mathf.InverseLerp(_wreckShowerLevels.x, _wreckShowerLevels.y, levelIndex);
+            float evaluator = Mathf.InverseLerp(_wreckShowerLevels.x, _wreckShowerLevels.y, level);
             float wreckShowerProbability = _wreckShowerProbability.Evaluate(evaluator);
 
             return AuxMath.RandomNormal < wreckShowerProbability;
@@ -174,11 +174,11 @@ namespace SpaceAce.Gameplay.Wrecks
 
         #region API
 
-        public WreckWave NextWave(int levelIndex)
+        public WreckWave NextWave(int level)
         {
-            if (levelIndex <= 0) throw new ArgumentOutOfRangeException();
+            if (level <= 0) throw new ArgumentOutOfRangeException();
 
-            bool isWreckShower = IsWreckShower(levelIndex);
+            bool isWreckShower = IsWreckShower(level);
             int waveLength = GetWaveLength(isWreckShower);
             WreckWaveSlot[] waveSlots = new WreckWaveSlot[waveLength];
             WreckType[] wreckSequenceThisWave = GetWreckTypeRandomSequence(waveLength);

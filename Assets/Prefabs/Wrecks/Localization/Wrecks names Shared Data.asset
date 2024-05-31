@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Wrecks names Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Wrecks names
+  m_TableCollectionNameGuidString: 0e65ed0ca80d4bb4a97ce05c677b2faf
+  m_Entries:
+  - m_Id: 5984604160
+    m_Key: Wreck pirate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 448353652736
+    m_Key: Wreck alien
+    m_Metadata:
+      m_Items: []
+  - m_Id: 547523776512
+    m_Key: Wreck sweeper
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 129448298071457800
+  references:
+    version: 2
+    RefIds:
+    - rid: 129448298071457800
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1716709106786

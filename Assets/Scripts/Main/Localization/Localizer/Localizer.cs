@@ -25,7 +25,7 @@ namespace SpaceAce.Main.Localization
         private bool _initialized = false;
 
         public Language ActiveLanguage { get; private set; } = Language.EnglishUnitedStates;
-        public string ID => "Localization";
+        public string SavedDataName => "Localization";
 
         public Localizer(LocalizedFont localizedFont,
                          LanguageToCodeConverter languageToCodeConverter,
@@ -115,9 +115,9 @@ namespace SpaceAce.Main.Localization
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && ID == other.ID;
+        public bool Equals(ISavable other) => other is not null && SavedDataName == other.SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         #endregion
     }

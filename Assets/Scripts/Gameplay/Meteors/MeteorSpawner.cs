@@ -88,21 +88,33 @@ namespace SpaceAce.Gameplay.Meteors
             _spawnCancellation = null;
         }
 
-        private async UniTask SpawnAsync(int levelIndex, CancellationToken token)
+        private async UniTask SpawnAsync(int level, CancellationToken token)
         {
             SpawnStarted?.Invoke(this, EventArgs.Empty);
             SpawnActive = true;
 
             while (token.IsCancellationRequested == false)
             {
-                MeteorWave wave = _config.NextWave(levelIndex);
+                MeteorWave wave = _config.NextWave(level);
 
                 if (wave.MeteorShower == true) ShowerStarted?.Invoke(this, EventArgs.Empty);
                 else WaveStarted?.Invoke(this, EventArgs.Empty);
 
                 foreach (MeteorWaveSlot slot in wave)
                 {
-                    await WaitForDelayAsync(slot.SpawnDelay, token);
+                    float timer = 0f;
+
+                    while (timer < slot.SpawnDelay)
+                    {
+                        if (token.IsCancellationRequested == true) break;
+
+                        timer += Time.deltaTime;
+
+                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
+                        await UniTask.Yield();
+                    }
+
+                    if (token.IsCancellationRequested == true) break;
 
                     Vector3 spawnPosition = GetSpawnPosition();
                     Vector3 targetPosition = GetTargetPosition();
@@ -126,10 +138,6 @@ namespace SpaceAce.Gameplay.Meteors
                     };
 
                     MeteorSpawned?.Invoke(this, new(meteor.View));
-
-                    await UniTask.WaitUntil(() => _gamePauser.Paused == false, PlayerLoopTiming.Update, token);
-
-                    if (token.IsCancellationRequested == true) break;
                 }
 
                 if (wave.MeteorShower == true) ShowerEnded?.Invoke(this, EventArgs.Empty);

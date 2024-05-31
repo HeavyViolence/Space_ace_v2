@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 583870591624504651}
   - component: {fileID: 7365319479053723370}
   - component: {fileID: 2599041850647251917}
+  - component: {fileID: 1207771826179235287}
   m_Layer: 11
   m_Name: Meteor depleted 1
   m_TagString: Untagged
@@ -230,3 +231,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: b96dce4489a2c7340b56cbe6cff3ee38, type: 2}
+--- !u!114 &1207771826179235287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5088362774754610738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0639e249946a9f47a7031a29ba9e419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: fe0c89f534baf2c41a0fa26ede04add5, type: 2}

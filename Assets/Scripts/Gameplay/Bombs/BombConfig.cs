@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Bombs
@@ -15,6 +17,21 @@ namespace SpaceAce.Gameplay.Bombs
         private float _explosionDamage = MinExplosionDamage;
 
         public float ExplosionDamage => _explosionDamage;
+
+        #endregion
+
+        #region explosion damage falloff
+
+        [SerializeField]
+        private AnimationCurve _explosionFalloff;
+
+        public float GetExplosionDamage(float distance)
+        {
+            if (distance < 0f) throw new ArgumentOutOfRangeException();
+
+            float factor = _explosionFalloff.Evaluate(distance / _explosionRadius);
+            return _explosionDamage * factor;
+        }
 
         #endregion
 

@@ -91,19 +91,19 @@ namespace SpaceAce.Main
 
         #region event handlers
 
-        private void GamePausedEventHandler(object sender, System.EventArgs e)
+        private void GamePausedEventHandler(object sender, EventArgs e)
         {
             _paused = true;
             _dustfield.Pause(true);
         }
 
-        private void GameResumedEventHandler(object sender, System.EventArgs e)
+        private void GameResumedEventHandler(object sender, EventArgs e)
         {
             _paused = false;
             _dustfield.Play(true);
         }
 
-        private void MainMenuLoadedEventHandler(object sender, System.EventArgs e)
+        private void MainMenuLoadedEventHandler(object sender, EventArgs e)
         {
             SetMainMenuState();
         }

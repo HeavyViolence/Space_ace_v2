@@ -14,9 +14,7 @@ namespace SpaceAce.Gameplay.Levels
 {
     public sealed class LevelCompleter : IInitializable, IDisposable
     {
-        public event EventHandler<LevelEndedEventArgs> LevelCompleted;
-        public event EventHandler<LevelEndedEventArgs> LevelFailed;
-        public event EventHandler<LevelEndedEventArgs> LevelConcluded;
+        public event EventHandler<LevelEndedEventArgs> LevelCompleted, LevelFailed, LevelConcluded;
 
         private readonly AudioCollection _levelCompletedAudio;
         private readonly AudioCollection _levelFailedAudio;
@@ -46,13 +44,13 @@ namespace SpaceAce.Gameplay.Levels
         public void Initialize()
         {
             _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
-            _player.ShipDefeated += PlayerSpaceshipDefeatedEventHandler;
+            _player.ShipDefeated += PlayerShipDefeatedEventHandler;
         }
 
         public void Dispose()
         {
             _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
-            _player.ShipDefeated -= PlayerSpaceshipDefeatedEventHandler;
+            _player.ShipDefeated -= PlayerShipDefeatedEventHandler;
         }
 
         #endregion
@@ -64,7 +62,7 @@ namespace SpaceAce.Gameplay.Levels
             LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevel));
         }
 
-        private void PlayerSpaceshipDefeatedEventHandler(object sender, EventArgs e)
+        private void PlayerShipDefeatedEventHandler(object sender, EventArgs e)
         {
             LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevel));
             LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevel));

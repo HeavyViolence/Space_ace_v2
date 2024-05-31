@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1432560414417957533, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 62cd038f72c6a104e96f205b301b39bb, type: 2}
     - target: {fileID: 4016815024395014353, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -50,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4439937985452822301, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
       propertyPath: m_Name
-      value: Wreck sweeper 2 Variant
+      value: Wreck sweeper 2
       objectReference: {fileID: 0}
     - target: {fileID: 7234107582523985157, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
       propertyPath: m_Size.x
@@ -71,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 7965649706799218896, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: 6ca2093bac871ff4c93369c306f7389d, type: 2}
+      objectReference: {fileID: 11400000, guid: 40bd4707a250db34c843092ce1a45a43, type: 2}
     - target: {fileID: 8590637374915565758, guid: ce0d51e605a78a54da9c3a4c44857e2b, type: 3}
       propertyPath: m_Sprite
       value: 

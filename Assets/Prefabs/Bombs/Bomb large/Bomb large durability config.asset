@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df338a6a698be0a45ab3c3f4ba8ca85f, type: 3}
   m_Name: Bomb large durability config
   m_EditorClassIdentifier: 
-  _icon: {fileID: 21300000, guid: fa7f8a54e1822a34b847cd4ab9557fd4, type: 3}
-  _durability: {x: 1, y: 1}
+  _durability: {x: 300, y: 300}
   _regen: {x: 0, y: 0}

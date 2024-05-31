@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6925485581339297471}
   - component: {fileID: 3916445988706974925}
   - component: {fileID: 8042937837214867255}
+  - component: {fileID: 571260746108052287}
   m_Layer: 12
   m_Name: Wreck pirate 1
   m_TagString: Untagged
@@ -188,6 +189,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: b96dce4489a2c7340b56cbe6cff3ee38, type: 2}
+--- !u!114 &571260746108052287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2995219854151376575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0639e249946a9f47a7031a29ba9e419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: 4cebd06c2d1329d43a723e83531ac6dd, type: 2}
 --- !u!1 &6979457011778885110
 GameObject:
   m_ObjectHideFlags: 0

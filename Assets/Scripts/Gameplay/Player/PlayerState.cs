@@ -10,7 +10,7 @@ namespace SpaceAce.Gameplay.Players
 {
     public sealed class PlayerState
     {
-        public static PlayerState Default => new(0f, 0f, PlayerShipType.Ship1Mk1, null);
+        public static PlayerState Default => new(0f, 0f, PlayerShipType.TempestMk1, null);
 
         public float Credits { get; }
         public float Experience { get; }

@@ -24,7 +24,7 @@ namespace SpaceAce.Gameplay.Players
 
         private DateTime _startingItemsDispenseTime = DateTime.MaxValue.ToUniversalTime();
 
-        public string ID => "Player starting items dispenser";
+        public string SavedDataName => "Player starting items dispenser";
 
         public PlayerStartingItemsDispenser(Player player,
                                             AmmoFactory ammoFactory,
@@ -68,9 +68,9 @@ namespace SpaceAce.Gameplay.Players
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && other.ID == ID;
+        public bool Equals(ISavable other) => other is not null && other.SavedDataName == SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         #endregion
 

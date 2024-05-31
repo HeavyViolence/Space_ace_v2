@@ -18,7 +18,7 @@ namespace SpaceAce.Gameplay.Levels
         public int LargestCompletedLevelIndex { get; private set; }
         public int LargestUnlockedLevelIndex => LargestCompletedLevelIndex + 1;
 
-        public string ID => "Game progress";
+        public string SavedDataName => "Game progress";
 
         public LevelUnlocker(ISavingSystem savingSystem, LevelCompleter levelCompleter)
         {
@@ -57,9 +57,9 @@ namespace SpaceAce.Gameplay.Levels
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && ID == other.ID;
+        public bool Equals(ISavable other) => other is not null && SavedDataName == other.SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         #endregion
 

@@ -211,10 +211,6 @@ MonoBehaviour:
     m_Key: Missile/Code
     m_Metadata:
       m_Items: []
-  - m_Id: 31967295504240640
-    m_Key: New Entry
-    m_Metadata:
-      m_Items: []
   - m_Id: 31967320993026048
     m_Key: Explosive missile/Code
     m_Metadata:

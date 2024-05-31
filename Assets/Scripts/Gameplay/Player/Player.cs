@@ -33,8 +33,7 @@ namespace SpaceAce.Gameplay.Players
                                  IAmmoObservable,
                                  IEntityView
     {
-        public event EventHandler ShipSpawned, ShipDefeated;
-        public event EventHandler SavingRequested;
+        public event EventHandler ShipSpawned, ShipDefeated, SavingRequested;
 
         private static readonly JsonSerializerSettings s_serializationSettings = new()
         {
@@ -57,15 +56,21 @@ namespace SpaceAce.Gameplay.Players
         public Inventory Inventory { get; }
         public PlayerShipType SelectedShipType { get; set; }
 
-        public string ID => "Player";
+        public string SavedDataName => "Player";
 
         public Shooting.Shooting Shooter => _activeShip.Shooting;
 
-        public IDurabilityView DurabilityView => _activeShip?.Durability;
-        public IArmorView ArmorView => _activeShip?.Armor;
-        public IShooterView ShooterView => _activeShip?.Shooting;
-        public IEscapable Escapable => _activeShip?.Escapable;
-        public IDestroyable Destroyable => _activeShip?.Destroyable;
+        public Guid ID => _activeShip.View.ID;
+        public Sprite Icon => _activeShip?.View.Icon;
+
+        public IDurabilityView DurabilityView => _activeShip?.View.DurabilityView;
+        public IArmorView ArmorView => _activeShip?.View.ArmorView;
+        public IShooterView ShooterView => _activeShip?.View.ShooterView;
+        public IEscapable Escapable => _activeShip?.View.Escapable;
+        public IDamageReceiver DamageReceiver => _activeShip?.View.DamageReceiver;
+        public IDestroyable Destroyable => _activeShip?.View.Destroyable;
+
+        public async UniTask<string> GetLocalizedNameAsync() => await _activeShip.View.GetLocalizedNameAsync();
 
         public Player(PlayerShipFactory playerShipFactory,
                       SavedItemsFactory savedItemsFactory,
@@ -94,9 +99,9 @@ namespace SpaceAce.Gameplay.Players
         {
             _savingSystem.Register(this);
 
-            Wallet.BalanceChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
-            Experience.ValueChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
-            Inventory.ContentChanged += (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Wallet.BalanceChanged += (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Experience.ValueChanged += (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Inventory.ContentChanged += (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
             _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoaded += MainMenuLoadedEventHandler;
@@ -106,9 +111,9 @@ namespace SpaceAce.Gameplay.Players
         {
             _savingSystem.Deregister(this);
 
-            Wallet.BalanceChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
-            Experience.ValueChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
-            Inventory.ContentChanged -= (sender, args) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Wallet.BalanceChanged -= (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Experience.ValueChanged -= (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
+            Inventory.ContentChanged -= (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
             _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoaded -= MainMenuLoadedEventHandler;
@@ -140,9 +145,9 @@ namespace SpaceAce.Gameplay.Players
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && other.ID == ID;
+        public bool Equals(ISavable other) => other is not null && other.SavedDataName == SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         public void FixedTick()
         {
@@ -172,7 +177,7 @@ namespace SpaceAce.Gameplay.Players
             _activeShip = _playerShipFactory.Create(SelectedShipType, _shipSpawnPosition, Quaternion.identity);
 
             _activeShip.Shooting.BindInventory(Inventory);
-            _activeShip.Destroyable.Destroyed += PlayerShipDefeatedEventHandler;
+            _activeShip.View.Destroyable.Destroyed += PlayerShipDefeatedEventHandler;
 
             _gameControlsTransmitter.SwitchToSmallWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
             _gameControlsTransmitter.SwitchToMediumWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
@@ -199,7 +204,7 @@ namespace SpaceAce.Gameplay.Players
             _gameControlsTransmitter.Fire -= FireEventHandler;
             _gameControlsTransmitter.Ceasefire -= CeasefireEventHandler;
 
-            _activeShip.Destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
+            _activeShip.View.Destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
 
             _playerShipFactory.Release(SelectedShipType, _activeShip);
         }

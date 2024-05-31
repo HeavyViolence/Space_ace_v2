@@ -50,8 +50,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 965524988217480239, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
       propertyPath: m_Name
-      value: Wreck pirate 3 Variant
+      value: Wreck pirate 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2529498886195751343, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 1fdf51b6241ea814c92dc0ea788f576f, type: 2}
     - target: {fileID: 3093062928981937944, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -91,7 +95,7 @@ PrefabInstance:
     - target: {fileID: 6805013781419973602, guid: 1373e315326c03442a044211c1a5fb4d, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: 50abf32168e7031419566a25d3be383e, type: 2}
+      objectReference: {fileID: 11400000, guid: b4277d89dbf1f354ab124624656ef5ac, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

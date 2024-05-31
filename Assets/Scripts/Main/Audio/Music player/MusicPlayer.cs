@@ -37,7 +37,7 @@ namespace SpaceAce.Main.Audio
             }
         }
 
-        public string ID => "Music settings";
+        public string SavedDataName => "Music settings";
 
 
         public MusicPlayer(AudioCollection music, AudioPlayer audioPlayer, ISavingSystem savingSystem)
@@ -118,9 +118,9 @@ namespace SpaceAce.Main.Audio
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && other.ID == ID;
+        public bool Equals(ISavable other) => other is not null && other.SavedDataName == SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         #endregion
     }

@@ -27,7 +27,7 @@ PrefabInstance:
     - target: {fileID: 3244235639004203796, guid: e2201aa95279998419a65327a4684725, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: 8ea9064e1e15d6540b21ef91c4a8ee3d, type: 2}
+      objectReference: {fileID: 11400000, guid: b4277d89dbf1f354ab124624656ef5ac, type: 2}
     - target: {fileID: 3798337713975661434, guid: e2201aa95279998419a65327a4684725, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -36,6 +36,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5795852555294570841, guid: e2201aa95279998419a65327a4684725, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 3decd1c7a06ff194f9ac6a418cc10a37, type: 2}
     - target: {fileID: 8372452086284032789, guid: e2201aa95279998419a65327a4684725, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -78,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9084797533956965593, guid: e2201aa95279998419a65327a4684725, type: 3}
       propertyPath: m_Name
-      value: Wreck pirate 4 Variant
+      value: Wreck pirate 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

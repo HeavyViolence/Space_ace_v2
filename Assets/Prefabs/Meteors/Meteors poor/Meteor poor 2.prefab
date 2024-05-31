@@ -95,7 +95,11 @@ PrefabInstance:
     - target: {fileID: 583870591624504651, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: a48cb0531b4e0504c8ee2d9c5acd1797, type: 2}
+      objectReference: {fileID: 11400000, guid: dde11fddecd6bc24086f2052e5ed4cdb, type: 2}
+    - target: {fileID: 1207771826179235287, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: d87919e43e64d7e46bf0073e82dd7a66, type: 2}
     - target: {fileID: 3212545537762009428, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

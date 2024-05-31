@@ -19,8 +19,6 @@ namespace SpaceAce.Gameplay.Damage
 
         private GamePauser _gamePauser;
 
-        public Sprite Icon => _config.Icon;
-
         private float _value;
         public float Value
         {

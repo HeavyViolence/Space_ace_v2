@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: _config
       value: 
       objectReference: {fileID: 11400000, guid: 51430e37127e2724fadeedcf3312308b, type: 2}
+    - target: {fileID: 1207771826179235287, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 84723c003042faf44bd7ea4f828d0ae4, type: 2}
     - target: {fileID: 3212545537762009428, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -54,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5088362774754610738, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
       propertyPath: m_Name
-      value: Meteor very rich 1 Variant
+      value: Meteor very rich 1
       objectReference: {fileID: 0}
     - target: {fileID: 7365319479053723370, guid: 6140356d78ffb1e4da8c6412fab73439, type: 3}
       propertyPath: _config

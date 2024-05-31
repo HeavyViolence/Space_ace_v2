@@ -1,7 +1,7 @@
 using SpaceAce.Gameplay.Damage;
-using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Gameplay.Shooting;
+using SpaceAce.UI;
 
 using System;
 using System.Collections.Generic;
@@ -65,10 +65,9 @@ namespace SpaceAce.Main.Factories.PlayerShipFactories
                 if (shipObject.TryGetComponent(out Shooting shooting) == false) throw new MissingComponentException(nameof(Shooting));
                 if (shipObject.TryGetComponent(out IMovementController movement) == false) throw new MissingComponentException(nameof(IMovementController));
                 if (shipObject.TryGetComponent(out IDamageable damageable) == false) throw new MissingComponentException(nameof(IDamageable));
-                if (shipObject.TryGetComponent(out IDestroyable destroyable) == false) throw new MissingComponentException(nameof(IDestroyable));
-                if (shipObject.TryGetComponent(out IEscapable escapable) == false) throw new MissingComponentException(nameof(IEscapable));
+                if (shipObject.TryGetComponent(out IEntityView view) == false) throw new MissingComponentException(nameof(IEntityView));
 
-                ShipCache cache = new(shipObject, durability, armor, shooting, movement, damageable, destroyable, escapable);
+                ShipCache cache = new(shipObject, durability, armor, shooting, movement, damageable, view);
 
                 return cache;
             }

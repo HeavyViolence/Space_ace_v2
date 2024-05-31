@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 304796198848593659, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
       propertyPath: m_Name
-      value: Wreck alien 2 Variant
+      value: Wreck alien 2
       objectReference: {fileID: 0}
     - target: {fileID: 1016011890140897591, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3046250353785078651, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 8ce73a5a0884b0b408c0bed1b7662652, type: 2}
     - target: {fileID: 5665279535066048856, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -63,7 +67,7 @@ PrefabInstance:
     - target: {fileID: 6281574395267379510, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: 30ad48491aa175c469cf98edadd59f93, type: 2}
+      objectReference: {fileID: 11400000, guid: 82d70cf3421959246bf49ba683c3df9f, type: 2}
     - target: {fileID: 6756446251113446627, guid: 31fc51bf7e3270145ad19e19c0042f11, type: 3}
       propertyPath: m_Size.x
       value: 1.4748298

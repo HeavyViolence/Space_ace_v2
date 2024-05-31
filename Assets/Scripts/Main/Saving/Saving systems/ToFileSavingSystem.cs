@@ -53,7 +53,7 @@ namespace SpaceAce.Main.Saving
         {
             foreach (var entity in _savableEntities)
             {
-                string saveFilePath = GetSaveFilePath(entity.ID);
+                string saveFilePath = GetSaveFilePath(entity.SavedDataName);
                 if (File.Exists(saveFilePath) == true) File.Delete(saveFilePath);
             }
         }
@@ -65,23 +65,23 @@ namespace SpaceAce.Main.Saving
                 string state = entity.GetState();
                 byte[] byteState = _UTF8.GetBytes(state);
 
-                byte[] key = _keyGenerator.GenerateKey(entity.ID);
+                byte[] key = _keyGenerator.GenerateKey(entity.SavedDataName);
                 byte[] encryptedState = _encryptor.Encrypt(byteState, key);
 
-                string saveFilePath = GetSaveFilePath(entity.ID);
+                string saveFilePath = GetSaveFilePath(entity.SavedDataName);
                 File.WriteAllBytes(saveFilePath, encryptedState);
 
-                SavingCompleted?.Invoke(this, new(entity.ID));
+                SavingCompleted?.Invoke(this, new(entity.SavedDataName));
             }
             catch (Exception ex)
             {
-                SavingFailed?.Invoke(this, new(entity.ID, ex.Message));
+                SavingFailed?.Invoke(this, new(entity.SavedDataName, ex.Message));
             }
         }
 
         private void LoadStateFromFile(ISavable entity)
         {
-            string saveFilePath = GetSaveFilePath(entity.ID);
+            string saveFilePath = GetSaveFilePath(entity.SavedDataName);
 
             if (File.Exists(saveFilePath) == true)
             {
@@ -89,21 +89,22 @@ namespace SpaceAce.Main.Saving
                 {
                     byte[] encryptedState = File.ReadAllBytes(saveFilePath);
 
-                    byte[] key = _keyGenerator.GenerateKey(entity.ID);
+                    byte[] key = _keyGenerator.GenerateKey(entity.SavedDataName);
                     byte[] decryptedState = _encryptor.Decrypt(encryptedState, key);
 
                     string state = _UTF8.GetString(decryptedState);
                     entity.SetState(state);
 
-                    LoadingCompleted?.Invoke(this, new(entity.ID));
+                    LoadingCompleted?.Invoke(this, new(entity.SavedDataName));
                 }
                 catch (Exception ex)
                 {
-                    LoadingFailed?.Invoke(this, new(entity.ID, ex.Message));
+                    LoadingFailed?.Invoke(this, new(entity.SavedDataName, ex.Message));
                 }
             }
         }
 
-        private string GetSaveFilePath(string id) => Path.Combine(Application.persistentDataPath, id + SavesExtension);
+        private string GetSaveFilePath(string id) =>
+            Path.Combine(Application.persistentDataPath, id + SavesExtension);
     }
 }

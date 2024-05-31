@@ -42,7 +42,7 @@ namespace SpaceAce.Gameplay.Bombs
             {
                 if (hit.collider.gameObject.TryGetComponent(out DamageReceiver damageReceiver) == true)
                 {
-                    float explosionDamage = Mathf.Lerp(ExplosionDamage, 0f, hit.distance / ExplosionRadius);
+                    float explosionDamage = _config.GetExplosionDamage(hit.distance);
                     damageReceiver.ApplyDamage(explosionDamage);
                 }
             }

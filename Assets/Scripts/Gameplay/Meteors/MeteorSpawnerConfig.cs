@@ -26,9 +26,9 @@ namespace SpaceAce.Gameplay.Meteors
         [SerializeField]
         private AnimationCurve _meteorShowerProbability;
 
-        private bool IsMeteorShower(int levelIndex)
+        private bool IsMeteorShower(int level)
         {
-            float evaluator = Mathf.InverseLerp(_meteorShowerLevels.x, _meteorShowerLevels.y, levelIndex);
+            float evaluator = Mathf.InverseLerp(_meteorShowerLevels.x, _meteorShowerLevels.y, level);
             float meteorShowerProbability = _meteorShowerProbability.Evaluate(evaluator);
 
             return AuxMath.RandomNormal < meteorShowerProbability;
@@ -191,11 +191,11 @@ namespace SpaceAce.Gameplay.Meteors
 
         #region API
 
-        public MeteorWave NextWave(int levelIndex)
+        public MeteorWave NextWave(int level)
         {
-            if (levelIndex <= 0) throw new ArgumentOutOfRangeException();
+            if (level <= 0) throw new ArgumentOutOfRangeException();
 
-            bool isMeteorShower = IsMeteorShower(levelIndex);
+            bool isMeteorShower = IsMeteorShower(level);
             int waveLength = GetWaveLength(isMeteorShower);
             MeteorWaveSlot[] waveSlots = new MeteorWaveSlot[waveLength];
             MeteorType[] meteorSequenceThisWave = GetMeteorTypeRandomSequence(waveLength);

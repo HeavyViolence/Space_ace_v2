@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 3da5ff23e46f8d4458cafe0191c83356, type: 2}
     - target: {fileID: 748175466290968935, guid: d9b3259aea9966243947dadbf2a080c7, type: 3}
       propertyPath: m_Name
-      value: Bomb large Variant
+      value: Bomb large
       objectReference: {fileID: 0}
     - target: {fileID: 4362131950127224146, guid: d9b3259aea9966243947dadbf2a080c7, type: 3}
       propertyPath: m_Sprite
@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: _config
       value: 
       objectReference: {fileID: 11400000, guid: 483cbcf4c527bc443b159c841e8a2277, type: 2}
+    - target: {fileID: 8675067877048853991, guid: d9b3259aea9966243947dadbf2a080c7, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: ad2be3e8c1b42d3498693cce6d638fb2, type: 2}
     - target: {fileID: 8902750002901738311, guid: d9b3259aea9966243947dadbf2a080c7, type: 3}
       propertyPath: m_Controller
       value: 

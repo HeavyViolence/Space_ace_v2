@@ -19,6 +19,10 @@ MonoBehaviour:
     m_Key: Size code
     m_Metadata:
       m_Items: []
+  - m_Id: 21671421075116032
+    m_Key: No guns code
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

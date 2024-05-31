@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 817999609715033745, guid: 48e6842840c013b499457f3b206b6b11, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 604d958aa75082c43aa9e62d847ca0ba, type: 2}
     - target: {fileID: 2677020843489360657, guid: 48e6842840c013b499457f3b206b6b11, type: 3}
       propertyPath: m_Name
-      value: Wreck sweeper 4 Variant
+      value: Wreck sweeper 4
       objectReference: {fileID: 0}
     - target: {fileID: 3388382229462148317, guid: 48e6842840c013b499457f3b206b6b11, type: 3}
       propertyPath: m_LocalPosition.x

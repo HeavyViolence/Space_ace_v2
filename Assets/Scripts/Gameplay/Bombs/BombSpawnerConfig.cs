@@ -88,10 +88,8 @@ namespace SpaceAce.Gameplay.Bombs
 
         #region API
 
-        public BombWave NextWave(int levelIndex)
+        public BombWave NextWave()
         {
-            if (levelIndex <= 0) throw new ArgumentOutOfRangeException();
-
             int waveLength = GetWaveLength();
             BombWaveSlot[] waveSlots = new BombWaveSlot[waveLength];
             BombSize[] bombSequenceThisWave = GetBombSizeRandomSequence(waveLength);

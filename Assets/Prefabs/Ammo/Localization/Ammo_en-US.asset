@@ -87,7 +87,7 @@ MonoBehaviour:
 
       Damage: {Damage:n} Hp
 
-      Projectiles per shot: {ProjectilesPerShot:n}'
+      Projectiles per shot: {ProjectilesPerShot:n0}'
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
@@ -102,7 +102,6 @@ MonoBehaviour:
   - m_Id: 12349631018422272
     m_Localized: 'Has a chance to deal critical damage
 
-      
 
       Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
 
@@ -324,7 +323,7 @@ MonoBehaviour:
 
       Damage: {Damage:n} Hp
 
-      Max hits: {ProjectileHits:n}'
+      Max hits: {ProjectileHits:n0}'
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
@@ -333,8 +332,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 14893212664975360
-    m_Localized: 'Ammo doesn''t deplete on shot. Lose additional ammo on miss, but
-      gain more ammo on hit
+    m_Localized: 'Ammo doesn''t deplete on shot. Lose ammo only on miss, but gain
+      more ammo on hit
 
 
       Size: {Size:choose(Small|Medium|Large|None):Small|Medium|Large|None}
@@ -352,10 +351,10 @@ MonoBehaviour:
 
       Damage: {Damage:n} Hp
 
-      Ammo loss on miss: {AmmoLossOnMiss:n}
+      Ammo loss on miss: {AmmoLossOnMiss:n0}
 
       Ammo
-      gain on hit: {AmmoGainOnHit:n}'
+      gain on hit: {AmmoGainOnHit:n0}'
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
@@ -578,7 +577,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 31965702377558016
-    m_Localized: PRCG
+    m_Localized: PRCN
     m_Metadata:
       m_Items: []
   - m_Id: 31965831725699072

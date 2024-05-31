@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1375787738536658403, guid: 6d60b46af55fb5e41a93c57f851da1f4, type: 3}
       propertyPath: m_Name
-      value: Wreck sweeper 1 Variant
+      value: Wreck sweeper 1
       objectReference: {fileID: 0}
     - target: {fileID: 1816221967934118447, guid: 6d60b46af55fb5e41a93c57f851da1f4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 55
       objectReference: {fileID: 0}
+    - target: {fileID: 4425747199079888995, guid: 6d60b46af55fb5e41a93c57f851da1f4, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: b59557518371677448eb7db7b690d3a6, type: 2}
     - target: {fileID: 4612178110086597166, guid: 6d60b46af55fb5e41a93c57f851da1f4, type: 3}
       propertyPath: _config
       value: 

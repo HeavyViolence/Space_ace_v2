@@ -48,8 +48,11 @@ namespace SpaceAce.Gameplay.Damage
 
         public float GetReducedDamage(float damage)
         {
-            if (damage < 0f) throw new ArgumentOutOfRangeException();
-            return damage * damage / Value;
+            if (damage <= 0f) throw new ArgumentOutOfRangeException();
+
+            if (Value == 0f || damage >= Value) return damage;
+
+            return damage * _config.GetDamageFalloffFactor(damage, Value);
         }
 
         public float GetExperience() => Value;
@@ -83,7 +86,7 @@ namespace SpaceAce.Gameplay.Damage
                     return false;
                 }
 
-                if (_gamePauser.Paused == true) await UniTask.Yield();
+                await UniTask.WaitUntil(() => _gamePauser.Paused == false);
 
                 timer += Time.deltaTime;
 

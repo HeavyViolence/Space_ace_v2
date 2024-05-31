@@ -19,7 +19,7 @@ PrefabInstance:
     - target: {fileID: 3505729473254979574, guid: 76adff251804bf14fb47677c042b63e0, type: 3}
       propertyPath: _config
       value: 
-      objectReference: {fileID: 11400000, guid: be6fdbb5367d7af438166d5d057a150c, type: 2}
+      objectReference: {fileID: 11400000, guid: 82d70cf3421959246bf49ba683c3df9f, type: 2}
     - target: {fileID: 4200100132760451619, guid: 76adff251804bf14fb47677c042b63e0, type: 3}
       propertyPath: m_Size.x
       value: 1.1247578
@@ -36,9 +36,13 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.08494252
       objectReference: {fileID: 0}
+    - target: {fileID: 5605869168498279867, guid: 76adff251804bf14fb47677c042b63e0, type: 3}
+      propertyPath: _config
+      value: 
+      objectReference: {fileID: 11400000, guid: 502324c71b017f543ad1037f5c48abde, type: 2}
     - target: {fileID: 7183419831727781947, guid: 76adff251804bf14fb47677c042b63e0, type: 3}
       propertyPath: m_Name
-      value: Wreck alien 4 Variant
+      value: Wreck alien 4
       objectReference: {fileID: 0}
     - target: {fileID: 7607672334887479287, guid: 76adff251804bf14fb47677c042b63e0, type: 3}
       propertyPath: m_LocalPosition.x

@@ -1,3 +1,5 @@
+using SpaceAce.Auxiliary;
+
 using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Gameplay.Shooting.Guns;
 
@@ -9,6 +11,8 @@ namespace SpaceAce.Gameplay.Shooting
     {
         event EventHandler ShootingStarted, ShootingStopped;
         event EventHandler Overheated, CooledDown;
+
+        event EventHandler<FloatValueChangedEventArgs> HeatValueChanged, HeatCapacityChanged;
 
         event EventHandler<WeaponChangedEventArgs> WeaponChanged;
         event EventHandler<AmmoChangedEventArgs> AmmoChanged;
@@ -22,6 +26,8 @@ namespace SpaceAce.Gameplay.Shooting
         float HeatNormalized => Heat / HeatCapacity;
         float HeatPercentage => HeatNormalized * 100f;
         float OverheatDuration { get; }
+
+        bool Overheat { get; }
 
         float GetDamagePerSecond();
     }

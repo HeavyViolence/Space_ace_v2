@@ -41,7 +41,7 @@ namespace SpaceAce.Main
             }
         }
 
-        public string ID => "Camera shaking";
+        public string SavedDataName => "Camera shaking";
 
         public MasterCameraShaker(MasterCameraShakerSettings settings,
                                   AnimationCurve shakeCurve,
@@ -57,10 +57,9 @@ namespace SpaceAce.Main
 
             if (masterCameraHolder is null) throw new ArgumentNullException();
 
-            Rigidbody2D body = masterCameraHolder.MasterCameraObject.GetComponentInChildren<Rigidbody2D>();
+            Rigidbody2D body = masterCameraHolder.MasterCameraAnchor.gameObject.GetComponentInChildren<Rigidbody2D>();
 
-            if (body == null)
-                throw new MissingComponentException($"Passed master camera object is missing {typeof(Rigidbody2D)}!");
+            if (body == null) throw new MissingComponentException(nameof(Rigidbody2D));
 
             _masterCameraBody = body;
 
@@ -140,9 +139,9 @@ namespace SpaceAce.Main
 
         public override bool Equals(object obj) => obj is not null && Equals(obj as ISavable);
 
-        public bool Equals(ISavable other) => other is not null && ID == other.ID;
+        public bool Equals(ISavable other) => other is not null && SavedDataName == other.SavedDataName;
 
-        public override int GetHashCode() => ID.GetHashCode();
+        public override int GetHashCode() => SavedDataName.GetHashCode();
 
         public void FixedTick()
         {

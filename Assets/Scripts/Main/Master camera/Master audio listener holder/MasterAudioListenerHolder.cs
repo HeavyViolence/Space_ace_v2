@@ -21,10 +21,9 @@ namespace SpaceAce.Main
         {
             if (masterCameraHolder is null) throw new ArgumentNullException();
 
-            AudioListener listener = masterCameraHolder.MasterCameraObject.GetComponentInChildren<AudioListener>();
+            AudioListener listener = masterCameraHolder.MasterCameraAnchor.gameObject.GetComponentInChildren<AudioListener>();
 
-            if (listener == null)
-                throw new MissingComponentException($"Passed master camera object is missing {typeof(AudioListener)}!");
+            if (listener == null) throw new MissingComponentException(nameof(AudioListener));
 
             MasterAudioListener = listener;
 

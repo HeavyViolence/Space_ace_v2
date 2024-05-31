@@ -100,6 +100,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             Damage = savedState.Damage;
         }
 
+        ~AmmoSet()
+        {
+            AmountChanged = null;
+            Depleted = null;
+        }
+
         public async UniTask<bool> TryUseAsync(object user, CancellationToken token = default)
         {
             await UniTask.Yield();

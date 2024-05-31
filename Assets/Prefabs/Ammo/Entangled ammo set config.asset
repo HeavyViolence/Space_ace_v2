@@ -20,5 +20,5 @@ MonoBehaviour:
   _heatGeneration: {x: 3, y: 5}
   _speed: {x: 130, y: 170}
   _damage: {x: 30, y: 70}
-  _ammoLossOnMiss: {x: 2, y: 3}
-  _ammoGainOnHit: {x: 5, y: 7}
+  _ammoLossOnMiss: {x: 1, y: 3}
+  _ammoGainOnHit: {x: 2, y: 11}
