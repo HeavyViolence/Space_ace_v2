@@ -18,7 +18,7 @@ namespace SpaceAce.Gameplay.Shooting
         event EventHandler<AmmoChangedEventArgs> AmmoChanged;
         event EventHandler<OutOfAmmoEventArgs> OutOfAmmo;
 
-        IGun FirstActiveGun { get; }
+        IGunView FirstActiveGunView { get; }
         AmmoSet ActiveAmmo { get; }
 
         float Heat { get; }
@@ -27,6 +27,7 @@ namespace SpaceAce.Gameplay.Shooting
         float HeatPercentage => HeatNormalized * 100f;
         float OverheatDuration { get; }
 
+        bool Firing { get; }
         bool Overheat { get; }
 
         float GetDamagePerSecond();

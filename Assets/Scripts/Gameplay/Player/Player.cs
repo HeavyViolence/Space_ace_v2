@@ -5,9 +5,6 @@ using Newtonsoft.Json;
 using SpaceAce.Gameplay.Controls;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Gameplay.Movement;
-using SpaceAce.Gameplay.Shooting;
-using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories.PlayerShipFactories;
 using SpaceAce.Main.Factories.SavedItemsFactories;
@@ -26,12 +23,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace SpaceAce.Gameplay.Players
 {
-    public sealed class Player : IInitializable,
-                                 IDisposable,
-                                 ISavable,
-                                 IFixedTickable,
-                                 IAmmoObservable,
-                                 IEntityView
+    public sealed class Player : IInitializable, IDisposable, ISavable, IFixedTickable
     {
         public event EventHandler ShipSpawned, ShipDefeated, SavingRequested;
 
@@ -57,18 +49,7 @@ namespace SpaceAce.Gameplay.Players
         public PlayerShipType SelectedShipType { get; set; }
 
         public string SavedDataName => "Player";
-
-        public Shooting.Shooting Shooter => _activeShip.Shooting;
-
-        public Guid ID => _activeShip.View.ID;
-        public Sprite Icon => _activeShip?.View.Icon;
-
-        public IDurabilityView DurabilityView => _activeShip?.View.DurabilityView;
-        public IArmorView ArmorView => _activeShip?.View.ArmorView;
-        public IShooterView ShooterView => _activeShip?.View.ShooterView;
-        public IEscapable Escapable => _activeShip?.View.Escapable;
-        public IDamageReceiver DamageReceiver => _activeShip?.View.DamageReceiver;
-        public IDestroyable Destroyable => _activeShip?.View.Destroyable;
+        public IEntityView ShipView => _activeShip.View;
 
         public async UniTask<string> GetLocalizedNameAsync() => await _activeShip.View.GetLocalizedNameAsync();
 
@@ -153,8 +134,8 @@ namespace SpaceAce.Gameplay.Players
         {
             if (_gameStateLoader.CurrentState != GameState.Level || _gamePauser.Paused == true) return;
 
-            _activeShip.Movement?.Move(_gameControlsTransmitter.MovementDirection);
-            _activeShip.Movement?.Rotate(_gameControlsTransmitter.MouseWorldPosition);
+            _activeShip.MovementController?.Move(_gameControlsTransmitter.MovementDirection);
+            _activeShip.MovementController?.Rotate(_gameControlsTransmitter.MouseWorldPosition);
         }
 
         #endregion
@@ -163,13 +144,12 @@ namespace SpaceAce.Gameplay.Players
 
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
-            _shootingCancellation = new();
             SpawnPlayerShip();
         }
 
         private void MainMenuLoadedEventHandler(object sender, EventArgs e)
         {
-            ReleasePlayerShip();
+            DisposePlayerShip();
         }
 
         private void SpawnPlayerShip()
@@ -179,12 +159,12 @@ namespace SpaceAce.Gameplay.Players
             _activeShip.Shooting.BindInventory(Inventory);
             _activeShip.View.Destroyable.Destroyed += PlayerShipDefeatedEventHandler;
 
-            _gameControlsTransmitter.SwitchToSmallWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
-            _gameControlsTransmitter.SwitchToMediumWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
-            _gameControlsTransmitter.SwitchToLargeWeapons += async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
+            _gameControlsTransmitter.SwitchToSmallWeapons += async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
+            _gameControlsTransmitter.SwitchToMediumWeapons += async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
+            _gameControlsTransmitter.SwitchToLargeWeapons += async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
 
-            _gameControlsTransmitter.SelectNextAmmo += async (sender, args) => await _activeShip.Shooting.TrySwitchToNextAmmoAsync();
-            _gameControlsTransmitter.SelectPreviousAmmo += async (sender, args) => await _activeShip.Shooting.TrySwitchToPreviousAmmoAsync();
+            _gameControlsTransmitter.SelectNextAmmo += async (_, _) => await _activeShip.Shooting.TrySwitchToNextAmmoAsync();
+            _gameControlsTransmitter.SelectPreviousAmmo += async (_, _) => await _activeShip.Shooting.TrySwitchToPreviousAmmoAsync();
 
             _gameControlsTransmitter.Fire += FireEventHandler;
             _gameControlsTransmitter.Ceasefire += CeasefireEventHandler;
@@ -192,31 +172,31 @@ namespace SpaceAce.Gameplay.Players
             ShipSpawned?.Invoke(this, EventArgs.Empty);
         }
 
-        private void ReleasePlayerShip()
+        private void DisposePlayerShip()
         {
-            _gameControlsTransmitter.SwitchToSmallWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
-            _gameControlsTransmitter.SwitchToMediumWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
-            _gameControlsTransmitter.SwitchToLargeWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
+            _gameControlsTransmitter.SwitchToSmallWeapons -= async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
+            _gameControlsTransmitter.SwitchToMediumWeapons -= async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
+            _gameControlsTransmitter.SwitchToLargeWeapons -= async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
 
-            _gameControlsTransmitter.SelectNextAmmo -= async (sender, args) => await _activeShip.Shooting.TrySwitchToNextAmmoAsync();
-            _gameControlsTransmitter.SelectPreviousAmmo -= async (sender, args) => await _activeShip.Shooting.TrySwitchToPreviousAmmoAsync();
+            _gameControlsTransmitter.SelectNextAmmo -= async (_, _) => await _activeShip.Shooting.TrySwitchToNextAmmoAsync();
+            _gameControlsTransmitter.SelectPreviousAmmo -= async (_, _) => await _activeShip.Shooting.TrySwitchToPreviousAmmoAsync();
 
             _gameControlsTransmitter.Fire -= FireEventHandler;
             _gameControlsTransmitter.Ceasefire -= CeasefireEventHandler;
 
             _activeShip.View.Destroyable.Destroyed -= PlayerShipDefeatedEventHandler;
 
-            _playerShipFactory.Release(SelectedShipType, _activeShip);
+            _activeShip.Dispose();
         }
 
         private void PlayerShipDefeatedEventHandler(object sender, DestroyedEventArgs e)
         {
-            _gameControlsTransmitter.SwitchToSmallWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
-            _gameControlsTransmitter.SwitchToMediumWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
-            _gameControlsTransmitter.SwitchToLargeWeapons -= async (sender, ctx) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
+            _gameControlsTransmitter.SwitchToSmallWeapons -= async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Small);
+            _gameControlsTransmitter.SwitchToMediumWeapons -= async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Medium);
+            _gameControlsTransmitter.SwitchToLargeWeapons -= async (_, _) => await _activeShip.Shooting.TrySwitchWeaponsAsync(Size.Large);
 
-            _gameControlsTransmitter.SelectNextAmmo -= async (sender, args) => await _activeShip.Shooting.TrySwitchToNextAmmoAsync();
-            _gameControlsTransmitter.SelectPreviousAmmo -= async (sender, args) => await _activeShip.Shooting.TrySwitchToPreviousAmmoAsync();
+            _gameControlsTransmitter.SelectNextAmmo -= async (_, _) => await _activeShip.Shooting.TrySwitchToNextAmmoAsync();
+            _gameControlsTransmitter.SelectPreviousAmmo -= async (_, _) => await _activeShip.Shooting.TrySwitchToPreviousAmmoAsync();
 
             _gameControlsTransmitter.Fire -= FireEventHandler;
             _gameControlsTransmitter.Ceasefire -= CeasefireEventHandler;
@@ -225,7 +205,7 @@ namespace SpaceAce.Gameplay.Players
             _shootingCancellation?.Dispose();
             _shootingCancellation = null;
 
-            _playerShipFactory.Release(SelectedShipType, _activeShip);
+            _activeShip.Dispose();
 
             ShipDefeated?.Invoke(this, e);
         }
@@ -233,13 +213,13 @@ namespace SpaceAce.Gameplay.Players
         private void FireEventHandler(object sender, CallbackContext e)
         {
             _shootingCancellation = new();
-            _activeShip.Shooting.FireAsync(this, _shootingCancellation.Token).Forget();
+            _activeShip.Shooting.Fire(this, _shootingCancellation.Token);
         }
 
         private void CeasefireEventHandler(object sender, CallbackContext e)
         {
-            _shootingCancellation.Cancel();
-            _shootingCancellation.Dispose();
+            _shootingCancellation?.Cancel();
+            _shootingCancellation?.Dispose();
             _shootingCancellation = null;
         }
 

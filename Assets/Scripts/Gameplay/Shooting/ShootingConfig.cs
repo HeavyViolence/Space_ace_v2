@@ -127,11 +127,6 @@ namespace SpaceAce.Gameplay.Shooting
         public float MaxInitialAmmoSwitchDuration => _ammoSwitchDuration.y;
         public float RandomInitialAmmoSwitchDuration => Random.Range(MinInitialAmmoSwitchDuration, MaxInitialAmmoSwitchDuration);
 
-        [SerializeField]
-        private bool _shakeOnShotFired = false;
-
-        public bool ShakeOnShotFired => _shakeOnShotFired;
-
         #endregion
     }
 }

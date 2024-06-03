@@ -51,16 +51,16 @@ namespace SpaceAce.Gameplay.Movement
         public float HighestRotationSpeed => _rotationSpeed.y;
         public float RandomRotationSpeed => AuxMath.RandomSign * Random.Range(_rotationSpeed.x, _rotationSpeed.y);
 
-        [SerializeField, MinValue(MinBoundDisplacement), MaxValue(MaxBoundDisplacement), HorizontalLine]
+        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement), HorizontalLine]
         private float _upperBoundDisplacement = DefaultBoundDisplacement;
 
-        [SerializeField, MinValue(MinBoundDisplacement), MaxValue(MaxBoundDisplacement)]
+        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement)]
         private float _lowerBoundDisplacement = DefaultBoundDisplacement;
 
-        [SerializeField, MinValue(MinBoundDisplacement), MaxValue(MaxBoundDisplacement)]
+        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement)]
         private float _leftBoundDisplacement = DefaultBoundDisplacement;
 
-        [SerializeField, MinValue(MinBoundDisplacement), MaxValue(MaxBoundDisplacement)]
+        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement)]
         private float _rightBoundDisplacement = DefaultBoundDisplacement;
 
         public float UpperBoundDisplacement => _upperBoundDisplacement;

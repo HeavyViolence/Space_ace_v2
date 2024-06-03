@@ -16,3 +16,4 @@ MonoBehaviour:
   _convergenceAngle: 1
   _fireRate: 7
   _dispersion: 3
+  _shakeOnShotFired: 1

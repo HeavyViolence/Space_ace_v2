@@ -182,6 +182,8 @@ namespace SpaceAce.UI.Displays
             view.ShooterView.ActiveAmmo.AmountChanged -= (_, _) => UpdatePlayerShipAmmoView(view.ShooterView);
             view.ShooterView.HeatValueChanged -= (_, _) => UpdatePlayerShipHeatView(view.ShooterView);
             view.ShooterView.HeatCapacityChanged -= (_, _) => UpdatePlayerShipHeatView(view.ShooterView);
+
+            if (Active == true) _playerShipPanel.visible = false;
         }
 
         private async UniTask UpdatePlayerShipVisualAsync(IEntityView view)
@@ -193,7 +195,7 @@ namespace SpaceAce.UI.Displays
         private void UpdatePlayerShipDurabilityView(IDurabilityView view)
         {
             if (view.Regen == 0f) _playerShipDurabilityLabel.text = $"{view.MaxValue:n0}";
-            else _playerShipDurabilityLabel.text = $"{view.MaxValue:n0}(+{view.Regen:n0})";
+            else _playerShipDurabilityLabel.text = $"{view.MaxValue:n0}/+{view.Regen:n0}";
 
             Color durabilityColor = _config.GetDurabilityColor(view.ValueNormalized);
 
@@ -208,7 +210,7 @@ namespace SpaceAce.UI.Displays
 
         private async UniTask UpdatePlayerShipWeaponViewAsync(IShooterView view)
         {
-            _gunSizeCode = await view.FirstActiveGun.GetSizeCodeAsync();
+            _gunSizeCode = await view.FirstActiveGunView.GetSizeCodeAsync();
             _ammoTypeCode = await view.ActiveAmmo.GetTypeCodeAsync();
 
             _playerShipAmmoLabel.text = $"{_gunSizeCode}.{_ammoTypeCode}.{view.GetDamagePerSecond():n0}/{view.ActiveAmmo.Amount:n0}";
@@ -344,7 +346,7 @@ namespace SpaceAce.UI.Displays
         private void UpdateTargetDurabilityView(IDurabilityView view)
         {
             if (view.Regen == 0f) _targetDurabilityLabel.text = $"{view.MaxValue:n0}";
-            else _targetDurabilityLabel.text = $"{view.MaxValue:n0}(+{view.Regen:n0})";
+            else _targetDurabilityLabel.text = $"{view.MaxValue:n0}/+{view.Regen:n0})";
 
             _targetDurabilityBar.style.width = Length.Percent(view.ValuePercentage);
 
@@ -365,7 +367,7 @@ namespace SpaceAce.UI.Displays
             }
             else
             {
-                string gunSizeCode = await view.FirstActiveGun.GetSizeCodeAsync();
+                string gunSizeCode = await view.FirstActiveGunView.GetSizeCodeAsync();
                 string ammoTypeCode = await view.ActiveAmmo.GetTypeCodeAsync();
 
                 _targetAmmoLabel.text = $"{gunSizeCode}.{ammoTypeCode}.{view.GetDamagePerSecond():n0}";

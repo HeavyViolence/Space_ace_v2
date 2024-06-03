@@ -12,7 +12,7 @@ namespace SpaceAce.Gameplay.Experience
     {
         #region factor
 
-        public const float MinExperienceFactor = 0.1f;
+        public const float MinExperienceFactor = 0f;
         public const float MaxExperienceFactor = 10f;
         public const float DefaultExperienceFactor = 1f;
 

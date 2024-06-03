@@ -9,22 +9,22 @@ using UnityEngine;
 
 namespace SpaceAce.Main.Factories.PlayerShipFactories
 {
-    public sealed record ShipCache
+    public sealed record ShipCache : IDisposable
     {
-        public GameObject Object { get; }
-        public Transform Transform { get; }
-        public Durability Durability { get; }
-        public Armor Armor { get; }
-        public Shooting Shooting { get; }
-        public IMovementController Movement { get; }
-        public IDamageable Damageable { get; }
-        public IEntityView View { get; }
+        public GameObject Object { get; private set; }
+        public Transform Transform { get; private set; }
+        public Durability Durability { get; private set; }
+        public Armor Armor { get; private set; }
+        public Shooting Shooting { get; private set; }
+        public IMovementController MovementController { get; private set; }
+        public IDamageable Damageable { get; private set; }
+        public IEntityView View { get; private set; }
 
         public ShipCache(GameObject instance,
                          Durability durability,
                          Armor armor,
                          Shooting shooting,
-                         IMovementController movement,
+                         IMovementController movementController,
                          IDamageable damageable,
                          IEntityView view)
         {
@@ -41,9 +41,23 @@ namespace SpaceAce.Main.Factories.PlayerShipFactories
             if (shooting == null) throw new ArgumentNullException();
             Shooting = shooting;
 
-            Movement = movement ?? throw new ArgumentNullException();
+            MovementController = movementController ?? throw new ArgumentNullException();
             Damageable = damageable ?? throw new ArgumentNullException();
             View = view ?? throw new ArgumentNullException();
+        }
+
+        public void Dispose()
+        {
+            GameObject.Destroy(Object);
+
+            Object = null;
+            Transform = null;
+            Durability = null;
+            Armor = null;
+            Shooting = null;
+            MovementController = null;
+            Damageable = null;
+            View = null;
         }
     }
 }

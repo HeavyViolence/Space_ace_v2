@@ -16,7 +16,7 @@ namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
         private readonly Dictionary<ProjectileHitEffectSkin, GameObject> _hitEffectPrefabs = new();
         private readonly Dictionary<ProjectileHitEffectSkin, Stack<ParticleSystemCache>> _objtectPools = new();
         private readonly Dictionary<ProjectileHitEffectSkin, Transform> _objectPoolsAnchors = new();
-        private readonly GameObject _masterAnchor = new("Projectile hit effects pools");
+        private readonly Transform _masterAnchor = new GameObject("Projectile hit effects pools").transform;
 
         public ProjectileHitEffectFactory(DiContainer diContainer,
                                           GamePauser gamePauser,
@@ -37,10 +37,10 @@ namespace SpaceAce.Main.Factories.ProjectileHitEffectFactories
 
             foreach (ProjectileHitEffectSkin skin in skins)
             {
-                GameObject anchor = new($"Anchor of {skin.ToString().ToLower()}");
-                anchor.transform.parent = _masterAnchor.transform;
+                Transform anchor = new GameObject($"{skin}").transform;
+                anchor.parent = _masterAnchor;
 
-                _objectPoolsAnchors.Add(skin, anchor.transform);
+                _objectPoolsAnchors.Add(skin, anchor);
             }
         }
 

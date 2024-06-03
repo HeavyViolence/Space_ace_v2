@@ -29,6 +29,9 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         [SerializeField, Range(MinDispersion, MaxDispersion)]
         private float _dispersion = MinDispersion;
 
+        [SerializeField]
+        private bool _shakeOnShotFired = false;
+
         public Size AmmoSize => _ammoSize;
 
         public float ConvergenceAngle => _convergenceAngle * Mathf.Deg2Rad;
@@ -36,5 +39,7 @@ namespace SpaceAce.Gameplay.Shooting.Guns
         public float FireRate => _fireRate;
 
         public float Dispersion => _dispersion * Mathf.Deg2Rad;
+
+        public bool ShakeOnShotFired => _shakeOnShotFired;
     }
 }

@@ -106,7 +106,7 @@ namespace SpaceAce.UI.Displays
             _levelDisplay.Enabled += LevelDisplayEnabledEventHandler;
             _levelDisplay.Disabled += LevelDisplayDisabledEventHandler;
 
-            _player.ShipDefeated += PlayerDefeatedEventHandler;
+            _player.ShipDefeated += PlayerShipDefeatedEventHandler;
 
             _meteorSpawner.MeteorSpawned += MeteorSpawnedEventHandler;
             _wreckSpawner.WreckSpawned += WreckSpawnedEventHandler;
@@ -118,7 +118,7 @@ namespace SpaceAce.UI.Displays
             _levelDisplay.Enabled -= LevelDisplayEnabledEventHandler;
             _levelDisplay.Disabled -= LevelDisplayDisabledEventHandler;
 
-            _player.ShipDefeated -= PlayerDefeatedEventHandler;
+            _player.ShipDefeated -= PlayerShipDefeatedEventHandler;
 
             _meteorSpawner.MeteorSpawned -= MeteorSpawnedEventHandler;
             _wreckSpawner.WreckSpawned -= WreckSpawnedEventHandler;
@@ -143,7 +143,7 @@ namespace SpaceAce.UI.Displays
             _levelDisplay.UpdateExperienceReward(_levelRewardCollector.ExperienceReward);
 
             _playerShipViewCancellation = new();
-            _levelDisplay.DisplayPlayerShipViewAsync(_player, _playerShipViewCancellation.Token).Forget();
+            _levelDisplay.DisplayPlayerShipViewAsync(_player.ShipView, _playerShipViewCancellation.Token).Forget();
         }
 
         private void LevelDisplayDisabledEventHandler(object sender, EventArgs e)
@@ -161,15 +161,13 @@ namespace SpaceAce.UI.Displays
 
         private CancellationTokenSource _playerShipViewCancellation;
 
-        private void PlayerDefeatedEventHandler(object sender, EventArgs e)
+        private void PlayerShipDefeatedEventHandler(object sender, EventArgs e)
         {
             DisablePlayerShipViewIfActive();
         }
 
         private void DisablePlayerShipViewIfActive()
         {
-            if (_playerShipViewCancellation is null) return;
-
             _playerShipViewCancellation?.Cancel();
             _playerShipViewCancellation?.Dispose();
             _playerShipViewCancellation = null;
@@ -217,8 +215,6 @@ namespace SpaceAce.UI.Displays
 
         private void DisableMeteorViewIfActive()
         {
-            if (_meteorViewCancellation is null) return;
-
             _meteorViewCancellation?.Cancel();
             _meteorViewCancellation?.Dispose();
             _meteorViewCancellation = null;
@@ -252,8 +248,6 @@ namespace SpaceAce.UI.Displays
 
         private void DisableWreckViewIfActive()
         {
-            if (_wreckViewCancellation is null) return;
-
             _wreckViewCancellation?.Cancel();
             _wreckViewCancellation?.Dispose();
             _wreckViewCancellation = null;
@@ -279,8 +273,6 @@ namespace SpaceAce.UI.Displays
 
         private void DisableBombViewIfActive()
         {
-            if (_bombViewCancellation is null) return;
-
             _bombViewCancellation?.Cancel();
             _bombViewCancellation?.Dispose();
             _bombViewCancellation = null;

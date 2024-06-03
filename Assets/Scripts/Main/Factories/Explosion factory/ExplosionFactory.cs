@@ -22,7 +22,7 @@ namespace SpaceAce.Main.Factories.ExplosionFactories
         private readonly Dictionary<ExplosionSize, Transform> _explosionAnchors = new();
         private readonly Dictionary<ExplosionSize, AudioCollection> _explosionAudio = new();
         private readonly Dictionary<ExplosionSize, Stack<ParticleSystemCache>> _explosionPool = new();
-        private readonly GameObject _masterAnchor = new("Explosion object pools");
+        private readonly Transform _masterAnchor = new GameObject("Explosion object pools").transform;
 
         public ExplosionFactory(DiContainer diContainer,
                                 GamePauser gamePauser,
@@ -42,10 +42,10 @@ namespace SpaceAce.Main.Factories.ExplosionFactories
                 _explosionPrefabs.Add(explosion.Size, explosion.Prefab);
                 _explosionAudio.Add(explosion.Size, explosion.Audio);
 
-                GameObject anchor = new($"{explosion.Size.ToString().ToLower()} explosions anchor");
-                anchor.transform.parent = _masterAnchor.transform;
+                Transform anchor = new GameObject($"{explosion.Size}").transform;
+                anchor.parent = _masterAnchor;
 
-                _explosionAnchors.Add(explosion.Size, anchor.transform);
+                _explosionAnchors.Add(explosion.Size, anchor);
             }
         }
 

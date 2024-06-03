@@ -17,7 +17,7 @@ namespace SpaceAce.Main.Audio
 {
     public sealed class AudioPlayer : IInitializable, IDisposable, ISavable
     {
-        private const int MaxAudioSources = 32;
+        private const int MaxAudioSources = 64;
 
         public event EventHandler SavingRequested;
 
@@ -25,9 +25,9 @@ namespace SpaceAce.Main.Audio
         private readonly ISavingSystem _savingSystem;
         private readonly GamePauser _gamePauser;
 
-        private GameObject _audioSourcesAnchor;
-        private readonly Dictionary<Guid, AudioSource> _activeAudioSources = new(MaxAudioSources);
-        private readonly Stack<AudioSource> _availableAudioSources = new(MaxAudioSources);
+        private readonly Transform _audioSourcesAnchor = new GameObject("Audio sources anchor").transform;
+        private readonly Dictionary<Guid, AudioSourceCache> _activeAudioSources = new(MaxAudioSources);
+        private readonly Stack<AudioSourceCache> _availableAudioSources = new(MaxAudioSources);
 
         public string SavedDataName => "Audio settings";
 
@@ -72,8 +72,8 @@ namespace SpaceAce.Main.Audio
                                            bool obeyGamePause = false,
                                            CancellationToken token = default)
         {
-            AudioSource source = FindAvailableAudioSource();
-            AudioAccess access = ConfigureAudioSource(source, properties, position, anchor, false);
+            AudioSourceCache cache = FindAvailableAudioSource();
+            AudioAccess access = ConfigureAudioSource(cache, properties, position, anchor, false);
 
             float timer = 0f;
 
@@ -85,11 +85,11 @@ namespace SpaceAce.Main.Audio
 
                 if (obeyGamePause == true && _gamePauser.Paused == true)
                 {
-                    source.Pause();
+                    cache.AudioSource.Pause();
 
                     while (_gamePauser.Paused == true) await UniTask.Yield();
 
-                    source.Play();
+                    cache.AudioSource.Play();
                 }
 
                 await UniTask.Yield();
@@ -104,8 +104,8 @@ namespace SpaceAce.Main.Audio
                                              bool obeyGamePause = false,
                                              CancellationToken token = default)
         {
-            AudioSource source = FindAvailableAudioSource();
-            AudioAccess access = ConfigureAudioSource(source, properties, position, anchor, true);
+            AudioSourceCache cache = FindAvailableAudioSource();
+            AudioAccess access = ConfigureAudioSource(cache, properties, position, anchor, true);
 
             if (token == default)
             {
@@ -117,11 +117,11 @@ namespace SpaceAce.Main.Audio
 
                     if (obeyGamePause == true && _gamePauser.Paused == true)
                     {
-                        source.Pause();
+                        cache.AudioSource.Pause();
 
                         while (_gamePauser.Paused == true) await UniTask.Yield();
 
-                        source.Play();
+                        cache.AudioSource.Play();
                     }
 
                     await UniTask.Yield();
@@ -133,11 +133,11 @@ namespace SpaceAce.Main.Audio
                 {
                     if (obeyGamePause == true && _gamePauser.Paused == true)
                     {
-                        source.Pause();
+                        cache.AudioSource.Pause();
 
                         while (_gamePauser.Paused == true) await UniTask.Yield();
 
-                        source.Play();
+                        cache.AudioSource.Play();
                     }
 
                     await UniTask.Yield();
@@ -149,27 +149,26 @@ namespace SpaceAce.Main.Audio
 
         private void CreateAudioSourcePool()
         {
-            _audioSourcesAnchor = new GameObject("Audio sources anchor");
-
             for (int i = 0; i < MaxAudioSources; i++)
             {
                 var audioSourceHolder = new GameObject($"Audio source #{i + 1}");
-                audioSourceHolder.transform.parent = _audioSourcesAnchor.transform;
+                audioSourceHolder.transform.parent = _audioSourcesAnchor;
                 var audioSource = audioSourceHolder.AddComponent<AudioSource>();
+                AudioSourceCache cache = new(audioSource, audioSourceHolder.transform);
 
-                ResetAudioSource(audioSource);
-                _availableAudioSources.Push(audioSource);
+                ResetAudioSource(cache);
+                _availableAudioSources.Push(cache);
             }
         }
 
         private bool DisableActiveAudioSource(Guid id)
         {
-            if (_activeAudioSources.TryGetValue(id, out AudioSource source) == true)
+            if (_activeAudioSources.TryGetValue(id, out AudioSourceCache cache) == true)
             {
-                ResetAudioSource(source);
+                ResetAudioSource(cache);
 
                 _activeAudioSources.Remove(id);
-                _availableAudioSources.Push(source);
+                _availableAudioSources.Push(cache);
 
                 return true;
             }
@@ -177,32 +176,32 @@ namespace SpaceAce.Main.Audio
             return false;
         }
 
-        private void ResetAudioSource(AudioSource source)
+        private void ResetAudioSource(AudioSourceCache cache)
         {
-            if (source == null) return;
+            if (cache is null || cache.AudioSource == null || cache.Transform == null) return;
 
-            source.Stop();
+            cache.AudioSource.Stop();
 
-            source.clip = null;
-            source.outputAudioMixerGroup = null;
-            source.mute = true;
-            source.bypassEffects = true;
-            source.bypassListenerEffects = true;
-            source.bypassReverbZones = true;
-            source.playOnAwake = false;
-            source.loop = false;
-            source.priority = byte.MaxValue;
-            source.volume = 0f;
-            source.spatialBlend = 0f;
-            source.pitch = 1f;
-            source.reverbZoneMix = 0f;
+            cache.AudioSource.clip = null;
+            cache.AudioSource.outputAudioMixerGroup = null;
+            cache.AudioSource.mute = true;
+            cache.AudioSource.bypassEffects = true;
+            cache.AudioSource.bypassListenerEffects = true;
+            cache.AudioSource.bypassReverbZones = true;
+            cache.AudioSource.playOnAwake = false;
+            cache.AudioSource.loop = false;
+            cache.AudioSource.priority = byte.MaxValue;
+            cache.AudioSource.volume = 0f;
+            cache.AudioSource.spatialBlend = 0f;
+            cache.AudioSource.pitch = 1f;
+            cache.AudioSource.reverbZoneMix = 0f;
 
-            source.transform.parent = _audioSourcesAnchor.transform;
-            source.transform.position = Vector3.zero;
-            source.gameObject.SetActive(false);
+            cache.Transform.parent = _audioSourcesAnchor.transform;
+            cache.Transform.position = Vector3.zero;
+            cache.Transform.gameObject.SetActive(false);
         }
 
-        private AudioAccess ConfigureAudioSource(AudioSource source,
+        private AudioAccess ConfigureAudioSource(AudioSourceCache cache,
                                                  AudioProperties properties,
                                                  Vector3 position,
                                                  Transform anchor,
@@ -211,60 +210,60 @@ namespace SpaceAce.Main.Audio
             AudioAccess access;
             var id = Guid.NewGuid();
 
-            source.clip = properties.Clip;
-            source.outputAudioMixerGroup = properties.OutputAudioGroup;
-            source.mute = false;
-            source.bypassEffects = false;
-            source.bypassListenerEffects = false;
-            source.bypassReverbZones = false;
-            source.priority = (byte)properties.Priority;
-            source.volume = properties.Volume;
-            source.spatialBlend = properties.SpatialBlend;
-            source.pitch = properties.Pitch;
+            cache.AudioSource.clip = properties.Clip;
+            cache.AudioSource.outputAudioMixerGroup = properties.OutputAudioGroup;
+            cache.AudioSource.mute = false;
+            cache.AudioSource.bypassEffects = false;
+            cache.AudioSource.bypassListenerEffects = false;
+            cache.AudioSource.bypassReverbZones = false;
+            cache.AudioSource.priority = (byte)properties.Priority;
+            cache.AudioSource.volume = properties.Volume;
+            cache.AudioSource.spatialBlend = properties.SpatialBlend;
+            cache.AudioSource.pitch = properties.Pitch;
 
-            if (anchor != null) source.transform.parent = anchor;
+            if (anchor != null) cache.Transform.parent = anchor;
 
             if (loop == true)
             {
-                source.loop = true;
-                source.transform.localPosition = position;
+                cache.AudioSource.loop = true;
+                cache.Transform.localPosition = position;
 
                 access = new AudioAccess(id, float.PositiveInfinity);
             }
             else
             {
-                source.loop = false;
-                source.transform.position = position;
+                cache.AudioSource.loop = false;
+                cache.Transform.position = position;
 
                 access = new AudioAccess(id, properties.Clip.length);
             }
 
-            source.gameObject.SetActive(true);
-            source.Play();
+            cache.Transform.gameObject.SetActive(true);
+            cache.AudioSource.Play();
 
-            _activeAudioSources.Add(id, source);
+            _activeAudioSources.Add(id, cache);
 
             return access;
         }
 
-        private AudioSource FindAvailableAudioSource()
+        private AudioSourceCache FindAvailableAudioSource()
         {
             if (_availableAudioSources.Count > 0)
                 return _availableAudioSources.Pop();
 
             byte priority = 0;
             Guid id = Guid.Empty;
-            AudioSource availableSource = null;
+            AudioSourceCache availableSource = null;
 
-            foreach (var source in _activeAudioSources)
+            foreach (var entry in _activeAudioSources)
             {
-                if (source.Value.loop == true) continue;
+                if (entry.Value.AudioSource.loop == true) continue;
 
-                if (source.Value.priority > priority)
+                if (entry.Value.AudioSource.priority > priority)
                 {
-                    priority = (byte)source.Value.priority;
-                    id = source.Key;
-                    availableSource = source.Value;
+                    priority = (byte)entry.Value.AudioSource.priority;
+                    id = entry.Key;
+                    availableSource = entry.Value;
                 }
             }
 

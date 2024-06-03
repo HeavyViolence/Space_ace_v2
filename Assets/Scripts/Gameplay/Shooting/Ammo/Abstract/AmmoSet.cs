@@ -3,7 +3,6 @@ using Cysharp.Threading.Tasks;
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
-using SpaceAce.Gameplay.Shooting.Guns;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 using SpaceAce.Main.Factories.ProjectileFactories;
@@ -38,11 +37,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
             protected set
             {
-                int oldAmount = _amount;
-
+                AmountChanged?.Invoke(this, new(_amount, value));
                 _amount = Mathf.Clamp(value, 0, int.MaxValue);
-
-                AmountChanged?.Invoke(this, new(oldAmount, _amount));
 
                 if (_amount == 0) Depleted?.Invoke(this, EventArgs.Empty);
             }
@@ -57,7 +53,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public bool Usable => false;
         public bool Tradable => Services.GameStateLoader.CurrentState == GameState.MainMenu;
 
-        protected abstract ShotBehaviourAsync ShotBehaviourAsync { get; }
+        public abstract ShotBehaviour ShotBehaviour { get; }
         protected abstract MovementBehaviour MovementBehaviour { get; }
         protected abstract HitBehaviour HitBehaviour { get; }
         protected abstract MissBehaviour MissBehaviour { get; }
@@ -110,17 +106,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         {
             await UniTask.Yield();
             return false;
-        }
-
-        public async UniTask<ShotResult> FireAsync(object shooter, IGun gun)
-        {
-            if (shooter is null) throw new ArgumentNullException();
-            if (gun is null) throw new ArgumentNullException();
-
-            if (Services.GameStateLoader.CurrentState == GameState.Level)
-                return await ShotBehaviourAsync.Invoke(shooter, gun);
-
-            return ShotResult.None;
         }
 
         public abstract ItemSavableState GetSavableState();

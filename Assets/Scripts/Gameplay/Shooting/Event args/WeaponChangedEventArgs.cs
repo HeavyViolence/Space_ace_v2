@@ -4,9 +4,9 @@ using System;
 
 public sealed class WeaponChangedEventArgs : EventArgs
 {
-    public IGun FirstActiveGun;
+    public IGunView FirstActiveGun;
 
-    public WeaponChangedEventArgs(IGun firstActiveGun)
+    public WeaponChangedEventArgs(IGunView firstActiveGun)
     {
         FirstActiveGun = firstActiveGun ?? throw new ArgumentNullException();
     }

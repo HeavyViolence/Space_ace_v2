@@ -1,21 +1,16 @@
 using Cysharp.Threading.Tasks;
 
-using SpaceAce.Gameplay.Items;
+using SpaceAce.Gameplay.Shooting.Ammo;
 
-using UnityEngine;
-
+using System.Threading;
 
 namespace SpaceAce.Gameplay.Shooting.Guns
 {
     public interface IGun
     {
-        Transform Transform { get; }
-        Size AmmoSize { get; }
-        bool IsRightHanded { get; }
-        float SignedConvergenceAngle { get; }
-        float FireRate { get; }
-        float Dispersion { get; }
-
-        UniTask<string> GetSizeCodeAsync();
+        UniTask FireAsync(object shooter,
+                          AmmoSet ammo,
+                          CancellationToken fireCancellation = default,
+                          CancellationToken overheatCancellation = default);
     }
 }

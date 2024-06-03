@@ -19,7 +19,7 @@ using Zenject;
 
 namespace SpaceAce.Gameplay.Shooting
 {
-    public sealed class Shooting : MonoBehaviour, IShooterView, IExperienceSource, IEMPTarget
+    public sealed class Shooting : MonoBehaviour, IShooterView, IExperienceSource
     {
         public event EventHandler ShootingStarted, ShootingStopped;
         public event EventHandler Overheated, CooledDown;
@@ -30,15 +30,14 @@ namespace SpaceAce.Gameplay.Shooting
         public event EventHandler<AmmoChangedEventArgs> AmmoChanged;
         public event EventHandler<OutOfAmmoEventArgs> OutOfAmmo;
 
-        private readonly List<IGun> _availableGuns = new();
-        private List<AmmoSet> _availableAmmo;
-
-        private List<IGun> _activeGuns;
-
-        private List<AmmoSet> _ammoForActiveWeapons;
-
         [SerializeField]
         private ShootingConfig _config;
+
+        private readonly List<Gun> _availableGuns = new();
+
+        private List<AmmoSet> _availableAmmo;
+        private List<Gun> _activeGuns;
+        private List<AmmoSet> _ammoForActiveWeapons;
 
         private AnimationCurve HeatLossFactorCurve => _config.HeatLossFactorCurve;
 
@@ -46,7 +45,6 @@ namespace SpaceAce.Gameplay.Shooting
 
         private GamePauser _gamePauser;
         private AudioPlayer _audioPlayer;
-        private MasterCameraShaker _masterCameraShaker;
         private Localizer _localizer;
         private Inventory _userInventory;
         private Transform _transform;
@@ -83,6 +81,8 @@ namespace SpaceAce.Gameplay.Shooting
 
         public AmmoSet ActiveAmmo { get; private set; }
 
+        private CancellationTokenSource _overheatCancellation;
+
         private float _heat;
         public float Heat
         {
@@ -91,7 +91,9 @@ namespace SpaceAce.Gameplay.Shooting
             private set
             {
                 HeatValueChanged?.Invoke(this, new(_heat, value));
-                _heat = value;
+                _heat = Mathf.Clamp(value, 0f, _heatCapacity);
+
+                if (HeatNormalized == 1f) PerformOverheatAsync().Forget();
             }
         }
 
@@ -112,42 +114,38 @@ namespace SpaceAce.Gameplay.Shooting
         public float OverheatDuration { get; private set; }
 
         public bool Overheat { get; private set; }
-        public bool Firing { get; private set; }
-        public bool FirstShotInLine { get; private set; }
+        public bool Firing => FirstActiveGunView is null ? false : FirstActiveGunView.Firing;
 
         public Size ActiveWeaponsSize { get; private set; } = Size.None;
 
         public int ActiveAmmoIndex { get; private set; }
         public int AmmoCountForActiveWeapons => _ammoForActiveWeapons.Count;
 
-        public IGun FirstActiveGun => _activeGuns[0];
+        public IGunView FirstActiveGunView => _activeGuns?[0];
 
         [Inject]
         private void Construct(GamePauser gamePauser,
                                AudioPlayer audioPlayer,
-                               MasterCameraShaker masterCameraShaker,
                                Localizer localizer)
         {
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
-            _masterCameraShaker = masterCameraShaker ?? throw new ArgumentNullException();
             _localizer = localizer ?? throw new ArgumentNullException();
         }
 
         private void Awake()
         {
             _transform = transform;
-            _availableGuns.AddRange(gameObject.GetComponentsInChildren<IGun>());
+            _availableGuns.AddRange(gameObject.GetComponentsInChildren<Gun>());
         }
 
         private void OnEnable()
         {
-            Heat = 0f;
             HeatCapacity = RandomInitialHeatCapacity;
+            Heat = 0f;
             _baseHeatLossRate = RandomInitialBaseHeatLossRate;
             OverheatDuration = RandomInitialOverheatDuration;
             Overheat = false;
-            Firing = false;
         }
 
         private void OnDisable()
@@ -172,82 +170,43 @@ namespace SpaceAce.Gameplay.Shooting
         {
             float damagePerSecond = 0f;
 
-            foreach (IGun gun in _activeGuns) damagePerSecond += gun.FireRate / _activeGuns.Count * ActiveAmmo.Damage;
+            foreach (Gun gun in _activeGuns)
+                damagePerSecond += gun.FireRate * ActiveAmmo.Damage;
 
             return damagePerSecond;
         }
 
-        public async UniTask FireAsync(object shooter, CancellationToken token)
+        public void Fire(object shooter, CancellationToken token = default)
         {
             if (shooter is null) throw new ArgumentNullException();
 
-            if (Overheat == true) return;
-            if (Firing == true) return;
+            if (Firing == true || Overheat == true) return;
 
-            if (AmmoCountForActiveWeapons == 0)
+            if (ActiveAmmo is null)
             {
-                if (_config.EmptyAmmoAudio != null)
-                {
-                    await _audioPlayer.PlayOnceAsync(_config.EmptyAmmoAudio.Random, _transform.position, _transform, true);
-                }
-
+                _audioPlayer.PlayOnceAsync(_config.EmptyAmmoAudio.Random, _transform.position, _transform, true).Forget();
                 return;
             }
 
-            Firing = true;
             ShootingStarted?.Invoke(this, EventArgs.Empty);
-            FirstShotInLine = true;
+            _overheatCancellation = new();
 
-            while (HeatNormalized < 1f)
-            {
-                while (_gamePauser.Paused == true) await UniTask.Yield();
-
-                foreach (IGun gun in _activeGuns)
-                {
-                    if (token.IsCancellationRequested == true)
-                    {
-                        Firing = false;
-                        ShootingStopped?.Invoke(this, EventArgs.Empty);
-
-                        return;
-                    }
-
-                    ShotResult shotResult;
-
-                    if (AuxMath.RandomNormal < _empFactor)
-                    {
-                        shotResult = await ActiveAmmo.FireAsync(shooter, gun);
-                    }
-                    else
-                    {
-                        await UniTask.WaitForSeconds(1f / gun.FireRate);
-                        shotResult = ShotResult.None;
-                    }
-
-                    Heat = Mathf.Clamp(Heat + shotResult.Heat, 0f, HeatCapacity);
-
-                    if (_config.ShakeOnShotFired == true) _masterCameraShaker.ShakeOnShotFired();
-
-                    if (HeatNormalized == 1f)
-                    {
-                        await PerformOverheatAsync();
-                        return;
-                    }
-
-                    if (FirstShotInLine == true) FirstShotInLine = false;
-                }
-            }
+            foreach (Gun gun in _activeGuns)
+                gun.FireAsync(shooter, ActiveAmmo, token, _overheatCancellation.Token).Forget();
         }
 
         private async UniTask PerformOverheatAsync()
         {
             if (Overheat == true) return;
 
-            Firing = false;
             ShootingStopped?.Invoke(this, EventArgs.Empty);
 
             Overheat = true;
             Overheated?.Invoke(this, EventArgs.Empty);
+
+            _overheatCancellation?.Cancel();
+            _overheatCancellation?.Dispose();
+            _overheatCancellation = null;
 
             _audioPlayer.PlayOnceAsync(_config.OverheatAudio.Random, _transform.position, _transform, true).Forget();
 
@@ -289,15 +248,17 @@ namespace SpaceAce.Gameplay.Shooting
 
         public async UniTask<bool> TrySwitchWeaponsAsync(Size size)
         {
-            if (Firing == true) return false;
-            if (_weaponsSwitchEnabled == false) return false;
-            if (ActiveWeaponsSize == size) return false;
+            if (Firing == true || _weaponsSwitchEnabled == false || ActiveWeaponsSize == size) return false;
+
+            if (_activeGuns is not null)
+                foreach (Gun gun in _activeGuns)
+                    gun.ShotFired -= ShotFiredEventHandler;
 
             _weaponsSwitchEnabled = false;
 
-            List<IGun> activeGuns = new();
+            List<Gun> activeGuns = new();
 
-            foreach (IGun gun in _availableGuns)
+            foreach (Gun gun in _availableGuns)
                 if (gun.AmmoSize == size)
                     activeGuns.Add(gun);
 
@@ -308,7 +269,10 @@ namespace SpaceAce.Gameplay.Shooting
                 AmmoSet previousAmmo = ActiveAmmo;
 
                 _activeGuns = activeGuns;
-                WeaponChanged?.Invoke(this, new(_activeGuns[0]));
+                WeaponChanged?.Invoke(this, new(FirstActiveGunView));
+
+                foreach (Gun gun in _activeGuns)
+                    gun.ShotFired += ShotFiredEventHandler;
 
                 _ammoForActiveWeapons = ammoSetsForActiveGuns;
                 ActiveAmmoIndex = 0;
@@ -453,47 +417,9 @@ namespace SpaceAce.Gameplay.Shooting
             }
         }
 
-        #endregion
-
-        #region EMP target interface
-
-        private float _empFactor = 1f;
-        private bool _empActive = false;
-
-        public async UniTask<bool> TryApplyEMPAsync(EMP emp, CancellationToken token = default)
+        private void ShotFiredEventHandler(object sender, ShotFiredEventArgs e)
         {
-            if (_empActive == true) return false;
-
-            _empActive = true;
-
-            float timer = 0f;
-
-            while (timer < emp.Duration)
-            {
-                if (gameObject == null) return false;
-
-                if (token.IsCancellationRequested == true ||
-                    gameObject.activeInHierarchy == false)
-                {
-                    _empFactor = 1f;
-                    _empActive = false;
-
-                    return false;
-                }
-
-                if (_gamePauser.Paused == true) await UniTask.Yield();
-
-                timer += Time.deltaTime;
-
-                _empFactor = emp.GetCurrentFactor(timer);
-
-                await UniTask.Yield();
-            }
-
-            _empFactor = 1f;
-            _empActive = false;
-
-            return true;
+            Heat += e.ShotResult.Heat;
         }
 
         #endregion

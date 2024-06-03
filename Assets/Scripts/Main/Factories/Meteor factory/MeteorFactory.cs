@@ -16,7 +16,7 @@ namespace SpaceAce.Main.Factories.MeteorFactories
         private readonly Dictionary<MeteorType, GameObject> _prefabs;
         private readonly Dictionary<MeteorType, Stack<MeteorCache>> _objectPools = new();
         private readonly Dictionary<MeteorType, Transform> _objectPoolsAnchors = new();
-        private readonly GameObject _masterAnchor = new($"Meteor object pools");
+        private readonly Transform _masterAnchor = new GameObject("Meteor object pools").transform;
         private readonly DiContainer _container;
 
         public MeteorFactory(IEnumerable<KeyValuePair<MeteorType, GameObject>> prefabs, DiContainer container)
@@ -35,10 +35,10 @@ namespace SpaceAce.Main.Factories.MeteorFactories
 
             foreach (MeteorType type in types)
             {
-                GameObject anchor = new($"{type.ToString().ToLower()} meteors");
-                anchor.transform.parent = _masterAnchor.transform;
+                Transform anchor = new GameObject($"{type}").transform;
+                anchor.parent = _masterAnchor;
 
-                _objectPoolsAnchors.Add(type, anchor.transform);
+                _objectPoolsAnchors.Add(type, anchor);
             }
         }
 
@@ -65,7 +65,7 @@ namespace SpaceAce.Main.Factories.MeteorFactories
                 return new(meteor, damageDealer, supplier, view);
             }
 
-            throw new MissingMemberException($"There is no meteor prefab of type {type} in the config!");
+            throw new Exception($"There is no meteor prefab of type {type} in the config!");
         }
 
         public void Release(MeteorType type, MeteorCache meteor)

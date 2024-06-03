@@ -22,20 +22,20 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float TargetingWidth { get; }
         public float SpeedGainDuration { get; }
 
-        protected sealed override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object user, IGun gun)
+        public sealed override ShotBehaviour ShotBehaviour => delegate (object user, IGunView gunView)
         {
             ProjectileCache projectile = Services.ProjectileFactory.Create(user, ProjectileSkin, Size);
 
-            float dispersion = AuxMath.RandomUnit * gun.Dispersion;
+            float dispersion = AuxMath.RandomUnit * gunView.Dispersion;
 
-            Vector2 projectileDirection = new(gun.Transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.Transform.up.y);
+            Vector2 projectileDirection = new(gunView.Transform.up.x + gunView.SignedConvergenceAngle + dispersion, gunView.Transform.up.y);
             projectileDirection.Normalize();
 
-            Quaternion projectileRotation = gun.Transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
+            Quaternion projectileRotation = gunView.Transform.rotation * Quaternion.Euler(0f, 0f, gunView.SignedConvergenceAngle + dispersion);
             projectileRotation.Normalize();
 
             Vector2 boxSize = new(TargetingWidth, TargetingWidth);
-            Vector2 boxDirection = new(gun.Transform.up.x, gun.Transform.up.y);
+            Vector2 boxDirection = new(gunView.Transform.up.x, gunView.Transform.up.y);
 
             int layerMask;
 
@@ -51,12 +51,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 layerMask = LayerMask.GetMask("Player");
             }
 
-            RaycastHit2D hit = Physics2D.BoxCast(gun.Transform.position, boxSize, 0f, boxDirection, float.PositiveInfinity, layerMask);
+            RaycastHit2D hit = Physics2D.BoxCast(gunView.Transform.position, boxSize, 0f, boxDirection, float.PositiveInfinity, layerMask);
             Transform target = hit.transform;
 
-            MovementData data = new(0f, Speed, SpeedGainDuration, gun.Transform.position, projectileDirection, projectileRotation, target, HomingSpeed, 0f, _speedGainCurve);
+            MovementData data = new(0f, Speed, SpeedGainDuration, gunView.Transform.position, projectileDirection, projectileRotation, target, HomingSpeed, 0f, _speedGainCurve);
 
-            projectile.Object.transform.SetPositionAndRotation(gun.Transform.position, projectileRotation);
+            projectile.Transform.SetPositionAndRotation(gunView.Transform.position, projectileRotation);
             projectile.MovementBehaviourSupplier.Supply(MovementBehaviour, data);
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
@@ -72,9 +72,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 Services.ProjectileFactory.Release(ProjectileSkin, projectile);
             };
 
-            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
-
-            await UniTask.WaitForSeconds(1f / gun.FireRate);
+            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gunView.Transform.position, null, true).Forget();
 
             return new(1, HeatGeneration);
         };

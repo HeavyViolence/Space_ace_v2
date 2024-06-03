@@ -16,7 +16,7 @@ namespace SpaceAce.Main.Factories.WreckFactories
         private readonly Dictionary<WreckType, GameObject> _prefabs;
         private readonly Dictionary<WreckType, Stack<WreckCache>> _objectPools = new();
         private readonly Dictionary<WreckType, Transform> _objectPoolsAnchors = new();
-        private readonly GameObject _masterAnchor = new($"Wreck object pools");
+        private readonly Transform _masterAnchor = new GameObject("Wreck object pools").transform;
         private readonly DiContainer _container;
 
         public WreckFactory(IEnumerable<KeyValuePair<WreckType, GameObject>> prefabs, DiContainer container)
@@ -35,10 +35,10 @@ namespace SpaceAce.Main.Factories.WreckFactories
 
             foreach (WreckType type in types)
             {
-                GameObject anchor = new($"{type.ToString().ToLower()} wrecks");
-                anchor.transform.parent = _masterAnchor.transform;
+                Transform anchor = new GameObject($"{type}").transform;
+                anchor.parent = _masterAnchor;
 
-                _objectPoolsAnchors.Add(type, anchor.transform);
+                _objectPoolsAnchors.Add(type, anchor);
             }
         }
 
@@ -65,7 +65,7 @@ namespace SpaceAce.Main.Factories.WreckFactories
                 return new(wreck, damageDealer, supplier, view);
             }
 
-            throw new MissingMemberException($"There is no wreck prefab of type {type} in the config!");
+            throw new Exception($"There is no wreck prefab of type {type} in the config!");
         }
 
         public void Release(WreckType type, WreckCache wreck)

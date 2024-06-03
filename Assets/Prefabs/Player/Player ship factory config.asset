@@ -15,3 +15,11 @@ MonoBehaviour:
   _slots:
   - _type: 0
     _prefab: {fileID: 7057199970465144767, guid: 1a005daf849776f489022ca13d076d91, type: 3}
+  - _type: 1
+    _prefab: {fileID: 3016562484337850919, guid: ea0a74fc5fdd77241940c93ff88df8b5, type: 3}
+  - _type: 2
+    _prefab: {fileID: 3003373455766088914, guid: 36f76418b1c037443b8e9d3126fdbb20, type: 3}
+  - _type: 3
+    _prefab: {fileID: 7370130068114186321, guid: 6458896d9f4d9644ab4bdf483a274a80, type: 3}
+  - _type: 4
+    _prefab: {fileID: 9206879986757799923, guid: 97b27211ad13052429ac86bb68bb006a, type: 3}

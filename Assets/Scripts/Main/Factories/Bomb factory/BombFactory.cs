@@ -15,7 +15,7 @@ namespace SpaceAce.Main.Factories.BombFactories
         private readonly Dictionary<BombSize, GameObject> _prefabs;
         private readonly Dictionary<BombSize, Stack<BombCache>> _objectPools = new();
         private readonly Dictionary<BombSize, Transform> _objectPoolsAnchors = new();
-        private readonly GameObject _masterAnchor = new($"Bomb object pools");
+        private readonly Transform _masterAnchor = new GameObject("Bomb object pools").transform;
         private readonly DiContainer _container;
 
         public BombFactory(IEnumerable<KeyValuePair<BombSize, GameObject>> prefabs, DiContainer container)
@@ -34,10 +34,10 @@ namespace SpaceAce.Main.Factories.BombFactories
 
             foreach (BombSize size in sizes)
             {
-                GameObject anchor = new($"{size} bombs");
-                anchor.transform.parent = _masterAnchor.transform;
+                Transform anchor = new GameObject($"{size}").transform;
+                anchor.parent = _masterAnchor;
 
-                _objectPoolsAnchors.Add(size, anchor.transform);
+                _objectPoolsAnchors.Add(size, anchor);
             }
         }
 
@@ -63,7 +63,7 @@ namespace SpaceAce.Main.Factories.BombFactories
                 return new(bomb, supplier, view);
             }
 
-            throw new MissingMemberException($"There is no bomb prefab of size {size} in the config!");
+            throw new Exception($"There is no bomb prefab of size {size} in the config!");
         }
 
         public void Release(BombSize size, BombCache bomb)

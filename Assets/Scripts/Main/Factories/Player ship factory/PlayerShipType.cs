@@ -6,6 +6,6 @@ namespace SpaceAce.Main.Factories.PlayerShipFactories
         TempestMk2,
         TempestMk3,
         TempestMk4,
-        TempestMk5
+        TempestPrime
     }
 }

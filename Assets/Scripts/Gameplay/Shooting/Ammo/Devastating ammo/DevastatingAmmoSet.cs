@@ -22,21 +22,21 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float ConsecutiveDamageFactor { get; }
         public float DamageIncreasePerHitPercentage => (ConsecutiveDamageFactor - 1f) * 100f;
 
-        protected override ShotBehaviourAsync ShotBehaviourAsync => async delegate (object shooter, IGun gun)
+        public override ShotBehaviour ShotBehaviour => delegate (object shooter, IGunView gunView)
         {
             ProjectileCache projectile = Services.ProjectileFactory.Create(shooter, ProjectileSkin, Size);
 
-            float dispersion = AuxMath.RandomUnit * gun.Dispersion;
+            float dispersion = AuxMath.RandomUnit * gunView.Dispersion;
 
-            Vector2 projectileDirection = new(gun.Transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.Transform.up.y);
+            Vector2 projectileDirection = new(gunView.Transform.up.x + gunView.SignedConvergenceAngle + dispersion, gunView.Transform.up.y);
             projectileDirection.Normalize();
 
-            Quaternion projectileRotation = gun.Transform.rotation * Quaternion.Euler(0f, 0f, gun.SignedConvergenceAngle + dispersion);
+            Quaternion projectileRotation = gunView.Transform.rotation * Quaternion.Euler(0f, 0f, gunView.SignedConvergenceAngle + dispersion);
             projectileRotation.Normalize();
 
-            MovementData data = new(Speed, Speed, 0f, gun.Transform.position, projectileDirection, projectileRotation, null, 0f, 0f);
+            MovementData data = new(Speed, Speed, 0f, gunView.Transform.position, projectileDirection, projectileRotation, null, 0f, 0f);
 
-            projectile.Object.transform.SetPositionAndRotation(gun.Transform.position, projectileRotation);
+            projectile.Transform.SetPositionAndRotation(gunView.Transform.position, projectileRotation);
             projectile.MovementBehaviourSupplier.Supply(MovementBehaviour, data);
 
             projectile.DamageDealer.Hit += (sender, hitArgs) =>
@@ -58,9 +58,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 Price -= ShotPrice;
             }
 
-            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
-
-            await UniTask.WaitForSeconds(1f / gun.FireRate);
+            Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gunView.Transform.position, null, true).Forget();
 
             return new(1, HeatGeneration);
         };

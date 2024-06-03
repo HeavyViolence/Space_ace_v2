@@ -17,13 +17,13 @@ namespace SpaceAce.Main.Audio
     {
         public event EventHandler SavingRequested;
 
-        private CancellationTokenSource _musicCanceller;
-
         private readonly AudioCollection _music;
         private readonly AudioPlayer _audioPlayer;
         private readonly ISavingSystem _savingSystem;
 
-        public bool IsPlaying { get; private set; } = false;
+        private CancellationTokenSource _musicCancellation;
+
+        public bool IsPlaying => _musicCancellation is not null;
 
         private MusicPlayerSettings _settings = MusicPlayerSettings.Default;
         public MusicPlayerSettings Settings
@@ -53,38 +53,27 @@ namespace SpaceAce.Main.Audio
         {
             if (IsPlaying == true) return;
 
-            IsPlaying = true;
-
-            _musicCanceller = new();
-            PlayMusicForeverAsync(_musicCanceller.Token).Forget();
+            _musicCancellation = new();
+            PlayMusicForeverAsync(_musicCancellation.Token).Forget();
         }
 
         public void Stop()
         {
             if (IsPlaying == false) return;
 
-            IsPlaying = false;
-
-            _musicCanceller.Cancel();
-            _musicCanceller.Dispose();
+            _musicCancellation?.Cancel();
+            _musicCancellation?.Dispose();
+            _musicCancellation = null;
         }
 
         private async UniTaskVoid PlayMusicForeverAsync(CancellationToken token)
         {
             await UniTask.WaitForSeconds(Settings.PlaybackStartDelay, true, PlayerLoopTiming.Update, token);
 
-            while (true)
+            while (token.IsCancellationRequested == false)
             {
                 await _audioPlayer.PlayOnceAsync(_music.NonRepeatingRandom, Vector3.zero, null, true, token);
                 await UniTask.WaitForSeconds(Settings.PlaybackDelay, true, PlayerLoopTiming.Update, token);
-
-                if (token.IsCancellationRequested == true)
-                {
-                    IsPlaying = false;
-                    _musicCanceller.Dispose();
-
-                    return;
-                }
             }
         }
 

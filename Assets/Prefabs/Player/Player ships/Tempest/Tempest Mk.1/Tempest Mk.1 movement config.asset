@@ -17,7 +17,7 @@ MonoBehaviour:
   _spatialSpeed: {x: 0, y: 0}
   _rotationSpeed: {x: 5, y: 5}
   _upperBoundDisplacement: -0.1
-  _lowerBoundDisplacement: 0.87
+  _lowerBoundDisplacement: 0.88
   _leftBoundDisplacement: 0.94
   _rightBoundDisplacement: 0.94
   _collisionDamage: {x: 1000, y: 1500}

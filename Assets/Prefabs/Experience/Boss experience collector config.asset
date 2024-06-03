@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef93b841122cd944cbb4e365cef2f911, type: 3}
   m_Name: Boss experience collector config
   m_EditorClassIdentifier: 
-  _experienceFactor: 1
+  _experienceFactor: 0.03
   _enableDissipation: 1
   _dissipationDuration: 300
   _dissipationOverTime:
@@ -30,11 +30,11 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.5
       value: 0.7
-      inSlope: -1.8278031
-      outSlope: -1.8278031
+      inSlope: -1.6642793
+      outSlope: -1.6642793
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1976744
+      inWeight: 0.3767442
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1

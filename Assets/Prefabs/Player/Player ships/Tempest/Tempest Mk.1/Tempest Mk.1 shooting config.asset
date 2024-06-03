@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47589322c8936a4dafa0afcd525ee6e, type: 3}
   m_Name: Tempest Mk.1 shooting config
   m_EditorClassIdentifier: 
-  _heatCapacity: {x: 110, y: 110}
-  _baseHeatLossRate: {x: 11, y: 11}
+  _heatCapacity: {x: 170, y: 170}
+  _baseHeatLossRate: {x: 17, y: 17}
   _heatLossFactorCurve:
     serializedVersion: 2
     m_Curve:
@@ -29,12 +29,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.5
       value: 1.5
-      inSlope: 2.9977272
-      outSlope: 2.9977272
+      inSlope: 2.8047473
+      outSlope: 2.8047473
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.31860465
-      outWeight: 0.33333334
+      outWeight: 0.32558143
     - serializedVersion: 3
       time: 1
       value: 2
@@ -58,4 +58,3 @@ MonoBehaviour:
   _emptyAmmoAudio: {fileID: 11400000, guid: 6c629ea9cd10a774f96e6e2309d48e9a, type: 2}
   _ammoSwitchAudio: {fileID: 11400000, guid: 4bd043e9fc2760042af6c3e56faee713, type: 2}
   _ammoSwitchDuration: {x: 0.2, y: 0.2}
-  _shakeOnShotFired: 1

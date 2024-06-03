@@ -23,7 +23,7 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
         private readonly Dictionary<ProjectileSkin, GameObject> _projectilePrefabs = new();
         private readonly Dictionary<ProjectileSkin, Stack<ProjectileCache>> _cachedProjectiles = new();
         private readonly Dictionary<ProjectileSkin, Transform> _projectileAnchors = new();
-        private readonly GameObject _projectileMasterAnchor = new("Projectiles object pools");
+        private readonly Transform _masterAnchor = new GameObject("Projectiles object pools").transform;
 
         private readonly DiContainer _diContainer;
         private readonly ProjectileFactoryConfig _config;
@@ -39,10 +39,10 @@ namespace SpaceAce.Main.Factories.ProjectileFactories
             {
                 _projectilePrefabs.Add(slot.Skin, slot.Prefab);
 
-                GameObject anchor = new($"Projectile pool of {slot.Skin}");
-                anchor.transform.parent = _projectileMasterAnchor.transform;
+                Transform anchor = new GameObject($"{slot.Skin}").transform;
+                anchor.parent = _masterAnchor;
 
-                _projectileAnchors.Add(slot.Skin, anchor.transform);
+                _projectileAnchors.Add(slot.Skin, anchor);
             }
         }
 
