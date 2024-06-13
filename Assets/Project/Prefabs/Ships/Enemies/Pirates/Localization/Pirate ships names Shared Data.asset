@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Pirate ships names Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Pirate ships names
+  m_TableCollectionNameGuidString: 999fa1a4a1447ca4f8937c0a47658370
+  m_Entries:
+  - m_Id: 8459243520
+    m_Key: Pirate bomber
+    m_Metadata:
+      m_Items: []
+  - m_Id: 412555268096
+    m_Key: Pirate hunter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 494872678400
+    m_Key: Pirate overseer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 692827049984
+    m_Key: Pirate captain
+    m_Metadata:
+      m_Items: []
+  - m_Id: 769142411264
+    m_Key: Pirate savage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1025569574912
+    m_Key: Pirate scavenger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1391950417920
+    m_Key: Pirate scout
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 4131314981985845248
+  references:
+    version: 2
+    RefIds:
+    - rid: 4131314981985845248
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1717480481746

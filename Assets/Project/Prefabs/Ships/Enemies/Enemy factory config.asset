@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e0a01f3ccb5d0b4f9b885630faf30d9, type: 3}
+  m_Name: Enemy factory config
+  m_EditorClassIdentifier: 
+  _slots:
+  - _type: 0
+    _prefab: {fileID: 312311854221012264, guid: f75d441aa8bb54f448bbb73ff9263817, type: 3}
+  - _type: 1
+    _prefab: {fileID: 1556540948825804249, guid: 1ce53180746e4964d9343ec149d0b44a, type: 3}
+  - _type: 2
+    _prefab: {fileID: 7103392855667470763, guid: ac3631a78ad488b4f8d68d356df37824, type: 3}
+  - _type: 3
+    _prefab: {fileID: 8316690911160728747, guid: bfa78335d7b540c4ca3a72c3c2129d78, type: 3}
+  - _type: 4
+    _prefab: {fileID: 6264197088494834295, guid: 01a69c298ecd53a43b6c158f2777816f, type: 3}
+  - _type: 5
+    _prefab: {fileID: 5394980867432199167, guid: e1abf2e147add824196fa33abde36b7d, type: 3}
+  - _type: 6
+    _prefab: {fileID: 6852033185879380673, guid: d075104a9c9589b4f98bd893d734990b, type: 3}

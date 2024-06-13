@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d7aefd68694584490fb04593c605e5, type: 3}
+  m_Name: Pirate overseer movement config
+  m_EditorClassIdentifier: 
+  _horizontalSpeed: {x: 20, y: 20}
+  _verticalSpeed: {x: 15, y: 15}
+  _spatialSpeed: {x: 0, y: 0}
+  _rotationSpeed: {x: 4, y: 4}
+  _upperBoundDisplacement: 0
+  _lowerBoundDisplacement: 0
+  _leftBoundDisplacement: 0
+  _rightBoundDisplacement: 0
+  _collisionDamage: {x: 1000, y: 1000}
+  _collisionAudio: {fileID: 11400000, guid: df5831f1ecc6c7849aec438c5fbc94a4, type: 2}

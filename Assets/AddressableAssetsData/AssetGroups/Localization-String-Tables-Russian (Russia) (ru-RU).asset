@@ -71,6 +71,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-ru-RU
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e7f3f878935631438877f3d763c73bb
+    m_Address: Pirate ships names_ru-RU
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-ru-RU
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: dcb4bb72737eed14d92942ca7458de1c, type: 2}
   m_SchemaSet:
