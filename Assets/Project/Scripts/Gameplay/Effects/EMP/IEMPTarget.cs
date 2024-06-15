@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 
 using System.Threading;
 
-namespace SpaceAce.Gameplay.Shooting.Ammo
+namespace SpaceAce.Gameplay.Effects
 {
     public interface IEMPTarget
     {

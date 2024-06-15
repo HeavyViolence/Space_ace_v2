@@ -86,7 +86,7 @@ namespace SpaceAce.Gameplay.Players
             Experience.ValueChanged += (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
             Inventory.ContentChanged += (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
-            _gameStateLoader.LevelLoaded += (_, _) => SpawnPlayerShip();
+            _gameStateLoader.LevelLoaded += async (_, _) => await SpawnPlayerShipAsync();
             _gameStateLoader.MainMenuLoaded += (_, _) => DisposePlayerShip();
         }
 
@@ -98,7 +98,7 @@ namespace SpaceAce.Gameplay.Players
             Experience.ValueChanged -= (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
             Inventory.ContentChanged -= (_, _) => SavingRequested?.Invoke(this, EventArgs.Empty);
 
-            _gameStateLoader.LevelLoaded -= (_, _) => SpawnPlayerShip();
+            _gameStateLoader.LevelLoaded -= async (_, _) => await SpawnPlayerShipAsync();
             _gameStateLoader.MainMenuLoaded -= (_, _) => DisposePlayerShip();
         }
 
@@ -148,11 +148,12 @@ namespace SpaceAce.Gameplay.Players
 
         #region event handlers
 
-        private void SpawnPlayerShip()
+        private async UniTask SpawnPlayerShipAsync()
         {
             _activeShip = _playerShipFactory.Create(SelectedShipType, _shipSpawnPosition, Quaternion.identity);
+            ShipSpawned?.Invoke(this, EventArgs.Empty);
 
-            _activeShip.Shooting.BindInventory(Inventory);
+            await _activeShip.Shooting.BindInventoryAsync(Inventory);
             _activeShip.View.Destroyable.Destroyed += PlayerShipDestroyedEventHandler;
 
             _gameControlsTransmitter.SwitchToSmallGuns += async (_, _) => await _activeShip.Shooting.TrySwitchToGunsAsync(Size.Small);
@@ -164,8 +165,6 @@ namespace SpaceAce.Gameplay.Players
 
             _gameControlsTransmitter.Fire += FireEventHandler;
             _gameControlsTransmitter.Ceasefire += CeasefireEventHandler;
-
-            ShipSpawned?.Invoke(this, EventArgs.Empty);
         }
 
         private void DisposePlayerShip()

@@ -23,6 +23,42 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float TargetingWidth { get; }
         public float SpeedGainDuration { get; }
 
+        public MissileSet(AmmoServices services,
+                          MissileSetConfig config,
+                          MissileSetSavableState savedState) : base(services, config, savedState)
+        {
+            _speedGainCurve = config.SpeedGainCurve;
+            HomingSpeed = savedState.HomingSpeed;
+            TargetingWidth = savedState.TargetingWidth;
+            SpeedGainDuration = savedState.SpeedGainDuration;
+        }
+
+        public MissileSet(AmmoServices services,
+                          Size size,
+                          Quality quality,
+                          MissileSetConfig config) : base(services, size, quality, config)
+        {
+            _speedGainCurve = config.SpeedGainCurve;
+
+            HomingSpeed = services.ItemPropertyEvaluator.Evaluate(config.HomingSpeed,
+                                                                  RangeEvaluationDirection.Forward,
+                                                                  quality,
+                                                                  size,
+                                                                  SizeInfluence.Inverted);
+
+            TargetingWidth = services.ItemPropertyEvaluator.Evaluate(config.TargetingWidth,
+                                                                     RangeEvaluationDirection.Backward,
+                                                                     quality,
+                                                                     size,
+                                                                     SizeInfluence.None);
+
+            SpeedGainDuration = services.ItemPropertyEvaluator.Evaluate(config.SpeedGainDuration,
+                                                                        RangeEvaluationDirection.Backward,
+                                                                        quality,
+                                                                        size,
+                                                                        SizeInfluence.Inverted);
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -95,7 +131,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected sealed override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected sealed override void OnMove(Rigidbody2D body, MovementData data)
         {
             data.Timer += Time.fixedDeltaTime;
 
@@ -134,33 +170,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             }
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public MissileSet(AmmoServices services,
-                          MissileSetConfig config,
-                          MissileSetSavableState savedState) : base(services, config, savedState)
-        {
-            _speedGainCurve = config.SpeedGainCurve;
-            HomingSpeed = savedState.HomingSpeed;
-            TargetingWidth = savedState.TargetingWidth;
-            SpeedGainDuration = savedState.SpeedGainDuration;
-        }
-
-        public MissileSet(AmmoServices services,
-                          Size size,
-                          Quality quality,
-                          MissileSetConfig config) : base(services, size, quality, config)
-        {
-            _speedGainCurve = config.SpeedGainCurve;
-            HomingSpeed = services.ItemPropertyEvaluator.Evaluate(config.HomingSpeed, true, quality, size, SizeInfluence.Inverted);
-            TargetingWidth = services.ItemPropertyEvaluator.Evaluate(config.TargetingWidth, false, quality, size, SizeInfluence.None);
-            SpeedGainDuration = services.ItemPropertyEvaluator.Evaluate(config.SpeedGainDuration, false, quality, size, SizeInfluence.Inverted);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Missile/Description", this);

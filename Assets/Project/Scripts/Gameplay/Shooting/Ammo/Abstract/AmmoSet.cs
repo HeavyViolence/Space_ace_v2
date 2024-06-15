@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
@@ -74,8 +75,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                                           IGun gun,
                                           CancellationToken fireCancellation = default,
                                           CancellationToken overheatCancellation = default);
-        protected abstract void OnMove(Rigidbody2D body, ref MovementData data);
-        protected abstract void OnHit(object shooter, HitEventArgs e);
+        protected abstract void OnMove(Rigidbody2D body, MovementData data);
+        protected abstract void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f);
         protected abstract void OnMiss(object shooter);
 
         public AmmoSet(AmmoServices services, Size size, Quality quality, AmmoSetConfig config)
@@ -89,12 +90,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             HitEffectSkin = config.HitEffectSkin;
             ShotAudio = config.ShotAudio;
 
-            Amount = services.ItemPropertyEvaluator.Evaluate(config.Amount, true, quality, size, SizeInfluence.None);
+            Amount = services.ItemPropertyEvaluator.Evaluate(config.Amount, RangeEvaluationDirection.Forward, quality, size, SizeInfluence.None);
             Price = services.ItemPropertyEvaluator.EvaluatePrice(config.Price, quality, size);
             ShotPrice = Price / Amount;
-            HeatGeneration = services.ItemPropertyEvaluator.Evaluate(config.HeatGeneration, false, quality, size, SizeInfluence.Inverted);
-            Speed = services.ItemPropertyEvaluator.Evaluate(config.Speed, true, quality, size, SizeInfluence.Inverted);
-            Damage = services.ItemPropertyEvaluator.Evaluate(config.Damage, true, quality, size, SizeInfluence.Direct);
+            HeatGeneration = services.ItemPropertyEvaluator.Evaluate(config.HeatGeneration, RangeEvaluationDirection.Forward, quality, size, SizeInfluence.Inverted);
+            Speed = services.ItemPropertyEvaluator.Evaluate(config.Speed, RangeEvaluationDirection.Forward, quality, size, SizeInfluence.Inverted);
+            Damage = services.ItemPropertyEvaluator.Evaluate(config.Damage, RangeEvaluationDirection.Forward, quality, size, SizeInfluence.Direct);
         }
 
         public AmmoSet(AmmoServices services, AmmoSetConfig config, AmmoSetSavableState savedState)
@@ -188,12 +189,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             {
                 if (token.IsCancellationRequested == true) break;
 
-                timer += Time.deltaTime;
+                timer += Time.fixedDeltaTime;
 
                 EMPFactor = emp.GetFactor(timer);
 
                 await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
-                await UniTask.Yield();
+                await UniTask.WaitForFixedUpdate();
             }
 
             EMPFactor = 0f;

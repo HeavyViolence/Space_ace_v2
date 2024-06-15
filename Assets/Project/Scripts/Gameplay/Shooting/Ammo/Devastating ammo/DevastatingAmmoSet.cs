@@ -17,11 +17,27 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class DevastatingAmmoSet : AmmoSet, IEquatable<DevastatingAmmoSet>
     {
-        private Guid _previousDamageReceiverID = Guid.Empty;
-        private float _currentDamageFactor = 1f;
-
         public float ConsecutiveDamageFactor { get; }
         public float DamageIncreasePerHitPercentage => (ConsecutiveDamageFactor - 1f) * 100f;
+
+        public DevastatingAmmoSet(AmmoServices services,
+                                  DevastatingAmmoSetConfig config,
+                                  DevastatingAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            ConsecutiveDamageFactor = savedState.ConsecutiveDamageFactor;
+        }
+
+        public DevastatingAmmoSet(AmmoServices services,
+                                  Size size,
+                                  Quality quality,
+                                  DevastatingAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            ConsecutiveDamageFactor = services.ItemPropertyEvaluator.Evaluate(config.ConsecutiveDamegeFactor,
+                                                                              RangeEvaluationDirection.Forward,
+                                                                              quality,
+                                                                              size,
+                                                                              SizeInfluence.None);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -30,6 +46,9 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         {
             if (shooter is null) throw new ArgumentNullException();
             if (gun is null) throw new ArgumentNullException();
+
+            Guid previourTargetID  = Guid.Empty;
+            float damageFactor = 1f;
 
             while (Amount > 0 && fireCancellation.IsCancellationRequested == false && overheatCancellation.IsCancellationRequested == false)
             {
@@ -58,7 +77,17 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
                 projectile.DamageDealer.Hit += (_, e) =>
                 {
-                    OnHit(shooter, e);
+                    if (e.Damageable.ID == previourTargetID)
+                    {
+                        damageFactor *= ConsecutiveDamageFactor;
+                    }
+                    else
+                    {
+                        damageFactor = 1f;
+                        previourTargetID = e.Damageable.ID;
+                    }
+
+                    OnHit(shooter, e, damageFactor);
                     Services.ProjectileFactory.Release(ProjectileSkin, projectile);
                     Services.ProjectileHitEffectFactory.CreateAsync(HitEffectSkin, e.HitPosition).Forget();
                 };
@@ -79,42 +108,17 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
-            if (e.Damageable.ID == _previousDamageReceiverID)
-            {
-                _currentDamageFactor *= ConsecutiveDamageFactor;
-            }
-            else
-            {
-                _previousDamageReceiverID = e.Damageable.ID;
-                _currentDamageFactor = 1f;
-            }
-
-            e.Damageable.ApplyDamage(Damage * _currentDamageFactor);
+            e.Damageable.ApplyDamage(Damage * damageFactor);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public DevastatingAmmoSet(AmmoServices services,
-                                  DevastatingAmmoSetConfig config,
-                                  DevastatingAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            ConsecutiveDamageFactor = savedState.ConsecutiveDamageFactor;
-        }
-
-        public DevastatingAmmoSet(AmmoServices services,
-                                  Size size,
-                                  Quality quality,
-                                  DevastatingAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            ConsecutiveDamageFactor = services.ItemPropertyEvaluator.Evaluate(config.ConsecutiveDamegeFactor, true, quality, size, SizeInfluence.None);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Devastating/Description", this);

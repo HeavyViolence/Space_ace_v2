@@ -165,7 +165,7 @@ namespace SpaceAce.UI.Displays
 
             view.ShooterView.GunsSwitched += async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, true);
             view.ShooterView.ActiveAmmoView.OutOfAmmo += async (_, _) => await PlayerIsOutOfAmmoEventHandlerAsync();
-            view.ShooterView.ActiveAmmoView.AmmoSwitched += async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, false);
+            view.ShooterView.ActiveAmmoView.AmmoSwitched += async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, true);
             view.ShooterView.ActiveAmmoView.AmountChanged += async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, false);
             view.ShooterView.HeatValueChanged += (_, _) => UpdatePlayerShipHeatView(view.ShooterView);
             view.ShooterView.HeatCapacityChanged += (_, _) => UpdatePlayerShipHeatView(view.ShooterView);
@@ -179,7 +179,7 @@ namespace SpaceAce.UI.Displays
 
             view.ShooterView.GunsSwitched -= async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, true);
             view.ShooterView.ActiveAmmoView.OutOfAmmo -= async (_, _) => await PlayerIsOutOfAmmoEventHandlerAsync();
-            view.ShooterView.ActiveAmmoView.AmmoSwitched -= async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, false);
+            view.ShooterView.ActiveAmmoView.AmmoSwitched -= async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, true);
             view.ShooterView.ActiveAmmoView.AmountChanged -= async (_, _) => await UpdatePlayerShipAmmoViewAsync(view.ShooterView, false);
             view.ShooterView.HeatValueChanged -= (_, _) => UpdatePlayerShipHeatView(view.ShooterView);
             view.ShooterView.HeatCapacityChanged -= (_, _) => UpdatePlayerShipHeatView(view.ShooterView);

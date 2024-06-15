@@ -20,6 +20,25 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float AmmoLossProbability { get; }
         public float AmmoLossProbabilityPercentage => AmmoLossProbability * 100f;
 
+        public StrangeAmmoSet(AmmoServices services,
+                              Size size,
+                              Quality quality,
+                              StrangeAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            AmmoLossProbability = services.ItemPropertyEvaluator.Evaluate(config.AmmoLossProbability,
+                                                                          RangeEvaluationDirection.Backward,
+                                                                          quality,
+                                                                          size,
+                                                                          SizeInfluence.None);
+        }
+
+        public StrangeAmmoSet(AmmoServices services,
+                              StrangeAmmoSetConfig config,
+                              StrangeAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            AmmoLossProbability = savedState.AmmoLossProbability;
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -76,32 +95,17 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public StrangeAmmoSet(AmmoServices services,
-                              Size size,
-                              Quality quality,
-                              StrangeAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            AmmoLossProbability = services.ItemPropertyEvaluator.Evaluate(config.AmmoLossProbability, false, quality, size, SizeInfluence.None);
-        }
-
-        public StrangeAmmoSet(AmmoServices services,
-                              StrangeAmmoSetConfig config,
-                              StrangeAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            AmmoLossProbability = savedState.AmmoLossProbability;
-        }
 
         public override async UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Strange/Name", this);

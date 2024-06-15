@@ -18,6 +18,10 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         Nanite,
         Missiles,
         ExplosiveMissiles,
-        NaniteMissiles
+        NaniteMissiles,
+        Antimatter,
+        Scatter,
+        Stasis,
+        Fusion
     }
 }

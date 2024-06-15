@@ -545,7 +545,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 31965831725699072
-    m_Localized: ENTG
+    m_Localized: TNGL
     m_Metadata:
       m_Items: []
   - m_Id: 31966635249487872
@@ -610,10 +610,144 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 4327559728174727170
+  - m_Id: 60165667666907136
+    m_Localized: 'Increasing fire rate and dispersion
+
+
+      Size: {Size:choose(Small|Medium|Large):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Fire rate increase: {FireRateIncrease:n}
+      shots/sec
+
+      Dispersion increase: {DispersionIncrease:n} deg'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 60166648395845632
+    m_Localized: Scatter ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60166845758820352
+    m_Localized: SCTR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60181805855526912
+    m_Localized: 'Greatly increases damage and decreases fire rate with each shot.
+      Both effects reset on ceasefire
+
+
+      Size: {Size:choose(Small|Medium|Large):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Damage increase per shot: {DamageIncreasePerShotPercentage:n}%
+
+      Fire
+      rate decrease per shot: {FireRateDecreasePerShotPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 60183404501913600
+    m_Localized: Antimatter ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60183617669025792
+    m_Localized: ANMT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60522963953635328
+    m_Localized: 'Slows down target on hit. This effect doesn''t stack
+
+
+      Size:
+      {Size:choose(Small|Medium|Large):Small|Medium|Large}
+
+      Quality: {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Target slowdown: {SlowdownPercentage:n}%
+
+      Duration:
+      {Duration:n} s'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 60524659207426048
+    m_Localized: Stasis ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60524863704911872
+    m_Localized: STSS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60573509091708928
+    m_Localized: 'Damage ignores some fraction of target''s armor
+
+
+      Size: {Size:choose(Small|Medium|Large):Small|Medium|Large}
+
+      Quality:
+      {Quality:choose(Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary):Common|Uncommon|Rare|Exceptional|Exotic|Epic|Legendary}
+
+      Price:
+      ${Price:n}
+
+      Heat generation: {HeatGeneration:n} MJ
+
+      Speed: {Speed:n}
+      m/s
+
+      Damage: {Damage:n} Hp
+
+      Armor ignoring: {ArmorIgnoringPercentage:n}%'
+    m_Metadata:
+      m_Items:
+      - rid: 4327559728174727170
+  - m_Id: 60575140059402240
+    m_Localized: Fusion ammo set
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60575327901306880
+    m_Localized: FSN
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
     - rid: 4327559728174727170
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 00d0f508e11a040000d03524fdb5060000d0755fafc22b0000d0f589ecdf2b0000d0755b08532c0000d0357e84102d0000d0b5f96d292d0000d035be6d062f0000d0354f7da3330000d035f0d3d0340000d0754a4ce9340000d0758e3014360000d0758d4d12380000d03515a1993c0000d075964f9b3c0000d03598f6ab3c0000d0b5812e0bce0000d0f5f9726bd400
+        m_Entries: 00d0f508e11a040000d03524fdb5060000d0755fafc22b0000d0f589ecdf2b0000d0755b08532c0000d0357e84102d0000d0b5f96d292d0000d035be6d062f0000d0354f7da3330000d035f0d3d0340000d0754a4ce9340000d0758e3014360000d0758d4d12380000d03515a1993c0000d075964f9b3c0000d03598f6ab3c0000d0b5812e0bce0000d0f5f9726bd40000d0f5205bc0d50000d0f59708cfd50000d035a75005d70000d0351c4933d700

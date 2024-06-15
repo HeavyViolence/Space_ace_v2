@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d8b0f0bc0d437c44b9a4ce00f93f983, type: 3}
+  m_Name: Fusion ammo set config
+  m_EditorClassIdentifier: 
+  _price: {x: 70, y: 1100}
+  _shotAudio: {fileID: 11400000, guid: 41f8753f4aa778b4cb7fc1205a29889f, type: 2}
+  _projectileSkin: 19
+  _hitEffectSkin: 1
+  _amount: {x: 3000, y: 9999}
+  _heatGeneration: {x: 5, y: 11}
+  _speed: {x: 130, y: 170}
+  _damage: {x: 20, y: 30}
+  _armorIgnoring: {x: 0.3, y: 0.8}

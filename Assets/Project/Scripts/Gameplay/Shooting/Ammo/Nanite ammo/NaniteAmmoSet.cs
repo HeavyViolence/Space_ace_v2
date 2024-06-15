@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Players;
@@ -20,7 +21,34 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         private readonly Nanites _nanites;
 
         public float DamagePerSecond => _nanites.DamagePerSecond;
-        public float DamageDuration => _nanites.DamageDuration;
+        public float DamageDuration => _nanites.Duration;
+
+        public NaniteAmmoSet(AmmoServices services,
+                             NaniteAmmoSetConfig config,
+                             NaniteAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            _nanites = new(savedState.DamagePerSecond, savedState.DamageDuration);
+        }
+
+        public NaniteAmmoSet(AmmoServices services,
+                             Size size,
+                             Quality quality,
+                             NaniteAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            float damagePerSecond = services.ItemPropertyEvaluator.Evaluate(config.DamagePerSecond,
+                                                                            RangeEvaluationDirection.Forward,
+                                                                            quality,
+                                                                            size,
+                                                                            SizeInfluence.Direct);
+
+            float damageDuration = services.ItemPropertyEvaluator.Evaluate(config.DamageDuration,
+                                                                           RangeEvaluationDirection.Forward,
+                                                                           quality,
+                                                                           size,
+                                                                           SizeInfluence.Direct);
+
+            _nanites = new(damagePerSecond, damageDuration);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -78,12 +106,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
 
@@ -92,24 +120,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public NaniteAmmoSet(AmmoServices services,
-                             NaniteAmmoSetConfig config,
-                             NaniteAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            _nanites = new(savedState.DamagePerSecond, savedState.DamageDuration);
-        }
-
-        public NaniteAmmoSet(AmmoServices services,
-                             Size size,
-                             Quality quality,
-                             NaniteAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            float damagePerSecond = services.ItemPropertyEvaluator.Evaluate(config.DamagePerSecond, true, quality, size, SizeInfluence.Direct);
-            float damageDuration = services.ItemPropertyEvaluator.Evaluate(config.DamageDuration, true, quality, size, SizeInfluence.Direct);
-
-            _nanites = new(damagePerSecond, damageDuration);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Nanite/Description", this);

@@ -39,6 +39,8 @@ MonoBehaviour:
     _prefab: {fileID: 8503966456865163755, guid: 4b692e6edfb472b4b853ce51a203f518, type: 3}
   - _skin: 11
     _prefab: {fileID: 7904691952544837413, guid: 5b47daa0f3b2b0a439008eda37193d92, type: 3}
+  - _skin: 12
+    _prefab: {fileID: 3994269715820132603, guid: b23a84af833b3d946b25e9957cdb8198, type: 3}
   - _skin: 13
     _prefab: {fileID: 3462597418696441308, guid: ce7cf8d0ee70f394cbb7136a690635a9, type: 3}
   - _skin: 14

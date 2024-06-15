@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 
 using SpaceAce.Gameplay.Damage;
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Items;
 
 using System;
@@ -15,18 +16,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         public float ExplosionRadius { get; }
         public float DamagePerSecond => _nanites.DamagePerSecond;
-        public float DamageDuration => _nanites.DamageDuration;
-
-        protected override void OnHit(object shooter, HitEventArgs e)
-        {
-            e.Damageable.ApplyDamage(Damage);
-
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(e.HitPosition, ExplosionRadius, Vector2.zero);
-
-            foreach (RaycastHit2D hit in hits)
-                if (hit.collider.gameObject.TryGetComponent(out INaniteTarget target) == true)
-                    target.TryApplyNanitesAsync(_nanites).Forget();
-        }
+        public float DamageDuration => _nanites.Duration;
 
         public NaniteMissileSet(AmmoServices services,
                                 NaniteMissileSetConfig config,
@@ -41,12 +31,36 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                                 Quality quality,
                                 NaniteMissileSetConfig config) : base(services, size, quality, config)
         {
-            ExplosionRadius = services.ItemPropertyEvaluator.Evaluate(config.ExplosionRadius, true, quality, size, SizeInfluence.Direct);
+            ExplosionRadius = services.ItemPropertyEvaluator.Evaluate(config.ExplosionRadius,
+                                                                      RangeEvaluationDirection.Forward,
+                                                                      quality,
+                                                                      size,
+                                                                      SizeInfluence.Direct);
 
-            float damagePerSecond = services.ItemPropertyEvaluator.Evaluate(config.DamagePerSecond, true, quality, size, SizeInfluence.Direct);
-            float damageDuration = services.ItemPropertyEvaluator.Evaluate(config.DamageDuration, true, quality, size, SizeInfluence.Direct);
+            float damagePerSecond = services.ItemPropertyEvaluator.Evaluate(config.DamagePerSecond,
+                                                                            RangeEvaluationDirection.Forward,
+                                                                            quality,
+                                                                            size,
+                                                                            SizeInfluence.Direct);
+
+            float damageDuration = services.ItemPropertyEvaluator.Evaluate(config.DamageDuration,
+                                                                           RangeEvaluationDirection.Forward,
+                                                                           quality,
+                                                                           size,
+                                                                           SizeInfluence.Direct);
 
             _nanites = new(damagePerSecond, damageDuration);
+        }
+
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
+        {
+            e.Damageable.ApplyDamage(Damage);
+
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(e.HitPosition, ExplosionRadius, Vector2.zero);
+
+            foreach (RaycastHit2D hit in hits)
+                if (hit.collider.gameObject.TryGetComponent(out INaniteTarget target) == true)
+                    target.TryApplyNanitesAsync(_nanites).Forget();
         }
 
         public async override UniTask<string> GetDescriptionAsync() =>

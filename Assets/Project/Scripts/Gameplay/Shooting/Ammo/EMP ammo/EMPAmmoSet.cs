@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Items;
 using SpaceAce.Gameplay.Movement;
 using SpaceAce.Gameplay.Shooting.Guns;
@@ -20,8 +21,34 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         public float EMPStrength => _emp.Strength;
         public float EMPStrengthPercentage => _emp.StrengthPercentage;
-
         public float EMPDuration => _emp.Duration;
+
+        public EMPAmmoSet(AmmoServices services,
+                          EMPAmmoSetConfig config,
+                          EMPAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            _emp = new(savedState.EMPStrength, savedState.EMPDuration, config.EMPStrenghtOverTime);
+        }
+
+        public EMPAmmoSet(AmmoServices services,
+                          Size size,
+                          Quality quality,
+                          EMPAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            float empStrength = services.ItemPropertyEvaluator.Evaluate(config.EMPStrength,
+                                                                        RangeEvaluationDirection.Forward,
+                                                                        quality,
+                                                                        size,
+                                                                        SizeInfluence.None);
+
+            float empDuration = services.ItemPropertyEvaluator.Evaluate(config.EMPDuration,
+                                                                        RangeEvaluationDirection.Forward,
+                                                                        quality,
+                                                                        size,
+                                                                        SizeInfluence.Direct);
+
+            _emp = new(empStrength, empDuration, config.EMPStrenghtOverTime);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -77,12 +104,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
 
@@ -92,24 +119,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public EMPAmmoSet(AmmoServices services,
-                          EMPAmmoSetConfig config,
-                          EMPAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            _emp = new(savedState.EMPStrength, savedState.EMPDuration, config.EMPStrenghtOverTime);
-        }
-
-        public EMPAmmoSet(AmmoServices services,
-                          Size size,
-                          Quality quality,
-                          EMPAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            float empStrength = services.ItemPropertyEvaluator.Evaluate(config.EMPStrength, true, quality, size, SizeInfluence.None);
-            float empDuration = services.ItemPropertyEvaluator.Evaluate(config.EMPDuration, true, quality, size, SizeInfluence.Direct);
-
-            _emp = new(empStrength, empDuration, config.EMPStrenghtOverTime);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "EMP/Description", this);

@@ -17,10 +17,28 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class CoolingAmmoSet : AmmoSet, IEquatable<CoolingAmmoSet>
     {
-        private float _currentHeatGenerationFactor = 1f;
-
         public float HeatGenerationFactorPerShot { get; }
-        public float HeatGenerationDecreasePerShotPercentage => (1f - HeatGenerationFactorPerShot) * 100f;
+        public float HeatGenerationDecreasePerShot => 1f - HeatGenerationFactorPerShot;
+        public float HeatGenerationDecreasePerShotPercentage => HeatGenerationDecreasePerShot * 100f;
+
+        public CoolingAmmoSet(AmmoServices services,
+                              CoolingAmmoSetConfig config,
+                              CoolingAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            HeatGenerationFactorPerShot = savedState.HeatGenerationFactorPerShot;
+        }
+
+        public CoolingAmmoSet(AmmoServices services,
+                              Size size,
+                              Quality quality,
+                              CoolingAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            HeatGenerationFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.HeatGenerationFactorPerShot,
+                                                                                  RangeEvaluationDirection.Backward,
+                                                                                  quality,
+                                                                                  size,
+                                                                                  SizeInfluence.None);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -30,7 +48,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             if (shooter is null) throw new ArgumentNullException();
             if (gun is null) throw new ArgumentNullException();
 
-            int shotCounter = 0;
+            float heatGenerationFactor = 1f;
 
             while (Amount > 0 && fireCancellation.IsCancellationRequested == false && overheatCancellation.IsCancellationRequested == false)
             {
@@ -71,44 +89,28 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
                 if (gun.ShakeOnShotFired == true) Services.MasterCameraShaker.ShakeOnShotFired();
 
-                if (++shotCounter == 1) _currentHeatGenerationFactor = 1f;
-                else _currentHeatGenerationFactor *= HeatGenerationFactorPerShot;
-
-                OnShotFired(HeatGeneration * _currentHeatGenerationFactor);
+                OnShotFired(HeatGeneration * heatGenerationFactor);
 
                 await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
                 await UniTask.WaitForSeconds(1f / gun.FireRate);
+
+                heatGenerationFactor *= HeatGenerationFactorPerShot;
             }
 
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public CoolingAmmoSet(AmmoServices services,
-                              CoolingAmmoSetConfig config,
-                              CoolingAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            HeatGenerationFactorPerShot = savedState.HeatGenerationFactorPerShot;
-        }
-
-        public CoolingAmmoSet(AmmoServices services,
-                              Size size,
-                              Quality quality,
-                              CoolingAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            HeatGenerationFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.HeatGenerationFactorPerShot, false, quality, size, SizeInfluence.None);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Cooling/Description", this);

@@ -17,10 +17,27 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class CatalyticAmmoSet : AmmoSet, IEquatable<CatalyticAmmoSet>
     {
-        private float _fireRateFactor = 1f;
-
         public float FireRateFactorPerShot { get; }
         public float FireRateIncreasePerShotPercentage => (FireRateFactorPerShot - 1f) * 100f;
+
+        public CatalyticAmmoSet(AmmoServices services,
+                                CatalyticAmmoSetConfig config,
+                                CatalyticAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            FireRateFactorPerShot = savedState.FirerateFactorPerShot;
+        }
+
+        public CatalyticAmmoSet(AmmoServices services,
+                                Size size,
+                                Quality quality,
+                                CatalyticAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            FireRateFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.FireRateFactorPerShot,
+                                                                            RangeEvaluationDirection.Forward,
+                                                                            quality,
+                                                                            size,
+                                                                            SizeInfluence.None);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -30,14 +47,14 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             if (shooter is null) throw new ArgumentNullException();
             if (gun is null) throw new ArgumentNullException();
 
-            int shotCounter = 0;
+            float fireRateFactor = 1f;
 
             while (Amount > 0 && fireCancellation.IsCancellationRequested == false && overheatCancellation.IsCancellationRequested == false)
             {
                 if (AuxMath.RandomNormal < EMPFactor)
                 {
                     await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
-                    await UniTask.WaitForSeconds(1f / gun.FireRate);
+                    await UniTask.WaitForSeconds(1f / (gun.FireRate * fireRateFactor));
 
                     continue;
                 }
@@ -71,44 +88,28 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                 Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
                 if (gun.ShakeOnShotFired == true) Services.MasterCameraShaker.ShakeOnShotFired();
 
-                if (++shotCounter == 1) _fireRateFactor = 1f;
-                else _fireRateFactor *= FireRateFactorPerShot;
-
                 OnShotFired(HeatGeneration);
 
                 await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
-                await UniTask.WaitForSeconds(1f / (gun.FireRate * _fireRateFactor));
+                await UniTask.WaitForSeconds(1f / (gun.FireRate * fireRateFactor));
+
+                fireRateFactor *= FireRateFactorPerShot;
             }
 
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public CatalyticAmmoSet(AmmoServices services,
-                                CatalyticAmmoSetConfig config,
-                                CatalyticAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            FireRateFactorPerShot = savedState.FirerateFactorPerShot;
-        }
-
-        public CatalyticAmmoSet(AmmoServices services,
-                                Size size,
-                                Quality quality,
-                                CatalyticAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            FireRateFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.FireRateFactorPerShot, true, quality, size, SizeInfluence.None);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Catalytic/Description", this);

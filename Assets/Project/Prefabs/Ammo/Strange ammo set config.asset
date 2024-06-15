@@ -17,7 +17,7 @@ MonoBehaviour:
   _projectileSkin: 0
   _hitEffectSkin: 3
   _amount: {x: 500, y: 1000}
-  _heatGeneration: {x: 3, y: 5}
+  _heatGeneration: {x: 5, y: 13}
   _speed: {x: 130, y: 170}
   _damage: {x: 30, y: 70}
   _ammoLossProbability: {x: 0.01, y: 0.1}

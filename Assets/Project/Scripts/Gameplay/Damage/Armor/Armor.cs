@@ -1,12 +1,9 @@
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Experience;
-using SpaceAce.Main;
 
 using System;
 
 using UnityEngine;
-
-using Zenject;
 
 namespace SpaceAce.Gameplay.Damage
 {
@@ -16,8 +13,6 @@ namespace SpaceAce.Gameplay.Damage
 
         [SerializeField]
         private ArmorConfig _config;
-
-        private GamePauser _gamePauser;
 
         private float _value;
         public float Value
@@ -34,21 +29,15 @@ namespace SpaceAce.Gameplay.Damage
             }
         }
 
-        [Inject]
-        private void Construct(GamePauser gamePauser)
-        {
-            _gamePauser = gamePauser ?? throw new ArgumentNullException();
-        }
-
         private void OnEnable()
         {
             Value = _config.RandomInitialValue;
         }
 
-        public float GetReducedDamage(float damage, float armorIgnorance)
+        public float GetReducedDamage(float damage, float armorIgnoring)
         {
-            if (Value == 0f || damage >= Value * (1f - armorIgnorance)) return damage;
-            return damage * _config.GetDamageFalloffFactor(damage, Value * (1f - armorIgnorance));
+            if (Value == 0f || damage >= Value * (1f - armorIgnoring)) return damage;
+            return damage * _config.GetDamageFalloffFactor(damage, Value * (1f - armorIgnoring));
         }
 
         public float GetExperience() => Value;

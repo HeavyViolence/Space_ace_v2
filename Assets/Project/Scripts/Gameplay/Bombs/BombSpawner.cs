@@ -166,7 +166,7 @@ public sealed class BombSpawner : IInitializable, IDisposable
         return new Vector3(spawnWidth, y, 0f);
     }
 
-    private MovementBehaviour MeteorMovement => delegate (Rigidbody2D body, ref MovementData data)
+    private MovementBehaviour MeteorMovement => delegate (Rigidbody2D body, MovementData data)
     {
         body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
     };

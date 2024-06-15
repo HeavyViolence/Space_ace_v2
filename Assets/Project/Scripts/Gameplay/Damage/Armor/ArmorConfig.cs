@@ -34,7 +34,7 @@ namespace SpaceAce.Gameplay.Damage
             if (damage <= 0f) throw new ArgumentOutOfRangeException();
             if (armor < 0f) throw new ArgumentOutOfRangeException();
 
-            return _damageFalloff.Evaluate(damage / armor);
+            return armor == 0f ? 1f : _damageFalloff.Evaluate(damage / armor);
         }
 
         #endregion

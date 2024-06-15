@@ -21,6 +21,32 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float CriticalDamageProbabilityPercentage => CriticalDamageProbability * 100f;
         public float CriticalDamage { get; }
 
+        public CriticalAmmoSet(AmmoServices services,
+                               Size size,
+                               Quality quality,
+                               CriticalAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            CriticalDamageProbability = services.ItemPropertyEvaluator.Evaluate(config.CriticalDamageProbability,
+                                                                                RangeEvaluationDirection.Forward,
+                                                                                quality,
+                                                                                size,
+                                                                                SizeInfluence.None);
+
+            CriticalDamage = services.ItemPropertyEvaluator.Evaluate(config.CriticalDamage,
+                                                                     RangeEvaluationDirection.Forward,
+                                                                     quality,
+                                                                     size,
+                                                                     SizeInfluence.Direct);
+        }
+
+        public CriticalAmmoSet(AmmoServices services,
+                               CriticalAmmoSetConfig config,
+                               CriticalAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            CriticalDamageProbability = savedState.CriticalDamageProbability;
+            CriticalDamage = savedState.CriticalDamage;
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -77,35 +103,18 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             if (AuxMath.RandomNormal < CriticalDamageProbability) e.Damageable.ApplyDamage(CriticalDamage);
             else e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public CriticalAmmoSet(AmmoServices services,
-                               Size size,
-                               Quality quality,
-                               CriticalAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            CriticalDamageProbability = services.ItemPropertyEvaluator.Evaluate(config.CriticalDamageProbability, true, quality, size, SizeInfluence.None);
-            CriticalDamage = services.ItemPropertyEvaluator.Evaluate(config.CriticalDamage, true, quality, size, SizeInfluence.Direct);
-        }
-
-        public CriticalAmmoSet(AmmoServices services,
-                               CriticalAmmoSetConfig config,
-                               CriticalAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            CriticalDamageProbability = savedState.CriticalDamageProbability;
-            CriticalDamage = savedState.CriticalDamage;
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Critical/Description", this);

@@ -39,20 +39,18 @@ namespace SpaceAce.Main.Factories.AmmoFactories
 
         private void BuildAmmoTypesSpawnProbabilityDistribution()
         {
-            int ammoTypesAmount = Enum.GetValues(typeof(AmmoType)).Length;
+            List<AmmoType> ammoTypesValues = new(_ammoConfigs.Count);
 
-            if (ammoTypesAmount != _ammoConfigs.Count)
-                throw new Exception("Ammo configs amount doesn't match the total ammo types amount there are!");
+            foreach (AmmoSetConfig config in _ammoConfigs)
+                ammoTypesValues.Add(config.AmmoType);
 
-            string[] ammoTypesNames = Enum.GetNames(typeof(AmmoType));
-
-            for (int i = ammoTypesAmount; i > 0; i--)
+            for (int i = _ammoConfigs.Count; i > 0; i--)
             {
-                float rangeStart = _ammoSpawnProbabilityByPrice.Evaluate((float)(i - 1) / ammoTypesAmount);
-                float rangeEnd = _ammoSpawnProbabilityByPrice.Evaluate((float)i / ammoTypesAmount);
+                float rangeStart = _ammoSpawnProbabilityByPrice.Evaluate((float)(i - 1) / _ammoConfigs.Count);
+                float rangeEnd = _ammoSpawnProbabilityByPrice.Evaluate((float)i / _ammoConfigs.Count);
 
                 Vector2 probabilityRange = new(rangeStart, rangeEnd);
-                AmmoType type = Enum.Parse<AmmoType>(ammoTypesNames[i - 1], true);
+                AmmoType type = ammoTypesValues[i - 1];
 
                 _ammoTypesSpawnProbabilityDistribution.Add(probabilityRange, type);
             }
@@ -61,11 +59,10 @@ namespace SpaceAce.Main.Factories.AmmoFactories
         public T GetAmmoConfig<T>() where T : AmmoSetConfig
         {
             foreach (var config in _ammoConfigs)
-            {
-                if (config.GetType() == typeof(T)) return (T)config;
-            }
+                if (config.GetType() == typeof(T))
+                    return (T)config;
 
-            throw new MissingMemberException(typeof(T).FullName);
+            throw new Exception($"{nameof(AmmoFactoryConfig)} is missing ammo config of type {typeof(T)}!");
         }
 
         public AmmoType GetProbableAmmoType()
@@ -73,9 +70,8 @@ namespace SpaceAce.Main.Factories.AmmoFactories
             float seed = AuxMath.RandomNormal;
 
             foreach (var entry in _ammoTypesSpawnProbabilityDistribution)
-            {
-                if (AuxMath.ValueInRange(entry.Key, seed) == true) return entry.Value;
-            }
+                if (AuxMath.ValueInRange(entry.Key, seed) == true)
+                    return entry.Value;
 
             return AmmoType.Regular;
         }

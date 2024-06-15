@@ -6,6 +6,6 @@ namespace SpaceAce.Gameplay.Damage
     {
         Guid ID { get; }
 
-        void ApplyDamage(float damage, float armorIgnorance = 0f);
+        void ApplyDamage(float damage, float armorIgnoring = 0f);
     }
 }

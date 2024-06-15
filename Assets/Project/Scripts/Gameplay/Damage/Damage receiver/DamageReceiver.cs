@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Experience;
-using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 using SpaceAce.Main.Factories.ExplosionFactories;
@@ -130,14 +130,19 @@ namespace SpaceAce.Gameplay.Damage
             _invulnerable = false;
         }
 
-        public void ApplyDamage(float damage, float armorIgnorance = 0f)
+        public void ApplyDamage(float damage, float armorIgnoring = 0f)
         {
-            if (_masterCameraHolder.InsideViewport(_transform.position) == false || _invulnerable == true) return;
+            if (gameObject.activeInHierarchy == false ||
+                _masterCameraHolder.InsideViewport(_transform.position) == false ||
+                _invulnerable == true)
+            {
+                return;
+            }
 
             if (damage <= 0f) throw new ArgumentOutOfRangeException();
-            if (armorIgnorance < 0f || armorIgnorance > 1f) throw new ArgumentOutOfRangeException();
+            if (armorIgnoring < 0f || armorIgnoring > 1f) throw new ArgumentOutOfRangeException();
 
-            float damageToBeDealt = _armor.GetReducedDamage(damage, armorIgnorance);
+            float damageToBeDealt = _armor.GetReducedDamage(damage, armorIgnoring);
 
             _durability.ApplyDamage(damageToBeDealt);
             DamageReceived?.Invoke(this, new(damage, damageToBeDealt, _transform.position));
@@ -153,28 +158,28 @@ namespace SpaceAce.Gameplay.Damage
 
         #region nanite target interface
 
-        private bool _nanitesActive = false;
+        public bool NanitesActive { get; private set; } = false;
 
         public async UniTask<bool> TryApplyNanitesAsync(Nanites nanites, CancellationToken token = default)
         {
-            if (_nanitesActive == true) return false;
+            if (NanitesActive == true) return false;
 
-            _nanitesActive = true;
+            NanitesActive = true;
             float timer = 0f;
 
-            while (timer < nanites.DamageDuration)
+            while (timer < nanites.Duration)
             {
                 if (token.IsCancellationRequested == true || gameObject.activeInHierarchy == false) break;
 
-                timer += Time.deltaTime;
+                timer += Time.fixedDeltaTime;
 
-                _durability.ApplyDamage(nanites.DamagePerSecond * Time.deltaTime);
+                _durability.ApplyDamage(nanites.DamagePerSecond * Time.fixedDeltaTime);
 
                 await UniTask.WaitUntil(() => _gamePauser.Paused == false);
                 await UniTask.WaitForFixedUpdate();
             }
 
-            _nanitesActive = false;
+            NanitesActive = false;
             return true;
         }
 

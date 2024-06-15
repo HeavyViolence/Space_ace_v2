@@ -1,19 +1,30 @@
+using Cysharp.Threading.Tasks;
+
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Players;
+
+using System.Threading;
 
 using UnityEngine;
 
 namespace SpaceAce.Gameplay.Movement
 {
-    public sealed class ShipMovement : ControllableMovement, IMovementController
+    public sealed class ShipMovement : ControllableMovement, IMovementController, IStasisTarget
     {
-        private Vector2 _speed2D;
+        private Vector2 _velocity;
+        private Vector2 Velocity
+        {
+            set => _velocity = value;
+            get => _velocity * SpeedFactor;
+        }
+
         private float _rotationSpeed;
 
         protected override void Awake()
         {
             base.Awake();
 
-            _speed2D = new(MaxHorizontalSpeed, MaxVerticalSpeed);
+            Velocity = new(MaxHorizontalSpeed, MaxVerticalSpeed);
             _rotationSpeed = MaxRotationSpeed;
         }
 
@@ -22,7 +33,7 @@ namespace SpaceAce.Gameplay.Movement
         public void Move(Vector2 direction)
         {
             Vector2 clampedDirection = ClampMovementDirection(direction);
-            Vector2 velocity = clampedDirection * Time.fixedDeltaTime * _speed2D;
+            Vector2 velocity = Velocity * clampedDirection * Time.fixedDeltaTime;
 
             Body.MovePosition(Body.position + velocity);
         }
@@ -54,5 +65,37 @@ namespace SpaceAce.Gameplay.Movement
 
             return new(x, y);
         }
+
+        #region stasis target interface
+
+        public bool StasisActive { get; private set; } = false;
+        public float SpeedFactor { get; private set; } = 1f;
+
+        public async UniTask<bool> TryApplyStasis(Stasis stasis, CancellationToken token = default)
+        {
+            if (StasisActive == true) return false;
+
+            StasisActive = true;
+            float timer = 0f;
+
+            while (timer < stasis.Duration)
+            {
+                if (token.IsCancellationRequested == true || gameObject.activeInHierarchy == false) break;
+
+                timer += Time.fixedDeltaTime;
+
+                SpeedFactor = stasis.GetSpeedFactor(timer);
+
+                await UniTask.WaitUntil(() => GamePauser.Paused == false);
+                await UniTask.WaitForFixedUpdate();
+            }
+
+            StasisActive = false;
+            SpeedFactor = 1f;
+
+            return true;
+        }
+
+        #endregion
     }
 }

@@ -93,7 +93,10 @@ namespace SpaceAce.Gameplay.Items
         public void Clear()
         {
             foreach (var item in _items)
+            {
                 item.Depleted -= ItemDepletedEventHandler;
+                item.Dispose();
+            }
 
             _items.Clear();
             ContentChanged?.Invoke(this, EventArgs.Empty);

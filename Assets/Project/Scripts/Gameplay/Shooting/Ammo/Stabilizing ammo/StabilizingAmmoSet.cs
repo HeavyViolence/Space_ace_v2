@@ -17,10 +17,27 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class StabilizingAmmoSet : AmmoSet, IEquatable<StabilizingAmmoSet>
     {
-        private float _currentDispersionFactor = 1f;
-
         public float DispersionFactorPerShot { get; }
         public float DispersionDecreasePerShotPercentage => (1f - DispersionFactorPerShot) * 100f;
+
+        public StabilizingAmmoSet(AmmoServices services,
+                                  StabilizingAmmoSetConfig config,
+                                  StabilizingAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            DispersionFactorPerShot = savedState.DispersionFactorPerShot;
+        }
+
+        public StabilizingAmmoSet(AmmoServices services,
+                                  Size size,
+                                  Quality quality,
+                                  StabilizingAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            DispersionFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.DispersionFactorPerShot,
+                                                                              RangeEvaluationDirection.Backward,
+                                                                              quality,
+                                                                              size,
+                                                                              SizeInfluence.None);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -30,7 +47,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             if (shooter is null) throw new ArgumentNullException();
             if (gun is null) throw new ArgumentNullException();
 
-            int shotCounter = 0;
+            float dispersionFactor = 1f;
 
             while (Amount > 0 && fireCancellation.IsCancellationRequested == false && overheatCancellation.IsCancellationRequested == false)
             {
@@ -44,10 +61,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
                 ProjectileCache projectile = Services.ProjectileFactory.Create(shooter, ProjectileSkin, Size);
 
-                if (++shotCounter == 1) _currentDispersionFactor = 1f;
-                else _currentDispersionFactor *= DispersionFactorPerShot;
-
-                float dispersion = AuxMath.RandomUnit * gun.Dispersion * _currentDispersionFactor;
+                float dispersion = AuxMath.RandomUnit * gun.Dispersion * dispersionFactor;
 
                 Vector2 projectileDirection = new(gun.Transform.up.x + gun.SignedConvergenceAngle + dispersion, gun.Transform.up.y);
                 projectileDirection.Normalize();
@@ -78,37 +92,24 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
                 await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
                 await UniTask.WaitForSeconds(1f / gun.FireRate);
+
+                dispersionFactor *= DispersionFactorPerShot;
             }
 
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs hitArgs)
+        protected override void OnHit(object shooter, HitEventArgs hitArgs, float damageFactor = 1f)
         {
             hitArgs.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public StabilizingAmmoSet(AmmoServices services,
-                                  StabilizingAmmoSetConfig config,
-                                  StabilizingAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            DispersionFactorPerShot = savedState.DispersionFactorPerShot;
-        }
-
-        public StabilizingAmmoSet(AmmoServices services,
-                                  Size size,
-                                  Quality quality,
-                                  StabilizingAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            DispersionFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.DispersionFactorPerShot, false, quality, size, SizeInfluence.None);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Stabilizing/Description", this);

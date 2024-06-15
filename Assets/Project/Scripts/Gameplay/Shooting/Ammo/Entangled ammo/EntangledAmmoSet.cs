@@ -21,6 +21,32 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public int AmmoLossOnMiss { get; }
         public int AmmoGainOnHit { get; }
 
+        public EntangledAmmoSet(AmmoServices services,
+                                EntangledAmmoSetConfig config,
+                                EntangledAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            AmmoLossOnMiss = savedState.AmmoLossOnMiss;
+            AmmoGainOnHit = savedState.AmmoGainOnHit;
+        }
+
+        public EntangledAmmoSet(AmmoServices services,
+                                Size size,
+                                Quality quality,
+                                EntangledAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            AmmoLossOnMiss = services.ItemPropertyEvaluator.Evaluate(config.AmmoLossOnMiss,
+                                                                     RangeEvaluationDirection.Backward,
+                                                                     quality,
+                                                                     size,
+                                                                     SizeInfluence.None);
+
+            AmmoGainOnHit = services.ItemPropertyEvaluator.Evaluate(config.AmmoGainOnHit,
+                                                                    RangeEvaluationDirection.Forward,
+                                                                    quality,
+                                                                    size,
+                                                                    SizeInfluence.None);
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -79,12 +105,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
             if (shooter is Player) Amount += AmmoGainOnHit;
@@ -94,23 +120,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         {
             if (shooter is not Player && Services.GameStateLoader.CurrentState != GameState.Level) return;
             Amount -= AmmoLossOnMiss;
-        }
-
-        public EntangledAmmoSet(AmmoServices services,
-                                EntangledAmmoSetConfig config,
-                                EntangledAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            AmmoLossOnMiss = savedState.AmmoLossOnMiss;
-            AmmoGainOnHit = savedState.AmmoGainOnHit;
-        }
-
-        public EntangledAmmoSet(AmmoServices services,
-                                Size size,
-                                Quality quality,
-                                EntangledAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            AmmoLossOnMiss = services.ItemPropertyEvaluator.Evaluate(config.AmmoLossOnMiss, false, quality, size, SizeInfluence.None);
-            AmmoGainOnHit = services.ItemPropertyEvaluator.Evaluate(config.AmmoGainOnHit, true, quality, size, SizeInfluence.None);
         }
 
         public async override UniTask<string> GetDescriptionAsync() =>

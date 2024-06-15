@@ -19,6 +19,25 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
     {
         public int ProjectilesPerShot { get; }
 
+        public ClusterAmmoSet(AmmoServices services,
+                              Size size,
+                              Quality quality,
+                              ClusterAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            ProjectilesPerShot = services.ItemPropertyEvaluator.Evaluate(config.ProjectilesPerShot,
+                                                                         RangeEvaluationDirection.Forward,
+                                                                         quality,
+                                                                         size,
+                                                                         SizeInfluence.Direct);
+        }
+
+        public ClusterAmmoSet(AmmoServices services,
+                              ClusterAmmoSetConfig config,
+                              ClusterAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            ProjectilesPerShot = savedState.ProjectilesPerShot;
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -78,32 +97,17 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public ClusterAmmoSet(AmmoServices services,
-                              Size size,
-                              Quality quality,
-                              ClusterAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            ProjectilesPerShot = services.ItemPropertyEvaluator.Evaluate(config.ProjectilesPerShot, true, quality, size, SizeInfluence.Direct);
-        }
-
-        public ClusterAmmoSet(AmmoServices services,
-                              ClusterAmmoSetConfig config,
-                              ClusterAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            ProjectilesPerShot = savedState.ProjectilesPerShot;
-        }
 
         public override async UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Cluster/Description", this);

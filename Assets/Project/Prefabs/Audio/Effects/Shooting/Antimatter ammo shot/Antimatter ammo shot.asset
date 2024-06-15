@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Antimatter ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 8a8507dc818db4500a239ea0e89bee0d, type: 3}
+  - {fileID: 8300000, guid: 9ad462fa76efd48a1b45e3b149849e5b, type: 3}
+  - {fileID: 8300000, guid: 23ff155f8fd344e3e96170077d8b04ec, type: 3}
+  - {fileID: 8300000, guid: 2cd225efbaa594d31985570738f6349a, type: 3}
+  - {fileID: 8300000, guid: 1e8a313f0c28b4be3b29988d02ca4f9b, type: 3}
+  - {fileID: 8300000, guid: c0a9dfc5790d44a248a609562cf167d4, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

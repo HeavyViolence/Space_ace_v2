@@ -14,21 +14,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float ExplosionDamage { get; }
         public float ExplosionRadius { get; }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
-        {
-            e.Damageable.ApplyDamage(Damage);
-            RaycastHit2D[] hits = Physics2D.CircleCastAll(e.HitPosition, ExplosionRadius, Vector2.zero, float.PositiveInfinity, AllTargetsMask);
-
-            foreach (RaycastHit2D hit in hits)
-            {
-                if (hit.collider.gameObject.TryGetComponent(out IDamageable damageReceiver) == true)
-                {
-                    float explosionDamage = Mathf.Lerp(ExplosionDamage, 0f, hit.distance / ExplosionRadius);
-                    damageReceiver.ApplyDamage(explosionDamage);
-                }
-            }
-        }
-
         public ExplosiveMissileSet(AmmoServices services,
                                    ExplosiveMissileSetConfig config,
                                    ExplosiveMissileSetSavableState savedState) : base(services, config, savedState)
@@ -42,8 +27,32 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                                    Quality quality,
                                    ExplosiveMissileSetConfig config) : base(services, size, quality, config)
         {
-            ExplosionDamage = services.ItemPropertyEvaluator.Evaluate(config.ExplosionDamage, true, quality, size, SizeInfluence.Direct);
-            ExplosionRadius = services.ItemPropertyEvaluator.Evaluate(config.ExplosionRadius, true, quality, size, SizeInfluence.Direct);
+            ExplosionDamage = services.ItemPropertyEvaluator.Evaluate(config.ExplosionDamage,
+                                                                      RangeEvaluationDirection.Forward,
+                                                                      quality,
+                                                                      size,
+                                                                      SizeInfluence.Direct);
+
+            ExplosionRadius = services.ItemPropertyEvaluator.Evaluate(config.ExplosionRadius,
+                                                                      RangeEvaluationDirection.Forward,
+                                                                      quality,
+                                                                      size,
+                                                                      SizeInfluence.Direct);
+        }
+
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
+        {
+            e.Damageable.ApplyDamage(Damage);
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(e.HitPosition, ExplosionRadius, Vector2.zero, float.PositiveInfinity, AllTargetsMask);
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (hit.collider.gameObject.TryGetComponent(out IDamageable damageReceiver) == true)
+                {
+                    float explosionDamage = Mathf.Lerp(ExplosionDamage, 0f, hit.distance / ExplosionRadius);
+                    damageReceiver.ApplyDamage(explosionDamage);
+                }
+            }
         }
 
         public async override UniTask<string> GetDescriptionAsync() =>

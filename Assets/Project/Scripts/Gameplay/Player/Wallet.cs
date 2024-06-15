@@ -10,12 +10,7 @@ namespace SpaceAce.Gameplay.Players
 
         public float Balance { get; private set; }
 
-        public Wallet()
-        {
-            Balance = 0f;
-        }
-
-        public Wallet(float balance)
+        public Wallet(float balance = 0f)
         {
             if (balance < 0f) throw new ArgumentOutOfRangeException();
             Balance = balance;

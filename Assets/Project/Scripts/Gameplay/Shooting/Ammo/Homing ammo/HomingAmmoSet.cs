@@ -20,6 +20,32 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float HomingSpeed { get; }
         public float TargetingWidth { get; }
 
+        public HomingAmmoSet(AmmoServices services,
+                             HomingAmmoSetConfig config,
+                             HomingAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            HomingSpeed = savedState.HomingSpeed;
+            TargetingWidth = savedState.TargetingWidth;
+        }
+
+        public HomingAmmoSet(AmmoServices services,
+                             Size size,
+                             Quality quality,
+                             HomingAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            HomingSpeed = services.ItemPropertyEvaluator.Evaluate(config.HomingSpeed,
+                                                                  RangeEvaluationDirection.Forward,
+                                                                  quality,
+                                                                  size,
+                                                                  SizeInfluence.None);
+
+            TargetingWidth = services.ItemPropertyEvaluator.Evaluate(config.TargetingWidth,
+                                                                     RangeEvaluationDirection.Backward,
+                                                                     quality,
+                                                                     size,
+                                                                     SizeInfluence.None);
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -92,7 +118,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             if (data.CurrentDirection == Vector3.zero) data.CurrentDirection = data.InitialDirection;
 
@@ -126,29 +152,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             }
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public HomingAmmoSet(AmmoServices services,
-                             HomingAmmoSetConfig config,
-                             HomingAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            HomingSpeed = savedState.HomingSpeed;
-            TargetingWidth = savedState.TargetingWidth;
-        }
-
-        public HomingAmmoSet(AmmoServices services,
-                             Size size,
-                             Quality quality,
-                             HomingAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            HomingSpeed = services.ItemPropertyEvaluator.Evaluate(config.HomingSpeed, true, quality, size, SizeInfluence.None);
-            TargetingWidth = services.ItemPropertyEvaluator.Evaluate(config.TargetingWidth, false, quality, size, SizeInfluence.None);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Homing/Description", this);

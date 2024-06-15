@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SpaceAce.Gameplay.Shooting.Ammo
+namespace SpaceAce.Gameplay.Effects
 {
     public interface IEMPTargetProvider
     {

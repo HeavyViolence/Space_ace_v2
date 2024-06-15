@@ -17,12 +17,36 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class PiercingAmmoSet : AmmoSet, IEquatable<PiercingAmmoSet>
     {
-        private float _currentHeatGenerationFactor = 1f;
-
         public int ProjectileHits { get; }
 
         public float HeatGenerationFactorPerShot { get; }
         public float HeatGenerationIncreasePerShotPercentage => (HeatGenerationFactorPerShot - 1f) * 100f;
+
+        public PiercingAmmoSet(AmmoServices services,
+                               PiercingAmmoSetConfig config,
+                               PiercingAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            ProjectileHits = savedState.ProjectileHits;
+            HeatGenerationFactorPerShot = savedState.HeatGenerationFactorPerShot;
+        }
+
+        public PiercingAmmoSet(AmmoServices services,
+                               Size size,
+                               Quality quality,
+                               PiercingAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            ProjectileHits = services.ItemPropertyEvaluator.Evaluate(config.ProjectileHits,
+                                                                     RangeEvaluationDirection.Forward,
+                                                                     quality,
+                                                                     size,
+                                                                     SizeInfluence.None);
+
+            HeatGenerationFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.HeatGenerationFactorPerShot,
+                                                                                  RangeEvaluationDirection.Backward,
+                                                                                  quality,
+                                                                                  size,
+                                                                                  SizeInfluence.None);
+        }
 
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
@@ -32,7 +56,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             if (shooter is null) throw new ArgumentNullException();
             if (gun is null) throw new ArgumentNullException();
 
-            int shotCounter = 0;
+            float heatGenerationFactor = 1f;
 
             while (Amount > 0 && fireCancellation.IsCancellationRequested == false && overheatCancellation.IsCancellationRequested == false)
             {
@@ -72,49 +96,31 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
                 if (shooter is Player) Amount--;
 
-                if (++shotCounter == 1) _currentHeatGenerationFactor = 1f;
-                else _currentHeatGenerationFactor *= HeatGenerationFactorPerShot;
-
                 Services.AudioPlayer.PlayOnceAsync(ShotAudio.Random, gun.Transform.position, null, true).Forget();
                 if (gun.ShakeOnShotFired == true) Services.MasterCameraShaker.ShakeOnShotFired();
 
-                OnShotFired(HeatGeneration * _currentHeatGenerationFactor);
+                OnShotFired(HeatGeneration * heatGenerationFactor);
 
                 await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
                 await UniTask.WaitForSeconds(1f / gun.FireRate);
+
+                heatGenerationFactor *= HeatGenerationFactorPerShot;
             }
 
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public PiercingAmmoSet(AmmoServices services,
-                               PiercingAmmoSetConfig config,
-                               PiercingAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            ProjectileHits = savedState.ProjectileHits;
-            HeatGenerationFactorPerShot = savedState.HeatGenerationFactorPerShot;
-        }
-
-        public PiercingAmmoSet(AmmoServices services,
-                               Size size,
-                               Quality quality,
-                               PiercingAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            ProjectileHits = services.ItemPropertyEvaluator.Evaluate(config.ProjectileHits, true, quality, size, SizeInfluence.None);
-            HeatGenerationFactorPerShot = services.ItemPropertyEvaluator.Evaluate(config.HeatGenerationFactorPerShot, false, quality, size, SizeInfluence.None);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Piercing/Description", this);

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Scatter ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 38920e43c7bbe4e6fa488b8bb739a6e9, type: 3}
+  - {fileID: 8300000, guid: ba311ca09e73a43c3aa87667c21581fd, type: 3}
+  - {fileID: 8300000, guid: 157a623f3651944d496c66f11c3ae5e7, type: 3}
+  - {fileID: 8300000, guid: 622bd0cef94cc42b09f9f7b169e193f9, type: 3}
+  - {fileID: 8300000, guid: 7d6dc5bf4060549e882d08221de3e3b5, type: 3}
+  - {fileID: 8300000, guid: 4e02a0732814a4e659ca8bb67b7e8f60, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

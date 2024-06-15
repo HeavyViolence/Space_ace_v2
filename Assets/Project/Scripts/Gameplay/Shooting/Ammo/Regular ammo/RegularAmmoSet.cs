@@ -17,6 +17,15 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 {
     public sealed class RegularAmmoSet : AmmoSet
     {
+        public RegularAmmoSet(AmmoServices services,
+                              Size size,
+                              Quality quality,
+                              RegularAmmoSetConfig config) : base(services, size, quality, config) { }
+
+        public RegularAmmoSet(AmmoServices services,
+                              RegularAmmoSetConfig config,
+                              RegularAmmoSetSavableState savedState) : base(services, config, savedState) { }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -73,28 +82,17 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public RegularAmmoSet(AmmoServices services,
-                              Size size,
-                              Quality quality,
-                              RegularAmmoSetConfig config) : base(services, size, quality, config)
-        { }
-
-        public RegularAmmoSet(AmmoServices services,
-                              RegularAmmoSetConfig config,
-                              RegularAmmoSetSavableState savedState) : base(services, config, savedState)
-        { }
 
         public override async UniTask<string> GetNameAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Regular/Name", this);

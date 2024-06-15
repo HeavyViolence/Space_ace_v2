@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level reward collector config
   m_EditorClassIdentifier: 
   _firstLevelCreditsReward: 500
-  _creditsRewardIncreasePerLevel: 250
+  _creditsRewardIncreasePerLevel: 200
   _firstLevelExperienceReward: 1000
   _experienceRewardIncreasePerLevel: 500

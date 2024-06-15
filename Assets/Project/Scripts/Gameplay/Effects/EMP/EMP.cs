@@ -2,13 +2,12 @@ using System;
 
 using UnityEngine;
 
-namespace SpaceAce.Gameplay.Shooting.Ammo
+namespace SpaceAce.Gameplay.Effects
 {
-    public readonly struct EMP
+    public sealed record EMP
     {
         public float Strength { get; }
         public float StrengthPercentage => Strength * 100f;
-
         public float Duration { get; }
 
         private readonly AnimationCurve _strengthOverTime;

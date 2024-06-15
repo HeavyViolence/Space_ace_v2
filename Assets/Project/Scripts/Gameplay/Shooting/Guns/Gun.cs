@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Gameplay.Effects;
 using SpaceAce.Gameplay.Items;
-using SpaceAce.Gameplay.Shooting.Ammo;
 using SpaceAce.Main;
 using SpaceAce.Main.Localization;
 

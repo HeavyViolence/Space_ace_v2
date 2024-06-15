@@ -8,6 +8,7 @@ using SpaceAce.Main;
 using SpaceAce.Main.Audio;
 using SpaceAce.Main.Localization;
 using SpaceAce.Auxiliary;
+using SpaceAce.Gameplay.Effects;
 
 using System;
 using System.Collections.Generic;
@@ -141,6 +142,7 @@ namespace SpaceAce.Gameplay.Shooting
         {
             _userInventory.ContentChanged -= async (_, _) => await UpdateAvailableAmmoAsync();
             _userInventory = null;
+            _empTargets.Clear();
         }
 
         private void Update()
@@ -230,14 +232,14 @@ namespace SpaceAce.Gameplay.Shooting
             CooledDown?.Invoke(this, EventArgs.Empty);
         }
 
-        public void BindInventory(Inventory inventory)
+        public async UniTask BindInventoryAsync(Inventory inventory)
         {
             _userInventory = inventory ?? throw new ArgumentNullException();
 
             if (TryGetAvailableAmmo(out IEnumerable<AmmoSet> ammo) == true)
             {
                 _availableAmmo = new(ammo);
-                TrySwitchToWorkingGunsAsync().Forget();
+                await TrySwitchToWorkingGunsAsync();
             }
 
             _userInventory.ContentChanged += async (_, _) => await UpdateAvailableAmmoAsync();
@@ -454,18 +456,18 @@ namespace SpaceAce.Gameplay.Shooting
 
         #region EMP target interface
 
-        List<IEMPTarget> _targets;
+        private List<IEMPTarget> _empTargets = new();
 
         public IEnumerable<IEMPTarget> GetTargets()
         {
-            if (_targets is null || _targets.Count != _availableGuns.Count + _availableAmmo.Count)
+            if (_empTargets.Count != _availableGuns.Count + _availableAmmo.Count)
             {
-                _targets = new(_availableGuns.Count + _availableAmmo.Count);
-                _targets.AddRange(_availableGuns);
-                _targets.AddRange(_availableAmmo);
+                _empTargets = new(_availableGuns.Count + _availableAmmo.Count);
+                _empTargets.AddRange(_availableGuns);
+                _empTargets.AddRange(_availableAmmo);
             }
 
-            return _targets;
+            return _empTargets;
         }
 
         #endregion

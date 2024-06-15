@@ -47,23 +47,39 @@ namespace SpaceAce.Gameplay.Items
             return cache;
         }
 
-        public float Evaluate(Vector2 range, bool goodProperty, Quality quality, Size size, SizeInfluence sizeInfluence)
+        public float Evaluate(Vector2 range, RangeEvaluationDirection direction, Quality quality, Size size, SizeInfluence sizeInfluence)
         {
             float minValue, maxValue;
 
-            if (goodProperty == true)
+            switch (direction)
             {
-                Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+                case RangeEvaluationDirection.Forward:
+                    {
+                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
 
-                minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
-                maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
-            }
-            else
-            {
-                Vector2 rangeInterpolators = _badPropertyInterpolators[quality];
+                        minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+                        maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
 
-                minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
-                maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+                        break;
+                    }
+                case RangeEvaluationDirection.Backward:
+                    {
+                        Vector2 rangeInterpolators = _badPropertyInterpolators[quality];
+
+                        minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
+                        maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+
+                        break;
+                    }
+                default:
+                    {
+                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+
+                        minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+                        maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
+
+                        break;
+                    }
             }
 
             float evaluator = _config.ValueProbabilityCurvePerRange.Evaluate(AuxMath.RandomNormal);
@@ -96,23 +112,39 @@ namespace SpaceAce.Gameplay.Items
             }
         }
 
-        public int Evaluate(Vector2Int range, bool goodProperty, Quality quality, Size size, SizeInfluence sizeInfluence)
+        public int Evaluate(Vector2Int range, RangeEvaluationDirection direction, Quality quality, Size size, SizeInfluence sizeInfluence)
         {
             float minValue, maxValue;
 
-            if (goodProperty == true)
+            switch (direction)
             {
-                Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+                case RangeEvaluationDirection.Forward:
+                    {
+                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
 
-                minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
-                maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
-            }
-            else
-            {
-                Vector2 rangeInterpolators = _badPropertyInterpolators[quality];
+                        minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+                        maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
 
-                minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
-                maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+                        break;
+                    }
+                case RangeEvaluationDirection.Backward:
+                    {
+                        Vector2 rangeInterpolators = _badPropertyInterpolators[quality];
+
+                        minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
+                        maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+
+                        break;
+                    }
+                default:
+                    {
+                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+
+                        minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
+                        maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
+
+                        break;
+                    }
             }
 
             float evaluator = _config.ValueProbabilityCurvePerRange.Evaluate(AuxMath.RandomNormal);

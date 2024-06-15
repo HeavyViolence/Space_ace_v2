@@ -227,6 +227,54 @@ MonoBehaviour:
     m_Key: Size code
     m_Metadata:
       m_Items: []
+  - m_Id: 60165667666907136
+    m_Key: Scatter/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60166648395845632
+    m_Key: Scatter/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60166845758820352
+    m_Key: Scatter/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60181805855526912
+    m_Key: Antimatter/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60183404501913600
+    m_Key: Antimatter/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60183617669025792
+    m_Key: Antimatter/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60522963953635328
+    m_Key: Stasis/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60524659207426048
+    m_Key: Stasis/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60524863704911872
+    m_Key: Stasis/Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60573509091708928
+    m_Key: Fusion/Description
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60575140059402240
+    m_Key: Fusion/Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60575327901306880
+    m_Key: Fusion/Code
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

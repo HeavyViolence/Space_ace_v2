@@ -71,6 +71,10 @@ namespace SpaceAce.Main.Factories.AmmoFactories
                 AmmoType.Missiles => new MissileSet(_ammoServices, size, quality, _config.GetAmmoConfig<MissileSetConfig>()),
                 AmmoType.ExplosiveMissiles => new ExplosiveMissileSet(_ammoServices, size, quality, _config.GetAmmoConfig<ExplosiveMissileSetConfig>()),
                 AmmoType.NaniteMissiles => new NaniteMissileSet(_ammoServices, size, quality, _config.GetAmmoConfig<NaniteMissileSetConfig>()),
+                AmmoType.Scatter => new ScatterAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<ScatterAmmoSetConfig>()),
+                AmmoType.Antimatter => new AntimatterAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<AntimatterAmmoSetConfig>()),
+                AmmoType.Stasis => new StasisAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<StasisAmmoSetConfig>()),
+                AmmoType.Fusion => new FusionAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<FusionAmmoSetConfig>()),
                 _ => new RegularAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<RegularAmmoSetConfig>()),
             };
         }
@@ -79,58 +83,70 @@ namespace SpaceAce.Main.Factories.AmmoFactories
         {
             if (state is null) throw new ArgumentNullException();
 
-            if (state is RegularAmmoSetSavableState regularAmmoSetState)
-                return new RegularAmmoSet(_ammoServices, _config.GetAmmoConfig<RegularAmmoSetConfig>(), regularAmmoSetState);
+            if (state is RegularAmmoSetSavableState regularAmmoState)
+                return new RegularAmmoSet(_ammoServices, _config.GetAmmoConfig<RegularAmmoSetConfig>(), regularAmmoState);
 
-            if (state is StrangeAmmoSetSavableState strangeAmmoSetState)
-                return new StrangeAmmoSet(_ammoServices, _config.GetAmmoConfig<StrangeAmmoSetConfig>(), strangeAmmoSetState);
+            if (state is StrangeAmmoSetSavableState strangeAmmoState)
+                return new StrangeAmmoSet(_ammoServices, _config.GetAmmoConfig<StrangeAmmoSetConfig>(), strangeAmmoState);
 
-            if (state is ClusterAmmoSetSavableState clusterAmmoSetState)
-                return new ClusterAmmoSet(_ammoServices, _config.GetAmmoConfig<ClusterAmmoSetConfig>(), clusterAmmoSetState);
+            if (state is ClusterAmmoSetSavableState clusterAmmoState)
+                return new ClusterAmmoSet(_ammoServices, _config.GetAmmoConfig<ClusterAmmoSetConfig>(), clusterAmmoState);
 
-            if (state is CriticalAmmoSetSavableState criticalAmmoSetState)
-                return new CriticalAmmoSet(_ammoServices, _config.GetAmmoConfig<CriticalAmmoSetConfig>(), criticalAmmoSetState);
+            if (state is CriticalAmmoSetSavableState criticalAmmoState)
+                return new CriticalAmmoSet(_ammoServices, _config.GetAmmoConfig<CriticalAmmoSetConfig>(), criticalAmmoState);
 
-            if (state is CoolingAmmoSetSavableState coolingAmmoSetState)
-                return new CoolingAmmoSet(_ammoServices, _config.GetAmmoConfig<CoolingAmmoSetConfig>(), coolingAmmoSetState);
+            if (state is CoolingAmmoSetSavableState coolingAmmoState)
+                return new CoolingAmmoSet(_ammoServices, _config.GetAmmoConfig<CoolingAmmoSetConfig>(), coolingAmmoState);
 
-            if (state is ExplosiveAmmoSetSavableState explosiveAmmoSetState)
-                return new ExplosiveAmmoSet(_ammoServices, _config.GetAmmoConfig<ExplosiveAmmoSetConfig>(), explosiveAmmoSetState);
+            if (state is ExplosiveAmmoSetSavableState explosiveAmmoState)
+                return new ExplosiveAmmoSet(_ammoServices, _config.GetAmmoConfig<ExplosiveAmmoSetConfig>(), explosiveAmmoState);
 
-            if (state is DevastatingAmmoSetSavableState devastatingAmmoSetState)
-                return new DevastatingAmmoSet(_ammoServices, _config.GetAmmoConfig<DevastatingAmmoSetConfig>(), devastatingAmmoSetState);
+            if (state is DevastatingAmmoSetSavableState devastatingAmmoState)
+                return new DevastatingAmmoSet(_ammoServices, _config.GetAmmoConfig<DevastatingAmmoSetConfig>(), devastatingAmmoState);
 
-            if (state is CatalyticAmmoSetSavableState catalyticAmmoSetState)
-                return new CatalyticAmmoSet(_ammoServices, _config.GetAmmoConfig<CatalyticAmmoSetConfig>(), catalyticAmmoSetState);
+            if (state is CatalyticAmmoSetSavableState catalyticAmmoState)
+                return new CatalyticAmmoSet(_ammoServices, _config.GetAmmoConfig<CatalyticAmmoSetConfig>(), catalyticAmmoState);
 
-            if (state is StabilizingAmmoSetSavableState stabilizingAmmoSetState)
-                return new StabilizingAmmoSet(_ammoServices, _config.GetAmmoConfig<StabilizingAmmoSetConfig>(), stabilizingAmmoSetState);
+            if (state is StabilizingAmmoSetSavableState stabilizingAmmoState)
+                return new StabilizingAmmoSet(_ammoServices, _config.GetAmmoConfig<StabilizingAmmoSetConfig>(), stabilizingAmmoState);
 
-            if (state is HomingAmmoSetSavableState homingAmmoSetState)
-                return new HomingAmmoSet(_ammoServices, _config.GetAmmoConfig<HomingAmmoSetConfig>(), homingAmmoSetState);
+            if (state is HomingAmmoSetSavableState homingAmmoState)
+                return new HomingAmmoSet(_ammoServices, _config.GetAmmoConfig<HomingAmmoSetConfig>(), homingAmmoState);
 
-            if (state is PiercingAmmoSetSavableState piercingAmmoSetState)
-                return new PiercingAmmoSet(_ammoServices, _config.GetAmmoConfig<PiercingAmmoSetConfig>(), piercingAmmoSetState);
+            if (state is PiercingAmmoSetSavableState piercingAmmoState)
+                return new PiercingAmmoSet(_ammoServices, _config.GetAmmoConfig<PiercingAmmoSetConfig>(), piercingAmmoState);
 
-            if (state is EntangledAmmoSetSavableState entangledAmmoSetState)
-                return new EntangledAmmoSet(_ammoServices, _config.GetAmmoConfig<EntangledAmmoSetConfig>(), entangledAmmoSetState);
+            if (state is EntangledAmmoSetSavableState entangledAmmoState)
+                return new EntangledAmmoSet(_ammoServices, _config.GetAmmoConfig<EntangledAmmoSetConfig>(), entangledAmmoState);
 
-            if (state is EMPAmmoSetSavableState empAmmoSetState)
-                return new EMPAmmoSet(_ammoServices, _config.GetAmmoConfig<EMPAmmoSetConfig>(), empAmmoSetState);
+            if (state is EMPAmmoSetSavableState empAmmoState)
+                return new EMPAmmoSet(_ammoServices, _config.GetAmmoConfig<EMPAmmoSetConfig>(), empAmmoState);
 
-            if (state is NaniteAmmoSetSavableState naniteAmmoSetState)
-                return new NaniteAmmoSet(_ammoServices, _config.GetAmmoConfig<NaniteAmmoSetConfig>(), naniteAmmoSetState);
+            if (state is NaniteAmmoSetSavableState naniteAmmoState)
+                return new NaniteAmmoSet(_ammoServices, _config.GetAmmoConfig<NaniteAmmoSetConfig>(), naniteAmmoState);
 
-            if (state is MissileSetSavableState missileSetState)
-                return new MissileSet(_ammoServices, _config.GetAmmoConfig<MissileSetConfig>(), missileSetState);
+            if (state is MissileSetSavableState missileState)
+                return new MissileSet(_ammoServices, _config.GetAmmoConfig<MissileSetConfig>(), missileState);
 
-            if (state is ExplosiveMissileSetSavableState explosiveMissileSetState)
-                return new ExplosiveMissileSet(_ammoServices, _config.GetAmmoConfig<ExplosiveMissileSetConfig>(), explosiveMissileSetState);
+            if (state is ExplosiveMissileSetSavableState explosiveMissileState)
+                return new ExplosiveMissileSet(_ammoServices, _config.GetAmmoConfig<ExplosiveMissileSetConfig>(), explosiveMissileState);
 
-            if (state is NaniteMissileSetSavableState naniteMissileSetSavableState)
-                return new NaniteMissileSet(_ammoServices, _config.GetAmmoConfig<NaniteMissileSetConfig>(), naniteMissileSetSavableState);
+            if (state is NaniteMissileSetSavableState naniteMissilesState)
+                return new NaniteMissileSet(_ammoServices, _config.GetAmmoConfig<NaniteMissileSetConfig>(), naniteMissilesState);
 
-            throw new NotImplementedException();
+            if (state is ScatterAmmoSetSavableState scatterAmmoState)
+                return new ScatterAmmoSet(_ammoServices, _config.GetAmmoConfig<ScatterAmmoSetConfig>(), scatterAmmoState);
+
+            if (state is AntimatterAmmoSetSavableState antimatterAmmoState)
+                return new AntimatterAmmoSet(_ammoServices, _config.GetAmmoConfig<AntimatterAmmoSetConfig>(), antimatterAmmoState);
+
+            if (state is StasisAmmoSetSavableState stasisAmmoState)
+                return new StasisAmmoSet(_ammoServices, _config.GetAmmoConfig<StasisAmmoSetConfig>(), stasisAmmoState);
+
+            if (state is FusionAmmoSetSavableState fusionAmmoState)
+                return new FusionAmmoSet(_ammoServices, _config.GetAmmoConfig<FusionAmmoSetConfig>(), fusionAmmoState);
+
+            throw new Exception($"{nameof(AmmoFactoryConfig)} doesn't contain configs for all ammo types!");
         }
 
         public AmmoSet CreateProbable()

@@ -17,7 +17,7 @@ MonoBehaviour:
   _projectileSkin: 1
   _hitEffectSkin: 3
   _amount: {x: 3000, y: 5000}
-  _heatGeneration: {x: 7, y: 11}
+  _heatGeneration: {x: 7, y: 17}
   _speed: {x: 170, y: 230}
   _damage: {x: 70, y: 130}
   _projectileHits: {x: 2, y: 7}

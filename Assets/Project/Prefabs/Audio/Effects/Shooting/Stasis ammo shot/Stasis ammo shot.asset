@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Stasis ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: 061ad22e61caf4805921a595b3ee3ef1, type: 3}
+  - {fileID: 8300000, guid: 0d91b2e92cf704b2ca431aa38af0e3cd, type: 3}
+  - {fileID: 8300000, guid: 385598f4acadc45429ea4a9c39a94975, type: 3}
+  - {fileID: 8300000, guid: 9ed06c0e0622a413a9bbbf70f8c82981, type: 3}
+  - {fileID: 8300000, guid: 209a5ee2f10d44f45b588f5e6a9315c2, type: 3}
+  - {fileID: 8300000, guid: 297fac4de346141b58a32980f5475962, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

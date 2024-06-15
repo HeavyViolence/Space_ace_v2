@@ -14,22 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ammoConfigs:
   - {fileID: 11400000, guid: e7606c428b4296145a854291d6e1f55a, type: 2}
+  - {fileID: 11400000, guid: 453cfe37d222cef4b8afc21b248528b7, type: 2}
+  - {fileID: 11400000, guid: e1250f0328ccc5047b1cc7d12d735909, type: 2}
   - {fileID: 11400000, guid: 88f9124923b5bcb419c3a0904aa6bd3b, type: 2}
   - {fileID: 11400000, guid: 45cb8298531a3dc4ab906c5de70696f9, type: 2}
-  - {fileID: 11400000, guid: 453cfe37d222cef4b8afc21b248528b7, type: 2}
   - {fileID: 11400000, guid: 028f94c8264b14f48963d78e424a8979, type: 2}
+  - {fileID: 11400000, guid: c0ed1e52c83f44b43b159f55076aa98e, type: 2}
+  - {fileID: 11400000, guid: 59f983fb29bf49f4c88cf7df2fd64cae, type: 2}
   - {fileID: 11400000, guid: 1ade462fb68bba74baaa545e10792fc0, type: 2}
   - {fileID: 11400000, guid: dfa2f10f5034fd849b2a9e2527f8819a, type: 2}
   - {fileID: 11400000, guid: b676d815f99c62543927eb784da1e672, type: 2}
   - {fileID: 11400000, guid: 4933a566bccd37c4b8204eb93a8831cb, type: 2}
-  - {fileID: 11400000, guid: bea3e654ede629d4eac68c86eedfe8d0, type: 2}
   - {fileID: 11400000, guid: 4626b57cea13d2443a2cdfc1f6c89abc, type: 2}
   - {fileID: 11400000, guid: 2c6774048deccb64295449d0999a58f5, type: 2}
+  - {fileID: 11400000, guid: bea3e654ede629d4eac68c86eedfe8d0, type: 2}
   - {fileID: 11400000, guid: 3cbeb19fd7f8c824ea6cd593f32f8e9e, type: 2}
   - {fileID: 11400000, guid: 7f3ea473af761fa4a9af640d3d244f46, type: 2}
   - {fileID: 11400000, guid: eedaf138a94702d4f9a740dea4055eb4, type: 2}
   - {fileID: 11400000, guid: 2ed563d8e0559254c889622b13843865, type: 2}
   - {fileID: 11400000, guid: a3f0273ab4cb5c748be67f5d9551b2b6, type: 2}
+  - {fileID: 11400000, guid: cbf49912736e410488f50512974017b3, type: 2}
   _ammoSpawnProbabilityByPrice:
     serializedVersion: 2
     m_Curve:

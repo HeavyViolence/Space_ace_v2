@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d201772ccea5fe40bc11bd76527cb7f, type: 3}
+  m_Name: Fusion ammo shot
+  m_EditorClassIdentifier: 
+  _audioClips:
+  - {fileID: 8300000, guid: ec75ecf0ce2de42608f5f68af7db7a70, type: 3}
+  - {fileID: 8300000, guid: b4c9dbe88daa243bfbbaa19b74a2e9d5, type: 3}
+  - {fileID: 8300000, guid: b074c7658d5d442d885951a50f3de388, type: 3}
+  - {fileID: 8300000, guid: 32b499035af0e47d4a40838f53306397, type: 3}
+  - {fileID: 8300000, guid: 686f0068fe3f541b28aaff340e97d659, type: 3}
+  - {fileID: 8300000, guid: ff991ff82bc63461282802a3a67fcbfe, type: 3}
+  _outputAudioGroup: {fileID: 6101950330874879193, guid: 7becdf7d6273d5a429aa557ee557c16c, type: 2}
+  _volume: {x: 1, y: 1}
+  _priority: 1
+  _spatialBlend: {x: 0.5, y: 0.5}
+  _pitch: {x: 0.9, y: 1.1}

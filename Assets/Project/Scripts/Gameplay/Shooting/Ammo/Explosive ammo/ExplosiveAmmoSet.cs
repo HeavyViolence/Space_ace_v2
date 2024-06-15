@@ -22,6 +22,32 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public float ExplosionRadius { get; }
         public float ExplosionDamage { get; }
 
+        public ExplosiveAmmoSet(AmmoServices services,
+                                ExplosiveAmmoSetConfig config,
+                                ExplosiveAmmoSetSavableState savedState) : base(services, config, savedState)
+        {
+            ExplosionRadius = savedState.ExplosionRadius;
+            ExplosionDamage = savedState.ExplosionDamage;
+        }
+
+        public ExplosiveAmmoSet(AmmoServices services,
+                                Size size,
+                                Quality quality,
+                                ExplosiveAmmoSetConfig config) : base(services, size, quality, config)
+        {
+            ExplosionRadius = services.ItemPropertyEvaluator.Evaluate(config.ExplosionRadius,
+                                                                      RangeEvaluationDirection.Forward,
+                                                                      quality,
+                                                                      size,
+                                                                      SizeInfluence.Direct);
+
+            ExplosionDamage = services.ItemPropertyEvaluator.Evaluate(config.ExplosionDamage,
+                                                                      RangeEvaluationDirection.Forward,
+                                                                      quality,
+                                                                      size,
+                                                                      SizeInfluence.Direct);
+        }
+
         public override async UniTask FireAsync(object shooter,
                                                 IGun gun,
                                                 CancellationToken fireCancellation = default,
@@ -76,12 +102,12 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             ClearOnShotFired();
         }
 
-        protected override void OnMove(Rigidbody2D body, ref MovementData data)
+        protected override void OnMove(Rigidbody2D body, MovementData data)
         {
             body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
         }
 
-        protected override void OnHit(object shooter, HitEventArgs e)
+        protected override void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f)
         {
             e.Damageable.ApplyDamage(Damage);
 
@@ -100,23 +126,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         }
 
         protected override void OnMiss(object shooter) { }
-
-        public ExplosiveAmmoSet(AmmoServices services,
-                                ExplosiveAmmoSetConfig config,
-                                ExplosiveAmmoSetSavableState savedState) : base(services, config, savedState)
-        {
-            ExplosionRadius = savedState.ExplosionRadius;
-            ExplosionDamage = savedState.ExplosionDamage;
-        }
-
-        public ExplosiveAmmoSet(AmmoServices services,
-                                Size size,
-                                Quality quality,
-                                ExplosiveAmmoSetConfig config) : base(services, size, quality, config)
-        {
-            ExplosionRadius = services.ItemPropertyEvaluator.Evaluate(config.ExplosionRadius, true, quality, size, SizeInfluence.Direct);
-            ExplosionDamage = services.ItemPropertyEvaluator.Evaluate(config.ExplosionDamage, true, quality, size, SizeInfluence.Direct);
-        }
 
         public async override UniTask<string> GetDescriptionAsync() =>
             await Services.Localizer.GetLocalizedStringAsync("Ammo", "Explosive/Description", this);

@@ -10,12 +10,7 @@ namespace SpaceAce.Gameplay.Players
 
         public float Value { get; private set; }
 
-        public Experience()
-        {
-            Value = 0f;
-        }
-
-        public Experience(float value)
+        public Experience(float value = 0f)
         {
             if (value < 0f) throw new ArgumentOutOfRangeException();
             Value = value;

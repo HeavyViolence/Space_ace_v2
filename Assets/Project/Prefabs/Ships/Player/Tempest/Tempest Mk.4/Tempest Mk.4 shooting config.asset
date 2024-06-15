@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47589322c8936a4dafa0afcd525ee6e, type: 3}
   m_Name: Tempest Mk.4 shooting config
   m_EditorClassIdentifier: 
-  _heatCapacity: {x: 160, y: 160}
-  _baseHeatLossRate: {x: 16, y: 16}
+  _heatCapacity: {x: 300, y: 300}
+  _baseHeatLossRate: {x: 30, y: 30}
   _heatLossFactorCurve:
     serializedVersion: 2
     m_Curve:
