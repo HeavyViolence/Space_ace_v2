@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ae3fe9acbdec94db74f36d077867fe, type: 3}
   m_Name: Pirate bomber armor config
   m_EditorClassIdentifier: 
-  _armor: {x: 70, y: 70}
+  _armor: {x: 60, y: 60}
   _damageFalloff:
     serializedVersion: 2
     m_Curve:

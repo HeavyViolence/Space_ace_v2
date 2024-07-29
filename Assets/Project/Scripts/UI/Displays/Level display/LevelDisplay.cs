@@ -284,10 +284,8 @@ namespace SpaceAce.UI.Displays
 
         public async UniTask DisplayTargetViewAsync(IEntityView view, CancellationToken token = default)
         {
-            if (Active == false) return;
+            if (Active == false || _targetViewID == view.ID) return;
             if (view is null) throw new ArgumentNullException();
-
-            if (_targetViewID == view.ID) return;
 
             await UpdateTargetVisualAsync(view);
             UpdateTargetDurabilityView(view.DurabilityView);

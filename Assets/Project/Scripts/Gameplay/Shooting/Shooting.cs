@@ -47,6 +47,7 @@ namespace SpaceAce.Gameplay.Shooting
         private Transform _transform;
 
         private bool _gunsSwitchEnabled = true;
+        private bool _firstGunsSwitch = true;
 
         public float MinInitialHeatCapacity => _config.MinInitialHeatCapacity;
         public float MaxInitialHeatCapacity => _config.MaxInitialHeatCapacity;
@@ -55,10 +56,6 @@ namespace SpaceAce.Gameplay.Shooting
         public float MinInitialBaseHeatLossRate => _config.MinInitialBaseHeatLossRate;
         public float MaxInitialBaseHeatLossRate => _config.MaxInitialBaseHeatLossRate;
         public float RandomInitialBaseHeatLossRate => _config.RandomInitialBaseHeatLossRate;
-
-        public float SmallGunsSwitchDuration => _config.SmallGunsSwitchDuration;
-        public float MediumGunsSwitchDuration => _config.MediumGunsSwitchDuration;
-        public float LargeGunsSwitchDuration => _config.LargeGunsSwitchDuration;
 
         private CancellationTokenSource _overheatCancellation;
 
@@ -128,6 +125,8 @@ namespace SpaceAce.Gameplay.Shooting
 
         private void OnEnable()
         {
+            _firstGunsSwitch = true;
+
             _activeAmmo = null;
             ActiveAmmoIndex = -1;
 
@@ -298,36 +297,19 @@ namespace SpaceAce.Gameplay.Shooting
 
         private async UniTask PerformGunsSwitchDelayAsync(Size size)
         {
-            switch (size)
+            if (_firstGunsSwitch == true)
             {
-                case Size.Small:
-                    {
-                        if (_config.SmallGunsSwitchAudio == null)
-                            await UniTask.WaitForSeconds(SmallGunsSwitchDuration);
-                        else
-                            await _audioPlayer.PlayOnceAsync(_config.SmallGunsSwitchAudio.Random, _transform.position, _transform, true);
-
-                        break;
-                    }
-                case Size.Medium:
-                    {
-                        if (_config.MediumGunsSwitchAudio == null)
-                            await UniTask.WaitForSeconds(MediumGunsSwitchDuration);
-                        else
-                            await _audioPlayer.PlayOnceAsync(_config.MediumGunsSwitchAudio.Random, _transform.position, _transform, true);
-
-                        break;
-                    }
-                case Size.Large:
-                    {
-                        if (_config.LargeGunsSwitchAudio == null)
-                            await UniTask.WaitForSeconds(LargeGunsSwitchDuration);
-                        else
-                            await _audioPlayer.PlayOnceAsync(_config.LargeGunsSwitchAudio.Random, _transform.position, _transform, true);
-
-                        break;
-                    }
+                if (_config.FirstGunsSwitchAudioEnabled == true)
+                    await _audioPlayer.PlayOnceAsync(_config.GetGunsSwitchAudio(size).Random, _transform.position, _transform, true);
+                else
+                    await UniTask.WaitForSeconds(_config.GetGunsSwitchDuration(size));
             }
+            else
+            {
+                await _audioPlayer.PlayOnceAsync(_config.GetGunsSwitchAudio(size).Random, _transform.position, _transform, true);
+            }
+
+            if (_firstGunsSwitch == true) _firstGunsSwitch = false;
         }
 
         private bool TryGetGuns(Size size, out IEnumerable<Gun> guns)

@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Bombs;
 using SpaceAce.Gameplay.Controls;
+using SpaceAce.Gameplay.Enemies;
 using SpaceAce.Gameplay.Levels;
 using SpaceAce.Gameplay.Meteors;
 using SpaceAce.Gameplay.Players;
@@ -34,6 +35,7 @@ namespace SpaceAce.UI.Displays
         private readonly MeteorSpawner _meteorSpawner;
         private readonly WreckSpawner _wreckSpawner;
         private readonly BombSpawner _bombSpawner;
+        private readonly EnemySpawner _enemySpawner;
 
         public LevelDisplayMediator(AudioPlayer audioPlayer,
                                     UIAudio uiAudio,
@@ -47,7 +49,8 @@ namespace SpaceAce.UI.Displays
                                     LevelRewardCollector levelRewardCollector,
                                     MeteorSpawner meteorSpawner,
                                     WreckSpawner wreckSpawner,
-                                    BombSpawner bombSpawner) : base(audioPlayer, uiAudio)
+                                    BombSpawner bombSpawner,
+                                    EnemySpawner enemySpawner) : base(audioPlayer, uiAudio)
         {
             _levelDisplay = levelDisplay ?? throw new ArgumentNullException();
             _gamePauseDisplay = gamePauseDisplay ?? throw new ArgumentNullException();
@@ -60,6 +63,7 @@ namespace SpaceAce.UI.Displays
             _meteorSpawner = meteorSpawner ?? throw new ArgumentNullException();
             _wreckSpawner = wreckSpawner ?? throw new ArgumentNullException();
             _bombSpawner = bombSpawner ?? throw new ArgumentNullException();
+            _enemySpawner = enemySpawner ?? throw new ArgumentNullException();
         }
 
         #region interfaces
@@ -110,6 +114,7 @@ namespace SpaceAce.UI.Displays
             _meteorSpawner.MeteorSpawned += MeteorSpawnedEventHandler;
             _wreckSpawner.WreckSpawned += WreckSpawnedEventHandler;
             _bombSpawner.BombSpawned += BombSpawnedEventHandler;
+            _enemySpawner.EnemySpawned += EnemySpawnedEventHandler;
         }
 
         private void MainMenuLoadedEventHandler(object sender, EventArgs e)
@@ -122,6 +127,7 @@ namespace SpaceAce.UI.Displays
             _meteorSpawner.MeteorSpawned -= MeteorSpawnedEventHandler;
             _wreckSpawner.WreckSpawned -= WreckSpawnedEventHandler;
             _bombSpawner.BombSpawned -= BombSpawnedEventHandler;
+            _enemySpawner.EnemySpawned -= EnemySpawnedEventHandler;
 
             _meteorsDestroyed = 0;
             _meteorsEncountered = 0;
@@ -142,7 +148,7 @@ namespace SpaceAce.UI.Displays
             _levelDisplay.UpdateExperienceReward(_levelRewardCollector.ExperienceReward);
 
             _playerShipViewCancellation = new();
-            _levelDisplay.DisplayPlayerShipViewAsync(_player.ShipView, _playerShipViewCancellation.Token).Forget();
+            _levelDisplay.DisplayPlayerShipViewAsync(_player.View, _playerShipViewCancellation.Token).Forget();
         }
 
         private void LevelDisplayDisabledEventHandler(object sender, EventArgs e)
@@ -275,6 +281,31 @@ namespace SpaceAce.UI.Displays
             _bombViewCancellation?.Cancel();
             _bombViewCancellation?.Dispose();
             _bombViewCancellation = null;
+        }
+
+        #endregion
+
+        #region enemies
+
+        private CancellationTokenSource _enemyCancellation;
+
+        private void EnemySpawnedEventHandler(object sender, EnemySpawnedEventArgs e)
+        {
+            e.Enemy.View.DamageReceiver.DamageReceived += (_, _) =>
+            {
+                _enemyCancellation = new();
+                _levelDisplay.DisplayTargetViewAsync(e.Enemy.View, _enemyCancellation.Token).Forget();
+            };
+
+            e.Enemy.View.Destroyable.Destroyed += (_, _) => DisableEnemyViewIfActive();
+            e.Enemy.View.Escapable.Escaped += (_, _) => DisableEnemyViewIfActive();
+        }
+
+        private void DisableEnemyViewIfActive()
+        {
+            _enemyCancellation?.Cancel();
+            _enemyCancellation?.Dispose();
+            _enemyCancellation = null;
         }
 
         #endregion

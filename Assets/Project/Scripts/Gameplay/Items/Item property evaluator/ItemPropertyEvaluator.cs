@@ -9,9 +9,9 @@ namespace SpaceAce.Gameplay.Items
 {
     public sealed class ItemPropertyEvaluator
     {
-        private readonly Dictionary<Quality, Vector2> _goodPropertyInterpolators;
-        private readonly Dictionary<Quality, Vector2> _badPropertyInterpolators;
-        private readonly Dictionary<Quality, Vector2> _priceInterpolators;
+        private readonly Dictionary<Quality, Vector2> _goodPropertyInterpolation;
+        private readonly Dictionary<Quality, Vector2> _badPropertyInterpolation;
+        private readonly Dictionary<Quality, Vector2> _priceInterpolation;
 
         private readonly ItemPropertyEvaluatorConfig _config;
 
@@ -20,31 +20,9 @@ namespace SpaceAce.Gameplay.Items
             if (config == null) throw new ArgumentNullException();
             _config = config;
 
-            _goodPropertyInterpolators = BuildPropertyInterpolation(config.GoodPropertyInterpolationCurve);
-            _badPropertyInterpolators = BuildPropertyInterpolation(config.BadPropertyInterpolationCurve);
-            _priceInterpolators = BuildPropertyInterpolation(config.PriceInterpolationCurve);
-        }
-
-        private Dictionary<Quality, Vector2> BuildPropertyInterpolation(AnimationCurve interpolationCurve)
-        {
-            int evaluatorsAmount = Enum.GetValues(typeof(Quality)).Length;
-            string[] itemQualities = Enum.GetNames(typeof(Quality));
-
-            Dictionary<Quality, Vector2> cache = new(evaluatorsAmount);
-
-            for (int i = 0; i < evaluatorsAmount; i++)
-            {
-                float rangeStartEvaluator = (float)i / evaluatorsAmount;
-                float rangeEndEvaluator = (float)(i + 1) / evaluatorsAmount;
-
-                float rangeStartInterpolator = interpolationCurve.Evaluate(rangeStartEvaluator);
-                float rangeEndInterpolator = interpolationCurve.Evaluate(rangeEndEvaluator);
-
-                Quality quality = Enum.Parse<Quality>(itemQualities[i], true);
-                cache.Add(quality, new(rangeStartInterpolator, rangeEndInterpolator));
-            }
-
-            return cache;
+            _goodPropertyInterpolation = AuxMath.InterpolateRangeByEnum<Quality>(config.GoodPropertyInterpolationCurve);
+            _badPropertyInterpolation = AuxMath.InterpolateRangeByEnum<Quality>(config.BadPropertyInterpolationCurve);
+            _priceInterpolation = AuxMath.InterpolateRangeByEnum<Quality>(config.PriceInterpolationCurve);
         }
 
         public float Evaluate(Vector2 range, RangeEvaluationDirection direction, Quality quality, Size size, SizeInfluence sizeInfluence)
@@ -55,7 +33,7 @@ namespace SpaceAce.Gameplay.Items
             {
                 case RangeEvaluationDirection.Forward:
                     {
-                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+                        Vector2 rangeInterpolators = _goodPropertyInterpolation[quality];
 
                         minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
                         maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
@@ -64,7 +42,7 @@ namespace SpaceAce.Gameplay.Items
                     }
                 case RangeEvaluationDirection.Backward:
                     {
-                        Vector2 rangeInterpolators = _badPropertyInterpolators[quality];
+                        Vector2 rangeInterpolators = _badPropertyInterpolation[quality];
 
                         minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
                         maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
@@ -73,7 +51,7 @@ namespace SpaceAce.Gameplay.Items
                     }
                 default:
                     {
-                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+                        Vector2 rangeInterpolators = _goodPropertyInterpolation[quality];
 
                         minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
                         maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
@@ -120,7 +98,7 @@ namespace SpaceAce.Gameplay.Items
             {
                 case RangeEvaluationDirection.Forward:
                     {
-                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+                        Vector2 rangeInterpolators = _goodPropertyInterpolation[quality];
 
                         minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
                         maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
@@ -129,7 +107,7 @@ namespace SpaceAce.Gameplay.Items
                     }
                 case RangeEvaluationDirection.Backward:
                     {
-                        Vector2 rangeInterpolators = _badPropertyInterpolators[quality];
+                        Vector2 rangeInterpolators = _badPropertyInterpolation[quality];
 
                         minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
                         maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
@@ -138,7 +116,7 @@ namespace SpaceAce.Gameplay.Items
                     }
                 default:
                     {
-                        Vector2 rangeInterpolators = _goodPropertyInterpolators[quality];
+                        Vector2 rangeInterpolators = _goodPropertyInterpolation[quality];
 
                         minValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.x);
                         maxValue = Mathf.Lerp(range.x, range.y, rangeInterpolators.y);
@@ -179,7 +157,7 @@ namespace SpaceAce.Gameplay.Items
 
         public float EvaluatePrice(Vector2 priceRange, Quality quality, Size size)
         {
-            Vector2 rangeInterpolators = _priceInterpolators[quality];
+            Vector2 rangeInterpolators = _priceInterpolation[quality];
 
             float minPrice = Mathf.Lerp(priceRange.x, priceRange.y, rangeInterpolators.x);
             float maxPrice = Mathf.Lerp(priceRange.x, priceRange.y, rangeInterpolators.y);

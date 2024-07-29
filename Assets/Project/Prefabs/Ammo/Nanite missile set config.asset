@@ -18,7 +18,7 @@ MonoBehaviour:
   _hitEffectSkin: 5
   _amount: {x: 3000, y: 5000}
   _heatGeneration: {x: 7, y: 19}
-  _speed: {x: 170, y: 230}
+  _speed: {x: 230, y: 290}
   _damage: {x: 50, y: 70}
   _homingSpeed: {x: 500, y: 1300}
   _targetingWidth: {x: 3, y: 17}

@@ -120,6 +120,10 @@ PrefabInstance:
       propertyPath: _config
       value: 
       objectReference: {fileID: 11400000, guid: f054aab87a6909342be995a214bb9542, type: 2}
+    - target: {fileID: 6823657829637454163, guid: d075104a9c9589b4f98bd893d734990b, type: 3}
+      propertyPath: _invertAllowedRotation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6852033185879380673, guid: d075104a9c9589b4f98bd893d734990b, type: 3}
       propertyPath: m_Name
       value: Pirate bomber

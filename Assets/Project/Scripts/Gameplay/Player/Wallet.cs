@@ -51,5 +51,16 @@ namespace SpaceAce.Gameplay.Players
             Balance = 0f;
             BalanceChanged?.Invoke(this, new(oldBalance, newBalance));
         }
+
+        public void ClearAndAddCredits(float amount)
+        {
+            if (amount < 0f) throw new ArgumentOutOfRangeException();
+
+            float oldBalance = Balance;
+            float newBalance = amount;
+
+            Balance = amount;
+            BalanceChanged?.Invoke(this, new(oldBalance, newBalance));
+        }
     }
 }

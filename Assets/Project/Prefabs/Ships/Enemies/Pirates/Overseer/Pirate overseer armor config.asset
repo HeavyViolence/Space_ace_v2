@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3ae3fe9acbdec94db74f36d077867fe, type: 3}
   m_Name: Pirate overseer armor config
   m_EditorClassIdentifier: 
-  _armor: {x: 100, y: 100}
+  _armor: {x: 75, y: 75}
   _damageFalloff:
     serializedVersion: 2
     m_Curve:

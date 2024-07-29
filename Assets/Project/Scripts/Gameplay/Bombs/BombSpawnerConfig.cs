@@ -76,10 +76,10 @@ namespace SpaceAce.Gameplay.Bombs
         [SerializeField]
         private AnimationCurve _spawnWidthProbability;
 
-        public float GetSpawnWidth(float minWidth, float maxWidth)
+        public float GetSpawnWidth(float min, float max)
         {
             float widthNormalized = _spawnWidthProbability.Evaluate(AuxMath.RandomNormal);
-            float width = Mathf.Lerp(minWidth, maxWidth, widthNormalized);
+            float width = Mathf.Lerp(min, max, widthNormalized);
 
             return width;
         }

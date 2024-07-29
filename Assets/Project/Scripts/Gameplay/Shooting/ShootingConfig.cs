@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 
+using SpaceAce.Gameplay.Items;
 using SpaceAce.Main.Audio;
 
 using UnityEngine;
@@ -60,12 +61,8 @@ namespace SpaceAce.Gameplay.Shooting
         [SerializeField, Space]
         private AudioCollection _smallGunsSwitchAudio;
 
-        public AudioCollection SmallGunsSwitchAudio => _smallGunsSwitchAudio;
-
         [SerializeField, Range(MinGunsSwitchDuration, MaxGunsSwitchDuration)]
         private float _smallGunsSwitchDuration = MinGunsSwitchDuration;
-
-        public float SmallGunsSwitchDuration => _smallGunsSwitchDuration;
 
         #endregion
 
@@ -74,12 +71,8 @@ namespace SpaceAce.Gameplay.Shooting
         [SerializeField, Space]
         private AudioCollection _mediumGunsSwitchAudio;
 
-        public AudioCollection MediumGunsSwitchAudio => _mediumGunsSwitchAudio;
-
         [SerializeField, Range(MinGunsSwitchDuration, MaxGunsSwitchDuration)]
-        private float _mediumWeaponsSwitchDuration = MinGunsSwitchDuration;
-
-        public float MediumGunsSwitchDuration => _mediumWeaponsSwitchDuration;
+        private float _mediumGunsSwitchDuration = MinGunsSwitchDuration;
 
         #endregion
 
@@ -88,12 +81,43 @@ namespace SpaceAce.Gameplay.Shooting
         [SerializeField, Space]
         private AudioCollection _largeGunsSwitchAudio;
 
-        public AudioCollection LargeGunsSwitchAudio => _largeGunsSwitchAudio;
-
         [SerializeField, Range(MinGunsSwitchDuration, MaxGunsSwitchDuration)]
         private float _largeGunsSwitchDuration = MinGunsSwitchDuration;
 
-        public float LargeGunsSwitchDuration => _largeGunsSwitchDuration;
+        #endregion
+
+        #region guns switch duration
+
+        public AudioCollection GetGunsSwitchAudio(Size size)
+        {
+            return size switch
+            {
+                Size.Small => _smallGunsSwitchAudio,
+                Size.Medium => _mediumGunsSwitchAudio,
+                Size.Large => _largeGunsSwitchAudio,
+                _ => _mediumGunsSwitchAudio
+            };
+        }
+
+        public float GetGunsSwitchDuration(Size size)
+        {
+            return size switch
+            {
+                Size.Small => _smallGunsSwitchDuration,
+                Size.Medium => _mediumGunsSwitchDuration,
+                Size.Large => _largeGunsSwitchDuration,
+                _ => _mediumGunsSwitchDuration
+            };
+        }
+
+        #endregion
+
+        #region first guns switch
+
+        [SerializeField, Space]
+        private bool _enableFirstGunsSwitchAudio = false;
+
+        public bool FirstGunsSwitchAudioEnabled => _enableFirstGunsSwitchAudio;
 
         #endregion
 

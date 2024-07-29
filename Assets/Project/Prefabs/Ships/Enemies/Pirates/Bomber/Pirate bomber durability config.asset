@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df338a6a698be0a45ab3c3f4ba8ca85f, type: 3}
   m_Name: Pirate bomber durability config
   m_EditorClassIdentifier: 
-  _durability: {x: 700, y: 700}
+  _durability: {x: 300, y: 300}
   _regen: {x: 0, y: 0}

@@ -51,5 +51,16 @@ namespace SpaceAce.Gameplay.Players
             Value = 0f;
             ValueChanged?.Invoke(this, new(oldValue, newValue));
         }
+
+        public void ClearAndAdd(float amount)
+        {
+            if (amount < 0f) throw new ArgumentOutOfRangeException();
+
+            float oldValue = Value;
+            float newValue = amount;
+
+            Value = amount;
+            ValueChanged?.Invoke(this, new(oldValue, newValue));
+        }
     }
 }

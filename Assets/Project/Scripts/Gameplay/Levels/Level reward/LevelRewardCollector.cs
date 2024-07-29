@@ -12,8 +12,7 @@ namespace SpaceAce.Gameplay.Levels
 {
     public sealed class LevelRewardCollector : IInitializable, IDisposable
     {
-        public event EventHandler<FloatValueChangedEventArgs> CreditsRewardChanged;
-        public event EventHandler<FloatValueChangedEventArgs> ExperienceRewardChanged;
+        public event EventHandler<FloatValueChangedEventArgs> CreditsRewardChanged, ExperienceRewardChanged;
 
         private readonly LevelRewardCollectorConfig _config;
         private readonly GameStateLoader _gameStateLoader;

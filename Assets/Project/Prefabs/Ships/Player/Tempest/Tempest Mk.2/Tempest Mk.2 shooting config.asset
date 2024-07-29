@@ -52,9 +52,10 @@ MonoBehaviour:
   _smallGunsSwitchAudio: {fileID: 11400000, guid: c9e3e0824cc49f445a9c6de47bb3d919, type: 2}
   _smallGunsSwitchDuration: 0.3
   _mediumGunsSwitchAudio: {fileID: 11400000, guid: f1b9a6c59c9455242b141f9aba6d46fa, type: 2}
-  _mediumWeaponsSwitchDuration: 0.5
+  _mediumGunsSwitchDuration: 0.5
   _largeGunsSwitchAudio: {fileID: 11400000, guid: 435bc2d33786d1047a39ec68bcbd4a08, type: 2}
   _largeGunsSwitchDuration: 0.8
+  _enableFirstGunsSwitchAudio: 1
   _emptyAmmoAudio: {fileID: 11400000, guid: 6c629ea9cd10a774f96e6e2309d48e9a, type: 2}
   _ammoSwitchAudio: {fileID: 11400000, guid: 4bd043e9fc2760042af6c3e56faee713, type: 2}
   _ammoSwitchDuration: 0.5

@@ -23,7 +23,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace SpaceAce.Gameplay.Players
 {
-    public sealed class Player : IInitializable, IDisposable, ISavable, IFixedTickable
+    public sealed class Player : IInitializable, IDisposable, ISavable, IFixedTickable, IEntityViewProvider
     {
         public event EventHandler ShipSpawned, ShipDefeated, SavingRequested;
 
@@ -45,15 +45,13 @@ namespace SpaceAce.Gameplay.Players
         private ShipCache _activeShip;
         private CancellationTokenSource _shootingCancellation;
 
-        public Wallet Wallet { get; private set; }
-        public Experience Experience { get; }
-        public Inventory Inventory { get; }
+        public Wallet Wallet { get; } = new();
+        public Experience Experience { get; } = new();
+        public Inventory Inventory { get; } = new();
         public PlayerShipType SelectedShipType { get; set; }
 
         public string SavedDataName => "Player";
-        public IEntityView ShipView => _activeShip.View;
-
-        public async UniTask<string> GetLocalizedNameAsync() => await _activeShip.View.GetLocalizedNameAsync();
+        public IEntityView View => _activeShip.View;
 
         public Player(PlayerShipFactory playerShipFactory,
                       SavedItemsFactory savedItemsFactory,
@@ -70,10 +68,6 @@ namespace SpaceAce.Gameplay.Players
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
             _gameControlsTransmitter = gameControlsTransmitter ?? throw new ArgumentNullException();
             _gamePauser = gamePauser ?? throw new ArgumentNullException();
-
-            Wallet = new();
-            Experience = new();
-            Inventory = new();
         }
 
         #region interfaces
@@ -125,7 +119,7 @@ namespace SpaceAce.Gameplay.Players
             {
                 PlayerState defaultState = PlayerState.Default;
 
-                Wallet = new(defaultState.Credits);
+                Wallet.ClearAndAddCredits(defaultState.Credits);
                 SelectedShipType = defaultState.SelectedShip;
             }
         }

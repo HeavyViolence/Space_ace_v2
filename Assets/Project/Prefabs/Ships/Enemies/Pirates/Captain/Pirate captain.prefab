@@ -304,6 +304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 18f7edb647f748a4e9a9374755158642, type: 2}
+  _invertAllowedRotation: 1
 --- !u!114 &5652590588751359054
 MonoBehaviour:
   m_ObjectHideFlags: 0

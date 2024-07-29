@@ -54,8 +54,8 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
         #region speed
 
-        public const float MinSpeed = 70f;
-        public const float MaxSpeed = 300f;
+        public const float MinSpeed = 50f;
+        public const float MaxSpeed = 500f;
 
         [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
         private Vector2 _speed = new(MinSpeed, MaxSpeed);

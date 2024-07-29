@@ -11,6 +11,9 @@ namespace SpaceAce.Gameplay.Movement
 {
     public sealed class ShipMovement : ControllableMovement, IMovementController, IStasisTarget
     {
+        [SerializeField]
+        private bool _invertAllowedRotation = false;
+
         private Vector2 _velocity;
         private Vector2 Velocity
         {
@@ -40,7 +43,8 @@ namespace SpaceAce.Gameplay.Movement
 
         public void Rotate(Vector3 targetPosition)
         {
-            float clampedY = Mathf.Clamp(targetPosition.y, 0f, float.PositiveInfinity);
+            float clampedY = _invertAllowedRotation == true ? Mathf.Clamp(targetPosition.y, float.NegativeInfinity, 0f)
+                                                            : Mathf.Clamp(targetPosition.y, 0f, float.PositiveInfinity);
 
             Vector3 clampedMouseWorldPosition = new(targetPosition.x, clampedY, targetPosition.z);
             Vector3 clampedMouseDirection = transform.position - clampedMouseWorldPosition;

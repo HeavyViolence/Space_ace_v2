@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _keyGenerationType: 1
-  _encryptionType: 2
+  _encryptionType: 3
   _savingSystemType: 0
 --- !u!4 &66931798
 Transform:
@@ -1911,6 +1911,7 @@ MonoBehaviour:
   - {fileID: 380016430}
   - {fileID: 1656670915}
   - {fileID: 1994291600}
+  - {fileID: 1858865843}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -2071,6 +2072,7 @@ Transform:
   - {fileID: 1165464567}
   - {fileID: 380016431}
   - {fileID: 1656670916}
+  - {fileID: 1858865844}
   m_Father: {fileID: 1668263260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1802714762
@@ -2121,6 +2123,51 @@ MonoBehaviour:
   _settings: {fileID: 11400000, guid: 5a12fd6cc38a7484eaa995a83d149dca, type: 2}
   _config: {fileID: 11400000, guid: 8ebf1f3e8176a8f46ab73e2a94090006, type: 2}
   _uiAudio: {fileID: 11400000, guid: e8091a309e24cf14a9db7c09ebdf21cd, type: 2}
+--- !u!1 &1858865842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1858865844}
+  - component: {fileID: 1858865843}
+  m_Layer: 0
+  m_Name: Enemy spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1858865843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858865842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76dcbffe60e766143955e233d4df88e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: cccbc053db3d9874f9528fcbc53ee573, type: 2}
+--- !u!4 &1858865844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858865842}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1760196244}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1859438392
 GameObject:
   m_ObjectHideFlags: 0

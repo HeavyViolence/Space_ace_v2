@@ -17,10 +17,10 @@ namespace SpaceAce.Main.Factories.EnemyShipFactories
     public sealed class EnemyShipFactory
     {
         private readonly DiContainer _diContainer;
-        private readonly Transform MasterAnchor = new GameObject("Enemy ships").transform;
+        private readonly Transform MasterAnchor = new GameObject("Enemy ship pools").transform;
         private readonly Dictionary<EnemyShipType, GameObject> _prefabs;
         private readonly Dictionary<EnemyShipType, Transform> _anchors;
-        private readonly Dictionary<EnemyShipType, Stack<ShipCache>> _objectPools;
+        private readonly Dictionary<EnemyShipType, Stack<ShipCache>> _objectPools = new();
 
         public EnemyShipFactory(DiContainer container, IEnumerable<KeyValuePair<EnemyShipType, GameObject>> prefabs)
         {
@@ -53,8 +53,7 @@ namespace SpaceAce.Main.Factories.EnemyShipFactories
                 pool.TryPop(out ShipCache cache) == true)
             {
                 cache.Transform.parent = null;
-                cache.Transform.position = position;
-                cache.Transform.rotation = rotation;
+                cache.Transform.SetPositionAndRotation(position, rotation);
                 cache.Transform.gameObject.SetActive(true);
 
                 return cache;
@@ -82,8 +81,7 @@ namespace SpaceAce.Main.Factories.EnemyShipFactories
             if (cache is null) throw new ArgumentNullException();
 
             cache.Transform.parent = _anchors[type];
-            cache.Transform.position = Vector3.zero;
-            cache.Transform.rotation = Quaternion.identity;
+            cache.Transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
             cache.Transform.gameObject.SetActive(false);
 
             if (_objectPools.TryGetValue(type, out Stack<ShipCache> pool) == true)

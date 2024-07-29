@@ -7,6 +7,8 @@ using SpaceAce.Main.Localization;
 using SpaceAce.UI;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpaceAce.Main.Factories.AmmoFactories
 {
@@ -50,6 +52,21 @@ namespace SpaceAce.Main.Factories.AmmoFactories
 
         public AmmoSet Create(AmmoFactoryRequest request) => Create(request.Type, request.Size, request.Quality);
 
+        public IEnumerable<AmmoSet> BatchCreate(IEnumerable<AmmoFactoryRequest> requests)
+        {
+            if (requests is null) throw new ArgumentNullException();
+
+            List<AmmoSet> ammoSets = new();
+
+            foreach (AmmoFactoryRequest request in requests)
+            {
+                AmmoSet ammoSet = Create(request);
+                ammoSets.Add(ammoSet);
+            }
+
+            return ammoSets;
+        }
+
         public AmmoSet Create(AmmoType type, Size size, Quality quality)
         {
             return type switch
@@ -77,6 +94,21 @@ namespace SpaceAce.Main.Factories.AmmoFactories
                 AmmoType.Fusion => new FusionAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<FusionAmmoSetConfig>()),
                 _ => new RegularAmmoSet(_ammoServices, size, quality, _config.GetAmmoConfig<RegularAmmoSetConfig>()),
             };
+        }
+
+        public IEnumerable<AmmoSet> BatchCreate(IEnumerable<(AmmoType type, Size size, Quality quality)> requests)
+        {
+            if (requests is null) throw new ArgumentNullException();
+
+            List<AmmoSet> ammoSets = new();
+
+            foreach ((AmmoType type, Size size, Quality quality) in requests)
+            {
+                AmmoSet ammoSet = Create(type, size, quality);
+                ammoSets.Add(ammoSet);
+            }
+
+            return ammoSets;
         }
 
         public AmmoSet Create(AmmoSetSavableState state)
@@ -149,17 +181,76 @@ namespace SpaceAce.Main.Factories.AmmoFactories
             throw new Exception($"{nameof(AmmoFactoryConfig)} doesn't contain configs for all ammo types!");
         }
 
+        public IEnumerable<AmmoSet> BatchCreate(IEnumerable<AmmoSetSavableState> states)
+        {
+            if (states is null) throw new ArgumentNullException();
+
+            List<AmmoSet> ammoSets = new();
+
+            foreach (AmmoSetSavableState state in states)
+            {
+                AmmoSet ammoSet = Create(state);
+                ammoSets.Add(ammoSet);
+            }
+
+            return ammoSets;
+        }
+
         public AmmoSet CreateProbable()
         {
             AmmoType probableType = _config.GetProbableAmmoType();
 
-            Array availableSizes = Enum.GetValues(typeof(Size));
+            Size[] availableSizes = Enum.GetValues(typeof(Size)).Cast<Size>().ToArray();
             int randomIndex = _random.Next(0, availableSizes.Length);
-            Size randomSize = (Size)availableSizes.GetValue(randomIndex);
+            Size randomSize = availableSizes[randomIndex];
 
             Quality probableQuality = _itemQualityToSpawnProbabilityConverter.GetProbableQuality();
 
             return Create(probableType, randomSize, probableQuality);
+        }
+
+        public IEnumerable<AmmoSet> BatchCreateProbable(int amount)
+        {
+            if (amount <= 0) throw new ArgumentOutOfRangeException();
+
+            List<AmmoSet> ammoSets = new();
+            Size[] availableSizes = Enum.GetValues(typeof(Size)).Cast<Size>().ToArray();
+
+            for (int i = 0; i < amount; i++)
+            {
+                AmmoType probableType = _config.GetProbableAmmoType();
+
+                int randomIndex = _random.Next(0, availableSizes.Length);
+                Size randomSize = availableSizes[randomIndex];
+
+                Quality probableQuality = _itemQualityToSpawnProbabilityConverter.GetProbableQuality();
+
+                AmmoSet ammoSet = Create(probableType, randomSize, probableQuality);
+                ammoSets.Add(ammoSet);
+            }
+
+            return ammoSets;
+        }
+
+        public AmmoSet CreateWithProbableQuality(AmmoType type, Size size)
+        {
+            Quality probableQuality = _itemQualityToSpawnProbabilityConverter.GetProbableQuality();
+            return Create(type, size, probableQuality);
+        }
+
+        public IEnumerable<AmmoSet> BatchCreateWithProbableQuality(IEnumerable<(AmmoType type, Size size)> requests)
+        {
+            if (requests is null) throw new ArgumentNullException();
+
+            List<AmmoSet> ammoSets = new();
+
+            foreach ((AmmoType type, Size size) in requests)
+            {
+                AmmoSet ammoSet = CreateWithProbableQuality(type, size);
+                ammoSets.Add(ammoSet);
+            }
+
+            return ammoSets;
         }
     }
 }

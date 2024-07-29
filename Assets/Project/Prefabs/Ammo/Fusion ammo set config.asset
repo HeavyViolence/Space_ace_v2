@@ -18,6 +18,6 @@ MonoBehaviour:
   _hitEffectSkin: 1
   _amount: {x: 3000, y: 9999}
   _heatGeneration: {x: 5, y: 11}
-  _speed: {x: 130, y: 170}
+  _speed: {x: 170, y: 230}
   _damage: {x: 20, y: 30}
   _armorIgnoring: {x: 0.3, y: 0.8}

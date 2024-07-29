@@ -10,9 +10,16 @@ namespace SpaceAce.Main
         public Transform MasterCameraAnchor { get; private set; }
 
         public float ViewportLeftBound => MasterCamera == null ? 0f : MasterCamera.ViewportToWorldPoint(Vector3.zero).x;
+        public Vector3 ViewportLeftPosition => new(ViewportLeftBound, 0f, 0f);
+
         public float ViewportRightBound => MasterCamera == null ? 0f : MasterCamera.ViewportToWorldPoint(Vector3.right).x;
+        public Vector3 ViewportRightPosition => new(ViewportRightBound, 0f, 0f);
+
         public float ViewportUpperBound => MasterCamera == null ? 0f : MasterCamera.ViewportToWorldPoint(Vector3.up).y;
+        public Vector3 ViewportUpperPosition => new(0f, ViewportUpperBound, 0f);
+
         public float ViewportLowerBound => MasterCamera == null ? 0f : MasterCamera.ViewportToWorldPoint(Vector3.zero).y;
+        public Vector3 ViewportLowerPosition => new(0f, ViewportLowerBound, 0f);
 
         public MasterCameraHolder(GameObject masterCameraPrefab)
         {

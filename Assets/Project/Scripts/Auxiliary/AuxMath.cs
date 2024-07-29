@@ -61,5 +61,79 @@ namespace SpaceAce.Auxiliary
         public static bool ValueInRange(Vector2 range, float value) => value >= range.x && value <= range.y;
 
         public static bool ValueInRange(float min, float max, float value) => value >= min && value <= max;
+
+        public static Dictionary<Vector2, T> InterpolateEnumByRange<T>(AnimationCurve interpolation, IEnumerable<T> customOrder = null) where T : Enum
+        {
+            if (interpolation == null) throw new ArgumentNullException();
+
+            T[] members;
+
+            if (customOrder is null) members = Enum.GetValues(typeof(T)).Cast<T>().ToArray();
+            else members = customOrder.ToArray();
+
+            Dictionary<Vector2, T> result = new(members.Length);
+
+            for (int i = 0; i < members.Length; i++)
+            {
+                float rangeStart = interpolation.Evaluate((float)i / members.Length);
+                float rangeEnd = interpolation.Evaluate((float)(i + 1) / members.Length);
+
+                Vector2 range = new(rangeStart, rangeEnd);
+                T member = members[i];
+
+                result.Add(range, member);
+            }
+
+            return result;
+        }
+
+        public static Dictionary<Vector2, T> InterpolateValuesByRange<T>(AnimationCurve interpolation, IEnumerable<T> values)
+        {
+            if (interpolation == null) throw new ArgumentNullException();
+            if (values is null) throw new ArgumentNullException();
+
+            int valuesAmount = values.Count();
+            int counter = 0;
+
+            Dictionary<Vector2, T> result = new(valuesAmount);
+
+            foreach (T value in values)
+            {
+                float rangeStart = interpolation.Evaluate((float)counter / valuesAmount);
+                float rangeEnd = interpolation.Evaluate((float)(counter + 1) / valuesAmount);
+
+                Vector2 range = new(rangeStart, rangeEnd);
+                result.Add(range, value);
+
+                counter++;
+            }
+
+            return result;
+        }
+
+        public static Dictionary<T, Vector2> InterpolateRangeByEnum<T>(AnimationCurve interpolation, IEnumerable<T> customOrder = null) where T : Enum
+        {
+            if (interpolation == null) throw new ArgumentNullException();
+
+            T[] members;
+
+            if (customOrder is null) members = Enum.GetValues(typeof(T)).Cast<T>().ToArray();
+            else members = customOrder.ToArray();
+
+            Dictionary<T, Vector2> result = new(members.Length);
+
+            for (int i = 0; i < members.Length; i++)
+            {
+                float rangeStart = interpolation.Evaluate((float)i / members.Length);
+                float rangeEnd = interpolation.Evaluate((float)(i + 1) / members.Length);
+
+                Vector2 range = new(rangeStart, rangeEnd);
+                T member = members[i];
+
+                result.Add(member, range);
+            }
+
+            return result;
+        }
     }
 }
