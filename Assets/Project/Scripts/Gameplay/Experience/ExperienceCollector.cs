@@ -20,7 +20,7 @@ namespace SpaceAce.Gameplay.Experience
         {
             List<IExperienceSource> sources = new();
 
-            foreach (IExperienceSource source in gameObject.GetComponentsInChildren<IExperienceSource>())
+            foreach (IExperienceSource source in gameObject.GetComponents<IExperienceSource>())
                 sources.Add(source);
 
             return sources;

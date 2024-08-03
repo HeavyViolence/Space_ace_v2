@@ -80,6 +80,9 @@ namespace SpaceAce.Gameplay.Damage
 
         private void OnDisable()
         {
+            DamageReceived = null;
+            Destroyed = null;
+
             _invulnerabilityCancellation?.Cancel();
             _invulnerabilityCancellation?.Dispose();
             _invulnerabilityCancellation = null;

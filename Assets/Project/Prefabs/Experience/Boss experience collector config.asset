@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef93b841122cd944cbb4e365cef2f911, type: 3}
   m_Name: Boss experience collector config
   m_EditorClassIdentifier: 
-  _experienceFactor: 0.03
+  _experienceFactor: 1
   _enableDissipation: 1
   _dissipationDuration: 300
   _dissipationOverTime:

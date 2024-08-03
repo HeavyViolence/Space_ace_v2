@@ -18,7 +18,7 @@ namespace SpaceAce.Gameplay.Enemies
     public sealed class EnemySpawner : IInitializable, IDisposable
     {
         public event EventHandler SpawnStarted, SpawnEnded;
-        public event EventHandler<EnemySpawnedEventArgs> EnemySpawned, BossSpawned;
+        public event EventHandler<EnemySpawnedEventArgs> EnemySpawned;
 
         private readonly EnemySpawnerConfig _config;
         private readonly GameStateLoader _gameStateLoader;
@@ -30,7 +30,8 @@ namespace SpaceAce.Gameplay.Enemies
 
         private CancellationTokenSource _spawnCancellation;
 
-        public int AmountToSpawn => _config.AmountToSpawn;
+        public int AmountLeftToSpawn => _config.AmountLeftToSpawn;
+        public int AmountToSpawnThisLevel => _config.AmountToSpawnThisLevel;
 
         public EnemySpawner(EnemySpawnerConfig config,
                             GameStateLoader gameStateLoader,
@@ -75,7 +76,7 @@ namespace SpaceAce.Gameplay.Enemies
 
                     Enemy enemy = new(config, _ammoFactory, _enemyShipFactory, _masterCameraHolder);
                     _aliveEnemies.Add(enemy);
-                    EnemySpawned?.Invoke(this, new(enemy));
+                    EnemySpawned?.Invoke(this, new(enemy, false));
 
                     enemy.Defeated += EnemyDefeatedEventHandler;
                 }
@@ -90,7 +91,7 @@ namespace SpaceAce.Gameplay.Enemies
 
                 Enemy boss = new(bossConfig, _ammoFactory, _enemyShipFactory, _masterCameraHolder);
                 _aliveEnemies.Add(boss);
-                BossSpawned?.Invoke(this, new(boss));
+                EnemySpawned?.Invoke(this, new(boss, true));
 
                 boss.Defeated += EnemyDefeatedEventHandler;
             }
@@ -118,7 +119,7 @@ namespace SpaceAce.Gameplay.Enemies
 
         private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs e)
         {
-            _config.Initialize();
+            _config.Configure(e.Level);
 
             _spawnCancellation = new();
             SpawnAsync(e.Level, _spawnCancellation.Token).Forget();

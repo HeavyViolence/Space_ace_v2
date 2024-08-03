@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Gameplay.Enemies;
 using SpaceAce.Gameplay.Players;
 using SpaceAce.Main;
 using SpaceAce.Main.Audio;
@@ -21,12 +22,16 @@ namespace SpaceAce.Gameplay.Levels
         private readonly GameStateLoader _gameStateLoader;
         private readonly Player _player;
         private readonly AudioPlayer _audioPlayer;
+        private readonly EnemySpawner _enemySpawner;
+
+        private int _enemiesDefeated;
 
         public LevelCompleter(AudioCollection levelCompletedAudio,
                               AudioCollection levelFailedAudio,
                               GameStateLoader gameStateLoader,
                               Player player,
-                              AudioPlayer audioPlayer)
+                              AudioPlayer audioPlayer,
+                              EnemySpawner enemySpawner)
         {
             if (levelCompletedAudio == null) throw new ArgumentNullException();
             _levelCompletedAudio = levelCompletedAudio;
@@ -37,19 +42,24 @@ namespace SpaceAce.Gameplay.Levels
             _gameStateLoader = gameStateLoader ?? throw new ArgumentNullException();
             _player = player ?? throw new ArgumentNullException();
             _audioPlayer = audioPlayer ?? throw new ArgumentNullException();
+            _enemySpawner = enemySpawner ?? throw new ArgumentNullException();
         }
 
         #region interfaces
 
         public void Initialize()
         {
+            _gameStateLoader.LevelLoaded += LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoadingStarted += MainMenuLoadingStartedEventHandler;
+
             _player.ShipDefeated += PlayerShipDefeatedEventHandler;
         }
 
         public void Dispose()
         {
+            _gameStateLoader.LevelLoaded -= LevelLoadedEventHandler;
             _gameStateLoader.MainMenuLoadingStarted -= MainMenuLoadingStartedEventHandler;
+
             _player.ShipDefeated -= PlayerShipDefeatedEventHandler;
         }
 
@@ -60,6 +70,7 @@ namespace SpaceAce.Gameplay.Levels
         private void MainMenuLoadingStartedEventHandler(object sender, MainMenuLoadingStartedEventArgs e)
         {
             LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevel));
+            _enemiesDefeated = 0;
         }
 
         private void PlayerShipDefeatedEventHandler(object sender, EventArgs e)
@@ -67,6 +78,18 @@ namespace SpaceAce.Gameplay.Levels
             LevelConcluded?.Invoke(this, new(_gameStateLoader.LoadedLevel));
             LevelFailed?.Invoke(this, new(_gameStateLoader.LoadedLevel));
             _audioPlayer.PlayOnceAsync(_levelFailedAudio.Random, Vector3.zero).Forget();
+        }
+
+        private void LevelLoadedEventHandler(object sender, LevelLoadedEventArgs args)
+        {
+            _enemySpawner.EnemySpawned += (_, e) =>
+            {
+                e.Enemy.View.Destroyable.Destroyed += (_, _) =>
+                {
+                    if (++_enemiesDefeated == _enemySpawner.AmountToSpawnThisLevel)
+                        LevelCompleted?.Invoke(this, new(args.Level));
+                };
+            };
         }
 
         #endregion

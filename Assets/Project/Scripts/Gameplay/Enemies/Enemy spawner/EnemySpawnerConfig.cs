@@ -8,13 +8,11 @@ using System.Linq;
 
 using UnityEngine;
 
-using Zenject;
-
 namespace SpaceAce.Gameplay.Enemies
 {
     [CreateAssetMenu(fileName = "Enemy spawner config",
                      menuName = "Space ace/Configs/Enemies/Enemy spawner config")]
-    public sealed class EnemySpawnerConfig : ScriptableObject, IInitializable
+    public sealed class EnemySpawnerConfig : ScriptableObject
     {
         #region enemies
 
@@ -30,7 +28,7 @@ namespace SpaceAce.Gameplay.Enemies
         {
             if (level < 1) throw new ArgumentOutOfRangeException();
 
-            int waveLength = Mathf.Clamp(NextWaveLength, 0, AmountToSpawn);
+            int waveLength = Mathf.Clamp(NextWaveLength, 0, AmountLeftToSpawn);
 
             if (waveLength == 0)
             {
@@ -46,7 +44,7 @@ namespace SpaceAce.Gameplay.Enemies
                 float spawnDelay = GetSpawnDelay(i == 0);
 
                 result.Add((config, spawnDelay));
-                AmountToSpawn--;
+                AmountLeftToSpawn--;
             }
 
             wave = result;
@@ -122,7 +120,8 @@ namespace SpaceAce.Gameplay.Enemies
         [SerializeField, MinMaxSlider(MinAmountToSpawn, MaxAmountToSpawn), Space]
         private Vector2Int _amountToSpawn = new(MinAmountToSpawn, MaxAmountToSpawn);
 
-        public int AmountToSpawn { get; private set; } = 0;
+        public int AmountLeftToSpawn { get; private set; } = 0;
+        public int AmountToSpawnThisLevel { get; private set; } = 0;
 
         #endregion
 
@@ -158,15 +157,25 @@ namespace SpaceAce.Gameplay.Enemies
 
         #endregion
 
-        private void OnEnable()
+        public void Configure(int level)
         {
-            if (_enemies is null || _enemies.Count == 0) return;
-            _enemyDistribution = AuxMath.InterpolateValuesByRange(_spawnProbability, _enemies);
-        }
+            if (level < 1) throw new ArgumentOutOfRangeException();
 
-        public void Initialize()
-        {
-            AmountToSpawn = UnityEngine.Random.Range(_amountToSpawn.x, _amountToSpawn.y + 1);
+            if (_enemies is null || _enemies.Count == 0)
+                throw new Exception($"{nameof(EnemySpawnerConfig)} doesn't contain a single {nameof(EnemyConfig)}!");
+
+            AmountLeftToSpawn = UnityEngine.Random.Range(_amountToSpawn.x, _amountToSpawn.y + 1);
+            if (level % _bossPerLevelsPassed == 0) AmountLeftToSpawn += 1;
+
+            AmountToSpawnThisLevel = AmountLeftToSpawn;
+
+            List<EnemyConfig> _enemiesToEncounterAtTheLevel = new();
+
+            foreach (EnemyConfig config in _enemies)
+                if (config.FirstLevelToEncounter <= level)
+                    _enemiesToEncounterAtTheLevel.Add(config);
+
+            _enemyDistribution = AuxMath.InterpolateValuesByRange(_spawnProbability, _enemiesToEncounterAtTheLevel);
         }
     }
 }

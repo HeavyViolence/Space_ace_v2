@@ -101,7 +101,7 @@ namespace SpaceAce.Gameplay.Enemies
 
         #endregion
 
-        #region min spawn level
+        #region first level to encounter
 
         public const int MinLevelToEncounter = 1;
         public const int MaxLevelToEncounter = 10;

@@ -1,5 +1,6 @@
 using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Bombs;
+using SpaceAce.Gameplay.Enemies;
 using SpaceAce.Gameplay.Meteors;
 using SpaceAce.Gameplay.Wrecks;
 using SpaceAce.Main;
@@ -19,6 +20,7 @@ namespace SpaceAce.Gameplay.Levels
         private readonly MeteorSpawner _meteorSpawnner;
         private readonly WreckSpawner _wreckSpawner;
         private readonly BombSpawner _bombSpawner;
+        private readonly EnemySpawner _enemySpawner;
 
         private float _creditsReward = 0f;
         public float CreditsReward
@@ -48,7 +50,8 @@ namespace SpaceAce.Gameplay.Levels
                                     GameStateLoader gameStateLoader,
                                     MeteorSpawner meteorSpawner,
                                     WreckSpawner wreckSpawner,
-                                    BombSpawner bombSpawner)
+                                    BombSpawner bombSpawner,
+                                    EnemySpawner enemySpwner)
         {
             if (config == null) throw new ArgumentNullException();
             _config = config;
@@ -57,6 +60,7 @@ namespace SpaceAce.Gameplay.Levels
             _meteorSpawnner = meteorSpawner ?? throw new ArgumentNullException();
             _wreckSpawner = wreckSpawner ?? throw new ArgumentNullException();
             _bombSpawner = bombSpawner ?? throw new ArgumentNullException();
+            _enemySpawner = enemySpwner ?? throw new ArgumentNullException();
         }
 
         #region interfaces
@@ -69,6 +73,7 @@ namespace SpaceAce.Gameplay.Levels
             _meteorSpawnner.MeteorSpawned += MeteorSpawnerEventHandler;
             _wreckSpawner.WreckSpawned += WreckSpawnedEventHandler;
             _bombSpawner.BombSpawned += BombSpawnedEventHandler;
+            _enemySpawner.EnemySpawned += EnemySpawnedEventHandler;
         }
 
         public void Dispose()
@@ -79,6 +84,7 @@ namespace SpaceAce.Gameplay.Levels
             _meteorSpawnner.MeteorSpawned -= MeteorSpawnerEventHandler;
             _wreckSpawner.WreckSpawned -= WreckSpawnedEventHandler;
             _bombSpawner.BombSpawned -= BombSpawnedEventHandler;
+            _enemySpawner.EnemySpawned -= EnemySpawnedEventHandler;
         }
 
         #endregion
@@ -99,17 +105,27 @@ namespace SpaceAce.Gameplay.Levels
 
         private void MeteorSpawnerEventHandler(object sender, MeteorSpawnedEventArgs e)
         {
-            e.View.Destroyable.Destroyed += (s, e) => ExperienceReward += e.Experience.Gain;
+            e.View.Destroyable.Destroyed += (_, e) => ExperienceReward += e.Experience.Gain;
         }
 
         private void WreckSpawnedEventHandler(object sender, WreckSpawnedEventArgs e)
         {
-            e.View.Destroyable.Destroyed += (s, e) => ExperienceReward += e.Experience.Gain;
+            e.View.Destroyable.Destroyed += (_, e) => ExperienceReward += e.Experience.Gain;
         }
 
         private void BombSpawnedEventHandler(object sender, BombSpawnedEventArgs e)
         {
-            e.View.Destroyable.Destroyed += (s, e) => ExperienceReward += e.Experience.Gain;
+            e.View.Destroyable.Destroyed += (_, e) => ExperienceReward += e.Experience.Gain;
+        }
+
+        private void EnemySpawnedEventHandler(object sender, EnemySpawnedEventArgs e)
+        {
+            e.Enemy.View.Destroyable.Destroyed += (_, e) => ExperienceReward += e.Experience.Gain;
+        }
+
+        private void BossSpawnedEventHandler(object sender, EnemySpawnedEventArgs e)
+        {
+            e.Enemy.View.Destroyable.Destroyed += (_, e) => ExperienceReward += e.Experience.Gain;
         }
 
         #endregion

@@ -43,7 +43,7 @@ namespace SpaceAce.Gameplay.Shooting
         private GamePauser _gamePauser;
         private AudioPlayer _audioPlayer;
         private Localizer _localizer;
-        private Inventory _userInventory;
+        private Inventory _inventory;
         private Transform _transform;
 
         private bool _gunsSwitchEnabled = true;
@@ -97,7 +97,7 @@ namespace SpaceAce.Gameplay.Shooting
 
         public bool Overheat { get; private set; }
         public bool GunsSelected => _activeGuns is not null;
-        public bool Firing => GunsSelected == true ? _activeGuns[0].Firing : false;
+        public bool Firing => GunsSelected == true && _activeGuns[0].Firing;
 
         public Size ActiveGunsSize { get; private set; }
 
@@ -139,8 +139,8 @@ namespace SpaceAce.Gameplay.Shooting
 
         private void OnDisable()
         {
-            _userInventory.ContentChanged -= async (_, _) => await UpdateAvailableAmmoAsync();
-            _userInventory = null;
+            _inventory.ContentChanged -= async (_, _) => await UpdateAvailableAmmoAsync();
+            _inventory = null;
             _empTargets.Clear();
         }
 
@@ -166,6 +166,8 @@ namespace SpaceAce.Gameplay.Shooting
 
         public float GetDamagePerSecond()
         {
+            if (_activeGuns is null || _activeAmmo is null) return 0f;
+
             float damagePerSecond = 0f;
 
             foreach (Gun gun in _activeGuns)
@@ -233,7 +235,7 @@ namespace SpaceAce.Gameplay.Shooting
 
         public async UniTask BindInventoryAsync(Inventory inventory)
         {
-            _userInventory = inventory ?? throw new ArgumentNullException();
+            _inventory = inventory ?? throw new ArgumentNullException();
 
             if (TryGetAvailableAmmo(out IEnumerable<AmmoSet> ammo) == true)
             {
@@ -241,7 +243,7 @@ namespace SpaceAce.Gameplay.Shooting
                 await TrySwitchToWorkingGunsAsync();
             }
 
-            _userInventory.ContentChanged += async (_, _) => await UpdateAvailableAmmoAsync();
+            _inventory.ContentChanged += async (_, _) => await UpdateAvailableAmmoAsync();
         }
 
         private async UniTask<bool> TrySwitchToWorkingGunsAsync()
@@ -274,8 +276,8 @@ namespace SpaceAce.Gameplay.Shooting
                     _activeAmmo = _activeGunsAmmo[0];
                     ActiveGunsSize = size;
                     _gunsSwitchEnabled = true;
-                    ActiveAmmoView.Rebind(_activeAmmo);
 
+                    ActiveAmmoView.Rebind(_activeAmmo);
                     GunsSwitched?.Invoke(this, EventArgs.Empty);
 
                     return true;
@@ -334,11 +336,11 @@ namespace SpaceAce.Gameplay.Shooting
 
         private bool TryGetAvailableAmmo(out IEnumerable<AmmoSet> ammo)
         {
-            if (_userInventory is null) throw new ArgumentNullException();
+            if (_inventory is null) throw new ArgumentNullException();
 
             List<AmmoSet> availableAmmo = new();
 
-            foreach (IItem item in _userInventory.GetItems())
+            foreach (IItem item in _inventory.GetItems())
                 if (item is AmmoSet set)
                     availableAmmo.Add(set);
 

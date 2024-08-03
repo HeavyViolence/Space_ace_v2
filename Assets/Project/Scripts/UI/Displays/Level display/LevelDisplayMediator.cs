@@ -129,11 +129,9 @@ namespace SpaceAce.UI.Displays
             _bombSpawner.BombSpawned -= BombSpawnedEventHandler;
             _enemySpawner.EnemySpawned -= EnemySpawnedEventHandler;
 
-            _meteorsDestroyed = 0;
-            _meteorsEncountered = 0;
-
-            _wrecksDestroyed = 0;
-            _wrecksEncountered = 0;
+            ResetMeteorData();
+            ResetWreckData();
+            ResetEnemyData();
         }
 
         private void LevelDisplayEnabledEventHandler(object sender, EventArgs e)
@@ -146,6 +144,8 @@ namespace SpaceAce.UI.Displays
 
             _levelDisplay.UpdateCreditsReward(_levelRewardCollector.CreditsReward);
             _levelDisplay.UpdateExperienceReward(_levelRewardCollector.ExperienceReward);
+
+            _levelDisplay.UpdateEnemyCounter(_enemiesDestroyed, _enemySpawner.AmountToSpawnThisLevel);
 
             _playerShipViewCancellation = new();
             _levelDisplay.DisplayPlayerShipViewAsync(_player.View, _playerShipViewCancellation.Token).Forget();
@@ -160,6 +160,7 @@ namespace SpaceAce.UI.Displays
             DisableMeteorViewIfActive();
             DisableWreckViewIfActive();
             DisableBombViewIfActive();
+            DisableEnemyViewIfActive();
         }
 
         #region player
@@ -225,6 +226,12 @@ namespace SpaceAce.UI.Displays
             _meteorViewCancellation = null;
         }
 
+        private void ResetMeteorData()
+        {
+            _meteorsDestroyed = 0;
+            _meteorsEncountered = 0;
+        }
+
         #endregion
 
         #region wrecks
@@ -258,6 +265,12 @@ namespace SpaceAce.UI.Displays
             _wreckViewCancellation = null;
         }
 
+        private void ResetWreckData()
+        {
+            _wrecksDestroyed = 0;
+            _wrecksEncountered = 0;
+        }
+
         #endregion
 
         #region bombs
@@ -288,6 +301,7 @@ namespace SpaceAce.UI.Displays
         #region enemies
 
         private CancellationTokenSource _enemyCancellation;
+        private int _enemiesDestroyed = 0;
 
         private void EnemySpawnedEventHandler(object sender, EnemySpawnedEventArgs e)
         {
@@ -297,8 +311,15 @@ namespace SpaceAce.UI.Displays
                 _levelDisplay.DisplayTargetViewAsync(e.Enemy.View, _enemyCancellation.Token).Forget();
             };
 
-            e.Enemy.View.Destroyable.Destroyed += (_, _) => DisableEnemyViewIfActive();
+            e.Enemy.View.Destroyable.Destroyed += (_, _) =>
+            {
+                DisableEnemyViewIfActive();
+                _levelDisplay.UpdateEnemyCounter(++_enemiesDestroyed, _enemySpawner.AmountToSpawnThisLevel);
+            };
+
             e.Enemy.View.Escapable.Escaped += (_, _) => DisableEnemyViewIfActive();
+
+            _levelDisplay.UpdateEnemyCounter(_enemiesDestroyed, _enemySpawner.AmountToSpawnThisLevel);
         }
 
         private void DisableEnemyViewIfActive()
@@ -306,6 +327,11 @@ namespace SpaceAce.UI.Displays
             _enemyCancellation?.Cancel();
             _enemyCancellation?.Dispose();
             _enemyCancellation = null;
+        }
+
+        private void ResetEnemyData()
+        {
+            _enemiesDestroyed = 0;
         }
 
         #endregion

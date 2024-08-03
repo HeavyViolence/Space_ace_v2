@@ -47,7 +47,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 00d3efa38ba16744e83c815705d70796, type: 2}
   _bossPerLevelsPassed: 7
   _bossSpawnDelay: {x: 5, y: 5}
-  _amountToSpawn: {x: 1, y: 1}
-  _waveLength: {x: 1, y: 1}
-  _waveDelay: {x: 1, y: 1}
-  _spawnDelay: {x: 0.2, y: 0.2}
+  _amountToSpawn: {x: 30, y: 30}
+  _waveLength: {x: 5, y: 7}
+  _waveDelay: {x: 3, y: 5}
+  _spawnDelay: {x: 2, y: 3}
