@@ -49,10 +49,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
                                                                             SizeInfluence.None);
         }
 
-        public override async UniTask FireAsync(object shooter,
-                                                IGun gun,
-                                                CancellationToken fireCancellation = default,
-                                                CancellationToken overheatCancellation = default)
+        public override async UniTask FireAsync(object shooter, IGun gun, CancellationToken token)
         {
             if (shooter is null) throw new ArgumentNullException();
             if (gun is null) throw new ArgumentNullException();
@@ -60,13 +57,11 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             float damageFactor = 1f;
             float fireRateFactor = 1f;
 
-            while (Amount > 0 && fireCancellation.IsCancellationRequested == false && overheatCancellation.IsCancellationRequested == false)
+            while (Amount > 0 && token.IsCancellationRequested == false)
             {
                 if (AuxMath.RandomNormal < EMPFactor)
                 {
-                    await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
-                    await UniTask.WaitForSeconds(1f / (gun.FireRate * fireRateFactor));
-
+                    await AuxAsync.DelayAsync(() => 1f / gun.FireRate, () => Services.GamePauser.Paused == true, token);
                     continue;
                 }
 
@@ -101,11 +96,10 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
 
                 OnShotFired(HeatGeneration);
 
-                await UniTask.WaitUntil(() => Services.GamePauser.Paused == false);
-                await UniTask.WaitForSeconds(1f / (gun.FireRate * fireRateFactor));
-
                 damageFactor *= DamageFactorPerShot;
                 fireRateFactor *= FireRateFactorPerShot;
+
+                await AuxAsync.DelayAsync(() => 1f / gun.FireRate, () => Services.GamePauser.Paused == true, token);
             }
 
             ClearOnShotFired();

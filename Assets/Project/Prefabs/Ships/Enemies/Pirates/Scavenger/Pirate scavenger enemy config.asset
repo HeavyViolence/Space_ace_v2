@@ -16,7 +16,8 @@ MonoBehaviour:
   _ammo: 00000000
   _ammoSize: 1
   _ammoSwitchDelay: {x: 0, y: 60}
-  _shootingDuration: {x: 0, y: 30}
-  _shootingPause: {x: 0, y: 30}
+  _shootingDuration: {x: 2, y: 2}
+  _shootingPause: {x: 3, y: 3}
   _spawnWidthConfig: {fileID: 11400000, guid: 5c460cc0540e05a4abb905b3a785baac, type: 2}
   _mutationConfig: {fileID: 11400000, guid: df3e4e4da42d8954f9fb90356975b33c, type: 2}
+  _firstLevelToEncounter: 1

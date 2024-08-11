@@ -150,6 +150,8 @@ namespace SpaceAce.Gameplay.Damage
             _durability.ApplyDamage(damageToBeDealt);
             DamageReceived?.Invoke(this, new(damage, damageToBeDealt, _transform.position));
 
+            if (_config.ShakeOnHit == true) _masterCameraShaker.ShakeOnHit();
+
             if (_durability.Value == 0f)
             {
                 _explosionFactory.CreateAsync(_config.ExplosionSize, _transform.position).Forget();

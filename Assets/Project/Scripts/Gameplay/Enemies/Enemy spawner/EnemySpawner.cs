@@ -74,7 +74,7 @@ namespace SpaceAce.Gameplay.Enemies
                         return;
                     }
 
-                    Enemy enemy = new(config, _ammoFactory, _enemyShipFactory, _masterCameraHolder);
+                    Enemy enemy = new(config, _ammoFactory, _enemyShipFactory, _masterCameraHolder, _gamePauser);
                     _aliveEnemies.Add(enemy);
                     EnemySpawned?.Invoke(this, new(enemy, false));
 
@@ -89,7 +89,7 @@ namespace SpaceAce.Gameplay.Enemies
             {
                 await UniTask.WaitForSeconds(_config.BossSpawnDelay);
 
-                Enemy boss = new(bossConfig, _ammoFactory, _enemyShipFactory, _masterCameraHolder);
+                Enemy boss = new(bossConfig, _ammoFactory, _enemyShipFactory, _masterCameraHolder, _gamePauser);
                 _aliveEnemies.Add(boss);
                 EnemySpawned?.Invoke(this, new(boss, true));
 

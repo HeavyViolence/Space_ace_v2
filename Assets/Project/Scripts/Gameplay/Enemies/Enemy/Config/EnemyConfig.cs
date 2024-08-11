@@ -34,7 +34,8 @@ namespace SpaceAce.Gameplay.Enemies
 
         public IEnumerable<(AmmoType type, Size size)> GetAssignedAmmo()
         {
-            if (_ammo is null || _ammo.Count == 0) throw new Exception("No ammo types assigned!");
+            if (_ammo is null || _ammo.Count == 0)
+                throw new ArgumentNullException("Enemy ammo is not assigned!");
 
             List<(AmmoType type, Size size)> ammo = new(_ammo.Count);
 
@@ -49,7 +50,7 @@ namespace SpaceAce.Gameplay.Enemies
         #region ammo switching
 
         public const float MinAmmoSwitchDelay = 0f;
-        public const float MaxAmmoSwitchDelay = 60f;
+        public const float MaxAmmoSwitchDelay = 100f;
 
         public bool AmmoSwitchEnabled => _ammo.Count > 1;
 

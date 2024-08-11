@@ -23,10 +23,19 @@ namespace SpaceAce.Gameplay.Damage
 
         public AudioCollection ExplosionAudio => _explosionAudio;
 
-        [SerializeField]
+        #endregion
+
+        #region shaking
+
+        [SerializeField, Space]
         private bool _shakeOnDefeat = false;
 
         public bool ShakeOnDefeat => _shakeOnDefeat;
+
+        [SerializeField]
+        private bool _shakeOnHit = false;
+
+        public bool ShakeOnHit => _shakeOnHit;
 
         #endregion
 

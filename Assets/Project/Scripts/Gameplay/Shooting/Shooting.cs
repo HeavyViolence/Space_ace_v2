@@ -32,10 +32,10 @@ namespace SpaceAce.Gameplay.Shooting
         private ShootingConfig _config;
 
         private readonly List<Gun> _availableGuns = new();
-        private List<Gun> _activeGuns;
+        private readonly List<Gun> _activeGuns = new();
 
-        private List<AmmoSet> _availableAmmo;
-        private List<AmmoSet> _activeGunsAmmo;
+        private readonly List<AmmoSet> _availableAmmo = new();
+        private readonly List<AmmoSet> _activeGunsAmmo = new();
         private AmmoSet _activeAmmo;
 
         private float _baseHeatLossRate;
@@ -96,7 +96,7 @@ namespace SpaceAce.Gameplay.Shooting
         public float OverheatDuration { get; private set; }
 
         public bool Overheat { get; private set; }
-        public bool GunsSelected => _activeGuns is not null;
+        public bool GunsSelected => _activeGuns is not null && _activeGuns.Count > 0;
         public bool Firing => GunsSelected == true && _activeGuns[0].Firing;
 
         public Size ActiveGunsSize { get; private set; }
@@ -141,6 +141,9 @@ namespace SpaceAce.Gameplay.Shooting
         {
             _inventory.ContentChanged -= async (_, _) => await UpdateAvailableAmmoAsync();
             _inventory = null;
+
+            ActiveGunsSize = (Size)int.MinValue;
+
             _empTargets.Clear();
         }
 
@@ -176,7 +179,7 @@ namespace SpaceAce.Gameplay.Shooting
             return damagePerSecond;
         }
 
-        public async UniTask FireAsync(object shooter, CancellationToken token = default)
+        public async UniTask FireAsync(object shooter, CancellationToken token)
         {
             if (shooter is null) throw new ArgumentNullException();
 
@@ -188,15 +191,16 @@ namespace SpaceAce.Gameplay.Shooting
                 return;
             }
 
-            ShootingStarted?.Invoke(this, EventArgs.Empty);
             _overheatCancellation = new();
+            CancellationTokenSource overheatOrCancelled = CancellationTokenSource.CreateLinkedTokenSource(_overheatCancellation.Token, token);
+
+            ShootingStarted?.Invoke(this, EventArgs.Empty);
             _activeAmmo.ShotFired += (_, e) => Heat += e.Heat;
 
             foreach (Gun gun in _activeGuns)
-                _activeAmmo.FireAsync(shooter, gun, token, _overheatCancellation.Token).Forget();
+                _activeAmmo.FireAsync(shooter, gun, overheatOrCancelled.Token).Forget();
             
             await UniTask.WaitUntil(() => _gamePauser.Paused == false);
-            await UniTask.WaitUntil(() => token.IsCancellationRequested == true || _overheatCancellation.IsCancellationRequested == true);
 
             ShootingStopped?.Invoke(this, EventArgs.Empty);
             _activeAmmo.ShotFired -= (_, e) => Heat += e.Heat;
@@ -239,7 +243,9 @@ namespace SpaceAce.Gameplay.Shooting
 
             if (TryGetAvailableAmmo(out IEnumerable<AmmoSet> ammo) == true)
             {
-                _availableAmmo = new(ammo);
+                _availableAmmo.Clear();
+                _availableAmmo.AddRange(ammo);
+
                 await TrySwitchToWorkingGunsAsync();
             }
 
@@ -265,13 +271,16 @@ namespace SpaceAce.Gameplay.Shooting
 
             if (TryGetGuns(size, out IEnumerable<Gun> guns) == true)
             {
-                _activeGuns = new(guns);
+                _activeGuns.Clear();
+                _activeGuns.AddRange(guns);
 
                 if (TryGetFittingAmmo(size, out IEnumerable<AmmoSet> ammo) == true)
                 {
                     await PerformGunsSwitchDelayAsync(size);
 
-                    _activeGunsAmmo = new(ammo);
+                    _activeGunsAmmo.Clear();
+                    _activeGunsAmmo.AddRange(ammo);
+
                     ActiveAmmoIndex = 0;
                     _activeAmmo = _activeGunsAmmo[0];
                     ActiveGunsSize = size;
@@ -424,8 +433,17 @@ namespace SpaceAce.Gameplay.Shooting
 
         private async UniTask UpdateAvailableAmmoAsync()
         {
-            if (TryGetAvailableAmmo(out IEnumerable<AmmoSet> availableAmmo) == true) _availableAmmo = new(availableAmmo);
-            if (TryGetFittingAmmo(ActiveGunsSize, out IEnumerable<AmmoSet> fittingAmmo) == true) _activeGunsAmmo = new(fittingAmmo);
+            if (TryGetAvailableAmmo(out IEnumerable<AmmoSet> availableAmmo) == true)
+            {
+                _availableAmmo.Clear();
+                _availableAmmo.AddRange(availableAmmo);
+            }
+
+            if (TryGetFittingAmmo(ActiveGunsSize, out IEnumerable<AmmoSet> fittingAmmo) == true)
+            {
+                _activeGunsAmmo.Clear();
+                _activeGunsAmmo.AddRange(fittingAmmo);
+            }
 
             if (Firing == false && _activeAmmo.Amount == 0)
             {

@@ -15,4 +15,6 @@ MonoBehaviour:
   _explosionSize: 3
   _explosionAudio: {fileID: 11400000, guid: f680a9d2fbd43f24aae72dcce60ed3ff, type: 2}
   _shakeOnDefeat: 1
-  _indestructible: 0
+  _shakeOnHit: 1
+  _invulnerable: 0
+  _invulnetabilityDuration: 0

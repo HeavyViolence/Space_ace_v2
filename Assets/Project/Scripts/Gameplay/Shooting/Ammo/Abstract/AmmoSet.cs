@@ -71,14 +71,6 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
         public bool Usable => false;
         public bool Tradable => Services.GameStateLoader.CurrentState == GameState.MainMenu;
 
-        public abstract UniTask FireAsync(object shooter,
-                                          IGun gun,
-                                          CancellationToken fireCancellation = default,
-                                          CancellationToken overheatCancellation = default);
-        protected abstract void OnMove(Rigidbody2D body, MovementData data);
-        protected abstract void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f);
-        protected abstract void OnMiss(object shooter);
-
         public AmmoSet(AmmoServices services, Size size, Quality quality, AmmoSetConfig config)
         {
             if (config == null) throw new ArgumentNullException();
@@ -116,6 +108,11 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             Speed = savedState.Speed;
             Damage = savedState.Damage;
         }
+
+        public abstract UniTask FireAsync(object shooter, IGun gun, CancellationToken token);
+        protected abstract void OnMove(Rigidbody2D body, MovementData data);
+        protected abstract void OnHit(object shooter, HitEventArgs e, float damageFactor = 1f);
+        protected abstract void OnMiss(object shooter);
 
         public async UniTask<bool> TryUseAsync(object user, CancellationToken token = default)
         {

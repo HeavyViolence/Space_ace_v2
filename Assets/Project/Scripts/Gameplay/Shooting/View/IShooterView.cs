@@ -8,7 +8,7 @@ namespace SpaceAce.Gameplay.Shooting
     {
         event EventHandler ShootingStarted, ShootingStopped;
         event EventHandler<FloatValueChangedEventArgs> HeatValueChanged, HeatCapacityChanged;
-        public event EventHandler Overheated, CooledDown;
+        event EventHandler Overheated, CooledDown;
         event EventHandler GunsSwitched;
 
         AmmoView ActiveAmmoView { get; }
