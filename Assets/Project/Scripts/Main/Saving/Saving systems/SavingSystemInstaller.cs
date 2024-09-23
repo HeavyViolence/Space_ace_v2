@@ -24,13 +24,13 @@ namespace SpaceAce.Main.Saving
                 _ => new BlankKeyGenerator()
             };
 
-            IEncryptor encryptor = _encryptionType switch
+            Encryptor encryptor = _encryptionType switch
             {
-                EncryptionType.None => new BlankEncryptor(),
-                EncryptionType.XOR => new XOREncryptor(),
-                EncryptionType.RandomXOR => new RandomXOREncryptor(),
-                EncryptionType.AES => new AESEncryptor(),
-                _ => new BlankEncryptor()
+                EncryptionType.None => new BlankEncryptor(new BlankKeyValidator()),
+                EncryptionType.XOR => new XOREncryptor(new XORKeyValidator()),
+                EncryptionType.RandomXOR => new RandomXOREncryptor(new XORKeyValidator()),
+                EncryptionType.AES => new AESEncryptor(new AESKeyValidator()),
+                _ => new BlankEncryptor(new BlankKeyValidator())
             };
 
             ISavingSystem savingSystem = _savingSystemType switch

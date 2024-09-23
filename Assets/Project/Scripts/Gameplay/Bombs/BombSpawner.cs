@@ -3,6 +3,7 @@ using SpaceAce.Main.Factories.BombFactories;
 using SpaceAce.Gameplay.Levels;
 using SpaceAce.Main;
 using SpaceAce.Gameplay.Movement;
+using SpaceAce.Auxiliary;
 
 using System;
 using System.Threading;
@@ -32,6 +33,11 @@ public sealed class BombSpawner : IInitializable, IDisposable
     private CancellationTokenSource _spawnCancellation;
 
     public bool SpawnActive { get; private set; } = false;
+
+    private MovementBehaviour MeteorMovement => delegate (Rigidbody2D body, MovementData data)
+    {
+        body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
+    };
 
     public BombSpawner(BombSpawnerConfig config,
                        BombFactory bombFactory,
@@ -93,17 +99,7 @@ public sealed class BombSpawner : IInitializable, IDisposable
 
             foreach (BombWaveSlot slot in wave)
             {
-                float timer = 0f;
-
-                while (timer < slot.SpawnDelay)
-                {
-                    if (token.IsCancellationRequested == true) break;
-
-                    timer += Time.deltaTime;
-
-                    await UniTask.WaitUntil(() => _gamePauser.Paused == false);
-                    await UniTask.Yield();
-                }
+                await AuxAsync.DelayAsync(() => slot.SpawnDelay, () => _gamePauser.Paused == true, token);
 
                 if (token.IsCancellationRequested == true) break;
 
@@ -134,22 +130,6 @@ public sealed class BombSpawner : IInitializable, IDisposable
 
     #region auxiliary methods
 
-    private async UniTask WaitForDelayAsync(float delay, CancellationToken token)
-    {
-        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
-
-        float timer = 0f;
-
-        while (timer < delay)
-        {
-            if (token.IsCancellationRequested == true) return;
-
-            timer += Time.deltaTime;
-
-            await UniTask.Yield();
-        }
-    }
-
     private Vector3 GetSpawnPosition()
     {
         float xMin = _masterCameraHolder.ViewportLeftBound;
@@ -165,11 +145,6 @@ public sealed class BombSpawner : IInitializable, IDisposable
         float y = _masterCameraHolder.ViewportLowerBound;
         return new Vector3(spawnWidth, y, 0f);
     }
-
-    private MovementBehaviour MeteorMovement => delegate (Rigidbody2D body, MovementData data)
-    {
-        body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
-    };
 
     #endregion
 }

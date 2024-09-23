@@ -9,6 +9,6 @@ namespace SpaceAce.Gameplay.Effects
         bool StasisActive { get; }
         float SpeedFactor { get; }
 
-        UniTask<bool> TryApplyStasis(Stasis stasis, CancellationToken token = default);
+        UniTask<bool> TryApplyStasisAsync(Stasis stasis, CancellationToken token = default);
     }
 }

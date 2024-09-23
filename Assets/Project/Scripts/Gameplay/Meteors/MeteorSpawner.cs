@@ -38,6 +38,11 @@ namespace SpaceAce.Gameplay.Meteors
 
         public bool SpawnActive { get; private set; } = false;
 
+        private MovementBehaviour MeteorMovement => delegate (Rigidbody2D body, MovementData data)
+        {
+            body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
+        };
+
         public MeteorSpawner(MeteorSpawnerConfig config,
                              MeteorFactory meteorFactory,
                              GameStateLoader gameStateLoader,
@@ -102,17 +107,7 @@ namespace SpaceAce.Gameplay.Meteors
 
                 foreach (MeteorWaveSlot slot in wave)
                 {
-                    float timer = 0f;
-
-                    while (timer < slot.SpawnDelay)
-                    {
-                        if (token.IsCancellationRequested == true) break;
-
-                        timer += Time.deltaTime;
-
-                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
-                        await UniTask.Yield();
-                    }
+                    await AuxAsync.DelayAsync(() => slot.SpawnDelay, () => _gamePauser.Paused == true, token);
 
                     if (token.IsCancellationRequested == true) break;
 
@@ -152,22 +147,6 @@ namespace SpaceAce.Gameplay.Meteors
 
         #region auxiliary methods
 
-        private async UniTask WaitForDelayAsync(float delay, CancellationToken token)
-        {
-            await UniTask.WaitUntil(() => _gamePauser.Paused == false);
-
-            float timer = 0f;
-
-            while (timer < delay)
-            {
-                if (token.IsCancellationRequested == true) return;
-
-                timer += Time.deltaTime;
-
-                await UniTask.Yield();
-            }
-        }
-
         private Vector3 GetSpawnPosition()
         {
             float xMin = _masterCameraHolder.ViewportLeftBound;
@@ -189,11 +168,6 @@ namespace SpaceAce.Gameplay.Meteors
         }
 
         private Quaternion GetSpawnRotation() => Quaternion.Euler(0f, 0f, AuxMath.DegreesPerRotation * AuxMath.RandomNormal);
-
-        private MovementBehaviour MeteorMovement => delegate (Rigidbody2D body, MovementData data)
-        {
-            body.MovePosition(body.position + data.InitialVelocityPerFixedUpdate);
-        };
 
         #endregion
     }

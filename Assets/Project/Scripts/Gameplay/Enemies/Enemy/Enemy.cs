@@ -54,8 +54,7 @@ namespace SpaceAce.Gameplay.Enemies
             _inventory.TryAddItems(assignedAmmo, out _);
 
             float x = config.GetSpawnWidth(masterCameraHolder.ViewportLeftBound, masterCameraHolder.ViewportRightBound);
-            //float y = masterCameraHolder.ViewportUpperBound * SpawnPositionOffsetFactor;
-            float y = 0f;
+            float y = masterCameraHolder.ViewportUpperBound * SpawnPositionOffsetFactor;
             Vector3 spawnPosition = new(x, y, 0f);
 
             _ship = _enemyShipFactory.Create(config.ShipType, spawnPosition, Quaternion.Euler(0f, 0f, 180f));

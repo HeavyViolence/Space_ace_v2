@@ -1,6 +1,5 @@
 using NaughtyAttributes;
 
-using SpaceAce.Auxiliary;
 using SpaceAce.Main.Audio;
 
 using UnityEngine;
@@ -11,17 +10,10 @@ namespace SpaceAce.Gameplay.Movement
                      menuName = "Space ace/Configs/Movement/Movement config")]
     public class MovementConfig : ScriptableObject
     {
+        #region horizontal speed
+
         public const float MinSpeed = 0f;
         public const float MaxSpeed = 100f;
-
-        public const float MaxRotationSpeed = 60f;
-
-        public const float MinBoundDisplacement = -1f;
-        public const float MaxBoundDisplacement = 2f;
-        public const float DefaultBoundDisplacement = 1f;
-
-        public const float MinCollisionDamage = 0f;
-        public const float MaxCollisionDamage = 10000f;
 
         [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
         private Vector2 _horizontalSpeed = new(MinSpeed, MaxSpeed);
@@ -30,6 +22,10 @@ namespace SpaceAce.Gameplay.Movement
         public float MaxHorizontalSpeed => _horizontalSpeed.y;
         public float RandomHorizontalSpeed => Random.Range(_horizontalSpeed.x, _horizontalSpeed.y);
 
+        #endregion
+
+        #region vertical speed
+
         [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
         private Vector2 _verticalSpeed = new(MinSpeed, MaxSpeed);
 
@@ -37,38 +33,32 @@ namespace SpaceAce.Gameplay.Movement
         public float MaxVerticalSpeed => _verticalSpeed.y;
         public float RandomVerticalSpeed => Random.Range(_verticalSpeed.x, _verticalSpeed.y);
 
-        [SerializeField, MinMaxSlider(MinSpeed, MaxSpeed)]
-        private Vector2 _spatialSpeed = new(MinSpeed, MaxSpeed);
+        #endregion
 
-        public float MinSpatialSpeed => _spatialSpeed.x;
-        public float MaxSpatialSpeed => _spatialSpeed.y;
-        public float RandomSpatialSpeed => Random.Range(_spatialSpeed.x, _spatialSpeed.y);
+        #region movement stiffness
 
-        [SerializeField, MinMaxSlider(0f, MaxRotationSpeed)]
-        private Vector2 _rotationSpeed = new(0f, MaxRotationSpeed);
+        [SerializeField, Space]
+        private MovementStiffnessConfig _movementStiffnessConfig;
 
-        public float LowestRotationSpeed => _rotationSpeed.x;
-        public float HighestRotationSpeed => _rotationSpeed.y;
-        public float RandomRotationSpeed => AuxMath.RandomSign * Random.Range(_rotationSpeed.x, _rotationSpeed.y);
+        public MovementStiffnessConfig MovementStiffness => _movementStiffnessConfig;
 
-        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement), HorizontalLine]
-        private float _upperBoundDisplacement = DefaultBoundDisplacement;
+        #endregion
 
-        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement)]
-        private float _lowerBoundDisplacement = DefaultBoundDisplacement;
+        #region viewport bounds displacement
 
-        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement)]
-        private float _leftBoundDisplacement = DefaultBoundDisplacement;
+        [SerializeField]
+        private BoundsDisplacementConfig _boundsDisplacement;
 
-        [SerializeField, Range(MinBoundDisplacement, MaxBoundDisplacement)]
-        private float _rightBoundDisplacement = DefaultBoundDisplacement;
+        public BoundsDisplacementConfig BoundsDisplacement => _boundsDisplacement;
 
-        public float UpperBoundDisplacement => _upperBoundDisplacement;
-        public float LowerBoundDisplacement => _lowerBoundDisplacement;
-        public float LeftBoundDisplacement => _leftBoundDisplacement;
-        public float RightBoundDisplacement => _rightBoundDisplacement;
+        #endregion
 
-        [SerializeField, MinMaxSlider(MinCollisionDamage, MaxCollisionDamage), HorizontalLine]
+        #region collision damage
+
+        public const float MinCollisionDamage = 0f;
+        public const float MaxCollisionDamage = 10000f;
+
+        [SerializeField, MinMaxSlider(MinCollisionDamage, MaxCollisionDamage), Space]
         private Vector2 _collisionDamage = new(MinCollisionDamage, MaxCollisionDamage);
 
         public float LowestCollisionDamage => _collisionDamage.x;
@@ -79,5 +69,7 @@ namespace SpaceAce.Gameplay.Movement
         private AudioCollection _collisionAudio;
         
         public AudioCollection CollisionAudio => _collisionAudio;
+
+        #endregion
     }
 }

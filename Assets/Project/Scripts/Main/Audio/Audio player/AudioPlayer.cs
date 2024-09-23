@@ -216,7 +216,7 @@ namespace SpaceAce.Main.Audio
             cache.AudioSource.bypassEffects = false;
             cache.AudioSource.bypassListenerEffects = false;
             cache.AudioSource.bypassReverbZones = false;
-            cache.AudioSource.priority = (byte)properties.Priority;
+            cache.AudioSource.priority = (int)properties.Priority;
             cache.AudioSource.volume = properties.Volume;
             cache.AudioSource.spatialBlend = properties.SpatialBlend;
             cache.AudioSource.pitch = properties.Pitch;

@@ -27,6 +27,17 @@ namespace SpaceAce.Auxiliary
             }
         }
 
+        public static async UniTask DelayAsync(Func<bool> delayCondition,
+                                               Func<bool> pauseCondition,
+                                               CancellationToken token = default)
+        {
+            while (delayCondition() == true && token.IsCancellationRequested == false)
+            {
+                await UniTask.WaitUntil(() => pauseCondition() == false);
+                await UniTask.Yield();
+            }
+        }
+
         public static async UniTask DelayThenDoAsync(Action action,
                                                      Func<float> delayProvider,
                                                      Func<bool> pauseCondition,

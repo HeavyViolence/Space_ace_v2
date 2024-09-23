@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _keyGenerationType: 1
-  _encryptionType: 3
+  _encryptionType: 2
   _savingSystemType: 0
 --- !u!4 &66931798
 Transform:

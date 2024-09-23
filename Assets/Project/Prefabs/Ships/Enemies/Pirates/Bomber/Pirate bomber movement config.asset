@@ -14,11 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _horizontalSpeed: {x: 20, y: 20}
   _verticalSpeed: {x: 15, y: 15}
-  _spatialSpeed: {x: 0, y: 0}
-  _rotationSpeed: {x: 3, y: 3}
-  _upperBoundDisplacement: 0
-  _lowerBoundDisplacement: 0
-  _leftBoundDisplacement: 0
-  _rightBoundDisplacement: 0
+  _movementStiffnessConfig: {fileID: 11400000, guid: 406bd7b50a3fee94096e72739f5c84ca, type: 2}
+  _boundsDisplacement: {fileID: 11400000, guid: 40c3eaf77bac93d4891887ae6d414cfc, type: 2}
   _collisionDamage: {x: 1000, y: 1000}
   _collisionAudio: {fileID: 11400000, guid: df5831f1ecc6c7849aec438c5fbc94a4, type: 2}

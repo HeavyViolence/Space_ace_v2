@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 
+using SpaceAce.Auxiliary;
 using SpaceAce.Gameplay.Damage;
 using SpaceAce.Main;
 using SpaceAce.Main.Factories.AmmoFactories;
@@ -8,8 +9,6 @@ using SpaceAce.Main.Factories.EnemyShipFactories;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-
-using UnityEngine;
 
 using Zenject;
 
@@ -58,15 +57,7 @@ namespace SpaceAce.Gameplay.Enemies
             {
                 foreach ((EnemyConfig config, float spawnDelay) in wave)
                 {
-                    float timer = 0f;
-
-                    while (timer < spawnDelay && token.IsCancellationRequested == false)
-                    {
-                        timer += Time.deltaTime;
-
-                        await UniTask.WaitUntil(() => _gamePauser.Paused == false);
-                        await UniTask.Yield();
-                    }
+                    await AuxAsync.DelayAsync(() => spawnDelay, () => _gamePauser.Paused == true, token);
 
                     if (token.IsCancellationRequested == true)
                     {

@@ -17,9 +17,9 @@ namespace SpaceAce.Main.Saving
         private readonly UTF8Encoding _UTF8 = new(true, true);
         private readonly HashSet<ISavable> _savableEntities = new();
         private readonly IKeyGenerator _keyGenerator;
-        private readonly IEncryptor _encryptor;
+        private readonly Encryptor _encryptor;
 
-        public ToFileSavingSystem(IKeyGenerator keyGenerator, IEncryptor encryptor)
+        public ToFileSavingSystem(IKeyGenerator keyGenerator, Encryptor encryptor)
         {
             _keyGenerator = keyGenerator ?? throw new ArgumentNullException();
             _encryptor = encryptor ?? throw new ArgumentNullException();
@@ -31,7 +31,7 @@ namespace SpaceAce.Main.Saving
 
             if (_savableEntities.Add(entity) == true)
             {
-                entity.SavingRequested += (sender, args) => SaveStateToFile(entity);
+                entity.SavingRequested += (_, _) => SaveStateToFile(entity);
                 LoadStateFromFile(entity);
             }
         }
@@ -42,7 +42,7 @@ namespace SpaceAce.Main.Saving
 
             if (_savableEntities.Contains(entity) == true)
             {
-                entity.SavingRequested -= (sender, args) => SaveStateToFile(entity);
+                entity.SavingRequested -= (_, _) => SaveStateToFile(entity);
                 _savableEntities.Remove(entity);
 
                 SaveStateToFile(entity);

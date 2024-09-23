@@ -16,29 +16,36 @@ namespace SpaceAce.Gameplay.Movement
 
         protected virtual float MinHorizontalSpeed => _config.MinHorizontalSpeed;
         protected virtual float MaxHorizontalSpeed => _config.MaxHorizontalSpeed;
-        protected virtual float NextHorizontalSpeed => Random.Range(MinHorizontalSpeed, MaxHorizontalSpeed);
+        protected virtual float NextHorizontalSpeed => _config.RandomHorizontalSpeed;
 
         protected virtual float MinVerticalSpeed => _config.MinVerticalSpeed;
         protected virtual float MaxVerticalSpeed => _config.MaxVerticalSpeed;
-        protected virtual float NextVerticalSpeed => Random.Range(MinVerticalSpeed, MaxVerticalSpeed);
+        protected virtual float NextVerticalSpeed => _config.RandomVerticalSpeed;
 
-        protected virtual float MinSpatialSpeed => _config.MinSpatialSpeed;
-        protected virtual float MaxSpatialSpeed => _config.MaxSpatialSpeed;
-        protected virtual float NextSpatialSpeed => Random.Range(MinSpatialSpeed, MaxSpatialSpeed);
+        protected virtual float MinMovementStiffness => _config.MovementStiffness.MinMovementStiffness;
+        protected virtual float MaxMovementStiffness => _config.MovementStiffness.MaxMovementStiffness;
+        protected virtual float NextMovementStiffness => _config.MovementStiffness.RandomMovementStiffness;
 
-        protected virtual float MinRotationSpeed => _config.LowestRotationSpeed;
-        protected virtual float MaxRotationSpeed => _config.HighestRotationSpeed;
-        protected virtual float NextRotationSpeed => Random.Range(MinRotationSpeed, MaxRotationSpeed);
-        protected bool RotationEnabled => MinRotationSpeed != 0f || MaxRotationSpeed != 0f;
+        protected virtual float MinBrakingSmoothness => _config.MovementStiffness.MinBrakingStiffness;
+        protected virtual float MaxBrakingSmoothness => _config.MovementStiffness.MaxBrakingStiffness;
+        protected virtual float NextBrakingSmoothness => _config.MovementStiffness.RandomBrakingStiffness;
 
-        protected virtual float UpperBound => MasterCameraHolder.GetViewportUpperBoundWithOffset(_config.UpperBoundDisplacement);
-        protected virtual float LowerBound => MasterCameraHolder.GetViewportLowerBoundWithOffset(_config.LowerBoundDisplacement);
-        protected virtual float LeftBound => MasterCameraHolder.GetViewportLeftBoundWithOffset(_config.LeftBoundDisplacement);
-        protected virtual float RightBound => MasterCameraHolder.GetViewportRightBoundWithOffset(_config.RightBoundDisplacement);
+        protected virtual float MinViewportReboundStiffness => _config.MovementStiffness.MinViewportReboundStiffness;
+        protected virtual float MaxViewportReboundStiffness => _config.MovementStiffness.MaxViewportReboundStiffness;
+        protected virtual float NextViewportReboundStiffness => _config.MovementStiffness.RandomViewportReboundStiffness;
+
+        protected virtual float MinRotationStiffness => _config.MovementStiffness.MinRotationStiffness;
+        protected virtual float MaxRotationStiffness => _config.MovementStiffness.MaxRotationStiffness;
+        protected virtual float NextRotationStiffness => _config.MovementStiffness.RandomRotationStiffness;
+
+        protected virtual float ModifiedLowerBound => MasterCameraHolder.ViewportLowerBound * _config.BoundsDisplacement.LowerBoundDisplacement;
+        protected virtual float ModifiedUpperBound => MasterCameraHolder.ViewportUpperBound * _config.BoundsDisplacement.UpperBoundDisplacement;
+        protected virtual float ModifiedRightBound => MasterCameraHolder.ViewportRightBound * _config.BoundsDisplacement.SideBoundsDisplacement;
+        protected virtual float ModifiedLeftBound => MasterCameraHolder.ViewportLeftBound * _config.BoundsDisplacement.SideBoundsDisplacement;
 
         protected virtual float MinCollisionDamage => _config.LowestCollisionDamage;
         protected virtual float MaxCollisionDamage => _config.HighestCollisionDamage;
-        protected virtual float NextCollisionDamage => Random.Range(MinCollisionDamage, MaxCollisionDamage);
+        protected virtual float NextCollisionDamage => _config.RandomCollisionDamage;
         protected bool CollisionDamageEnabled => MaxCollisionDamage > 0f;
 
         protected override void Awake()
@@ -70,10 +77,6 @@ namespace SpaceAce.Gameplay.Movement
             MasterCameraShaker.ShakeOnCollision();
         }
 
-        public float GetExperience()
-        {
-            if (MaxHorizontalSpeed != 0f && MaxVerticalSpeed != 0f) return MaxHorizontalSpeed + MaxVerticalSpeed;
-            return MaxSpatialSpeed;
-        }
+        public float GetExperience() => MaxHorizontalSpeed + MaxVerticalSpeed;
     }
 }

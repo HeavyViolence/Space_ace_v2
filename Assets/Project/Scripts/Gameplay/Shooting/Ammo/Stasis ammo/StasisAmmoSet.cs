@@ -111,7 +111,7 @@ namespace SpaceAce.Gameplay.Shooting.Ammo
             e.Damageable.ApplyDamage(Damage);
 
             if (e.ObjectBeingHit.TryGetComponent(out IStasisTarget target) == true)
-                target.TryApplyStasis(_stasis).Forget();
+                target.TryApplyStasisAsync(_stasis).Forget();
         }
 
         protected override void OnMiss(object shooter) { }

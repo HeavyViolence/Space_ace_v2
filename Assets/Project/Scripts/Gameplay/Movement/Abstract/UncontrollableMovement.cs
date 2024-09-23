@@ -46,7 +46,7 @@ namespace SpaceAce.Gameplay.Movement
         public bool StasisActive { get; private set; } = false;
         public float SpeedFactor { get; private set; } = 1f;
 
-        public async UniTask<bool> TryApplyStasis(Stasis stasis, CancellationToken token = default)
+        public async UniTask<bool> TryApplyStasisAsync(Stasis stasis, CancellationToken token = default)
         {
             if (StasisActive == true) return false;
 

@@ -32,15 +32,7 @@ namespace SpaceAce.Gameplay.Controls
         private readonly MasterCameraHolder _masterCameraHolder;
 
         public Vector2 MovementDirection => _gameControls.Player.Movement.ReadValue<Vector2>();
-
-        public Vector3 MouseWorldPosition
-        {
-            get
-            {
-                if (Mouse.current is null) return Vector3.zero;
-                return _masterCameraHolder.MasterCamera.ScreenToWorldPoint(Mouse.current.position.value);
-            }
-        }
+        public Vector3 MouseWorldPosition => _masterCameraHolder.MasterCamera.ScreenToWorldPoint(Mouse.current.position.value);
 
         public GameControlsTransmitter(GamePauser gamePauser,
                                        GameStateLoader gameStateLoader,

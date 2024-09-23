@@ -4,14 +4,14 @@ using System.Security.Cryptography;
 
 namespace SpaceAce.Main.Saving
 {
-    public sealed class AESEncryptor : IEncryptor
+    public sealed class AESEncryptor : Encryptor
     {
-        public byte[] Encrypt(byte[] data, byte[] key)
+        public AESEncryptor(IKeyValidator validator) : base(validator) { }
+
+        public override byte[] Encrypt(byte[] data, byte[] key)
         {
             if (data is null) throw new ArgumentNullException();
-            if (key is null) throw new ArgumentNullException();
-
-            if (data.Length == 0 || key.Length == 0) return data;
+            if (KeyValidator.IsKeyValid(key) == false) throw new ArgumentException();
 
             using Aes algorithm = Aes.Create();
             using ICryptoTransform encryptor = algorithm.CreateEncryptor(key, algorithm.IV);
@@ -27,12 +27,10 @@ namespace SpaceAce.Main.Saving
             return result.ToArray();
         }
 
-        public byte[] Decrypt(byte[] data, byte[] key)
+        public override byte[] Decrypt(byte[] data, byte[] key)
         {
             if (data is null) throw new ArgumentNullException();
-            if (key is null) throw new ArgumentNullException();
-
-            if (data.Length == 0 || key.Length == 0) return data;
+            if (KeyValidator.IsKeyValid(key) == false) throw new ArgumentException();
 
             using Aes algorithm = Aes.Create();
 
